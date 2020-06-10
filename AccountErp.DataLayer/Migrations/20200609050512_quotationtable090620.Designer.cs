@@ -4,14 +4,16 @@ using AccountErp.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200609050512_quotationtable090620")]
+    partial class quotationtable090620
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -613,8 +615,6 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int>("TaxId");
 
-                    b.Property<int?>("TaxPercentage");
-
                     b.Property<decimal>("TaxPrice")
                         .HasColumnType("NUMERIC(12,2)");
 
@@ -811,8 +811,6 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<int>("ServiceId");
 
                     b.Property<int>("TaxId");
-
-                    b.Property<int?>("TaxPercentage");
 
                     b.Property<decimal>("TaxPrice")
                         .HasColumnType("NUMERIC(12,2)");

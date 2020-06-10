@@ -1,14 +1,15 @@
 ﻿using AccountErp.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace AccountErp.Entities
 {
-    public class Invoice
+    public class Quotation
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }
-        public string InvoiceNumber { get; set; }
+        public string QuotationNumber { get; set; }
         public decimal? Tax { get; set; }
         public decimal? Discount { get; set; }
         public decimal TotalAmount { get; set; }
@@ -21,12 +22,13 @@ namespace AccountErp.Entities
 
         public Customer Customer { get; set; }
 
-        public string StrInvoiceDate { get; set; }
-        public DateTime InvoiceDate { get; set; }
-        public string StrDueDate { get; set; }
-        public DateTime DueDate { get; set; }
+        public string StrQuotationDate { get; set; }
+        public DateTime QuotationDate { get; set; }
+        public string StrExpireDate { get; set; }
+        public DateTime ExpireDate { get; set; }
         public decimal? PoSoNumber { get; set; }
-        public ICollection<InvoiceService> Services { get; set; }
-        public ICollection<InvoiceAttachment> Attachments { get; set; }
+        public string Memo { get; set; }
+        public ICollection<QuotationService> Services { get; set; }
+        public ICollection<QuotationAttachment> Attachments { get; set; }
     }
 }

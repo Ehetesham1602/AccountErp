@@ -27,7 +27,9 @@ namespace AccountErp.DataLayer
         public DbSet<Country> Countries { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Contact> Contacts { get; set; }
-
+        public DbSet<Quotation> Quotations { get; set; }
+        public DbSet<QuotationAttachment> QuotationAttachments { get; set; }
+        public DbSet<QuotationService> QuotationServices { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -50,6 +52,9 @@ namespace AccountErp.DataLayer
             modelBuilder.ApplyConfiguration(new AddressConfiguration());
             modelBuilder.ApplyConfiguration(new ContactConfiguration());
             modelBuilder.ApplyConfiguration(new InvoicePaymentConfiguration());
+            modelBuilder.ApplyConfiguration(new QuotationAttachmentConfiguration());
+            modelBuilder.ApplyConfiguration(new QuotationConfiguration());
+            modelBuilder.ApplyConfiguration(new QuotationServicesConfiguration());
         }
     }
 }

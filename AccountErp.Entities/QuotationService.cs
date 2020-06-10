@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AccountErp.Models.Invoice
+namespace AccountErp.Entities
 {
-    public class InvoiceServiceModel
+   public class QuotationService
     {
+        public Guid Id { get; set; }
+        public int QuotationId { get; set; }
         public int ServiceId { get; set; }
         public decimal Rate { get; set; }
         public decimal Price { get; set; }
@@ -13,5 +15,7 @@ namespace AccountErp.Models.Invoice
         public decimal TaxPrice { get; set; }
         public int? TaxPercentage { get; set; }
         public int Quantity { get; set; }
+
+        public Item Service { get; set; }
     }
 }

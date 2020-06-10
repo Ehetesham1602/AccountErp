@@ -48,7 +48,7 @@ namespace AccountErp.Managers
             return await _repository.GetForEditAsync(id);
         }
 
-        public async Task<IEnumerable<SelectListItemDto>> GetSelectListItemsAsync()
+        public async Task<IEnumerable<SalesTaxDetailDto>> GetSelectListItemsAsync()
         {
             return await _repository.GetSelectListItemsAsync();
         }

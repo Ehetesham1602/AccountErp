@@ -14,7 +14,7 @@ namespace AccountErp.Dtos.Invoice
         public string Remark { get; set; }
         public DateTime InvoiceDate { get; set; }
         public DateTime DueDate { get; set; }
-        public decimal PoSoNumber { get; set; }
+        public decimal? PoSoNumber { get; set; }
         public string StrInvoiceDate { get; set; }
         public string StrDueDate { get; set; }
 

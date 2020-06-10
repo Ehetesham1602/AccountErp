@@ -1,53 +1,56 @@
-﻿using AccountErp.Dtos.Address;
-using AccountErp.Dtos.Customer;
-using AccountErp.Dtos.Invoice;
+﻿using AccountErp.Dtos.Quotation;
 using AccountErp.Entities;
 using AccountErp.Infrastructure.Repositories;
-using AccountErp.Models.Invoice;
-using AccountErp.Utilities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Threading.Tasks;
+using AccountErp.Utilities;
+using AccountErp.Dtos.Customer;
+using AccountErp.Dtos.Address;
+using AccountErp.Dtos.Invoice;
+using AccountErp.Models.Quotation;
 
 namespace AccountErp.DataLayer.Repositories
 {
-    public class InvoiceRepository : IInvoiceRepository
+    public class QuotationRepository : IQuotationRepository
     {
         private readonly DataContext _dataContext;
 
-        public InvoiceRepository(DataContext dataContext)
+        public QuotationRepository(DataContext dataContext)
         {
             _dataContext = dataContext;
         }
 
-        public async Task AddAsync(Invoice entity)
+        public async Task AddAsync(Quotation entity)
         {
-            await _dataContext.Invoices.AddAsync(entity);
+            await _dataContext.Quotations.AddAsync(entity);
         }
 
-        public void Edit(Invoice entity)
+        public void Edit(Quotation entity)
         {
 
-            _dataContext.Invoices.Update(entity);
+            _dataContext.Quotations.Update(entity);
         }
 
-        public async Task<Invoice> GetAsync(int id)
+        public async Task<Quotation> GetAsync(int id)
         {
-            return await _dataContext.Invoices
+            return await _dataContext.Quotations
                 .Include(x => x.Services)
                 .Include(x => x.Attachments)
                 .SingleAsync(x => x.Id == id);
         }
 
-        public async Task<InvoiceDetailDto> GetDetailAsync(int id)
+        public async Task<QuotationDetailDto> GetDetailAsync(int id)
         {
-            var invoice = await (from i in _dataContext.Invoices
+            var quotation = await (from i in _dataContext.Quotations
                                  join c in _dataContext.Customers
                                  on i.CustomerId equals c.Id
                                  where i.Id == id
-                                 select new InvoiceDetailDto
+                                 select new QuotationDetailDto
                                  {
                                      Id = i.Id,
                                      Tax = i.Tax,
@@ -56,11 +59,12 @@ namespace AccountErp.DataLayer.Repositories
                                      Remark = i.Remark,
                                      Status = i.Status,
                                      CreatedOn = i.CreatedOn,
-                                     InvoiceDate = i.InvoiceDate,
-                                     StrInvoiceDate = i.StrInvoiceDate,
-                                     DueDate = i.DueDate,
-                                     StrDueDate = i.StrDueDate,
+                                     QuotationDate = i.QuotationDate,
+                                     StrQuotationDate = i.StrQuotationDate,
+                                     ExpiryDate = i.ExpireDate,
+                                     StrExpiryDate = i.StrExpireDate,
                                      PoSoNumber = i.PoSoNumber,
+                                     Memo = i.Memo,
                                      Customer = new CustomerDetailDto
                                      {
                                          FirstName = c.FirstName,
@@ -78,7 +82,7 @@ namespace AccountErp.DataLayer.Repositories
                                              PostalCode = c.Address.PostalCode
                                          }
                                      },
-                                     Items = i.Services.Select(x => new InvoiceServiceDto
+                                     Items = i.Services.Select(x => new QuotationServiceDto
                                      {
                                          Id = x.ServiceId,
                                          Type = x.Service.Name,
@@ -91,7 +95,7 @@ namespace AccountErp.DataLayer.Repositories
                                          TaxPrice = x.TaxPrice,
                                          TaxPercentage = x.TaxPercentage
                                      }),
-                                     Attachments = i.Attachments.Select(x => new InvoiceAttachmentDto
+                                     Attachments = i.Attachments.Select(x => new QuotationAttachmentDto
                                      {
                                          Id = x.Id,
                                          Title = x.Title,
@@ -102,16 +106,16 @@ namespace AccountErp.DataLayer.Repositories
                           .AsNoTracking()
                           .SingleOrDefaultAsync();
 
-            return invoice;
+            return quotation;
         }
 
-        public async Task<InvoiceDetailForEditDto> GetForEditAsync(int id)
+        public async Task<QuotationDeatilForEditDto> GetForEditAsync(int id)
         {
-            return await (from i in _dataContext.Invoices
+            return await (from i in _dataContext.Quotations
                           join c in _dataContext.Customers
                           on i.CustomerId equals c.Id
                           where i.Id == id
-                          select new InvoiceDetailForEditDto
+                          select new QuotationDeatilForEditDto
                           {
                               Id = i.Id,
                               CustomerId = i.CustomerId,
@@ -119,18 +123,19 @@ namespace AccountErp.DataLayer.Repositories
                               Discount = i.Discount,
                               TotalAmount = i.TotalAmount,
                               Remark = i.Remark,
-                              InvoiceDate = i.InvoiceDate,
-                              StrInvoiceDate = i.StrInvoiceDate,
-                              DueDate = i.DueDate,
-                              StrDueDate = i.StrDueDate,
+                              QuotationDate = i.QuotationDate,
+                              StrQuotationDate = i.StrQuotationDate,
+                              ExpiryDate = i.ExpireDate,
+                              StrExpiryDate = i.StrExpireDate,
                               PoSoNumber = i.PoSoNumber,
+                              Memo = i.Memo,
                               Customer = new CustomerDetailDto
                               {
                                   FirstName = c.FirstName,
                                   LastName = c.LastName,
                                   Phone = c.Phone
                               },
-                              Items = i.Services.Select(x => new InvoiceServiceDto
+                              Items = i.Services.Select(x => new QuotationServiceDto
                               {
                                   Id = x.ServiceId,
                                   Type = x.Service.Name,
@@ -143,7 +148,7 @@ namespace AccountErp.DataLayer.Repositories
                                   TaxPrice = x.TaxPrice,
                                   TaxPercentage = x.TaxPercentage
                               }),
-                              Attachments = i.Attachments.Select(x => new InvoiceAttachmentDto
+                              Attachments = i.Attachments.Select(x => new QuotationAttachmentDto
                               {
                                   Id = x.Id,
                                   Title = x.Title,
@@ -155,14 +160,14 @@ namespace AccountErp.DataLayer.Repositories
                            .SingleOrDefaultAsync();
         }
 
-        public async Task<JqDataTableResponse<InvoiceListItemDto>> GetPagedResultAsync(InvoiceJqDataTableRequestModel model)
+        public async Task<JqDataTableResponse<QuotationListItemDto>> GetPagedResultAsync(QuotationJqDataTableRequestModel model)
         {
             if (model.Length == 0)
             {
                 model.Length = Constants.DefaultPageSize;
             }
 
-            var linqstmt = (from i in _dataContext.Invoices
+            var linqstmt = (from i in _dataContext.Quotations
                             join c in _dataContext.Customers
                             on i.CustomerId equals c.Id
                             where (model.CustomerId == null
@@ -171,7 +176,7 @@ namespace AccountErp.DataLayer.Repositories
                                     || EF.Functions.Like(c.FirstName, "%" + model.FilterKey + "%")
                                     || EF.Functions.Like(c.LastName, "%" + model.FilterKey + "%"))
                             && i.Status != Constants.InvoiceStatus.Deleted
-                            select new InvoiceListItemDto
+                            select new QuotationListItemDto
                             {
                                 Id = i.Id,
                                 CustomerId = i.CustomerId,
@@ -182,34 +187,39 @@ namespace AccountErp.DataLayer.Repositories
                                 Tax = i.Tax,
                                 TotalAmount = i.TotalAmount,
                                 CreatedOn = i.CreatedOn,
-                                Status = i.Status
+                                Status = i.Status,
+                                QuotationDate = i.QuotationDate,
+                                StrQuotationDate = i.StrQuotationDate,
+                                ExpiryDate = i.ExpireDate,
+                                StrExpiryDate = i.StrExpireDate
+
                             })
                             .AsNoTracking();
 
             var sortExpresstion = model.GetSortExpression();
 
-            var pagedResult = new JqDataTableResponse<InvoiceListItemDto>
+            var pagedResult = new JqDataTableResponse<QuotationListItemDto>
             {
-                RecordsTotal = await _dataContext.Invoices.CountAsync(x => model.CustomerId == null || x.CustomerId == model.CustomerId.Value),
+                RecordsTotal = await _dataContext.Quotations.CountAsync(x => model.CustomerId == null || x.CustomerId == model.CustomerId.Value),
                 RecordsFiltered = await linqstmt.CountAsync(),
                 Data = await linqstmt.OrderBy(sortExpresstion).Skip(model.Start).Take(model.Length).ToListAsync()
             };
 
-            foreach (var invoiceListItemDto in pagedResult.Data)
+            foreach (var quotationListItemDto in pagedResult.Data)
             {
-                invoiceListItemDto.CreatedOn = Utility.GetDateTime(invoiceListItemDto.CreatedOn, null);
+                quotationListItemDto.CreatedOn = Utility.GetDateTime(quotationListItemDto.CreatedOn, null);
             }
 
             return pagedResult;
         }
 
-        public async Task<List<InvoiceListItemDto>> GetRecentAsync()
+        public async Task<List<QuotationListItemDto>> GetRecentAsync()
         {
-            var linqstmt = (from i in _dataContext.Invoices
+            var linqstmt = (from i in _dataContext.Quotations
                             join c in _dataContext.Customers
                             on i.CustomerId equals c.Id
                             where i.Status != Constants.InvoiceStatus.Deleted
-                            select new InvoiceListItemDto
+                            select new QuotationListItemDto
                             {
                                 Id = i.Id,
                                 CustomerId = i.CustomerId,
@@ -218,24 +228,25 @@ namespace AccountErp.DataLayer.Repositories
                                 Tax = i.Tax ?? 0,
                                 Amount = i.TotalAmount,
                                 CreatedOn = i.CreatedOn,
-                                InvoiceDate = i.InvoiceDate,
-                                StrInvoiceDate = i.StrInvoiceDate,
-                                DueDate = i.DueDate,
-                                StrDueDate = i.StrDueDate,
-                                PoSoNumber = i.PoSoNumber
+                                QuotationDate = i.QuotationDate,
+                                StrQuotationDate = i.StrQuotationDate,
+                                ExpiryDate = i.ExpireDate,
+                                StrExpiryDate = i.StrExpireDate,
+                                PoSoNumber = i.PoSoNumber,
+                                Memo = i.Memo
                             })
                             .AsNoTracking();
 
             return await linqstmt.OrderByDescending(x => x.CreatedOn).Take(5).ToListAsync();
         }
 
-        public async Task<InvoiceSummaryDto> GetSummaryAsunc(int id)
+        public async Task<QuotationSummary> GetSummaryAsunc(int id)
         {
-            return await (from i in _dataContext.Invoices
+            return await (from i in _dataContext.Quotations
                           join c in _dataContext.Customers
                             on i.CustomerId equals c.Id
                           where i.Id == id
-                          select new InvoiceSummaryDto
+                          select new QuotationSummary
                           {
                               Id = i.Id,
                               CustomerId = c.Id,
@@ -249,11 +260,12 @@ namespace AccountErp.DataLayer.Repositories
                               Description = i.Remark,
                               Status = i.Status,
                               CreatedOn = i.CreatedOn,
-                              InvoiceDate = i.InvoiceDate,
-                              StrInvoiceDate = i.StrInvoiceDate,
-                              DueDate = i.DueDate,
-                              StrDueDate = i.StrDueDate,
-                              PoSoNumber = i.PoSoNumber
+                              QuotationDate = i.QuotationDate,
+                              StrQuotationDate = i.StrQuotationDate,
+                              ExpiryDate = i.ExpireDate,
+                              StrExpiryDate = i.StrExpireDate,
+                              PoSoNumber = i.PoSoNumber,
+                              Memo = i.Memo
                           })
                           .AsNoTracking()
                           .SingleOrDefaultAsync();
@@ -261,16 +273,16 @@ namespace AccountErp.DataLayer.Repositories
 
         public async Task UpdateStatusAsync(int id, Constants.InvoiceStatus status)
         {
-            var invoice = await _dataContext.Invoices.FindAsync(id);
+            var invoice = await _dataContext.Quotations.FindAsync(id);
             invoice.Status = status;
-            _dataContext.Invoices.Update(invoice);
+            _dataContext.Quotations.Update(invoice);
         }
 
         public async Task DeleteAsync(int id)
         {
-            var invoice = await _dataContext.Invoices.FindAsync(id);
+            var invoice = await _dataContext.Quotations.FindAsync(id);
             invoice.Status = Constants.InvoiceStatus.Deleted;
-            _dataContext.Invoices.Update(invoice);
+            _dataContext.Quotations.Update(invoice);
         }
     }
 }

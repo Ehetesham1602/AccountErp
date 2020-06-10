@@ -2,17 +2,18 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+
 namespace AccountErp.DataLayer.EntityConfigurations
 {
-    public class InvoiceServiceConfiguration : IEntityTypeConfiguration<InvoiceService>
+   public class QuotationServicesConfiguration : IEntityTypeConfiguration<QuotationService>
     {
-        public void Configure(EntityTypeBuilder<InvoiceService> builder)
+        public void Configure(EntityTypeBuilder<QuotationService> builder)
         {
-            builder.ToTable("InvoiceServices");
+            builder.ToTable("QuotationServices");
 
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.InvoiceId).IsRequired();
+            builder.Property(x => x.QuotationId).IsRequired();
             builder.Property(x => x.ServiceId).IsRequired();
             builder.Property(x => x.Rate).IsRequired().HasColumnType("NUMERIC(12,2)");
             builder.Property(x => x.Price).IsRequired().HasColumnType("NUMERIC(12,2)");
@@ -24,3 +25,4 @@ namespace AccountErp.DataLayer.EntityConfigurations
         }
     }
 }
+

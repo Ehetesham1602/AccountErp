@@ -21,16 +21,18 @@ namespace AccountErp.DataLayer.Repositories
             _dataContext = dataContext;
         }
 
-        public async Task<IEnumerable<SelectListItemDto>> GetSelectListItemsAsync()
+        public async Task<IEnumerable<SalesTaxDetailDto>> GetSelectListItemsAsync()
         {
             return await _dataContext.SalesTaxes
                 .AsNoTracking()
                 .Where(x=>x.Status != Constants.RecordStatus.Deleted)
                 .OrderBy(x => x.Code)
-                .Select(x => new SelectListItemDto
+                .Select(x => new SalesTaxDetailDto
                 {
-                    KeyInt = x.Id,
-                    Value = x.Code
+                    Id = x.Id,
+                    Code = x.Code,
+                    Description = x.Description,
+                    TaxPercentage = x.TaxPercentage
                 }).ToListAsync();
         }
 

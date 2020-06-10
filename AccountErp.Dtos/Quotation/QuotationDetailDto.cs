@@ -2,10 +2,11 @@
 using AccountErp.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace AccountErp.Dtos.Invoice
+namespace AccountErp.Dtos.Quotation
 {
-    public class InvoiceDetailDto
+    public class QuotationDetailDto
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }
@@ -15,15 +16,16 @@ namespace AccountErp.Dtos.Invoice
         public string Remark { get; set; }
         public Constants.InvoiceStatus Status { get; set; }
         public DateTime CreatedOn { get; set; }
-        public DateTime InvoiceDate { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime QuotationDate { get; set; }
+        public DateTime ExpiryDate { get; set; }
         public decimal? PoSoNumber { get; set; }
-        public string StrInvoiceDate { get; set; }
-        public string StrDueDate { get; set; }
+        public string StrQuotationDate { get; set; }
+        public string StrExpiryDate { get; set; }
+        public string Memo { get; set; }
 
         public CustomerDetailDto Customer { get; set; }
 
-        public IEnumerable<InvoiceServiceDto> Items { get; set; }
-        public IEnumerable<InvoiceAttachmentDto> Attachments { get; set; }
+        public IEnumerable<QuotationServiceDto> Items { get; set; }
+        public IEnumerable<QuotationAttachmentDto> Attachments { get; set; }
     }
 }

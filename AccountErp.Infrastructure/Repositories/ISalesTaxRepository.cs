@@ -20,7 +20,7 @@ namespace AccountErp.Infrastructure.Repositories
         Task<bool> IsCodeExistsAsync(string code);
         Task<bool> IsCodeExistsAsync(string code, int id);
 
-        Task<IEnumerable<SelectListItemDto>> GetSelectListItemsAsync();
+        Task<IEnumerable<SalesTaxDetailDto>> GetSelectListItemsAsync();
 
         Task<JqDataTableResponse<SalesTaxListItemDto>> GetPagedResultAsync(JqDataTableRequest model);
 

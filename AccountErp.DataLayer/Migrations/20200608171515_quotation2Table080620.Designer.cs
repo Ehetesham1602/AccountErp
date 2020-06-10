@@ -4,14 +4,16 @@ using AccountErp.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200608171515_quotation2Table080620")]
+    partial class quotation2Table080620
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -483,8 +485,7 @@ namespace AccountErp.DataLayer.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<decimal?>("PoSoNumber")
-                        .HasColumnType("NUMERIC(12,2)");
+                    b.Property<decimal>("PoSoNumber");
 
                     b.Property<string>("Remark")
                         .HasMaxLength(1000);
@@ -601,8 +602,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int>("InvoiceId");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("NUMERIC(12,2)");
+                    b.Property<decimal>("Price");
 
                     b.Property<int>("Quantity");
 
@@ -613,10 +613,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int>("TaxId");
 
-                    b.Property<int?>("TaxPercentage");
-
-                    b.Property<decimal>("TaxPrice")
-                        .HasColumnType("NUMERIC(12,2)");
+                    b.Property<decimal>("TaxPrice");
 
                     b.HasKey("Id");
 
@@ -701,129 +698,6 @@ namespace AccountErp.DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PaymentMethods");
-                });
-
-            modelBuilder.Entity("AccountErp.Entities.Quotation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(40);
-
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<int>("CustomerId");
-
-                    b.Property<decimal?>("Discount")
-                        .HasColumnType("NUMERIC(12,2)");
-
-                    b.Property<DateTime>("ExpireDate");
-
-                    b.Property<string>("Memo");
-
-                    b.Property<decimal?>("PoSoNumber")
-                        .HasColumnType("NUMERIC(12,2)");
-
-                    b.Property<DateTime>("QuotationDate");
-
-                    b.Property<string>("QuotationNumber")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Remark")
-                        .HasMaxLength(1000);
-
-                    b.Property<int>("Status");
-
-                    b.Property<string>("StrExpireDate");
-
-                    b.Property<string>("StrQuotationDate");
-
-                    b.Property<decimal?>("Tax")
-                        .HasColumnType("NUMERIC(12,2)");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("NUMERIC(12,2)");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(40);
-
-                    b.Property<DateTime?>("UpdatedOn");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Quotations");
-                });
-
-            modelBuilder.Entity("AccountErp.Entities.QuotationAttachment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(40);
-
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("OriginalFileName")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<int>("QuotationId");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuotationId");
-
-                    b.ToTable("QuotationAttachments");
-                });
-
-            modelBuilder.Entity("AccountErp.Entities.QuotationService", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("NUMERIC(12,2)");
-
-                    b.Property<int>("Quantity");
-
-                    b.Property<int>("QuotationId");
-
-                    b.Property<decimal>("Rate")
-                        .HasColumnType("NUMERIC(12,2)");
-
-                    b.Property<int>("ServiceId");
-
-                    b.Property<int>("TaxId");
-
-                    b.Property<int?>("TaxPercentage");
-
-                    b.Property<decimal>("TaxPrice")
-                        .HasColumnType("NUMERIC(12,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuotationId");
-
-                    b.HasIndex("ServiceId");
-
-                    b.ToTable("QuotationServices");
                 });
 
             modelBuilder.Entity("AccountErp.Entities.SalesTax", b =>
@@ -1188,35 +1062,6 @@ namespace AccountErp.DataLayer.Migrations
                     b.HasOne("AccountErp.Entities.SalesTax", "SalesTax")
                         .WithMany()
                         .HasForeignKey("SalesTaxId");
-                });
-
-            modelBuilder.Entity("AccountErp.Entities.Quotation", b =>
-                {
-                    b.HasOne("AccountErp.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("AccountErp.Entities.QuotationAttachment", b =>
-                {
-                    b.HasOne("AccountErp.Entities.Quotation")
-                        .WithMany("Attachments")
-                        .HasForeignKey("QuotationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("AccountErp.Entities.QuotationService", b =>
-                {
-                    b.HasOne("AccountErp.Entities.Quotation")
-                        .WithMany("Services")
-                        .HasForeignKey("QuotationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("AccountErp.Entities.Item", "Service")
-                        .WithMany()
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.ShippingAddress", b =>

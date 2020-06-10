@@ -37,7 +37,8 @@ namespace AccountErp.Factories
                     Quantity = x.Quantity,
                     Price = x.Price,
                     TaxId = x.TaxId,
-                    TaxPrice = x.TaxPrice
+                    TaxPrice = x.TaxPrice,
+                    TaxPercentage = x.TaxPercentage
                 }).ToList()
             };
 
@@ -231,7 +232,8 @@ namespace AccountErp.Factories
                     TaxId = service.TaxId,
                     Price = service.Price,
                     TaxPrice = service.TaxPrice,
-                    Quantity = service.Quantity
+                    Quantity = service.Quantity,
+                    TaxPercentage = service.TaxPercentage
                 });
             }
 
