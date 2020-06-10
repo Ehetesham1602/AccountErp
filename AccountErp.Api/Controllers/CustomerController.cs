@@ -1,4 +1,5 @@
 ﻿using AccountErp.Api.Helpers;
+using AccountErp.Dtos.Customer;
 using AccountErp.Infrastructure.Managers;
 using AccountErp.Models.Customer;
 using AccountErp.Utilities;
@@ -138,6 +139,14 @@ namespace AccountErp.Api.Controllers
         public async Task<IActionResult> GetPaymentInfo(int id)
         {
             return Ok(await _customerManager.GetPaymentInfoAsync(id));
+        }
+
+        [HttpPost]
+        [Route("get-customer-statement")]
+        public async Task<CustomerStatementDto> GetCustomerStatementAsync(CustomerStatementDto model)
+        {
+            var pagedResult = await _customerManager.GetCustomerStatementAsync(model);
+            return (pagedResult);
         }
     }
 }

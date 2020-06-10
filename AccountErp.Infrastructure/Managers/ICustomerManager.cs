@@ -30,5 +30,7 @@ namespace AccountErp.Infrastructure.Managers
         Task<bool> IsEmailExistsAsync(int id, string email);
 
         Task<CustomerPaymentInfoDto> GetPaymentInfoAsync(int id);
+
+        Task<CustomerStatementDto> GetCustomerStatementAsync(CustomerStatementDto model);
     }
 }

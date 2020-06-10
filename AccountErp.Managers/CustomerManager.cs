@@ -89,5 +89,10 @@ namespace AccountErp.Managers
         {
             return await _customerRepository.GetPaymentInfoAsync(id);
         }
+
+        public async Task<CustomerStatementDto> GetCustomerStatementAsync(CustomerStatementDto model)
+        {
+            return await _customerRepository.GetCustomerStatementAsync(model);
+        }
     }
 }

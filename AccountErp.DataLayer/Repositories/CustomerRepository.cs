@@ -1,6 +1,7 @@
 ﻿using AccountErp.Dtos;
 using AccountErp.Dtos.Address;
 using AccountErp.Dtos.Customer;
+using AccountErp.Dtos.Invoice;
 using AccountErp.Dtos.ShippingAddress;
 using AccountErp.Entities;
 using AccountErp.Infrastructure.Repositories;
@@ -230,5 +231,54 @@ namespace AccountErp.DataLayer.Repositories
                             .AsNoTracking()
                             .SingleOrDefaultAsync();
         }
+
+        public async Task<CustomerStatementDto> GetCustomerStatementAsync(CustomerStatementDto model)
+        {
+
+            var customerStatement = await (from c in _dataContext.Customers
+                                           join i in _dataContext.Invoices
+                                           on c.Id equals i.CustomerId
+                                           where c.Id == model.CustomerId && (i.InvoiceDate >= model.startDate && i.InvoiceDate <= model.endDate)
+                                            && (i.Status == model.Status)
+                                           select new CustomerStatementDto
+                                           {
+                                               //Id = i.Id,
+                                               startDate = model.startDate,
+                                               endDate = model.endDate,
+                                               CustomerId = model.CustomerId,
+                                               Customer = new CustomerDetailDto
+                                               {
+                                                   FirstName = c.FirstName,
+                                                   LastName = c.LastName,
+                                                   Email = c.Email,
+                                                   Phone = c.Phone,
+                                                   Discount = c.Discount,
+                                                   Address = new AddressDto
+                                                   {
+                                                       StreetNumber = c.Address.StreetNumber,
+                                                       StreetName = c.Address.StreetName,
+                                                       City = c.Address.City,
+                                                       State = c.Address.State,
+                                                       CountryName = c.Address.Country.Name,
+                                                       PostalCode = c.Address.PostalCode
+                                                   }
+                                               },
+                                               InvoiceList = c.Invoices.Select(x => new InvoiceListItemDto
+                                               {
+                                                   Id = x.Id,
+                                                   CustomerId = x.CustomerId,
+                                                   Description = x.Remark,
+                                                   Discount = x.Discount,
+                                                   //Amount = c.Services.Sum(x => x.Rate),
+                                                   Tax = x.Tax,
+                                                   TotalAmount = x.TotalAmount,
+                                                   CreatedOn = x.CreatedOn,
+                                                   Status = x.Status
+                                               })
+                                           })
+                          .AsNoTracking().ToListAsync();
+            return customerStatement.FirstOrDefault();
+        }
+
     }
 }
