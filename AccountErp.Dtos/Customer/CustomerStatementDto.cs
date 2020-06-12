@@ -12,7 +12,7 @@ namespace AccountErp.Dtos.Customer
 
         public int Id { get; set; }
         public int CustomerId { get; set; }
-        public DateTime startDate { get; set; }
+        public DateTime startDate { get; set; } 
         public DateTime endDate { get; set; }
         public Constants.InvoiceStatus Status { get; set; }
         public AddressDto Address { get; set; }

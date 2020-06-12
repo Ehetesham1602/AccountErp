@@ -78,7 +78,8 @@ namespace AccountErp.DataLayer.Repositories
                               IsTaxable = s.IsTaxable,
                               TaxCode = s.SalesTax.Code,
                               TaxPercentage = s.SalesTax.TaxPercentage,
-                              Status = s.Status
+                              Status = s.Status,
+                              SalesTaxId = s.SalesTaxId
                           })
                           .AsNoTracking()
                             .ToListAsync();

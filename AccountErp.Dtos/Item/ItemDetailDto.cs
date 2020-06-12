@@ -12,6 +12,7 @@ namespace AccountErp.Dtos.Item
         public bool IsTaxable { get; set; }
         public string TaxCode { get; set; }
         public decimal? TaxPercentage { get; set; }
+        public int? SalesTaxId { get; set; }
         public Constants.RecordStatus Status { get; set; }
     }
 }
