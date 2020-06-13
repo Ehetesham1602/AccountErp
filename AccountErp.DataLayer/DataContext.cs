@@ -30,6 +30,10 @@ namespace AccountErp.DataLayer
         public DbSet<Quotation> Quotations { get; set; }
         public DbSet<QuotationAttachment> QuotationAttachments { get; set; }
         public DbSet<QuotationService> QuotationServices { get; set; }
+
+        public DbSet<RecurringInvoice> RecurringInvoice { get; set; }
+        public DbSet<RecurringInvoiceAttachment> RecurringInvoiceAttachment { get; set; }
+        public DbSet<RecurringInvoiceService> RecurringInvoiceService { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -55,6 +59,9 @@ namespace AccountErp.DataLayer
             modelBuilder.ApplyConfiguration(new QuotationAttachmentConfiguration());
             modelBuilder.ApplyConfiguration(new QuotationConfiguration());
             modelBuilder.ApplyConfiguration(new QuotationServicesConfiguration());
+            modelBuilder.ApplyConfiguration(new RecurringInvoiceAttachmentConfiguration());
+            modelBuilder.ApplyConfiguration(new RecurringInvoiceConfiguration());
+            modelBuilder.ApplyConfiguration(new RecurringInvoiceServiceConfiguration());
         }
     }
 }

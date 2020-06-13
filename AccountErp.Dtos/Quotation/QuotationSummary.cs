@@ -15,6 +15,7 @@ namespace AccountErp.Dtos.Quotation
         public decimal Amount { get; set; }
         public decimal? Discount { get; set; }
         public decimal TotalAmount { get; set; }
+        public string QuotationNumber { get; set; }
         public decimal? Tax { get; set; }
         public DateTime QuotationDate { get; set; }
         public DateTime ExpiryDate { get; set; }

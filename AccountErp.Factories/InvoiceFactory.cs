@@ -10,13 +10,12 @@ namespace AccountErp.Factories
 {
     public class InvoiceFactory
     {
-        public static Invoice Create(InvoiceAddModel model, string userId)
+        public static Invoice Create(InvoiceAddModel model, string userId,int count)
         {
-            
             var invoice = new Invoice
             {
                 CustomerId = model.CustomerId,
-                InvoiceNumber = string.Empty,
+                InvoiceNumber = "Inv" + "-" + model.InvoiceDate.ToString("yy") + "-" + (count + 1).ToString("000"),
                 Tax = model.Tax,
                 Discount = model.Discount,
                 TotalAmount = model.TotalAmount,
@@ -25,9 +24,9 @@ namespace AccountErp.Factories
                 CreatedBy = userId ?? "0",
                 CreatedOn = Utility.GetDateTime(),
                 InvoiceDate = model.InvoiceDate,
-                StrInvoiceDate = model.InvoiceDate.ToString("yyyy-mm-dd"),
+                StrInvoiceDate = model.InvoiceDate.ToString("yyyy-MM-dd"),
                 DueDate = model.DueDate,
-                StrDueDate = model.DueDate.ToString("yyyy-mm-dd"),
+                StrDueDate = model.DueDate.ToString("yyyy-MM-dd"),
                 PoSoNumber = model.PoSoNumber,
                 Services = model.Items.Select(x => new InvoiceService
                 {
@@ -192,9 +191,9 @@ namespace AccountErp.Factories
             entity.UpdatedBy = userId ?? "0";
             entity.UpdatedOn = Utility.GetDateTime();
             entity.InvoiceDate = model.InvoiceDate;
-            entity.StrInvoiceDate = model.InvoiceDate.ToString("yyyy-mm-dd");
+            entity.StrInvoiceDate = model.InvoiceDate.ToString("yyyy-MM-dd");
             entity.DueDate = model.DueDate;
-            entity.StrDueDate = model.DueDate.ToString("yyyy-mm-dd");
+            entity.StrDueDate = model.DueDate.ToString("yyyy-MM-dd");
             entity.PoSoNumber = model.PoSoNumber;
 
             //int[] arr = new int[100];
@@ -218,11 +217,11 @@ namespace AccountErp.Factories
                 entity.Services.Remove(deletedService);
             }
 
-            //var addedServices = items
-            //    .Where(x => !entity.Services.Select(y => y.ServiceId).Contains(x.Id))
-            //    .ToList();
+            var addedServices = model.Items
+                .Where(x => !entity.Services.Select(y => y.ServiceId).Contains(x.ServiceId))
+                .ToList();
 
-            foreach (var service in model.Items)
+            foreach (var service in addedServices)
             {
                 entity.Services.Add(new InvoiceService
                 {

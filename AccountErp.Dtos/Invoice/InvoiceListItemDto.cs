@@ -8,6 +8,7 @@ namespace AccountErp.Dtos.Invoice
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
+        public string InvoiceNumber { get; set; }
         public string Description { get; set; }
         public decimal Amount { get; set; }
         public decimal? Discount { get; set; }

@@ -146,7 +146,6 @@ namespace AccountErp.Api.Controllers
         public async Task<CustomerStatementDto> GetCustomerStatementAsync(CustomerStatementDto model)
         {
             var pagedResult = await _customerManager.GetCustomerStatementAsync(model);
-            //error
             return (pagedResult);
         }
     }

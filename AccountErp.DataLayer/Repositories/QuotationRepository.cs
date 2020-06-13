@@ -65,6 +65,7 @@ namespace AccountErp.DataLayer.Repositories
                                      StrExpiryDate = i.StrExpireDate,
                                      PoSoNumber = i.PoSoNumber,
                                      Memo = i.Memo,
+                                     QuotationNumber = i.QuotationNumber,
                                      Customer = new CustomerDetailDto
                                      {
                                          FirstName = c.FirstName,
@@ -129,6 +130,7 @@ namespace AccountErp.DataLayer.Repositories
                               StrExpiryDate = i.StrExpireDate,
                               PoSoNumber = i.PoSoNumber,
                               Memo = i.Memo,
+                              QuotationNumber = i.QuotationNumber,
                               Customer = new CustomerDetailDto
                               {
                                   FirstName = c.FirstName,
@@ -191,7 +193,8 @@ namespace AccountErp.DataLayer.Repositories
                                 QuotationDate = i.QuotationDate,
                                 StrQuotationDate = i.StrQuotationDate,
                                 ExpiryDate = i.ExpireDate,
-                                StrExpiryDate = i.StrExpireDate
+                                StrExpiryDate = i.StrExpireDate,
+                                QuotationNumber = i.QuotationNumber
 
                             })
                             .AsNoTracking();
@@ -233,7 +236,8 @@ namespace AccountErp.DataLayer.Repositories
                                 ExpiryDate = i.ExpireDate,
                                 StrExpiryDate = i.StrExpireDate,
                                 PoSoNumber = i.PoSoNumber,
-                                Memo = i.Memo
+                                Memo = i.Memo,
+                                QuotationNumber = i.QuotationNumber
                             })
                             .AsNoTracking();
 
@@ -265,7 +269,8 @@ namespace AccountErp.DataLayer.Repositories
                               ExpiryDate = i.ExpireDate,
                               StrExpiryDate = i.StrExpireDate,
                               PoSoNumber = i.PoSoNumber,
-                              Memo = i.Memo
+                              Memo = i.Memo,
+                              QuotationNumber = i.QuotationNumber
                           })
                           .AsNoTracking()
                           .SingleOrDefaultAsync();
@@ -283,6 +288,12 @@ namespace AccountErp.DataLayer.Repositories
             var invoice = await _dataContext.Quotations.FindAsync(id);
             invoice.Status = Constants.InvoiceStatus.Deleted;
             _dataContext.Quotations.Update(invoice);
+        }
+
+        public async Task<int> getCount()
+        {
+            int count = await _dataContext.Quotations.CountAsync();
+            return count;
         }
     }
 }

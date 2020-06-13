@@ -1,9 +1,11 @@
 ﻿using AccountErp.Utilities;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace AccountErp.Dtos.Invoice
+namespace AccountErp.Dtos.RecurringInvoice
 {
-    public class InvoiceSummaryDto
+    public class RecInvoiceSummaryDto
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }
@@ -14,12 +16,11 @@ namespace AccountErp.Dtos.Invoice
         public decimal? Discount { get; set; }
         public decimal TotalAmount { get; set; }
         public decimal? Tax { get; set; }
-        public string InvoiceNumber { get; set; }
-        public DateTime InvoiceDate { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime RecInvoiceDate { get; set; }
+        public DateTime RecDueDate { get; set; }
         public decimal? PoSoNumber { get; set; }
-        public string StrInvoiceDate { get; set; }
-        public string StrDueDate { get; set; }
+        public string StrRecInvoiceDate { get; set; }
+        public string StrRecDueDate { get; set; }
         public string Description { get; set; }
         public Constants.InvoiceStatus Status { get; set; }
         public DateTime CreatedOn { get; set; }
