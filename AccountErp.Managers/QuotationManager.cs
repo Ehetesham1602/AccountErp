@@ -56,8 +56,10 @@ namespace AccountErp.Managers
                 model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
             }
 
+            var count = await _quotationRepository.getCount();
+
             //await _invoiceRepository.AddAsync(InvoiceFactory.Create(model, _userId, items));
-            await _quotationRepository.AddAsync(QuotationFactory.Create(model, _userId));
+            await _quotationRepository.AddAsync(QuotationFactory.Create(model, _userId, count));
 
             await _unitOfWork.SaveChangesAsync();
         }

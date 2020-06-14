@@ -11,13 +11,13 @@ namespace AccountErp.Factories
 {
     public class QuotationFactory
     {
-        public static Quotation Create(QuotationAddModel model, string userId)
+        public static Quotation Create(QuotationAddModel model, string userId,int count)
         {
 
             var quotation = new Quotation
             {
                 CustomerId = model.CustomerId,
-                QuotationNumber = string.Empty,
+                QuotationNumber = "Quo" + "-" + model.QuotationDate.ToString("yy") + "-" + (count + 1).ToString("000"),
                 Tax = model.Tax,
                 Discount = model.Discount,
                 TotalAmount = model.TotalAmount,
@@ -26,9 +26,9 @@ namespace AccountErp.Factories
                 CreatedBy = userId ?? "0",
                 CreatedOn = Utility.GetDateTime(),
                 QuotationDate = model.QuotationDate,
-                StrQuotationDate = model.QuotationDate.ToString("yyyy-mm-dd"),
+                StrQuotationDate = model.QuotationDate.ToString("yyyy-MM-dd"),
                 ExpireDate = model.ExpiryDate,
-                StrExpireDate = model.ExpiryDate.ToString("yyyy-mm-dd"),
+                StrExpireDate = model.ExpiryDate.ToString("yyyy-MM-dd"),
                 PoSoNumber = model.PoSoNumber,
                 Memo = model.Memo,
                 Services = model.Items.Select(x => new QuotationService
@@ -78,9 +78,9 @@ namespace AccountErp.Factories
             entity.UpdatedBy = userId ?? "0";
             entity.UpdatedOn = Utility.GetDateTime();
             entity.QuotationDate = model.QuotationDate;
-            entity.StrQuotationDate = model.QuotationDate.ToString("yyyy-mm-dd");
+            entity.StrQuotationDate = model.QuotationDate.ToString("yyyy-MM-dd");
             entity.ExpireDate = model.ExpiryDate;
-            entity.StrExpireDate = model.ExpiryDate.ToString("yyyy-mm-dd");
+            entity.StrExpireDate = model.ExpiryDate.ToString("yyyy-MM-dd");
             entity.PoSoNumber = model.PoSoNumber;
             entity.Memo = model.Memo;
 
@@ -105,11 +105,11 @@ namespace AccountErp.Factories
                 entity.Services.Remove(deletedService);
             }
 
-            //var addedServices = items
-            //    .Where(x => !entity.Services.Select(y => y.ServiceId).Contains(x.Id))
-            //    .ToList();
+            var addedServices = model.Items
+                .Where(x => !entity.Services.Select(y => y.ServiceId).Contains(x.ServiceId))
+                .ToList();
 
-            foreach (var service in model.Items)
+            foreach (var service in addedServices)
             {
                 entity.Services.Add(new QuotationService
                 {
