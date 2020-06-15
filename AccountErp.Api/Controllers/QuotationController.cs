@@ -193,5 +193,12 @@ namespace AccountErp.Api.Controllers
             await _emailManager.SendInvoiceAsync(quotation.Customer.Email, completePath);
             return Ok();
         }
+
+        [HttpGet]
+        [Route("get-QuotationNumber")]
+        public async Task<IActionResult> GetQuotationNumber()
+        {
+            return Ok(await _quotationManager.GetQuotationNumber());
+        }
     }
 }
