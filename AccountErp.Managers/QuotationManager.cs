@@ -125,6 +125,11 @@ namespace AccountErp.Managers
             await _quotationRepository.DeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();
         }
+        public async Task<int> GetQuotationNumber()
+        {
+            var count = await _quotationRepository.getCount();
+            return (count + 1);
+        }
     }
 }
 

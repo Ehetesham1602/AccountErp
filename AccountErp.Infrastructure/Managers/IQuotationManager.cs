@@ -26,5 +26,6 @@ namespace AccountErp.Infrastructure.Managers
         Task<QuotationSummary> GetSummaryAsunc(int id);
 
         Task DeleteAsync(int id);
+        Task<int> GetQuotationNumber();
     }
 }

@@ -124,5 +124,11 @@ namespace AccountErp.Managers
             await _invoiceRepository.DeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<int> GetInvoiceNumber()
+        {
+            var count = await _invoiceRepository.getCount();
+            return (count + 1);
+        }
     }
 }

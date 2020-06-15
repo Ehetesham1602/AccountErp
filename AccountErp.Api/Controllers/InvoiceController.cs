@@ -194,5 +194,12 @@ namespace AccountErp.Api.Controllers
             await _emailManager.SendInvoiceAsync(invoice.Customer.Email, completePath);
             return Ok();
         }
+
+        [HttpGet]
+        [Route("get-InvoiceNumber")]
+        public async Task<IActionResult> GetInvoiceNumber()
+        {
+            return Ok(await _invoiceManager.GetInvoiceNumber());
+        }
     }
 }
