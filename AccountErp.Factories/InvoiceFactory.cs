@@ -15,7 +15,7 @@ namespace AccountErp.Factories
             var invoice = new Invoice
             {
                 CustomerId = model.CustomerId,
-                InvoiceNumber = "Inv" + "-" + model.InvoiceDate.ToString("yy") + "-" + (count + 1).ToString("000"),
+                InvoiceNumber = "INV" + "-" + model.InvoiceDate.ToString("yy") + "-" + (count + 1).ToString("000"),
                 Tax = model.Tax,
                 Discount = model.Discount,
                 TotalAmount = model.TotalAmount,
@@ -207,10 +207,23 @@ namespace AccountErp.Factories
             foreach (var item in model.Items)
             {
                 tempArr.Add(item.ServiceId);
+                var alreadyExistServices = entity.Services.Where(x => item.ServiceId == x.ServiceId).FirstOrDefault();
+                //entity.Services.Where(x => item.ServiceId == x.ServiceId).Select(c => { c.CreditLimit = 1000; return c; });
+                if (alreadyExistServices != null)
+                {
+                    alreadyExistServices.Price = item.Price;
+                    alreadyExistServices.TaxId = item.TaxId;
+                    alreadyExistServices.TaxPercentage = item.TaxPercentage;
+                    alreadyExistServices.Rate = item.Rate;
+                    alreadyExistServices.Quantity = item.Quantity;
+                    entity.Services.Add(alreadyExistServices);
+                }
             }
 
             var deletedServices = entity.Services.Where(x => !tempArr.Contains(x.ServiceId)).ToList();
+            //var alreadyExistServices = entity.Services.Where(x => tempArr.Contains(x.ServiceId)).ToList();
             //var resultAll = items.Where(i => filter.All(x => i.Features.Any(f => x == f.Id)));
+
 
             foreach (var deletedService in deletedServices)
             {

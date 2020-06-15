@@ -30,5 +30,6 @@ namespace AccountErp.Infrastructure.Repositories
         Task UpdateStatusAsync(int id, Constants.InvoiceStatus status);
 
         Task DeleteAsync(int id);
+        Task<int> getCount();
     }
 }

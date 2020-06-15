@@ -16,6 +16,7 @@ namespace AccountErp.Dtos.RecurringInvoice
         public DateTime RecInvoiceDate { get; set; }
         public DateTime RecDueDate { get; set; }
         public decimal? PoSoNumber { get; set; }
+        public string RecInvoiceNumber { get; set; }
         public string StrRecInvoiceDate { get; set; }
         public string StrRecDueDate { get; set; }
 

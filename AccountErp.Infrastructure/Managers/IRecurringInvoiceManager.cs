@@ -25,5 +25,6 @@ namespace AccountErp.Infrastructure.Managers
         Task<RecInvoiceSummaryDto> GetSummaryAsunc(int id);
 
         Task DeleteAsync(int id);
+        Task<int> GetRecInvoiceNumber();
     }
 }
