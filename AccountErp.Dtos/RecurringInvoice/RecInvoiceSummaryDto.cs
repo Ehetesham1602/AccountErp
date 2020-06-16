@@ -22,6 +22,7 @@ namespace AccountErp.Dtos.RecurringInvoice
         public string StrRecInvoiceDate { get; set; }
         public string StrRecDueDate { get; set; }
         public string Description { get; set; }
+        public string RecInvoiceNumber { get; set; }
         public Constants.InvoiceStatus Status { get; set; }
         public DateTime CreatedOn { get; set; }
     }

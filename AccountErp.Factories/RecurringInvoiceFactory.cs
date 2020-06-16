@@ -1,23 +1,25 @@
 ﻿using AccountErp.Entities;
-using AccountErp.Models.Quotation;
+using AccountErp.Models.RecurringInvoice;
 using AccountErp.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace AccountErp.Factories
 {
-    public class QuotationFactory
+    public class RecurringInvoiceFactory
     {
-        public static Quotation Create(QuotationAddModel model, string userId,int count)
+        public static RecurringInvoice Create(RecInvoiceAddModel model, string userId, int count)
         {
+            var recInvoice = new RecurringInvoice
 
-            var quotation = new Quotation
+
+
             {
                 CustomerId = model.CustomerId,
-                QuotationNumber = "QUO" + "-" + model.QuotationDate.ToString("yy") + "-" + (count + 1).ToString("000"),
+                RecInvoiceNumber = "RECINV" + "-" + model.RecInvoiceDate.ToString("yy") + "-" + (count + 1).ToString("000"),
                 Tax = model.Tax,
                 Discount = model.Discount,
                 TotalAmount = model.TotalAmount,
@@ -25,13 +27,12 @@ namespace AccountErp.Factories
                 Status = Constants.InvoiceStatus.Pending,
                 CreatedBy = userId ?? "0",
                 CreatedOn = Utility.GetDateTime(),
-                QuotationDate = model.QuotationDate,
-                StrQuotationDate = model.QuotationDate.ToString("yyyy-MM-dd"),
-                ExpireDate = model.ExpiryDate,
-                StrExpireDate = model.ExpiryDate.ToString("yyyy-MM-dd"),
+                RecInvoiceDate = model.RecInvoiceDate,
+                StrRecInvoiceDate = model.RecInvoiceDate.ToString("yyyy-MM-dd"),
+                RecDueDate = model.RecDueDate,
+                StrRecDueDate = model.RecDueDate.ToString("yyyy-MM-dd"),
                 PoSoNumber = model.PoSoNumber,
-                Memo = model.Memo,
-                Services = model.Items.Select(x => new QuotationService
+                Services = model.Items.Select(x => new RecurringInvoiceService
                 {
                     Id = Guid.NewGuid(),
                     ServiceId = x.ServiceId,
@@ -39,7 +40,6 @@ namespace AccountErp.Factories
                     Quantity = x.Quantity,
                     Price = x.Price,
                     TaxId = x.TaxId,
-                    TaxPrice = x.TaxPrice,
                     TaxPercentage = x.TaxPercentage
                 }).ToList()
             };
@@ -47,14 +47,14 @@ namespace AccountErp.Factories
 
             if (model.Attachments == null || !model.Attachments.Any())
             {
-                return quotation;
+                return recInvoice;
             }
 
             foreach (var attachment in model.Attachments)
             {
-                quotation.Attachments = new List<QuotationAttachment>
+                recInvoice.Attachments = new List<RecurringInvoiceAttachment>
                 {
-                    new QuotationAttachment
+                    new RecurringInvoiceAttachment
                     {
                         Title = attachment.Title,
                         FileName = attachment.FileName,
@@ -65,10 +65,10 @@ namespace AccountErp.Factories
                 };
             }
 
-            return quotation;
+            return recInvoice;
         }
 
-        public static void EditInvoice(QuotationEditModel model, Quotation entity, string userId)
+        public static void EditInvoice(RecInvoiceEditModel model, RecurringInvoice entity, string userId)
         {
             entity.CustomerId = model.CustomerId;
             entity.Tax = model.Tax;
@@ -77,12 +77,11 @@ namespace AccountErp.Factories
             entity.Remark = model.Remark;
             entity.UpdatedBy = userId ?? "0";
             entity.UpdatedOn = Utility.GetDateTime();
-            entity.QuotationDate = model.QuotationDate;
-            entity.StrQuotationDate = model.QuotationDate.ToString("yyyy-MM-dd");
-            entity.ExpireDate = model.ExpiryDate;
-            entity.StrExpireDate = model.ExpiryDate.ToString("yyyy-MM-dd");
+            entity.RecInvoiceDate = model.RecInvoiceDate;
+            entity.StrRecInvoiceDate = model.RecInvoiceDate.ToString("yyyy-MM-dd");
+            entity.RecDueDate = model.RecDueDate;
+            entity.StrRecDueDate = model.RecDueDate.ToString("yyyy-MM-dd");
             entity.PoSoNumber = model.PoSoNumber;
-            entity.Memo = model.Memo;
 
             //int[] arr = new int[100];
             ArrayList tempArr = new ArrayList();
@@ -122,14 +121,13 @@ namespace AccountErp.Factories
 
             foreach (var service in addedServices)
             {
-                entity.Services.Add(new QuotationService
+                entity.Services.Add(new RecurringInvoiceService
                 {
                     Id = Guid.NewGuid(),
                     ServiceId = service.ServiceId,
                     Rate = service.Rate,
                     TaxId = service.TaxId,
                     Price = service.Price,
-                    TaxPrice = service.TaxPrice,
                     Quantity = service.Quantity,
                     TaxPercentage = service.TaxPercentage
                 });
@@ -151,11 +149,11 @@ namespace AccountErp.Factories
 
             foreach (var attachment in model.Attachments)
             {
-                var invoiceAttachment = entity.Attachments.SingleOrDefault(x => x.FileName.Equals(attachment.FileName));
+                var recInvoiceAttachment = entity.Attachments.SingleOrDefault(x => x.FileName.Equals(attachment.FileName));
 
-                if (invoiceAttachment == null)
+                if (recInvoiceAttachment == null)
                 {
-                    invoiceAttachment = new QuotationAttachment
+                    recInvoiceAttachment = new RecurringInvoiceAttachment
                     {
                         Title = attachment.Title,
                         FileName = attachment.FileName,
@@ -166,12 +164,12 @@ namespace AccountErp.Factories
                 }
                 else
                 {
-                    invoiceAttachment.Title = attachment.Title;
-                    invoiceAttachment.FileName = attachment.FileName;
-                    invoiceAttachment.OriginalFileName = attachment.OriginalFileName;
+                    recInvoiceAttachment.Title = attachment.Title;
+                    recInvoiceAttachment.FileName = attachment.FileName;
+                    recInvoiceAttachment.OriginalFileName = attachment.OriginalFileName;
                 }
 
-                entity.Attachments.Add(invoiceAttachment);
+                entity.Attachments.Add(recInvoiceAttachment);
             }
         }
     }
