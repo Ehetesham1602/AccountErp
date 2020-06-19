@@ -4,14 +4,16 @@ using AccountErp.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200617161153_RecurringInvoice")]
+    partial class RecurringInvoice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -161,10 +163,6 @@ namespace AccountErp.DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("BillDate");
-
-                    b.Property<string>("BillNumber");
-
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(40);
@@ -176,11 +174,6 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<DateTime?>("DueDate");
 
-                    b.Property<string>("Notes");
-
-                    b.Property<decimal?>("PoSoNumber")
-                        .HasColumnType("NUMERIC(12,2)");
-
                     b.Property<string>("ReferenceNumber")
                         .HasMaxLength(50);
 
@@ -188,10 +181,6 @@ namespace AccountErp.DataLayer.Migrations
                         .HasMaxLength(1000);
 
                     b.Property<int>("Status");
-
-                    b.Property<string>("StrBillDate");
-
-                    b.Property<string>("StrDueDate");
 
                     b.Property<decimal?>("Tax")
                         .HasColumnType("NUMERIC(12,2)");
@@ -255,18 +244,8 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int>("ItemId");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("NUMERIC(10,2)");
-
-                    b.Property<int>("Quantity");
-
                     b.Property<decimal>("Rate")
                         .HasColumnType("NUMERIC(10,2)");
-
-                    b.Property<int>("TaxId");
-
-                    b.Property<int?>("TaxPercentage")
-                        .IsRequired();
 
                     b.HasKey("Id");
 

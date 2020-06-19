@@ -27,6 +27,11 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.CreatedBy).IsRequired().HasMaxLength(40);
             builder.Property(x => x.UpdatedOn).IsRequired(false);
             builder.Property(x => x.UpdatedBy).HasMaxLength(40);
+            builder.Property(x => x.BillDate).IsRequired();
+            builder.Property(x => x.StrBillDate).IsRequired(false);
+            builder.Property(x => x.StrDueDate).IsRequired(false);
+            builder.Property(x => x.PoSoNumber).IsRequired(false).HasColumnType("NUMERIC(12,2)");
+            builder.Property(x => x.BillNumber).IsRequired(false);
 
             builder.HasMany(x => x.Items).WithOne().HasForeignKey(x => x.BillId);
             builder.HasMany(x => x.Attachments).WithOne().HasForeignKey(x => x.BillId);
