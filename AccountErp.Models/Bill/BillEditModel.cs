@@ -16,8 +16,12 @@ namespace AccountErp.Models.Bill
         [Required]
         public decimal TotalAmount { get; set; }
         public string Remark { get; set; }
+        public string Notes { get; set; }
+        public DateTime BillDate { get; set; }
+        public string BillNumber { get; set; }
+        public decimal? PoSoNumber { get; set; }
         [Required]
-        public List<int> Items { get; set; }
+        public List<BillServiceModel> Items { get; set; }
         public IList<BillAttachmentModel> Attachments { get; set; }
     }
 }

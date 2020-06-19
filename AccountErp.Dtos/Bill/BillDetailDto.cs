@@ -18,6 +18,13 @@ namespace AccountErp.Dtos.Bill
         public Constants.BillStatus Status { get; set; }
         public DateTime CreatedOn { get; set; }
 
+        public DateTime BillDate { get; set; }
+        public DateTime DueDate { get; set; }
+        public decimal? PoSoNumber { get; set; }
+        public string StrBillDate { get; set; }
+        public string StrDueDate { get; set; }
+        public string Notes { get; set; }
+        public string BillNumber { get; set; }
         public VendorPersonallnfoDto Vendor { get; set; }
 
         public IEnumerable<BillServiceDto> Items { get; set; }
