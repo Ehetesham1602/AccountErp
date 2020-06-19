@@ -8,6 +8,7 @@ using AccountErp.Models.Customer;
 using AccountErp.Utilities;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AccountErp.Managers
@@ -92,6 +93,11 @@ namespace AccountErp.Managers
 
         public async Task<CustomerStatementDto> GetCustomerStatementAsync(CustomerStatementDto model)
         {
+            if(model.Status == 1)
+            {
+                var data = await _customerRepository.GetOpeningBalance(model.startDate);
+                model.openingBalance = data.Sum(x => x.Amount);
+            }
             return await _customerRepository.GetCustomerStatementAsync(model);
         }
     }

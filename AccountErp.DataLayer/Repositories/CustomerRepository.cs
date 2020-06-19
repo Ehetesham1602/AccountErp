@@ -238,8 +238,7 @@ namespace AccountErp.DataLayer.Repositories
             var customerStatement = await (from c in _dataContext.Customers
                                            join i in _dataContext.Invoices
                                            on c.Id equals i.CustomerId
-                                           where c.Id == model.CustomerId && (i.InvoiceDate >= model.startDate && i.InvoiceDate <= model.endDate)
-                                            && (i.Status == model.Status)
+                                           where i.CustomerId == model.CustomerId  && i.InvoiceDate >= model.startDate && i.InvoiceDate <= model.endDate
                                            select new CustomerStatementDto
                                            {
                                                //Id = i.Id,
@@ -269,6 +268,7 @@ namespace AccountErp.DataLayer.Repositories
                                                    CustomerId = x.CustomerId,
                                                    Description = x.Remark,
                                                    Discount = x.Discount,
+                                                   InvoiceDate = x.InvoiceDate,
                                                    //Amount = c.Services.Sum(x => x.Rate),
                                                    Tax = x.Tax,
                                                    TotalAmount = x.TotalAmount,
@@ -279,6 +279,33 @@ namespace AccountErp.DataLayer.Repositories
                           .AsNoTracking().ToListAsync();
             return customerStatement.FirstOrDefault();
         }
+        public async Task<List<InvoiceListItemDto>> GetOpeningBalance(DateTime date)
+        {
+            DateTime startDateTime = DateTime.Today;
+            var linqstmt = (from i in _dataContext.Invoices
+                            join c in _dataContext.Customers
+                            on i.CustomerId equals c.Id
+                            where i.Status != Constants.InvoiceStatus.Deleted && i.Status != Constants.InvoiceStatus.Paid && i.InvoiceDate <= date
+                            select new InvoiceListItemDto
+                            {
+                                Id = i.Id,
+                                CustomerId = i.CustomerId,
+                                CustomerName = (c.FirstName ?? "") + " " + (c.MiddleName ?? "") + " " + (c.LastName ?? ""),
+                                Description = i.Remark,
+                                Tax = i.Tax ?? 0,
+                                Amount = i.TotalAmount,
+                                CreatedOn = i.CreatedOn,
+                                InvoiceDate = i.InvoiceDate,
+                                StrInvoiceDate = i.StrInvoiceDate,
+                                DueDate = i.DueDate,
+                                StrDueDate = i.StrDueDate,
+                                PoSoNumber = i.PoSoNumber,
+                                InvoiceNumber = i.InvoiceNumber
+                            })
+                            .AsNoTracking();
 
+            return await linqstmt.ToListAsync();
+        }
     }
+
 }
