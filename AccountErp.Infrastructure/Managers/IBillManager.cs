@@ -26,5 +26,6 @@ namespace AccountErp.Infrastructure.Managers
         Task<IEnumerable<SelectListItemDto>> GetSelectItemsAsync();
 
         Task DeleteAsync(int id);
+        Task<int> GetBillNumber();
     }
 }

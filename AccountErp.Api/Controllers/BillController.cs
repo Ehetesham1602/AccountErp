@@ -16,7 +16,6 @@ namespace AccountErp.Api.Controllers
 {
     [Route("api/[controller]")]
     [Produces("application/json")]
-    [Authorize]
     [ApiController]
     public class BillController : ControllerBase
     {
@@ -176,6 +175,12 @@ namespace AccountErp.Api.Controllers
             await _manager.DeleteAsync(id);
 
             return Ok();
+        }
+        [HttpGet]
+        [Route("get-BillNumber")]
+        public async Task<IActionResult> GetBillNumber()
+        {
+            return Ok(await _manager.GetBillNumber());
         }
     }
 }

@@ -14,11 +14,12 @@ namespace AccountErp.Dtos.Customer
         public int CustomerId { get; set; }
         public DateTime startDate { get; set; } 
         public DateTime endDate { get; set; }
-        public Constants.InvoiceStatus Status { get; set; }
+        public int Status { get; set; }
         public AddressDto Address { get; set; }
         public CustomerDetailDto Customer { get; set; }
         public ShippingAddressDto ShippingAddress { get; set; }
         public IEnumerable<InvoiceListItemDto> InvoiceList { get; set; }
+        public decimal openingBalance { get; set; }
         public DateTime CreatedOn { get; set; }
     }
 }

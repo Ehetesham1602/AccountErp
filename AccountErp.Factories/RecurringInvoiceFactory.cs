@@ -14,12 +14,9 @@ namespace AccountErp.Factories
         public static RecurringInvoice Create(RecInvoiceAddModel model, string userId, int count)
         {
             var recInvoice = new RecurringInvoice
-
-
-
             {
                 CustomerId = model.CustomerId,
-                RecInvoiceNumber = "RECINV" + "-" + model.RecInvoiceDate.ToString("yy") + "-" + (count + 1).ToString("000"),
+                RecInvoiceNumber = "REC-INV" + "-" + model.RecInvoiceDate.ToString("yy") + "-" + (count + 1).ToString("000"),
                 Tax = model.Tax,
                 Discount = model.Discount,
                 TotalAmount = model.TotalAmount,
