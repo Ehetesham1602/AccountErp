@@ -238,13 +238,13 @@ namespace AccountErp.DataLayer.Repositories
             var customerStatement = await (from c in _dataContext.Customers
                                            join i in _dataContext.Invoices
                                            on c.Id equals i.CustomerId
-                                           where i.CustomerId == model.CustomerId  && i.InvoiceDate >= model.startDate && i.InvoiceDate <= model.endDate
+                                           where i.CustomerId == model.CustomerId && i.Status != Constants.InvoiceStatus.Deleted
                                            select new CustomerStatementDto
                                            {
-                                               //Id = i.Id,
                                                startDate = model.startDate,
                                                endDate = model.endDate,
                                                CustomerId = model.CustomerId,
+                                               openingBalance = model.openingBalance,
                                                Customer = new CustomerDetailDto
                                                {
                                                    FirstName = c.FirstName,
@@ -269,7 +269,8 @@ namespace AccountErp.DataLayer.Repositories
                                                    Description = x.Remark,
                                                    Discount = x.Discount,
                                                    InvoiceDate = x.InvoiceDate,
-                                                   //Amount = c.Services.Sum(x => x.Rate),
+                                                   DueDate = x.DueDate,
+                                                   //Amount = i.Services.Sum(x => x.Rate),
                                                    Tax = x.Tax,
                                                    TotalAmount = x.TotalAmount,
                                                    CreatedOn = x.CreatedOn,

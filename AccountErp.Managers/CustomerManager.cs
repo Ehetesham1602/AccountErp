@@ -1,5 +1,6 @@
 ﻿using AccountErp.Dtos;
 using AccountErp.Dtos.Customer;
+using AccountErp.Entities;
 using AccountErp.Factories;
 using AccountErp.Infrastructure.DataLayer;
 using AccountErp.Infrastructure.Managers;
@@ -97,8 +98,16 @@ namespace AccountErp.Managers
             {
                 var data = await _customerRepository.GetOpeningBalance(model.startDate);
                 model.openingBalance = data.Sum(x => x.Amount);
+                var customerData = await _customerRepository.GetCustomerStatementAsync(model);
+                customerData.InvoiceList = customerData.InvoiceList.Where(p => p.InvoiceDate >= model.startDate && p.InvoiceDate <= model.endDate).ToList();
+                return customerData;
+
             }
-            return await _customerRepository.GetCustomerStatementAsync(model);
+            else
+            {
+                return await _customerRepository.GetCustomerStatementAsync(model);
+            }
+           
         }
     }
 }
