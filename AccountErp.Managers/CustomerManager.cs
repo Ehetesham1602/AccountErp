@@ -96,7 +96,7 @@ namespace AccountErp.Managers
         {
             if(model.Status == 1)
             {
-                var data = await _customerRepository.GetOpeningBalance(model.startDate);
+                var data = await _customerRepository.GetOpeningBalance(model.startDate,model.CustomerId);
                 model.openingBalance = data.Sum(x => x.Amount);
                 var customerData = await _customerRepository.GetCustomerStatementAsync(model);
                 customerData.InvoiceList = customerData.InvoiceList.Where(p => p.InvoiceDate >= model.startDate && p.InvoiceDate <= model.endDate).ToList();
@@ -108,6 +108,11 @@ namespace AccountErp.Managers
                 return await _customerRepository.GetCustomerStatementAsync(model);
             }
            
+        }
+        public async Task SetOverdueStatus(int custId)
+        {
+            await _customerRepository.SetOverdueStatus(custId);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

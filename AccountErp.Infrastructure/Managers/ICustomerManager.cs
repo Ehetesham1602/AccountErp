@@ -32,5 +32,6 @@ namespace AccountErp.Infrastructure.Managers
         Task<CustomerPaymentInfoDto> GetPaymentInfoAsync(int id);
 
         Task<CustomerStatementDto> GetCustomerStatementAsync(CustomerStatementDto model);
+        Task SetOverdueStatus(int custId);
     }
 }

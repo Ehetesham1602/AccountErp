@@ -192,6 +192,12 @@ namespace AccountErp.DataLayer.Repositories
                               TotalAmount = e.TotalAmount,
                               Remark = e.Remark,
                               Discount = e.Discount,
+                              BillDate = e.BillDate,
+                              DueDate = e.DueDate.Value,
+                              StrBillDate = e.StrBillDate,
+                              StrDueDate = e.StrDueDate,
+                              Notes = e.Notes,
+                              BillNumber = e.BillNumber,
                               Items = e.Items.Select(x => new BillServiceDto
                               {
                                   Id = x.ItemId,
