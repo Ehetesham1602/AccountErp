@@ -110,7 +110,8 @@ namespace AccountErp.DataLayer.Repositories
                                 StrBillDate = e.StrBillDate,
                                 StrDueDate = e.StrDueDate,
                                 Notes = e.Notes,
-                                BillNumber = e.BillNumber
+                                BillNumber = e.BillNumber,
+                                PoSoNumber = e.PoSoNumber
                             })
                             .AsNoTracking();
 
@@ -141,6 +142,7 @@ namespace AccountErp.DataLayer.Repositories
                               StrDueDate = b.StrDueDate,
                               Notes = b.Notes,
                               BillNumber = b.BillNumber,
+                              PoSoNumber = b.PoSoNumber,
                               Vendor = new VendorPersonallnfoDto
                               {
                                   Name = v.Name,
@@ -198,6 +200,7 @@ namespace AccountErp.DataLayer.Repositories
                               StrDueDate = e.StrDueDate,
                               Notes = e.Notes,
                               BillNumber = e.BillNumber,
+                              PoSoNumber = e.PoSoNumber,
                               Items = e.Items.Select(x => new BillServiceDto
                               {
                                   Id = x.ItemId,
@@ -243,7 +246,8 @@ namespace AccountErp.DataLayer.Repositories
                               StrDueDate = e.StrDueDate,
                               PoSoNumber = e.PoSoNumber,
                               Notes = e.Notes,
-                              BillNumber = e.BillNumber
+                              BillNumber = e.BillNumber,
+
                           })
                 .AsNoTracking()
                 .SingleOrDefaultAsync();
