@@ -238,13 +238,13 @@ namespace AccountErp.DataLayer.Repositories
             var customerStatement = await (from c in _dataContext.Customers
                                            join i in _dataContext.Invoices
                                            on c.Id equals i.CustomerId
-                                           where i.CustomerId == model.CustomerId  && i.InvoiceDate >= model.startDate && i.InvoiceDate <= model.endDate
+                                           where i.CustomerId == model.CustomerId && i.Status != Constants.InvoiceStatus.Deleted
                                            select new CustomerStatementDto
                                            {
-                                               //Id = i.Id,
                                                startDate = model.startDate,
                                                endDate = model.endDate,
                                                CustomerId = model.CustomerId,
+                                               openingBalance = model.openingBalance,
                                                Customer = new CustomerDetailDto
                                                {
                                                    FirstName = c.FirstName,
@@ -269,7 +269,8 @@ namespace AccountErp.DataLayer.Repositories
                                                    Description = x.Remark,
                                                    Discount = x.Discount,
                                                    InvoiceDate = x.InvoiceDate,
-                                                   //Amount = c.Services.Sum(x => x.Rate),
+                                                   DueDate = x.DueDate,
+                                                   //Amount = i.Services.Sum(x => x.Rate),
                                                    Tax = x.Tax,
                                                    TotalAmount = x.TotalAmount,
                                                    CreatedOn = x.CreatedOn,
@@ -279,13 +280,12 @@ namespace AccountErp.DataLayer.Repositories
                           .AsNoTracking().ToListAsync();
             return customerStatement.FirstOrDefault();
         }
-        public async Task<List<InvoiceListItemDto>> GetOpeningBalance(DateTime date)
+        public async Task<List<InvoiceListItemDto>> GetOpeningBalance(DateTime date, int custId)
         {
-            DateTime startDateTime = DateTime.Today;
             var linqstmt = (from i in _dataContext.Invoices
                             join c in _dataContext.Customers
                             on i.CustomerId equals c.Id
-                            where i.Status != Constants.InvoiceStatus.Deleted && i.Status != Constants.InvoiceStatus.Paid && i.InvoiceDate <= date
+                            where i.CustomerId == custId && i.Status != Constants.InvoiceStatus.Deleted && i.Status != Constants.InvoiceStatus.Paid && i.InvoiceDate <= date
                             select new InvoiceListItemDto
                             {
                                 Id = i.Id,
@@ -305,6 +305,26 @@ namespace AccountErp.DataLayer.Repositories
                             .AsNoTracking();
 
             return await linqstmt.ToListAsync();
+        }
+        public async Task SetOverdueStatus(int custId)
+        {
+            DateTime startDateTime = DateTime.Today;
+            var linqstmt = await (from i in _dataContext.Invoices
+                            where i.CustomerId == custId && i.Status != Constants.InvoiceStatus.Deleted && i.Status != Constants.InvoiceStatus.Paid && i.DueDate <= startDateTime
+                                  select i
+                            ).AsNoTracking()
+                            .ToListAsync();
+
+            foreach (var item in linqstmt)
+            {
+                item.Status = Constants.InvoiceStatus.Overdue;
+                _dataContext.Invoices.Update(item);
+            }
+          //  _dataContext.Invoices.Update(linqstmt);
+
+            //  return await linqstmt.ToListAsync();
+
+
         }
     }
 
