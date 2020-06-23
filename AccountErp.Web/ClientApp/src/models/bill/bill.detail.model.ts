@@ -18,7 +18,7 @@ export class BillDetailModel {
 
     public vendor: VendorPersonalInfoModel;
 
-    public items: Array<number>;
+    public items: any;
     public attachments: Array<AttachmentDetailModel>;
 
     constructor() {

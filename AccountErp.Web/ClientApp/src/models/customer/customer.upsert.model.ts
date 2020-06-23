@@ -1,4 +1,5 @@
 import { AddressModel } from '../address.model';
+import { ShippingAddressModel } from '../shippingAddress.model';
 
 export class CustomerUpsertModel {
     public id: number;
@@ -8,6 +9,7 @@ export class CustomerUpsertModel {
     public email: string;
     public phone: string;
     public address: AddressModel;
+    public shippingAddress:ShippingAddressModel;
 
     public accountNumber: string;
     public bankName: string;
@@ -18,5 +20,7 @@ export class CustomerUpsertModel {
 
     constructor() {
         this.address = new AddressModel();
+        this.shippingAddress = new ShippingAddressModel();
+
     }
 }

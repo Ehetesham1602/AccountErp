@@ -15,6 +15,7 @@ import { DataTableResponseModel } from '../../../models';
 export class ItemSelectorComponent implements OnInit, AfterViewInit {
     @BlockUI('container-blockui-items') blockUI: NgBlockUI;
     @Input() selectedItems: Array<ItemListItemModel>;
+    @Input() testVariable;
     @ViewChild(DataTableDirective, { static: false })
     datatableElement: DataTableDirective;
     dtOptions: DataTables.Settings = {};

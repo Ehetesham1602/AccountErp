@@ -111,8 +111,8 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-12">
-                                    <app-item-selected [selectedItems]="selectedItems" [readOnly]="true">
+                                <div class="col-12 disableDiv">
+                                    <app-item-selected [selectedItems]="selectedItems" [itemId]="itemId" [selectedTax]="selectedTax" (updateTotalAmount)="updateTotalAmount()">
                                     </app-item-selected>
                                 </div>
                             </div>

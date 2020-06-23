@@ -5,7 +5,7 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 import { AppUtils } from '../../../helpers';
 import { ItemListItemModel, BillDetailModel } from '../../../models';
-import { ItemService, BillService } from '../../../services';
+import { ItemService, BillService, SalesTaxService } from '../../../services';
 
 @Component({
     selector: 'app-bill-detail',
@@ -18,12 +18,17 @@ export class BillDetailComponent implements OnInit {
     items: Array<ItemListItemModel> = new Array<ItemListItemModel>();
     selectedItems: Array<ItemListItemModel> = new Array<ItemListItemModel>();
     isModelLoaded = false;
+    salesTaxItems;
+    itemId: Array<ItemListItemModel> = new Array<ItemListItemModel>();
+    selectedTax;
+    disabled;
 
     constructor(private router: Router,
         private route: ActivatedRoute,
         private toastr: ToastrService,
         private appUtils: AppUtils,
         private billService: BillService,
+        private taxService:SalesTaxService,
         private itemService: ItemService) {
         this.route.params.subscribe((params) => {
             this.model.id = params['id'];
@@ -31,7 +36,9 @@ export class BillDetailComponent implements OnInit {
     }
 
     ngOnInit() {
+       
         this.loadServices();
+        this.loadTaxes();
         this.loadBill();
     }
 
@@ -53,6 +60,22 @@ export class BillDetailComponent implements OnInit {
             });
     }
 
+    loadTaxes(){
+        this.taxService.getSelectListItems()
+            .subscribe((data: any) => {
+                if (!data || data.length === 0) {
+                    return;
+                }
+
+                this.salesTaxItems = data;
+
+                 this.updateSelectedItems();
+            },
+                error => {
+                    this.appUtils.ProcessErrorResponse(this.toastr, error);
+                });
+    }
+
     loadServices() {
         this.itemService.getAllActiveOnly()
             .subscribe((data: any) => {
@@ -69,23 +92,66 @@ export class BillDetailComponent implements OnInit {
                 });
     }
 
+    // updateSelectedItems() {
+    //     if (this.items.length === 0 || this.model.items.length === 0) {
+    //         return;
+    //     }
+
+    //     const tempArray = new Array<ItemListItemModel>();
+
+    //     this.model.items.map((serviceId) => {
+    //         const service = this.items.find(x => x.id === serviceId);
+    //         if (service) {
+    //             tempArray.push(service);
+    //         }
+    //     });
+
+    //     this.selectedItems = tempArray;
+    // }
+
     updateSelectedItems() {
-        if (this.items.length === 0 || this.model.items.length === 0) {
-            return;
-        }
-
-        const tempArray = new Array<ItemListItemModel>();
-
-        this.model.items.map((serviceId) => {
-            const service = this.items.find(x => x.id === serviceId);
-            if (service) {
-                tempArray.push(service);
-            }
-        });
-
-        this.selectedItems = tempArray;
-    }
-
+        debugger;
+             if (this.items.length === 0 || this.model.items.length === 0) {
+                 return;
+             }
+           
+             const tempArray = new Array<ItemListItemModel>();
+              const tempTax=[]
+             this.model.totalAmount = 0;
+             this.model.items.map((itemId) => {
+                 const item = this.items.find(x => x.id === itemId.id);
+                 console.log("itemss",itemId)
+                 if (item) {
+                      item.rate = itemId.rate;
+                      item.qty= itemId.quantity;
+                      item.rate=itemId.rate;
+                      item.price=itemId.price;
+                      item.description=itemId.description;
+                      
+                      tempArray.push(item);
+           
+                     this.model.totalAmount += itemId.rate;
+                     //Get item taxes
+                     debugger;
+                    if(itemId.taxId!=0){
+                        const taxitem=this.salesTaxItems.find(x=> x.id===itemId.taxId);
+                        tempTax.push(taxitem);
+           
+                    }else{
+                        tempTax.push(null);
+                    }
+                 }
+           
+                 
+             });
+           
+             this.selectedItems =[];
+             this.selectedItems = tempArray;
+             //this.itemId=[];
+             this.itemId=tempArray;
+             this.selectedTax=tempTax;
+             console.log("bindselecteditem",this.itemId);
+           }
 
     delete(): void {
         if (!confirm('Are you sure you want to delete the selected bill?')) {

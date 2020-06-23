@@ -9,8 +9,14 @@ export class InvoiceAddModel {
     public discount: number;
     public totalAmount: number;
     public remark: string;
+    public invoiceDate:string;
+    public dueDate:string;
+    public poSoNumber:string;
 
-    public items: Array<number>;
+   
+  
+
+    public items: any;
     public attachments: Array<AttachmentAddModel>;
 
     constructor() {

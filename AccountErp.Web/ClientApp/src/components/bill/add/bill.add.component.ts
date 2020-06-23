@@ -10,7 +10,8 @@ import {
     BillAddModel, AttachmentAddModel, SelectListItemModel, ItemListItemModel,
     VendorPersonalInfoModel
 } from '../../../models';
-import { BillService, VendorService } from '../../../services';
+import { BillService, VendorService, ItemService } from '../../../services';
+
 
 @Component({
     selector: 'app-bill-add',
@@ -24,24 +25,47 @@ export class BillAddComponent implements OnInit {
     vendor: VendorPersonalInfoModel = new VendorPersonalInfoModel();
     vendors: Array<SelectListItemModel> = new Array<SelectListItemModel>();
     selectedItems: Array<ItemListItemModel> = new Array<ItemListItemModel>();
-
+    vendorId;
+    items: Array<ItemListItemModel> = new Array<ItemListItemModel>();
+    selectedVendor;
+    selectedItemListItemModel : ItemListItemModel=new ItemListItemModel();
+    config = {displayKey:"value",search:true,limitTo:10,height: 'auto',placeholder:'Select Item',customComparator: ()=>{},moreText: 'more',noResultsFound: 'No results found!',searchPlaceholder:'Search',searchOnKey: 'value',clearOnSelection: false,inputDirection: 'ltr',}
+    itemId: Array<ItemListItemModel> = new Array<ItemListItemModel>();
+    selectedTax=[];
+    Items: Array<ItemListItemModel> = new Array<ItemListItemModel>();
+    salesTaxItems;
+    newBillNumber;
+    billDate;
+    dueDate;
     constructor(private router: Router,
         private route: ActivatedRoute,
         private modalService: NgbModal,
         private toastr: ToastrService,
         private appUtils: AppUtils,
         private billService: BillService,
+        private itemService: ItemService,
         private vendorService: VendorService) {
 
     }
 
     ngOnInit() {
+        this.getNewBillNumber();
         this.loadVendors();
 
         if (!this.model.attachments || this.model.attachments.length === 0) {
             const attachmentFile = new AttachmentAddModel();
             this.model.attachments.push(attachmentFile);
         }
+
+        this.route.params.subscribe((params) => {
+            if(params['id']){
+                this.vendorId = params['id'];
+                this.model.vendorId = params['id'];
+           
+               this.getVendorDetailForVenoders();
+            }
+            
+        });
     }
 
     loadVendors() {
@@ -49,7 +73,9 @@ export class BillAddComponent implements OnInit {
         this.vendorService.getSelectItems()
             .subscribe((data) => {
                 this.blockUI.stop();
+                this.vendors=[];
                 Object.assign(this.vendors, data);
+                console.log("vendr",this.vendors);
             },
                 error => {
                     this.blockUI.stop();
@@ -62,6 +88,9 @@ export class BillAddComponent implements OnInit {
     }
 
     getVendorDetail() {
+        debugger;
+        if(this.selectedVendor!=undefined){
+            this.model.vendorId=this.selectedVendor.keyInt;
         this.blockUI.start();
         this.vendor = new VendorPersonalInfoModel();
         this.vendorService.getPersonalInfo(Number(this.model.vendorId))
@@ -75,6 +104,32 @@ export class BillAddComponent implements OnInit {
                     this.appUtils.ProcessErrorResponse(this.toastr, error);
                 }
             );
+        }
+    }
+
+    getVendorDetailForVenoders() {
+       
+        this.blockUI.start();
+        this.vendor = new VendorPersonalInfoModel();
+        this.vendorService.getPersonalInfo(Number(this.model.vendorId))
+            .subscribe(
+                (data) => {
+                    this.blockUI.stop();
+                    Object.assign(this.vendor, data);
+                    var custTemp= {
+                        "keyInt": this.vendor.id,
+                        "keyString": null,
+                        "value": this.vendor.name
+                      }
+                      this.selectedVendor=custTemp;
+                    //   this.model.vendorId=Number(this.vendor.id);
+                },
+                error => {
+                    this.blockUI.stop();
+                    this.appUtils.ProcessErrorResponse(this.toastr, error);
+                }
+            );
+        
     }
 
     addNewAttachment() {
@@ -148,13 +203,16 @@ export class BillAddComponent implements OnInit {
     }
 
     updateTotalAmount() {
+        debugger;
+       
         this.model.totalAmount = 0;
         this.model.tax = 0;
         this.selectedItems.map((item: ItemListItemModel) => {
             if (item.taxPercentage != null) {
                 this.model.tax += (item.rate * item.taxPercentage) / 100;
             }
-            this.model.totalAmount += item.rate;
+            //this.model.totalAmount += item.rate;
+            this.model.totalAmount += item.price;
         });
 
         if (this.vendor.discount != null) {
@@ -182,10 +240,27 @@ export class BillAddComponent implements OnInit {
     }
 
     submit() {
-        if (this.selectedItems.length > 0) {
+
+        if (!confirm('Are you sure you want to add Bill?')) {
+            return;
+        }
+
+        this.model.items=[];
+        if (this.selectedItems.length > 0 && this.selectedItems[0].id!=0 ) {
+            if(this.selectedItems[this.selectedItems.length-1].id!=0){
             this.selectedItems.map((item) => {
-                this.model.items.push(item.id);
+                if(item.salesTaxId!=null){
+                    this.model.items.push({"itemId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage": item.taxPercentage,"quantity":item.qty});
+                }else{
+                    this.model.items.push({"itemId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage": 0,"quantity":item.qty});
+                }
             });
+        }else{
+            this.toastr.error('Please select items/services to continue');
+            // this.selectedItems.splice(0,this.selectedItems.length-1);
+            return;
+            
+        }
         } else {
             this.toastr.error('Please select items/services to continue');
             return;
@@ -199,6 +274,8 @@ export class BillAddComponent implements OnInit {
         }
 
         this.blockUI.start();
+
+        console.log("billModel",JSON.stringify(this.model));
 
         this.billService.add(this.model).subscribe(
             () => {
@@ -216,4 +293,159 @@ export class BillAddComponent implements OnInit {
                 this.appUtils.ProcessErrorResponse(this.toastr, error);
             });
     }
+
+  
+
+    // updateSelectedItems() {
+
+    //     if (this.items.length === 0
+    //         || this.model.items.length === 0) {
+    //         return;
+    //     }
+
+    //     const tempArray = new Array<ItemListItemModel>();
+
+    //     this.model.items.map((itemId) => {
+    //         const service = this.items.find(x => x.id === itemId);
+    //         if (service) {
+    //             tempArray.push(service);
+    //         }
+    //     });
+    //     console.log(tempArray);
+    //     this.selectedItems = tempArray;
+    // }
+
+    updateSelectedItems() {
+   
+        if (this.Items.length === 0 || this.model.items.length === 0) {
+            return;
+        }
+      
+        const tempArray = new Array<ItemListItemModel>();
+         const tempTax=[]
+        this.model.totalAmount = 0;
+        this.model.items.map((invoiceItem) => {
+            const item = this.Items.find(x => x.id === invoiceItem.id);
+            console.log("itemss",invoiceItem)
+            if (item) {
+                 item.rate = invoiceItem.rate;
+                 item.qty= invoiceItem.quantity;
+                 item.rate=invoiceItem.rate;
+                 item.price=invoiceItem.price;
+                 item.description=invoiceItem.description;
+                 
+                 tempArray.push(item);
+      
+                this.model.totalAmount += invoiceItem.rate;
+                //Get item taxes
+                debugger;
+               if(invoiceItem.taxId!=0){
+                   const taxitem=this.salesTaxItems.find(x=> x.id===invoiceItem.taxId);
+                   tempTax.push(taxitem);
+      
+               }else{
+                   tempTax.push(null);
+               }
+            }
+      
+            
+        });
+      
+        this.selectedItems = tempArray;
+       // this.itemId=[];
+        this.itemId=tempArray;
+        this.selectedTax=tempTax;
+        console.log("bindselecteditem",this.itemId);
+      }
+
+    newRow(){
+        console.log("selerow",this.selectedItems)
+        if(this.selectedItems[this.selectedItems.length-1].id!=0){
+            this.initiateGrid();
+        }
+        else{
+            this.toastr.error("Please select an item")
+        }
+     
+    }
+
+    initiateGrid(){
+        debugger;
+      this.selectedItems.push({"description": "",
+      "id": 0,
+      "isTaxable": false,
+      "itemTypeName": "",
+      "name": "Select Item",
+      "price": 0.00,
+      "qty": 1,
+      "rate": 0.00,
+      "salesTaxId": null,
+      "status": 1,
+      "taxCode": null,
+      "taxPercentage": null});
+
+    }
+
+    // initiateGrid(){
+    //     debugger;
+    //     // alert("ng oninit called")
+    //   this.selectedItemListItemModel.id=0;
+    //   this.selectedItemListItemModel.itemTypeName="";
+    //   this.selectedItemListItemModel.name="";
+    //   this.selectedItemListItemModel.rate=0;
+    //   this.selectedItemListItemModel.taxCode="";
+    //   this.selectedItemListItemModel.taxPercentage=0;
+    //   this.selectedItemListItemModel.description="";
+    //   this.selectedItems.push(this.selectedItemListItemModel);
+  
+    //   console.log("ddl",this.itemId)
+    // }
+
+    loadServices() {
+        this.itemService.getAllActiveOnly()
+            .subscribe((data: any) => {
+                if (!data || data.length === 0) {
+                    return;
+                }
+
+                this.items = data;
+
+                this.updateSelectedItems();
+            },
+                error => {
+                    this.appUtils.ProcessErrorResponse(this.toastr, error);
+                });
+    }
+
+    changeBillDate(){
+        debugger;
+        console.log("quotatindate",this.billDate);
+        const jsDate = new Date(this.billDate.year, this.billDate.month - 1, this.billDate.day);
+        this.model.billDate=jsDate.toISOString();
+       }
+    
+       changeDuedate(){
+        debugger;
+        console.log("quotatindate",JSON.stringify(this.dueDate));
+        const jsDate = new Date(this.dueDate.year, this.dueDate.month - 1, this.dueDate.day);
+        this.model.dueDate=jsDate.toISOString();
+       }
+
+    getNewBillNumber() {
+        this.blockUI.start();
+        this.billService.getNewBillNumber()
+            .subscribe((data) => {
+                debugger;
+                this.blockUI.stop();
+                console.log("inv",data)
+                var today=new Date();
+                this.newBillNumber="BNO-"+today.getFullYear().toString().match(/\d{2}$/)+"-"+data;
+               
+            },
+                error => {
+                    this.blockUI.stop();
+                    this.appUtils.ProcessErrorResponse(this.toastr, error);
+                });
+    }
+
 }

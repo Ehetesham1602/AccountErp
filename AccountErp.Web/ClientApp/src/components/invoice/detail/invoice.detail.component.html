@@ -41,7 +41,7 @@
                                         </a>
                                     </li>
                                     <li class="kt-nav__item">
-                                        <a href="javascript:;" class="kt-nav__link" (click)="print()">
+                                        <a href="javascript:;" class="kt-nav__link" (click)="openPDF()">
                                             <em class="kt-nav__link-icon la la-print"></em>
                                             <span class="kt-nav__link-text"> Print Invoice</span>
                                         </a>
@@ -64,13 +64,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="kt-portlet__body">
+                    <div class="kt-portlet__body" id="htmlData" #htmlData>
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group row">
                                     <label class="col-md-3 kt-portlet__label">Invoice#:</label>
                                     <div class="col-md-9">
-                                        <p class="kt-portlet__data">{{model.id}}</p>
+                                        <p class="kt-portlet__data">{{model.invoiceNumber  | uppercase}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -103,12 +103,41 @@
                             </div>
                         </div>
                         <div class="row">
+
+                            <div class="col-6">
+                                <div class="form-group row">
+                                    <label class="col-md-3 kt-portlet__label">Invoice date:</label>
+                                    <div class="col-md-9">
+                                        <p class="kt-portlet__data">{{model.invoiceDate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group row">
+                                    <label class="col-md-3 kt-portlet__label">Payment due:</label>
+                                    <div class="col-md-9">
+                                        <p class="kt-portlet__data">{{model.dueDate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                       
+                    </div>
+                        <div class="row">
                             <div class="col-6">
                                 <div class="form-group row">
                                     <label class="col-md-3 kt-portlet__label">Customer Discount:</label>
                                     <div class="col-md-9">
                                         <p class="kt-portlet__data" *ngIf="model.customer.discount">
                                             {{model.customer.discount}}%</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group row">
+                                    <label class="col-md-3 kt-portlet__label">P.O/S.O:</label>
+                                    <div class="col-md-9">
+                                        <p class="kt-portlet__data" *ngIf="model.poSoNumber">
+                                            {{model.poSoNumber}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -150,8 +179,8 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12">
-                                <app-item-selected [selectedItems]="selectedItems" [readOnly]="true">
+                            <div class="col-12 disableDiv">
+                                <app-item-selected  [selectedItems]="selectedItems" [itemId]="itemId" [selectedTax]="selectedTax" [readOnly]="true">
                                 </app-item-selected>
                             </div>
                         </div>

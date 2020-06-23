@@ -9,7 +9,13 @@ export class InvoiceService {
   constructor(private http: HttpClient,
     private appSettings: AppSettings) { }
 
+    getNewInvoiceNumber() {
+      debugger;
+      return this.http.get(this.appSettings.ApiBaseUrl + 'Invoice/get-InvoiceNumber');
+    }
+
   add(model: InvoiceAddModel) {
+    debugger;
     return this.http.post(this.appSettings.ApiBaseUrl + 'Invoice/Add', model);
   }
 

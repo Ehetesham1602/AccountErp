@@ -1,0 +1,27 @@
+mark { 
+    background-color: grey;
+    color: black;
+  }
+  customer-statements-report-container {
+    box-shadow: 0 3px 10px rgba(0,0,0,.25);
+    padding: 48px;
+}
+
+customer-statements-report-container {
+    min-height: 1061.17647px;
+}
+customer-statements-report-container {
+    box-sizing: border-box;
+    border-top: 6px solid #fff;
+    background: #fff;
+    max-width: 820px;
+    margin: 0 auto 40px;
+}
+header {
+    display: block;
+}
+
+.lblOverdue{
+    color: red;
+    font-weight: bold;
+}

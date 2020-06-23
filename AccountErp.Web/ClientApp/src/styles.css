@@ -1,3 +1,5 @@
+
+
 body {
     color: #000000;
 }
@@ -237,4 +239,9 @@ div.dataTables_wrapper div.dataTables_processing {
 
 .kt-aside--minimize .logo-sm {
     display: inline-block;
+}
+
+.disableDiv{
+    pointer-events: none;
+    /* opacity: 0.4; */
 }
