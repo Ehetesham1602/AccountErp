@@ -94,7 +94,7 @@ export class InvoiceManageComponent implements OnInit, AfterViewInit {
                 },
                 {
                     className: 'text-right',
-                    data: 'amount',
+                    data: 'totalAmount',
                     title: 'Amount',
                     width: '15%',
                     render: function (data, type, row) {
@@ -110,7 +110,9 @@ export class InvoiceManageComponent implements OnInit, AfterViewInit {
                             ? `<span class='kt-badge kt-badge--dark kt-badge--inline'>Pending</span>`
                             : data === 1 ?
                                 `<span class='kt-badge kt-badge--success kt-badge--inline'>Paid</span>`
-                                : `<span class='kt-badge kt-badge--danger kt-badge--inline'>Deleted</span>`;
+                            : data === 2 ?
+                                `<span class='kt-badge kt-badge--danger kt-badge--inline'>Deleted</span>`
+                                : `<span class='kt-badge kt-badge--warning kt-badge--inline'>Overdue</span>`;
                     }
                 },
                 {
