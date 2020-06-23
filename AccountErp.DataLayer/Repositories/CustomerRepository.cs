@@ -274,6 +274,7 @@ namespace AccountErp.DataLayer.Repositories
                                                    Tax = x.Tax,
                                                    TotalAmount = x.TotalAmount,
                                                    CreatedOn = x.CreatedOn,
+                                                   InvoiceNumber = x.InvoiceNumber,
                                                    Status = x.Status
                                                })
                                            })
