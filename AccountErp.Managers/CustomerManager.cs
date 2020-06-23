@@ -99,7 +99,7 @@ namespace AccountErp.Managers
                 var data = await _customerRepository.GetOpeningBalance(model.startDate,model.CustomerId);
                 model.openingBalance = data.Sum(x => x.Amount);
                 var customerData = await _customerRepository.GetCustomerStatementAsync(model);
-                customerData.InvoiceList = customerData.InvoiceList.Where(p => p.InvoiceDate >= model.startDate && p.InvoiceDate <= model.endDate).ToList();
+                customerData.InvoiceList = customerData.InvoiceList.Where(p => (p.InvoiceDate >= model.startDate && p.InvoiceDate <= model.endDate) && p.Status != Constants.InvoiceStatus.Deleted).ToList();
                 return customerData;
 
             }

@@ -42,18 +42,18 @@ namespace AccountErp.Managers
 
             //model.Tax = items.Where(x => x.IsTaxable).Sum(x => x.Rate * x.SalesTax.TaxPercentage / 100);
 
-            var vendor = await _vendorRepository.GetAsync(model.VendorId);
+            //var vendor = await _vendorRepository.GetAsync(model.VendorId);
 
-            if (vendor.Discount != null)
-            {
-                model.Discount = model.TotalAmount * vendor.Discount / 100;
-                model.TotalAmount = model.TotalAmount - (model.Discount ?? 0);
-            }
+            //if (vendor.Discount != null)
+            //{
+            //    model.Discount = model.TotalAmount * vendor.Discount / 100;
+            //    model.TotalAmount = model.TotalAmount - (model.Discount ?? 0);
+            //}
 
-            if (model.Tax != null)
-            {
-                model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
-            }
+            //if (model.Tax != null)
+            //{
+            //    model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
+            //}
 
             var count = await _repository.getCount();
 
@@ -70,18 +70,18 @@ namespace AccountErp.Managers
 
             //model.Tax = items.Where(x => x.IsTaxable).Sum(x => x.Rate * x.SalesTax.TaxPercentage / 100);
 
-            var vendor = await _vendorRepository.GetAsync(model.VendorId);
+            //var vendor = await _vendorRepository.GetAsync(model.VendorId);
 
-            if (vendor.Discount != null)
-            {
-                model.Discount = model.TotalAmount * vendor.Discount / 100;
-                model.TotalAmount = model.TotalAmount - (model.Discount ?? 0);
-            }
+            //if (vendor.Discount != null)
+            //{
+            //    model.Discount = model.TotalAmount * vendor.Discount / 100;
+            //    model.TotalAmount = model.TotalAmount - (model.Discount ?? 0);
+            //}
 
-            if (model.Tax != null)
-            {
-                model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
-            }
+            //if (model.Tax != null)
+            //{
+            //    model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
+            //}
 
             var bill = await _repository.GetAsync(model.Id);
 
