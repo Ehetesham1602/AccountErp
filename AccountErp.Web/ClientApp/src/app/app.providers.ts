@@ -6,6 +6,8 @@ import {
     VendorService, ItemService, InvoiceService, BillService, PaymentService, SalesTaxService,
     BillPaymentService, InvoicePaymentService
 } from '../services';
+import { ItemCalculationService } from 'src/services/item-calculation.service';
+import { CustomerStatementService } from 'src/services/customer-statement.service';
 
 export const appProviders = [
     AppSettings,
@@ -25,13 +27,12 @@ export const appProviders = [
     SalesTaxService,
     BillPaymentService,
     InvoicePaymentService,
+    ItemCalculationService,
+    CustomerStatementService,
     {
         provide: HTTP_INTERCEPTORS,
         useClass: JwtInterceptor,
         multi: true
-    },
-    {
-        provide: NgbDateParserFormatter,
-        useClass: NgbCustomDateParserFormatter
     }
+   
 ];

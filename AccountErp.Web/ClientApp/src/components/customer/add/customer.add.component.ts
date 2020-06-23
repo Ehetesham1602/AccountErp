@@ -34,6 +34,7 @@ export class CustomerAddComponent {
             case 2:
             case 3:
             case 4:
+            case 5:
                 this.updateCustomer();
                 break;
         }
@@ -49,7 +50,7 @@ export class CustomerAddComponent {
     }
 
     increaseWizard() {
-        if (this.wizardStep < 4) {
+        if (this.wizardStep < 5) {
             this.wizardStep += 1;
             setTimeout(() => {
                 this.appUtils.scrollToTop();
@@ -61,12 +62,14 @@ export class CustomerAddComponent {
     }
 
     setWizardStep(step: number) {
-        if (this.model.id) {
-            this.wizardStep = step;
-        } else {
-            this.toastr.warning('Please save the customer profile');
-            this.wizardStep = 1;
-        }
+        this.wizardStep = step;
+        alert(this.wizardStep);
+        // if (this.model.id) {
+        //     this.wizardStep = step;
+        // } else {
+        //     this.toastr.warning('Please save the customer profile');
+        //     this.wizardStep = 1;
+        // }
     }
 
     addCustomer() {
@@ -85,6 +88,7 @@ export class CustomerAddComponent {
     }
 
     updateCustomer() {
+        debugger;
         this.blockUI.start();
         this.customerService.edit(this.model).subscribe(
             () => {

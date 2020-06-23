@@ -16,7 +16,7 @@ import {
 import {
     CustomerFromWizarNavigatorComponent, CustomerFromWizardAsideComponent, CustomerPersonalInformationComponent,
     CustomerAddressDetailComponent, CustomerPaymentDetailComponent, CustomerDiscountDetailComponent,
-    CustomerDetailComponent, CustomerAddComponent, CustomerEditComponent, CustomerManageComponent
+    CustomerDetailComponent, CustomerAddComponent, CustomerEditComponent, CustomerManageComponent, CustomerShippingaddressComponent, AddCustomerPopupComponent
 } from '../components/customer';
 
 import {
@@ -61,6 +61,8 @@ import {
 } from '../helpers/app.directives';
 
 import { SettingComponent } from '../components/setting/setting.component';
+import { QuotationAddComponent,QuotationDetailComponent,QuotationManageComponent,QuotationEditComponent } from '../components/Quotation';
+import { CustomerStatementComponent } from 'src/components/customer-statement/customer-statement.component';
 
 export const appDeclarations = [
     DefaultIfEmpty,
@@ -99,9 +101,12 @@ export const appDeclarations = [
     CustomerFromWizardAsideComponent,
     CustomerPersonalInformationComponent,
     CustomerAddressDetailComponent,
+    CustomerShippingaddressComponent,
     CustomerPaymentDetailComponent,
     CustomerDiscountDetailComponent,
     CustomerAddComponent,
+    AddCustomerPopupComponent,
+   
     CustomerDetailComponent,
     CustomerEditComponent,
     CustomerManageComponent,
@@ -151,5 +156,10 @@ export const appDeclarations = [
     SalesTaxManageComponent,
     SalesTaxAddComponent,
     SalesTaxEditComponent,
-    SalesTaxDetailComponent
+    SalesTaxDetailComponent,
+    QuotationAddComponent,
+    QuotationDetailComponent,
+    QuotationManageComponent,
+    QuotationEditComponent,
+    CustomerStatementComponent
 ];

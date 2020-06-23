@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
@@ -6,7 +6,6 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { AppUtils } from '../../../helpers';
 import { CustomerUpsertModel } from '../../../models';
 import { CustomerService } from '../../../services';
-
 @Component({
     selector: 'app-customer-edit',
     templateUrl: './customer.edit.component.html'
@@ -15,6 +14,9 @@ import { CustomerService } from '../../../services';
 export class CustomerEditComponent implements OnInit {
     @BlockUI('container-blockui') blockUI: NgBlockUI;
     model: CustomerUpsertModel = new CustomerUpsertModel();
+    // @Input() model: CustomerUpsertModel;
+    @Output() moveForward = new EventEmitter();
+    @Output() moveBackward = new EventEmitter();
     wizardStep = 1;
 
     constructor(private route: ActivatedRoute,
@@ -63,8 +65,22 @@ export class CustomerEditComponent implements OnInit {
 
     next() {
         this.updateCustomer();
+            // this.moveForward.emit();
     }
-
+    addCustomer() {
+        this.blockUI.start();
+        this.customerService.add(this.model).subscribe(
+            (data: any) => {
+                this.model.id = data;
+                this.blockUI.stop();
+                this.toastr.success('Customer has been added successfully');
+                this.increaseWizard();
+            },
+            error => {
+                this.blockUI.stop();
+                this.appUtils.ProcessErrorResponse(this.toastr, error);
+            });
+    }
     prev() {
         if (this.wizardStep !== 1) {
             this.wizardStep -= 1;
@@ -74,6 +90,9 @@ export class CustomerEditComponent implements OnInit {
         }
     }
 
+    // prev() {
+    //     this.moveBackward.emit();
+    // }
     setWizardStep(step: number) {
         this.wizardStep = step;
     }

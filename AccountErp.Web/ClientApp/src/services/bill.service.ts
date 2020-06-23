@@ -44,4 +44,9 @@ export class BillService {
   getRecentBills() {
     return this.http.get(this.appSettings.ApiBaseUrl + 'Bill/get-recent');
 }
+
+getNewBillNumber(){
+  return this.http.get(this.appSettings.ApiBaseUrl + 'Bill/get-BillNumber');
+  
+}
 }

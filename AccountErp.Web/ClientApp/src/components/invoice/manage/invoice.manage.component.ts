@@ -26,7 +26,7 @@ export class InvoiceManageComponent implements OnInit, AfterViewInit {
     search: any = null;
     customers: Array<SelectListItemModel> = new Array<SelectListItemModel>();
     filterModel: InvoiceFilterModel = new InvoiceFilterModel();
-
+   
     constructor(private http: HttpClient,
         private router: Router,
         private toastr: ToastrService,
@@ -37,6 +37,7 @@ export class InvoiceManageComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.loadCustomers();
+      
         const self = this;
         this.dtOptions = {
             dom: '<"top">rt<"bottom"lip><"clear">',
@@ -78,11 +79,12 @@ export class InvoiceManageComponent implements OnInit, AfterViewInit {
             },
             columns: [
                 {
-                    data: 'id',
+                    data: 'invoiceNumber',
                     title: 'Invoice#',
                     width: '20%',
                     render: function (data, type, row) {
-                        return `<a href='javascript:;' action-type='view-detail'>${data}</a>`;
+                        return  `<a href='javascript:;' action-type='view-detail'>${data}
+                        </a>`;
                     }
                 },
                 {
@@ -126,10 +128,44 @@ export class InvoiceManageComponent implements OnInit, AfterViewInit {
                     orderable: false,
                     className: 'text-center',
                     render: function (data, type, row) {
-                        const htmlString = (row.status === 0
-                            ? `<em class='fa fa-edit cursor-pointer m-r-3' title='Edit' action-type='edit'></em>`
-                            : '<em class="m-r-10">&nbsp;</em>')
-                            + `<em class='fa fa-trash cursor-pointer' title='Delete' action-type='delete'></em>`;
+                        const htmlString = (
+                           ` <button type="button" class="btn btn-outline-success btn-sm dropdown-toggle"
+                            data-toggle="dropdown">
+                            Action
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
+                            <ul class="kt-nav">
+                                <li class="kt-nav__item">
+                                    <a class="kt-nav__link">
+                                        <em class="kt-nav__link-icon la la-credit-card"></em>
+                                        <span class="kt-nav__link-text" action-type = 'pay-invoice'> Pay Invoice</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a  class="kt-nav__link">
+                                        <em class="kt-nav__link-icon la la-print"></em>
+                                        <span class="kt-nav__link-text" action-type='view-detail'>View Details</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a class="kt-nav__link">
+                                        <em class="kt-nav__link-icon la la-edit"></em>
+                                        <span class="kt-nav__link-text" action-type='edit'> Edit</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a class="kt-nav__link">
+                                        <em class="kt-nav__link-icon la la-trash"></em>
+                                        <span class="kt-nav__link-text" action-type='delete'>
+                                            Delete
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>`)
+                            // ? `<em class='fa fa-edit cursor-pointer m-r-3' title='Edit' action-type='edit'></em>`
+                            // : `<em class='fa fa-file cursor-pointer m-r-3' title='Detail' action-type='view-detail'></em>`)
+                            // + `<em class='fa fa-trash cursor-pointer' title='Delete' action-type='delete'></em>`;
                         return htmlString;
                     }
                 }
@@ -157,6 +193,12 @@ export class InvoiceManageComponent implements OnInit, AfterViewInit {
                 $(detailElem).unbind('click');
                 $(detailElem).on('click', function () {
                     self.router.navigate(['/invoice/detail', data.id]);
+                });
+
+                const payElem = $(row).find('[action-type = pay-invoice]');
+                $(payElem).unbind('click');
+                $(payElem).on('click', function () {
+                    self.router.navigate(['/invoice/payment', data.id]);
                 });
             },
             drawCallback: function () {

@@ -56,6 +56,8 @@
                         <span class="kt-menu__link-text text-color-white">Dashboard</span>
                     </a>
                 </li>
+                
+
                 <li class="kt-menu__item "
                     [ngClass]="{ 'kt-menu__item--active' : currentUrl.indexOf('/sales-tax') !== -1 }"
                     aria-haspopup="true">
@@ -86,6 +88,16 @@
                     </a>
                 </li>
                 <li class="kt-menu__item "
+                    [ngClass]="{ 'kt-menu__item--active' : currentUrl.indexOf('/Quotation') !== -1 }"
+                    aria-haspopup="true">
+                    <a [routerLink]="['/Quotation/quotation-manage']" class="kt-menu__link ">
+                        <span class="kt-menu__link-icon text-color-white">
+                            <i class="la la-file"></i>
+                        </span>
+                        <span class="kt-menu__link-text text-color-white">Quotation</span>
+                    </a>
+                </li>
+                <li class="kt-menu__item "
                     [ngClass]="{ 'kt-menu__item--active' : (currentUrl.indexOf('/invoice') !== -1 && currentUrl.indexOf('/invoice/payments') === -1) }"
                     aria-haspopup="true">
                     <a [routerLink]="['/invoice/manage']" class="kt-menu__link ">
@@ -105,6 +117,16 @@
                         <span class="kt-menu__link-text text-color-white">Invoice Payments</span>
                     </a>
                 </li>
+                <li class="kt-menu__item "
+                [ngClass]="{ 'kt-menu__item--active' : currentUrl.indexOf('/customerStatement') !== -1 }"
+                aria-haspopup="true">
+                <a [routerLink]="['/customerStatement']" class="kt-menu__link ">
+                    <span class="kt-menu__link-icon text-color-white">
+                        <i class="la la-users"></i>
+                    </span>
+                    <span class="kt-menu__link-text text-color-white">Customers Statement</span>
+                </a>
+            </li>
                 <li class="kt-menu__item "
                     [ngClass]="{ 'kt-menu__item--active' : currentUrl.indexOf('/vendor') !== -1 }" aria-haspopup="true">
                     <a [routerLink]="['/vendor/manage']" class="kt-menu__link ">

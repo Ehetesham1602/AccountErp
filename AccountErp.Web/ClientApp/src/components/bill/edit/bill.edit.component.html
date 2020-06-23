@@ -32,49 +32,135 @@
             novalidate>
             <div class="kt-portlet__body">
               <div class="row">
-                <div class="col-6">
-                  <div class="form-group row" [ngClass]="{ 'validation-error' : f.submitted && vendorId.invalid}">
-                    <label class="col-md-3">Vendor name:*</label>
-                    <div class="col-md-9">
-                      <select name="vendorId" class="form-control" [(ngModel)]="model.vendorId"
-                        (change)="onVendorSelected()" #vendorId="ngModel" required>
-                        <option value="" selected>[Select]</option>
-                        <option *ngFor="let item of vendors" [value]="item.keyInt">
-                          {{item.value}}
-                        </option>
-                      </select>
-                      <div class="validation-error-message" *ngIf="f.submitted && !vendorId.valid">
-                        Vendor is required
+                <div class="col-4">
+                <div class="form-group row"
+                [ngClass]="{ 'validation-error' : f.submitted && billNumber.invalid}">
+                <label class="col-md-4">Bill#:</label>
+                <div class="col-md-8">
+                  <input type="text" name="billNumber"  #billNumber="ngModel" class="form-control" autocomplete="off"
+                  [(ngModel)]="model.billNumber" maxlength="100" placeholder=""
+                  appAlphaNumericsLevelTwo readonly />
+                </div>
+                </div>
+
+                <div class="form-group row" [ngClass]="{ 'validation-error' : f.submitted && vendorId.invalid}">
+                  <label class="col-md-4">Vendor name:*</label>
+                  <div class="col-md-8">
+                    <ngx-select-dropdown  name="vendorId" #vendorId="ngModel" (change)="getVendorDetail()" [multiple]="false" [(ngModel)]="selectedVendor" [config]="config" [options]="vendors"></ngx-select-dropdown>
+                    <div class="validation-error-message" *ngIf="f.submitted && !vendorId.valid">
+                      Vendor is required
+                    </div>
+                  </div>
+                  <!-- <div class="col-md-9">
+                    <select name="vendorId" class="form-control" [(ngModel)]="model.vendorId"
+                      (change)="onVendorSelected()" #vendorId="ngModel" required>
+                      <option value="" selected>[Select]</option>
+                      <option *ngFor="let item of vendors" [value]="item.keyInt">
+                        {{item.value}}
+                      </option>
+                    </select>
+                    <div class="validation-error-message" *ngIf="f.submitted && !vendorId.valid">
+                      Vendor is required
+                    </div>
+                  </div> -->
+                </div>
+             
+
+              </div>
+                <div class="col-4">
+                  <div class="form-group row"
+                  [ngClass]="{ 'validation-error' : f.submitted && billingDate.invalid}">
+                  <label class="col-md-3">Date:*</label>
+                  <div class="col-md-9">
+                      
+                      <div class="input-group">
+                          <input class="form-control" name="billingDate"
+                              #billingDate="ngModel" [(ngModel)]="billDate" (dateSelect)="changeBillDate()"
+                              ngbDatepicker #d="ngbDatepicker"  readonly />
+                          <div class="input-group-append">
+                              <button class="btn btn-outline-secondary calendar"
+                                  (click)="d.toggle()" type="button">
+                                  <i class="la la-calendar"></i>
+                              </button>
+                          </div>
                       </div>
+                  </div>
+              </div>
+
+              <div class="form-group row">
+                  <label class="col-md-3 kt-portlet__label">Expires on:</label>
+                  <div class="col-md-9">
+                      <div class="input-group">
+                          <input class="form-control" name="BillExpireDate" (dateSelect)="changeDuedate()"
+                              #BillExpireDate="ngModel"
+                              [(ngModel)]="dueDate" ngbDatepicker
+                              #d1="ngbDatepicker" [autoClose]=" true" readonly />
+                          <div class="input-group-append">
+                              <button class="btn btn-outline-secondary calendar"
+                                  (click)="d1.toggle()" type="button">
+                                  <i class="la la-calendar"></i>
+                              </button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+                </div>
+                <div class="col-4">
+
+                  <div class="form-group row">
+                      <label class="col-md-3 kt-portlet__label">P.O/S.O:</label>
+                      <div class="col-md-9">
+                          <input type="text" name="poso" class="form-control" autocomplete="off"
+                              [(ngModel)]="model.poSoNumber" maxlength="100" placeholder=""
+                              appAlphaNumericsLevelTwo />
+
+                      </div>
+                  </div>
+
+                  <div class="form-group row">
+                      <label class="col-md-3 kt-portlet__label">Notes:</label>
+                      <div class="col-md-9">
+                          <textarea name="notes" class="form-control" rows="2" maxlength="250"
+                              autocomplete="off" [(ngModel)]="model.notes" #remark="ngModel"
+                              appAlphaNumericsLevelTwo></textarea>
+                      </div>
+                  </div>
+
+              </div>
+                <div class="col-3">
+                  <div class="form-group row">
+                    <label class="col-md-3 kt-portlet__label">Regn#:</label>
+                    <div class="col-md-9">
+                      <p class="kt-portlet__data">{{vendor.registrationNumber}}</p>
                     </div>
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-3">
                   <div class="form-group row">
                     <label class="col-md-3 kt-portlet__label">Phone:</label>
                     <div class="col-md-9">
-                      <p class="kt-portlet__data">{{model.phone | mask: '000-000-0000'}}</p>
+                      <p class="kt-portlet__data">{{vendor.phone | mask: '000-000-0000'}}</p>
                     </div>
+                  </div>
+              </div>
+              <div class="col-3">
+                <div class="form-group row">
+                  <label class="col-md-3 kt-portlet__label">Email:</label>
+                  <div class="col-md-9">
+                    <p class="kt-portlet__data">{{vendor.email}}</p>
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-6">
-                  <div class="form-group row">
-                    <label class="col-md-3 kt-portlet__label">Email:</label>
-                    <div class="col-md-9">
-                      <p class="kt-portlet__data">{{model.email}}</p>
-                    </div>
+              <div class="col-3">
+                <div class="form-group row">
+                  <label class="col-md-4 kt-portlet__label">Vendor Discount:</label>
+                  <div class="col-md-8">
+                    <p class="kt-portlet__data" *ngIf="vendor.discount">{{vendor.discount}}%</p>
                   </div>
                 </div>
-                <div class="col-6">
-                  <div class="form-group row">
-                    <label class="col-md-3 kt-portlet__label">Reference#:</label>
-                    <div class="col-md-9">
-                      <p class="kt-portlet__data">{{model.referenceNumber}}</p>
-                    </div>
-                  </div>
-                </div>
+              </div>
+              
+                
               </div>
               <div class="row">
                 <div class="col-12">
@@ -89,8 +175,17 @@
               </div>
               <div class="row">
                 <div class="col-12">
-                  <app-item-selected [selectedItems]="selectedItems" [readOnly]="false" (deleteItem)="deleteItem($val)">
+                  <app-item-selected [selectedItems]="selectedItems" [itemId]="itemId" [selectedTax]="selectedTax" [readOnly]="false" (deleteItem)="deleteItem($event)" (updateTotalAmount)="updateTotalAmount()">
                   </app-item-selected>
+                  <div class="row">
+                    <div class="col-12">
+                        <div class="form-group text-right">
+                            <button type="button" class="btn btn-sm btn-outline-success"
+                                (click)="newRow()">
+                                <i class="la la-plus"></i> Add More</button>
+                        </div>
+                    </div>
+                </div>
                 </div>
               </div>
               <br>

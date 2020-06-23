@@ -11,7 +11,7 @@ export class CustomerPaymentDetailComponent {
     @Input() model: CustomerUpsertModel;
     @Output() moveForward = new EventEmitter();
     @Output() moveBackward = new EventEmitter()
-    wizardStep = 3;
+    wizardStep = 4;
 
     next() {
         this.moveForward.emit();

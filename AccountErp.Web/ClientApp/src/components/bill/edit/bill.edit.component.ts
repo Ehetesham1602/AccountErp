@@ -26,6 +26,16 @@ export class BillEditComponent implements OnInit {
     salesTaxes: Array<SalesTaxListItemModel> = new Array<SalesTaxListItemModel>();
     items: Array<ItemListItemModel> = new Array<ItemListItemModel>();
     selectedItems: Array<ItemListItemModel> = new Array<ItemListItemModel>();
+   
+    selectedVendor;
+    selectedItemListItemModel : ItemListItemModel=new ItemListItemModel();
+    config = {displayKey:"value",search:true,limitTo:10,height: 'auto',placeholder:'Select Item',customComparator: ()=>{},moreText: 'more',noResultsFound: 'No results found!',searchPlaceholder:'Search',searchOnKey: 'value',clearOnSelection: false,inputDirection: 'ltr',}
+    itemId: Array<ItemListItemModel> = new Array<ItemListItemModel>();
+    selectedTax=[];
+    Items: Array<ItemListItemModel> = new Array<ItemListItemModel>();
+    salesTaxItems;
+    billDate;
+    dueDate;
 
     constructor(private router: Router,
         private route: ActivatedRoute,
@@ -44,16 +54,28 @@ export class BillEditComponent implements OnInit {
     ngOnInit() {
         this.loadVendors();
         this.loadServices();
+        this.loadTaxes();
         this.loadBill();
     }
 
+
+
     loadBill() {
+        debugger;
         this.blockUI.start();
         this.billService.getDetailForEdit(this.model.id)
             .subscribe(
                 (data: any) => {
                     this.blockUI.stop();
+                    console.log("billDATA",data)
                     Object.assign(this.model, data);
+                    var qdt=new Date(this.model.dueDate)
+                    this.billDate={ day: qdt.getDate(), month: qdt.getMonth()+1, year: qdt.getFullYear()};
+      
+                    var expdt=new Date(this.model.dueDate);
+                    this.dueDate={ day: expdt.getDate(), month: expdt.getMonth()+1, year: expdt.getFullYear()};
+                    
+    
                     this.getVendorDetail();
                     this.loadVenderTaxes();
                     this.updateSelectedItems();
@@ -69,26 +91,70 @@ export class BillEditComponent implements OnInit {
                 });
     }
 
-    updateSelectedItems() {
+    // updateSelectedItems() {
 
-        if (this.items.length === 0
-            || this.model.items.length === 0) {
+    //     if (this.items.length === 0
+    //         || this.model.items.length === 0) {
+    //         return;
+    //     }
+
+    //     const tempArray = new Array<ItemListItemModel>();
+
+    //     this.model.items.map((itemId) => {
+    //         const service = this.items.find(x => x.id === itemId);
+    //         if (service) {
+    //             tempArray.push(service);
+    //         }
+    //     });
+    //     console.log(tempArray);
+    //     this.selectedItems = tempArray;
+    // }
+
+    updateSelectedItems() {
+   debugger;
+        if (this.items.length === 0 || this.model.items.length === 0) {
             return;
         }
-
+      
         const tempArray = new Array<ItemListItemModel>();
-
+         const tempTax=[]
+        this.model.totalAmount = 0;
         this.model.items.map((itemId) => {
-            const service = this.items.find(x => x.id === itemId);
-            if (service) {
-                tempArray.push(service);
+            const item = this.items.find(x => x.id === itemId.id);
+            console.log("itemss",itemId)
+            if (item) {
+                 item.rate = itemId.rate;
+                 item.qty= itemId.quantity;
+                 item.rate=itemId.rate;
+                 item.price=itemId.price;
+                 item.description=itemId.description;
+                 
+                 tempArray.push(item);
+      
+                this.model.totalAmount += itemId.rate;
+                //Get item taxes
+                debugger;
+               if(itemId.taxId!=0){
+                   const taxitem=this.salesTaxItems.find(x=> x.id===itemId.taxId);
+                   tempTax.push(taxitem);
+      
+               }else{
+                   tempTax.push(null);
+               }
             }
+      
+            
         });
-        console.log(tempArray);
+      
         this.selectedItems = tempArray;
-    }
+       // this.itemId=[];
+        this.itemId=tempArray;
+        this.selectedTax=tempTax;
+        console.log("bindselecteditem",this.itemId);
+      }
 
     loadServices() {
+        debugger;
         this.itemService.getAllActiveOnly()
             .subscribe((data: any) => {
                 if (!data || data.length === 0) {
@@ -104,6 +170,47 @@ export class BillEditComponent implements OnInit {
                 });
     }
 
+    newRow(){
+        console.log("selerow",this.selectedItems)
+        if(this.selectedItems[this.selectedItems.length-1].id!=0){
+            this.initiateGrid();
+        }
+        else{
+            this.toastr.error("Please select an item")
+        }
+     
+    }
+
+    initiateGrid(){
+        debugger;
+      this.selectedItems.push({"description": "",
+      "id": 0,
+      "isTaxable": false,
+      "itemTypeName": "",
+      "name": "Select Item",
+      "price": 0.00,
+      "qty": 1,
+      "rate": 0.00,
+      "salesTaxId": null,
+      "status": 1,
+      "taxCode": null,
+      "taxPercentage": null});
+
+    }
+
+    changeBillDate(){
+        debugger;
+        console.log("quotatindate",this.billDate);
+        const jsDate = new Date(this.billDate.year, this.billDate.month - 1, this.billDate.day);
+        this.model.billDate=jsDate.toISOString();
+       }
+    
+       changeDuedate(){
+        debugger;
+        console.log("quotatindate",JSON.stringify(this.dueDate));
+        const jsDate = new Date(this.dueDate.year, this.dueDate.month - 1, this.dueDate.day);
+        this.model.dueDate=jsDate.toISOString();
+       }
 
     loadVendors() {
         this.vendorService.getSelectItems()
@@ -130,12 +237,44 @@ export class BillEditComponent implements OnInit {
                 (data) => {
                     this.blockUI.stop();
                     Object.assign(this.vendor, data);
+                    var custTemp= {
+                        "keyInt": this.vendor.id,
+                        "keyString": null,
+                        "value": this.vendor.name
+                      }
+                      this.selectedVendor=custTemp;
                 },
                 error => {
                     this.blockUI.stop();
                     this.appUtils.ProcessErrorResponse(this.toastr, error);
                 }
             );
+    }
+
+    getVendorDetailOnSelect() {
+        debugger;
+        if(this.selectedVendor!=undefined){
+            this.model.vendorId=this.selectedVendor.keyInt;
+        this.blockUI.start();
+        this.vendor = new VendorPersonalInfoModel();
+        this.vendorService.getPersonalInfo(Number(this.model.vendorId))
+            .subscribe(
+                (data) => {
+                    this.blockUI.stop();
+                    Object.assign(this.vendor, data);
+                    var custTemp= {
+                        "keyInt": this.vendor.id,
+                        "keyString": null,
+                        "value": this.vendor.name
+                      }
+                      this.selectedVendor=custTemp;
+                },
+                error => {
+                    this.blockUI.stop();
+                    this.appUtils.ProcessErrorResponse(this.toastr, error);
+                }
+            );
+        }
     }
 
     loadVenderTaxes() {
@@ -213,7 +352,8 @@ export class BillEditComponent implements OnInit {
             if (item.taxPercentage != null) {
                 this.model.tax += (item.rate * item.taxPercentage) / 100;
             }
-            this.model.totalAmount += item.rate;
+            //this.model.totalAmount += item.rate;
+            this.model.totalAmount += item.price;
         });
 
         if (this.vendor.discount != null) {
@@ -243,14 +383,45 @@ export class BillEditComponent implements OnInit {
         this.updateTotalAmount();
     }
 
+    loadTaxes(){
+        this.salesTaxService.getSelectListItems()
+            .subscribe((data: any) => {
+                if (!data || data.length === 0) {
+                    return;
+                }
+
+                this.salesTaxItems = data;
+
+                 this.updateSelectedItems();
+            },
+                error => {
+                    this.appUtils.ProcessErrorResponse(this.toastr, error);
+                });
+    }
+
     submit() {
 
-        this.model.items = new Array<number>();
+        if (!confirm('Are you sure you want to edit Bill?')) {
+            return;
+        }
 
-        if (this.selectedItems.length > 0) {
+       // this.model.items = new Array<number>();
+       this.model.items=[];
+        if (this.selectedItems.length > 0 && this.selectedItems[0].id!=0 ) {
+            if(this.selectedItems[this.selectedItems.length-1].id!=0){
             this.selectedItems.map((item) => {
-                this.model.items.push(item.id);
+                if(item.salesTaxId!=null){
+                    this.model.items.push({"itemId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage": item.taxPercentage,"quantity":item.qty});
+                }else{
+                    this.model.items.push({"itemId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage": 0,"quantity":item.qty});
+                }
             });
+        }else{
+            this.toastr.error('Please select items/services to continue');
+            // this.selectedItems.splice(0,this.selectedItems.length-1);
+            return;
+            
+        }
         } else {
             this.toastr.error('Please select items/services to continue');
             return;

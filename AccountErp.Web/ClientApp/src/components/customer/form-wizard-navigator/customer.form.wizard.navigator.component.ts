@@ -9,6 +9,8 @@ export class CustomerFromWizarNavigatorComponent {
     @Input() wizardStep: number;
     @Output() moveBackward = new EventEmitter();
 
+    
+
     prev() {
         this.moveBackward.emit();
     }

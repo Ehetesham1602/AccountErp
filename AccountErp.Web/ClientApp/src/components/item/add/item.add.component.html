@@ -113,8 +113,8 @@
                       <select name="salesTaxId" class="form-control" [(ngModel)]="model.salesTaxId"
                         #salesTaxId="ngModel" required>
                         <option value="">[Select]</option>
-                        <option *ngFor="let item of salesTaxes" [value]="item.keyInt">
-                          {{item.value}}
+                        <option *ngFor="let item of salesTaxes" [value]="item.id">
+                          {{item.code}}
                         </option>
                       </select>
                       <div class="validation-error-message" *ngIf="f.submitted && !salesTaxId.valid">

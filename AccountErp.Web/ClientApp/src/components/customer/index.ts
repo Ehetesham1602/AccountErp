@@ -8,3 +8,5 @@ export * from './add/customer.add.component';
 export * from './detail/customer.detail.component';
 export * from './edit/customer.edit.component';
 export * from './manage/customer.manage.component';
+export * from './customer.shippingaddress/customer.shippingaddress.component';
+export * from './addPopup/add-customer.popup.component';

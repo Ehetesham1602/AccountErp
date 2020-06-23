@@ -5,13 +5,14 @@ export class BillAddModel {
     public phone: string;
     public email: string;
     public referenceNumber: string;
+    public billDate:string;
     public dueDate: string;
     public tax: number;
     public discount: number;
     public totalAmount: number;
     public remark: string;
 
-    public items: Array<number>;
+    public items: any;
     public attachments: Array<AttachmentAddModel>;
 
     constructor() {

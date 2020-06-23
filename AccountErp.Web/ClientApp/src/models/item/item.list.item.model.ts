@@ -1,11 +1,19 @@
 export class ItemListItemModel {
     public id: number;
-    public itemTypeName: number;
+    public itemTypeName: string;
     public name: string;
     public rate: number;
+    public price:number;
+    public qty:number;
 
     public taxCode:string;
     public taxPercentage:number;
+    public salesTaxId:number;
+    public isTaxable:boolean;
+    public status:number;
 
     public description: string;
+
+   
+   
 }
