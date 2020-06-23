@@ -235,10 +235,10 @@ namespace AccountErp.DataLayer.Repositories
         public async Task<CustomerStatementDto> GetCustomerStatementAsync(CustomerStatementDto model)
         {
 
-            var customerStatement = await (from c in _dataContext.Customers
-                                           join i in _dataContext.Invoices
-                                           on c.Id equals i.CustomerId
-                                           where i.CustomerId == model.CustomerId && i.Status != Constants.InvoiceStatus.Deleted
+            var customerStatement = await (from i in _dataContext.Invoices
+                                            join c in _dataContext.Customers
+                                            on i.CustomerId equals c.Id
+                                           where(i.CustomerId == model.CustomerId) && i.Status != Constants.InvoiceStatus.Deleted
                                            select new CustomerStatementDto
                                            {
                                                startDate = model.startDate,
