@@ -13,16 +13,10 @@ export class CustomerStatementService {
     return this.http.post(this.appSettings.ApiBaseUrl + 'Customer/Add', model);
   }
 
-  getCustomerStatement(){
+  getCustomerStatement(custDetail){
     debugger;
-    var body=[{
-      "id": 0,
-  "customerId": 0,
-  "startDate": "2020-06-19T08:32:51.329Z",
-  "endDate": "2020-06-19T08:32:51.329Z",
-  "status": 0,
- }]
-    return this.http.post(this.appSettings.ApiBaseUrl + 'Customer/get-customer-statement',body[0]);
+   
+    return this.http.post(this.appSettings.ApiBaseUrl + 'Customer/get-customer-statement',custDetail);
   }
 
   toggleStatus(id: number) {

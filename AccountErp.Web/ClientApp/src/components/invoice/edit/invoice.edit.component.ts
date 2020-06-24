@@ -317,6 +317,7 @@ export class InvoiceEditComponent implements OnInit {
                     if (!this.customer.discount) {
                         this.customer.discount = 0;
                     }
+                   // this.updateTotalAmount();
   
                 });
               
@@ -382,7 +383,14 @@ export class InvoiceEditComponent implements OnInit {
            this.model.totalAmount += item.price;
         });
 
-        if (this.customer.discount != null) {
+        console.log("custm",this.customer)
+        if(this.customer!=undefined){
+            console.log("custm",this.customer.id)
+            alert(this.customer.discount)
+        }
+      
+        if (this.selectedCustomer.discount != null) {
+            alert(this.selectedCustomer.discount)
             this.model.discount = this.model.totalAmount * this.customer.discount / 100;
             this.model.totalAmount -= this.model.discount;
         }

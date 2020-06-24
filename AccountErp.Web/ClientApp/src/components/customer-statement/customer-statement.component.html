@@ -1,3 +1,4 @@
+<form name="form" (ngSubmit)="onSubmit(f)" #f="ngForm">
 <div class="kt-holder kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
     <div class="kt-subheader kt-grid__item" id="kt_subheader">
         <div class="kt-subheader__main">
@@ -29,8 +30,8 @@
                             <a [routerLink]="['/Quotation/add/quotation.add']" class="btn btn-success"> <i class="la la-plus"></i> Create Statement</a>
                         </div> -->
                         <div class="col-md-12 text-right m-t-10">
-                            <button type="button" class="btn btn-success btn-elevate btn-icon-sm"
-                            *ngIf = "isShow" (click)="toggleDisplay();showcustomerStatement()">
+                            <button type="button" class="btn btn-success btn-elevate btn-icon-sm"[disabled]="!f.valid"
+                            (click)="showcustomerStatement();isShow=!isShow">
                             <i class="la la-search"></i> {{text1}}
                         </button>
                         <!-- (click)="changeText()"*ngIf = "!isShow" -->
@@ -43,16 +44,16 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="form-group row" >
+                                    <div class="form-group col-md-3 row" >
                                     <label class="col-md-3">Customer:*</label>
                                     <div class="col-md-11">
-                                        <ngx-select-dropdown  name="customerId" #customerId="ngModel" (change)="getCustomerDetail()" 
+                                        <ngx-select-dropdown  name="customerId" #customerId="ngModel" (change)="getCustomerDetail()"  id="customerId"
                                         [multiple]="false" [(ngModel)]="selectedCustomer" [config]="config" [options]="customers"></ngx-select-dropdown>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div class="form-group col-md-3 row">
                                    <label class="col-md-3">Type:</label>
-                                        <div class="col-md-11" >
+                                        <div class="col-md-12" >
                                             <!-- <ngx-select-dropdown  name="statementType" #statementType="ngModel" (change)="getCustomerDetail()" 
                                             [multiple]="false" [(ngModel)]="selectedStatement" [config]="config" [options]="statementTypes"></ngx-select-dropdown> -->
                                             <select class="form-control" id="statementType" [(ngModel)]="selectedstType" name="statementType" #statementType="ngModel" required>
@@ -62,14 +63,13 @@
                                               </select>
                                         </div>
                                  </div>
-
-                                 <div class="form-group row" *ngIf="selectedstType == 'accActivity'">
-                                    <label class="col-md-4">Date from:</label>
-                                    <div class="col-md-9">
+                                 <div class="form-group col-md-3 row" *ngIf="selectedstType == 'accActivity'">
+                                    <label class="col-md-3">from:</label>
+                                    <div class="col-md-12">
                                         <div class="input-group">
-                                            <input class="form-control" name="invoiceStartDate"
-                                                #invoiceStartDate="ngModel" [(ngModel)]="startDate"
-                                                ngbDatepicker #d="ngbDatepicker" (dateSelect)="changeInvoiceDate()"  readonly />
+                                            <input class="form-control" name="invoiceStartDate" id="invoiceStartDate"
+                                                #invoiceStartDate="ngModel" [(ngModel)]="startDate" required
+                                                ngbDatepicker #d="ngbDatepicker" (dateSelect)="changeStartDate()"  readonly />
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary calendar"
                                                     (click)="d.toggle()" type="button">
@@ -80,12 +80,12 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row" *ngIf="selectedstType == 'accActivity'">
-                                    <label class="col-md-4 ">to:</label>
-                                    <div class="col-md-9">
+                                <div class="form-group col-md-3 row" *ngIf="selectedstType == 'accActivity'">
+                                    <label class="col-md-3">to:</label>
+                                    <div class="col-md-12">
                                         <div class="input-group">
-                                            <input class="form-control" name="invoiceDueDate"
-                                                #invoiceDueDate="ngModel" (dateSelect)="changeDuedate()"
+                                            <input class="form-control" name="invoiceDueDate" id="invoiceDueDate"
+                                                #invoiceDueDate="ngModel" (dateSelect)="changeEnddate()"
                                                 [(ngModel)]="endDate" ngbDatepicker
                                                 #d1="ngbDatepicker" [autoClose]=" true" readonly />
                                             <div class="input-group-append">
@@ -97,6 +97,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 </div>
                             </div>
                             <div class="col-md-12" *blockUI="'container-blockui'">
@@ -113,302 +114,431 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-4"></div>
-                                <div class="col-md-3">
-                                    <button type="button" class="btn btn-success btn-elevate btn-icon-sm"
-                                        (click)="doFilter()">
-                                        <i class="la la-search"></i> More actions
-                                    </button>
-                                </div>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-success btn-elevate btn-icon-sm dropdown-toggle" data-toggle="dropdown" 
+                                    <!-- <button type="button" class="btn btn-success btn-elevate btn-icon-sm dropdown-toggle" data-toggle="dropdown" 
                                          aria-haspopup="true" aria-expanded="false">
-                                      Action
-                                    </button>
-                                    <div class="dropdown-menu">
-                                      <a class="dropdown-item" href="#">Get share link</a>
-                                      <a class="dropdown-item" href="#">Print</a>
-                                      <a class="dropdown-item" href="#">Preview as customer</a>
+                                      More Actions
+                                    </button> -->
+                                    <button type="button" class="btn btn-outline-success btn-sm dropdown-toggle"
+                                    data-toggle="dropdown">
+                                    Action
+                                </button>
+                                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
+
+                                      <ul class="kt-nav">
+                                        <li class="kt-nav__item">
+                                          <a href="javascript:;" class="kt-nav__link" (click)="downloadPDF()">
+                                              <em class="kt-nav__link-icon la la-print"></em>
+                                              <span class="kt-nav__link-text"> Get share link</span>
+                                          </a>
+                                      </li>
+                                        <li class="kt-nav__item">
+                                          <a href="javascript:;" class="kt-nav__link" (click)="openPDF()">
+                                              <em class="kt-nav__link-icon la la-print"></em>
+                                              <span class="kt-nav__link-text"> Preview as customer</span>
+                                          </a>
+                                      </li>
+                                      <li class="kt-nav__item">
+                                        <a href="javascript:;" class="kt-nav__link" (click)="downloadPDF()">
+                                            <em class="kt-nav__link-icon la la-print"></em>
+                                            <span class="kt-nav__link-text"> Print</span>
+                                        </a>
+                                    </li>
+                                      </ul>
+
                                     </div>
                                   </div>
+                                  <div class="col-md-3">
+                                    <button type="button" class="btn btn-success btn-elevate btn-icon-sm"
+                                    >Send Statement
+                                </button>
+
+                                </div>
                             </div>
                         </div>
 
                         
                     </div>
                     <br>
-                    <div  id="htmlData" #htmlData>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="row">
-                                    <!-- <label class="col-md-3 kt-portlet__label">Item Name</label> -->
-                                 
-                                    <!-- <label class=" kt-portlet__label">Bill to</label> -->
-                                    <h6 >Bill to</h6>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-9">
-                                        <!-- <p class="kt-portlet__data">firstName</p>
-                                        <p class="kt-portlet__data">9826483828</p>
-                                        <p class="kt-portlet__data">sadar</p>
-                                        <p class="kt-portlet__data">89</p>
-                                        <p class="kt-portlet__data">Maharashtra</p> -->
-                                        <div class="kt-portlet__data">{{customer.firstName+" "+customer.middleName+" "+customer.lastName}}</div>
-                                        <div>{{customer.email}}</div>
-                                        <div>{{customer.phone}}</div>
+                    <!-- Outstanding tab starts -->
+                    
+                    <div >
+                      <div id="htmlData" #htmlData> 
+                      <div class="container" >
+                        <div class="row justify-content-end ">
+                         <div class="col-4" >
+                             <div class="row">
+                                 <h2 class="col-md-10">Statement of Account</h2>
+                             </div>
+                             <div class="row">
+                                 <div class="col-md-10" *ngIf="selectedstType == 'outstanding'">Outstanding Invoices</div>
+                                 <div class="col-md-10" *ngIf="selectedstType == 'accActivity'">Account Activity</div>
+                             </div>
+                         </div>
+                        </div>
+                     </div>
 
-                                        <div>{{customer.address.streetNumber}}</div>
-                                        <div>{{customer.address.streetName}}</div>
-                                        <div>{{customer.address.postalCode}}</div>
-                                        <div>{{customer.address.city}}</div>
-                                        <div>{{customer.address.state}}</div>
-                                        <div>{{customer.address.countryId}}</div>
+                     <br><br> <br> <br> <br> <div class="col-8"></div>
+                       <div class="row justify-content-end " >
+                       <div class="col-4">
+                           <div class="row">
+                           </div>
+                       </div>
+                       </div>
+                     <div>
+                  
+                        <div class="container"  >
+                          <div  class="row justify-content-between">        
+                                <div class="col-4" >
+                                  <div class=" row">
+                                       <div class="col-md-4">Bill to :</div></div>
+                                   <div class=" row">
+                                       <label class="col-md-6">{{customer.firstName+" "+customer.middleName+" "+customer.lastName}}</label>
+                                   </div>
+                                   <div class=" row">
+                                       <div class="col-md-4">{{customer.phone}}</div>
+                                   </div>
+                                   <div class=" row">
+                                    <div class="col-md-4">{{customer.email}}</div>
+                                </div>
+                                   <div class=" row">
+                                       <div class="col-md-4">{{customer.address.streetNumber+" "+customer.address.streetName}}</div>
+                                   </div>
+                                   <div class=" row">
+                                       <div class="col-md-4">{{customer.address.city+" "+customer.address.state+" "+customer.address.postalCode}}
+                                       </div>
+                                   </div>
+                                   <div class=" row">
+                                       <div class="col-md-4">{{customer.address.countryId}}
+                                       </div>
                                     </div>
-                                
-                                </div>
-                            </div>
-                            <div class="col-6 pull-right">
-                                <div class="form-group row">
-                                    <!-- <label class="col-md-3 kt-portlet__label">Statement of Account</label> -->
-                                    <h3>Statement of Account</h3>
-                                    <div class="col-md-9">
-                                        <h4 *ngIf="selectedstType == 'outstanding'">Outstanding Invoices</h4>
-                                        <h4 *ngIf="selectedstType == 'accActivity'">AccountActivity</h4>
-                                        <div class="section-summary-header" *ngIf="selectedstType == 'outstanding'">
-                                            <table class="wv-table--plain customer-statements-summary-table">
-                                             <thead class="wv-table__header summary-header">
-                                             <tr class="wv-table__row">
-                                               <td class="wv-table__cell summary-cell" colspan="1"> 
-                                                <span class="wv-text wv-text--small">As of date:</span></td>
-                                               <td class="wv-table__cell summary-cell" colspan="1">
-                                                <span class="wv-text wv-text--small"> {{today | date}}</span>
-                                               </td>
-                                              </tr>
-                                              <tr class="wv-table__row">
-                                                <td class="wv-table__cell summary-cell" colspan="1">
-                                                 <span class="wv-text wv-text--small">Overdue:</span>
-                                                </td>
-                                                <td class="wv-table__cell summary-cell" colspan="1">
-                                                 <span class="wv-text wv-text--small">₹{{overDueAmount}}</span>
-                                                </td>
-                                               </tr>
-                                              </thead>
-                                             <tbody class="wv-table__body">
-                                               <tr class="wv-table__row">
-                                                <td class="wv-table__cell summary-cell" colspan="1">
-                                                 <span class="wv-text wv-text--small">Not yet due:</span>
-                                                </td>
-                                                <td class="wv-table__cell--amount summary-cell" colspan="1">
-                                                  <span class="wv-text wv-text--small">₹{{totalDueAmount}}</span>
-                                                </td>
-                                                </tr>
-                                                <tr class="wv-table__row">
-                                                   <td class="wv-table__cell summary-cell" colspan="1">
-                                                     <span class="wv-text wv-text--small">Outstanding Balance (INR):</span>
-                                                    </td>
-                                                    <td class="wv-table__cell--amount summary-cell" colspan="1">
-                                                      <span class="wv-text wv-text--small">{{outStandingBalance | currency}}</span>
-                                                    </td>
-                                                </tr>
-                                           
-                                          </tbody>
-                                        </table></div>
-                                                                           </div>
-                                  
-                                    <div class="section-summary-header" *ngIf="selectedstType == 'accActivity'">
-                                        <table class="wv-table--plain customer-statements-summary-table">
-                                         <thead class="wv-table__header summary-header">
-                                         <tr class="wv-table__row">
-                                           <td class="wv-table__cell summary-cell" colspan="1"> 
-                                            <span class="wv-text wv-text--small">From</span></td>
-                                           <td class="wv-table__cell summary-cell" colspan="1">
-                                            <span class="wv-text wv-text--small">{{fromDate | date}} </span>
-                                           </td>
-                                          </tr>
-                                          <tr class="wv-table__row">
-                                            <td class="wv-table__cell summary-cell" colspan="1">
-                                             <span class="wv-text wv-text--small">To</span>
-                                            </td>
-                                            <td class="wv-table__cell summary-cell" colspan="1">
-                                             <span class="wv-text wv-text--small">{{toDate | date}}</span>
-                                            </td>
-                                           </tr>
-                                          </thead>
-                                         <tbody class="wv-table__body">
-                                           <tr class="wv-table__row">
-                                            <td class="wv-table__cell summary-cell" colspan="1">
-                                             <span class="wv-text wv-text--small">Opening balance on {{fromDate | date}} (INR)</span>
-                                            </td>
-                                            <td class="wv-table__cell--amount summary-cell" colspan="1">
-                                              <span class="wv-text wv-text--small">₹0.00</span>
-                                            </td>
-                                            </tr>
-                                            <tr class="wv-table__row">
-                                               <td class="wv-table__cell summary-cell" colspan="1">
-                                                 <span class="wv-text wv-text--small">Invoiced</span>
-                                                </td>
-                                                <td class="wv-table__cell--amount summary-cell" colspan="1">
-                                                  <span class="wv-text wv-text--small">₹0.00{{model.totalAmount}}</span>
-                                                </td>
-                                            </tr>
-                                            <tr class="wv-table__row">
-                                                <td class="wv-table__cell summary-cell" colspan="1">
-                                                   <span class="wv-text wv-text--small">Paid</span>
-                                                </td>
-                                                <td class="wv-table__cell--amount summary-cell" colspan="1">
-                                                    <span class="wv-text wv-text--small">₹0.00</span>
-                                                </td>
-                                            </tr>
-    
-                                            <tr class="wv-table__row">
-                                                <td class="wv-table__cell summary-cell" colspan="1">
-                                                    <span class="wv-text wv-text--small">Refunded</span>
-                                                </td>
-                                                <td class="wv-table__cell--amount summary-cell" colspan="1">
-                                                    <span class="wv-text wv-text--small">₹0.00</span>
-                                                </td>
-                                            </tr>
-                                           <tr class="wv-table__row">
-                                                <td class="wv-table__cell summary-cell" colspan="1">
-                                                  <span class="wv-text wv-text--small">  Closing Balance on  {{toDate | date}} (INR) (INR)</span>
-                                               </td>
-                                                <td class="wv-table__cell--amount summary-cell" colspan="1">
-                                                  <span class="wv-text wv-text--small">₹153.00</span>
-                                                </td>
-                                            </tr>
-                                      </tbody>
-                                    </table></div>
-                                </div>
-                                <hr>
+                               </div>
+                               <div class="col-3"></div>
+                                    <div class="col-4" >
+                             
+                                      <div class="section-summary-header" *ngIf="selectedstType == 'outstanding'">
+                                        <div class=" row">
+                                            <label >      Indian rupee(INR) :</label>
+                                        </div>
+                                           <div class=" row">
+                                                <div class="col-md-4">As of :</div>
+                                                <div class="col-md-4 ml-auto">{{today | date}}</div>
+                                            </div>
+                                            <hr>
+                                            <div class=" row">
+                                                <div class="col-md-4">Overdue</div>
+                                                <div class="col-md-4 ml-auto">₹{{overDueAmount}}</div>
+                                            </div>
+                                            <div class=" row">
+                                                <div class="col-md-4">Not yet due</div>
+                                                <div class="col-md-4 ml-auto">₹{{totalDueAmount}}</div>
+                                            </div>
+                                            <div class=" row mark">
+                                                <label class="col-md-6">Outstanding balance (INR)	:</label>
+                                                <div class="col-md-4 ml-auto">₹{{outStandingBalance}}</div>
+                                            </div>
+                                      </div>
+
+                                      <div class="section-summary-header" *ngIf="selectedstType == 'accActivity'">
+                                        <div class=" row">
+                                            <div class="col-md-4">From :</div>
+                                            <div class="col-md-4 ml-auto">{{fromDate | date}}</div>
+                                        </div>
+                                           <div class=" row">
+                                                <div class="col-md-4">To :</div>
+                                                <div class="col-md-4 ml-auto">{{toDate | date}}</div>
+                                            </div>
+                                            <hr>
+                                            <div class=" row">
+                                                <div class="col-md-4">Opening balance on {{fromDate | date}} (INR)</div>
+                                                <div class="col-md-4 ml-auto">₹ {{statementData.openingBalance}}</div>
+                                            </div>
+                                            <div class=" row">
+                                                <div class="col-md-4">Invoiced</div>
+                                                <div class="col-md-4 ml-auto">₹ {{tempBalance}}</div>
+                                            </div>
+                                            <div class=" row ">
+                                                <div class="col-md-6">Paid </div>
+                                                <div class="col-md-4 ml-auto">₹0.00</div>
+                                            </div>
+                                            <div class=" row ">
+                                                <div class="col-md-6">Refunded </div>
+                                                <div class="col-md-4 ml-auto">₹0.00</div>
+                                            </div>
+                                            <div class=" row mark">
+                                                <label class="col-md-8">Closing Balance on {{toDate | date}} (INR) </label>
+                                                <div class="col-md-4 ml-auto">₹ {{getClosingBalanceAmount()}}</div>
+                                            </div>
+                                      </div>
+                                    </div>
                             </div>
                         </div>
-<div *ngIf="selectedstType == 'outstanding'">
-    <div class="row">
-        <div class="col-12">
-                                
-                <table class="table table-striped" id="my-table">
-                    <thead>
-                        <tr >
-                            <th>S.NO.</th>
-                            <th style="width:10%">Invoice #  </th>
-                            <th scope="col"> Invoice Date    </th>
-                            <th scope="col">  Due Date       </th>
-                            <th scope="col" style="width: 15%;">Total</th>
-                            <th scope="col">  Paid         </th>
-                            <th scope="col" style="width: 10%;"> Due</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of statementData.invoiceList; index as $index;">
-                            <td scope="row">
-                                {{($index + 1)}}
-                            </td>
-                            <td>
-                                {{item.invoiceNumber}}
 
-                            </td>
-                            <td>
-                                {{item.invoiceDate | date}}<br/>
-                                <div *ngIf="item.status==3" class="lblOverdue">Overdue</div>
-                            </td>
-                            <td>
-                                {{item.dueDate | date}}
+                      </div>
+                      </div>
 
-                            </td>
-                            <td>
-                                {{item.totalAmount}}
-
-                            </td>
-                            <td>
-                                {{item.paid}}
-
-                            </td>
-                            <td>
-                                {{item.totalAmount-item.paid}}
-
-                            </td>
-                        </tr>
-                    </tbody>
-                    </table>
-        </div>
-    </div>
-    <br><div class="col-8"></div>
-    <div class="row">
-        <div class="col-10">
-            <div class="form-group row">
-                <label class="col-md-3 kt-portlet__label">Outstanding Balance (INR):</label>
-                <div class="col-md-4">
-                    <p class="kt-portlet__data">₹{{outStandingBalance}}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div *ngIf="selectedstType == 'accActivity'" >
-    <div class="row">
-        <div class="col-12">
-                                
-                <table class="table table-striped" id="my-table">
-                    <thead>
-                        <tr >
-                            <th style="width:10%">Date</th>
-                            <th scope="col"> Item   </th>
-                            <th scope="col">  Amount  </th>
-                            <th scope="col" style="width: 15%;">Balance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of selectedItems; index as $index;">
-                            <td scope="row">
-                                {{($index + 1)}}
-                            </td>
-                            <td>
-                                {{model.startDate}}   
-                            </td>
-                            <td>
-                                {{(item.itemTypeName)}}
-                            </td>
-                        
-                            <td>
-                                <input class="form-control" type="text" (input)="changeRate($event,$index);updateTotalAmount.emit()"  value="{{item.rate}}"/>
-                                
-                            </td>
-                            <td *ngIf='item.taxPercentage'>
-                                <ngx-select-dropdown (change)="changeTax($index,$event);updateTotalAmount.emit()" [multiple]="false" [(ngModel)]="selectedTax[$index]" [config]="config2" [options]="taxList"></ngx-select-dropdown>
-
-                            </td>
-                            <td *ngIf='!item.taxPercentage'>
-                                Non-taxable
-                            </td>
-                    
-                        </tr>
-                    </tbody>
-                    </table>
-        </div>
-    </div>
-    <br><div class="col-8"></div>
-    <div class="row">
-        <div class="col-10">
-            <div class="form-group row">
-                <label class="col-md-3 kt-portlet__label">Outstanding Balance (INR):</label>
-                <div class="col-md-4">
-                    <p class="kt-portlet__data">{{model.amount | currency}}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
                       
+                    <div *ngIf="selectedstType == 'outstanding'">
+                      <div class="container" >
+                        <div class="row justify-content-center">
+                          <div class="col-12"></div> 
+                            <div class="col-12">
+                            </div>
+                        </div>
+                      </div>
+                      <br> <br> <br> <br> <br> <br> 
+                      <div class="container">
+                        <div class="row justify-content-center">  
+                          <div class="row-12"></div> <br>
+                              <div class="col-12"> 
+                                    <table class="table table-striped" id="my-table">
+                                        <thead>
+                                            <tr >
+                                                <th style="width:15%">S.NO.</th>
+                                                <th style="width:15%">Invoice #  </th>
+                                                <th scope="col" style="width:20%"> Invoice Date    </th>
+                                                <th scope="col" style="width:20%">  Due Date       </th>
+                                                <th scope="col" style="width: 15%;">Total</th>
+                                                <th scope="col "style="width:10%">  Paid         </th>
+                                                <th scope="col" style="width: 10%;"> Due</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of statementData.invoiceList; index as $index;">
+                                                <td scope="row">
+                                                    {{($index + 1)}}
+                                                </td>
+                                                <td>
+                                                    {{item.invoiceNumber}}
+
+                                                </td>
+                                                <td>
+                                                    {{item.invoiceDate | date}}<br/>
+                                                    <div *ngIf="item.status==3" class="lblOverdue">Overdue</div>
+                                                </td>
+                                                <td>
+                                                   {{item.dueDate | date}}
+
+                                                </td>
+                                                <td>
+                                                  ₹  {{item.totalAmount}}
+                                                </td>
+                                                <td>
+                                                  ₹ {{getPaidAmount(item)}}
+                                                </td>
+                                               
+                                                <td>
+                                                  ₹ {{getBalanceAmount(item)}}
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                     </table>
+                               </div>
+                         </div>
+                        </div>
+                        <br><div class="col-8"></div>
+
+                        <div class="container" id="htmlData" #htmlData>
+                          <div class="row justify-content-end ">
+                          <div class="col-4">
+                              <div class="row">
+                                  <label class="col-md-8 kt-portlet__label">Outstanding Balance (INR) ₹ {{outStandingBalance}}</label>
+                              </div>
+                          </div>
+                          </div>
+                      </div>
                     </div>
+                    <!-- </div> -->
+                    <!-- outstanding tab ends -->
+
+
+                    <!-- Accounting tab starts -->
+                    <div >
+                          <div *ngIf="selectedstType == 'accActivity'" >
+                            <div class="container" >
+                              <div class="row justify-content-center">
+                                <div class="col-12"></div> 
+                                  <div class="col-12">
+                                  </div>
+                              </div>
+                            </div>
+                            <br> <br> <br> <br> <br> <br> 
+                            <div class="container" >
+                              <div class="row justify-content-center">
+                                <div class="row-12"></div> <br>
+                                  <div class="col-12">
+                                                          
+                                    <table class="table table-striped" id="my-table">
+                                      <thead>
+                                          <tr >
+                                              <th >S.NO.</th>
+                                              <th  scope="col">Date</th>
+                                              <th scope="col"> Item   </th>
+                                              <th scope="col">  Amount  </th>
+                                              <th scope="col" style="width: 15%;">Balance</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr >
+                                              <td></td>
+                                              <td>{{fromDate | date}}</td>
+                                              <td> Opening Balance</td>
+                                              <td>{{statementData.openingBalance}}₹</td>
+                                              <td>{{statementData.openingBalance}}₹</td>
+                                          </tr>
+                                          <tr *ngFor="let item of statementData.invoiceList; index as $index;">
+                                              <td scope="row">
+                                                  {{($index + 1)}}
+                                              </td>
+
+                                              <td>
+                                                  {{item.invoiceDate | date}}
+
+                                              </td>
+                                              <td>
+                                                  {{item.invoiceNumber}}    <br/>
+                                                  <div *ngIf="item.status==3">Due {{item.dueDate | date}}</div>
+                                              </td>
+                                              <td>
+                                                ₹ {{getPaidAmount(item)}}
+                                             </td>
+                                            
+                                             <td>
+                                              ₹ {{getBalanceAccAmount(item)}}
+
+                                             </td>
+                                          </tr>
+
+                                          <tr >
+                                              <td></td>
+                                              <td>{{toDate | date}}</td>
+                                              <td> Closing Balance</td>
+                                              <td>₹ {{getClosingBalanceAmount()}}</td>
+                                              <td>₹ {{getClosingBalanceAmount()}}</td>
+                                          </tr>
+                                      </tbody>
+                                      </table>
+                                  </div>
+                              </div>
+                            </div>
+                           
+                              <br><div class="col-8"></div>
+
+                              <div class="container">
+                                <div class="row justify-content-end " id="htmlData" #htmlData>
+                                <div class="col-4">
+                                    <div class="row">
+                                        <label class="col-md-8 kt-portlet__label">Closing balance on {{toDate | date}} (INR): </label>
+                                        <label class="col-md-8 kt-portlet__label">{{getClosingBalanceAmount()}}</label>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                          </div>
+                    </div>
+                  </div>
+
+                    <!-- accounting tab ends -->
                 </div>
-
-
-                <!--_______________________________________ Account Activity starts _________________________________-->
-
-             
             </div>
-            <!-- </form> -->
+
         </div>
     </div>
 </div>
+</form>
+<ng-template #itemesModal let-modal *ngIf="!showMyContainer">
+    <div class="kt-portlet__body">
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group row" [ngClass]="{ 'validation-error' : f.submitted && accountNumber.invalid}">
+              <label class="col-md-3">From</label>
+              <div class="col-md-9">
+                <input type="text" name="accountNumber" class="form-control" maxlength="50" autocomplete="off"
+                  [(ngModel)]="model.accountNumber" #accountNumber="ngModel" required appNumbersOnly />
+                <div class="validation-error-message" *ngIf="f.submitted && accountNumber.invalid">
+                  Account number is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-group row" [ngClass]="{ 'validation-error' : f.submitted && bankName.invalid}">
+              <label class="col-md-3">To</label>
+              <div class="col-md-9">
+                <input type="text" name="bankName" class="form-control" maxlength="250" autocomplete="off"
+                  [(ngModel)]="model.bankName" #bankName="ngModel" appAlphaNumericsLevelThree required />
+                <div class="validation-error-message" *ngIf="f.submitted && bankName.invalid">
+                  Bank name is required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group row"
+              [ngClass]="{ 'validation-error' : f.submitted && accountHolderName.invalid}">
+              <label class="col-md-3">Subject</label>
+              <div class="col-md-9">
+                <input type="text" name="accountHolderName" class="form-control" maxlength="250"
+                  autocomplete="off" [(ngModel)]="model.accountHolderName" #accountHolderName="ngModel"
+                  appAlphaNumericsLevelTwo required />
+                <div class="validation-error-message" *ngIf="f.submitted && accountHolderName.invalid">
+                  Account holder name is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-group row" [ngClass]="{ 'validation-error' : f.submitted && branchName.invalid}">
+              <label class="col-md-3">Message</label>
+              <div class="col-md-9">
+             <textarea> </textarea>
+                <div class="validation-error-message" *ngIf="f.submitted && branchName.invalid">
+                  Branch name is required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group row" [ngClass]="{ 'validation-error' : f.submitted && ifsc.invalid}">
+              <label class="col-md-3">Chechbox</label>
+              <div class="checkbox">
+                <label><input type="checkbox" value="">Send a copy to myself at your gmail</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="col-md-12 text-right">
+          <button type="button" class="btn btn-success" (click)="closeItemesModal()">
+            <i class="la la-check"></i> Cancel
+          </button>
+          <button class="wv-button--primary">Send</button>
+        </div>
+      </div>
+
+
+      <!-- <div class="wv-button-wrapper" role="group"><button class="wv-button--secondary">Cancel</button><button class="wv-button--primary">Send</button></div> -->
+    <!-- <div class="modal-header">
+      <h5 class="modal-title">From</h5>
+      <button type="button" class="close" aria-label="Close" (click)="closeItemesModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <app-item-selector [selectedItems]='selectedItems'></app-item-selector>
+    </div>
+    <div class="modal-footer">
+      <div class="col-md-12 text-right">
+        <button type="button" class="btn btn-success" (click)="closeItemesModal()">
+          <i class="la la-check"></i> Done
+        </button>
+      </div>
+    </div> -->
+  </ng-template>
