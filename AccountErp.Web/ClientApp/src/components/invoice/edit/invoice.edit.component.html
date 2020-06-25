@@ -116,7 +116,7 @@
                       <div class="col-md-9">
                           <input type="text" name="poSoNumber" class="form-control" autocomplete="off"
                               [(ngModel)]="model.poSoNumber" maxlength="100" placeholder=""  #poSoNumber="ngModel"
-                              appAlphaNumericsLevelTwo />
+                              appNumbersOnly />
                               <div class="validation-error-message" *ngIf="f.submitted && poSoNumber.invalid">
                                 P.O/S.O is required
                               </div>

@@ -93,7 +93,7 @@ export class QuotationManageComponent implements OnInit {
                 },
                 {
                     className: 'text-right',
-                    data: 'amount',
+                    data: 'totalAmount',
                     title: 'Amount',
                     width: '15%',
                     render: function (data, type, row) {

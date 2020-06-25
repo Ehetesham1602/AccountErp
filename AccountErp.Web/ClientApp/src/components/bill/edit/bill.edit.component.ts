@@ -118,7 +118,7 @@ export class BillEditComponent implements OnInit {
       
         const tempArray = new Array<ItemListItemModel>();
          const tempTax=[]
-        this.model.totalAmount = 0;
+       // this.model.totalAmount = 0;
         this.model.items.map((itemId) => {
             const item = this.items.find(x => x.id === itemId.id);
             console.log("itemss",itemId)
@@ -131,7 +131,7 @@ export class BillEditComponent implements OnInit {
                  
                  tempArray.push(item);
       
-                this.model.totalAmount += itemId.rate;
+               // this.model.totalAmount += itemId.rate;
                 //Get item taxes
                 debugger;
                if(itemId.taxId!=0){

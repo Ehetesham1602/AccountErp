@@ -95,7 +95,7 @@ export class InvoiceEditComponent implements OnInit {
 
                 this.getCustomerDetail();
                 this.updateSelectedItems();
-                this.updateTotalAmount();
+               // this.updateTotalAmount();
             },
             error => {
                 this.blockUI.stop();
@@ -171,7 +171,7 @@ export class InvoiceEditComponent implements OnInit {
     
         const tempArray = new Array<ItemListItemModel>();
          const tempTax=[]
-        this.model.totalAmount = 0;
+       // this.model.totalAmount = 0;
         this.model.items.map((invoiceItem) => {
             const item = this.items.find(x => x.id === invoiceItem.id);
             console.log("itemss",invoiceItem)
@@ -184,7 +184,7 @@ export class InvoiceEditComponent implements OnInit {
                  
                  tempArray.push(item);
     
-                this.model.totalAmount += invoiceItem.rate;
+               // this.model.totalAmount += invoiceItem.rate;
                 //Get item taxes
                 debugger;
                 if(invoiceItem.taxId!=0){
@@ -306,6 +306,7 @@ export class InvoiceEditComponent implements OnInit {
                     var custTemp= {
                       "keyInt": this.customer.id,
                       "keyString": null,
+                      "discount":this.customer.discount,
                       "value": this.customer.firstName+" "+this.customer.middleName+" "+this.customer.lastName
                     }
                     this.selectedCustomer=custTemp;
@@ -383,14 +384,10 @@ export class InvoiceEditComponent implements OnInit {
            this.model.totalAmount += item.price;
         });
 
-        console.log("custm",this.customer)
-        if(this.customer!=undefined){
-            console.log("custm",this.customer.id)
-            alert(this.customer.discount)
-        }
+     
       
         if (this.selectedCustomer.discount != null) {
-            alert(this.selectedCustomer.discount)
+           
             this.model.discount = this.model.totalAmount * this.customer.discount / 100;
             this.model.totalAmount -= this.model.discount;
         }

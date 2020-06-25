@@ -155,7 +155,7 @@ initiateGrid(){
 
               this.getCustomerDetail();
               this.updateSelectedItems();
-              this.updateTotalAmount();
+             // this.updateTotalAmount();
           },
           error => {
               this.blockUI.stop();
@@ -171,7 +171,7 @@ initiateGrid(){
 
     const tempArray = new Array<ItemListItemModel>();
      const tempTax=[]
-    this.model.totalAmount = 0;
+   // this.model.totalAmount = 0;
     this.model.items.map((invoiceItem) => {
         const item = this.items.find(x => x.id === invoiceItem.id);
         console.log("itemss",invoiceItem)
@@ -184,7 +184,7 @@ initiateGrid(){
              
              tempArray.push(item);
 
-            this.model.totalAmount += invoiceItem.rate;
+           // this.model.totalAmount += invoiceItem.rate;
             //Get item taxes
             debugger;
            if(invoiceItem.taxId!=0){

@@ -39,6 +39,7 @@
     "fullcalendar": "^3.6.1",
     "jquery": "^3.4.1",
     "jspdf": "^1.5.3",
+    "jspdf-autotable": "^3.5.4",
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
     "ng-block-ui": "^2.1.7",
