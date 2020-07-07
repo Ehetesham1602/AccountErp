@@ -8,6 +8,8 @@ import {
 } from '../services';
 import { ItemCalculationService } from 'src/services/item-calculation.service';
 import { CustomerStatementService } from 'src/services/customer-statement.service';
+import { recurringOptions } from 'src/helpers/recurringOptions';
+import { chartOfAccountsList } from 'src/components/chart-of-account/chartOfAccountsList';
 
 export const appProviders = [
     AppSettings,
@@ -29,6 +31,8 @@ export const appProviders = [
     InvoicePaymentService,
     ItemCalculationService,
     CustomerStatementService,
+    chartOfAccountsList,
+    recurringOptions,
     {
         provide: HTTP_INTERCEPTORS,
         useClass: JwtInterceptor,
