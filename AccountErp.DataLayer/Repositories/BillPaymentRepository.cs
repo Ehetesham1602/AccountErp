@@ -61,7 +61,7 @@ namespace AccountErp.DataLayer.Repositories
             {
                 RecordsTotal = await _dataContext.BillPayments.CountAsync(x => x.Status != Constants.RecordStatus.Deleted),
                 RecordsFiltered = await linqstmt.CountAsync(),
-                Data = await linqstmt.OrderBy(sortExpression).ToListAsync()
+                Data = await linqstmt.OrderBy(sortExpression).Skip(model.Start).Take(model.Length).ToListAsync()
             };
 
             return pagedResult;
