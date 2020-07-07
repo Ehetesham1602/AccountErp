@@ -67,6 +67,8 @@ export class InvoiceManageComponent implements OnInit, AfterViewInit {
                 dataTablesParameters.customerId = self.filterModel.customerId;
                 dataTablesParameters.filterKey = self.filterModel.filterKey;
 
+                console.log("body",dataTablesParameters);
+
                 self.http
                     .post<DataTableResponseModel>(this.appSettings.ApiBaseUrl + 'Invoice/paged-result', dataTablesParameters, {})
                     .subscribe(resp => {

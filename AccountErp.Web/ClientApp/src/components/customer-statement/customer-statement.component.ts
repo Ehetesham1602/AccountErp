@@ -69,6 +69,7 @@ export class CustomerStatementComponent implements OnInit {
   loggedOut;
   totalAccBalance;
   tempBalance=0;
+  temp;
   statementTypes: any = ['Outstanding Invoices', 'Account Activity'];
 //   statementTypes: any = [
 //     {id: 1, name:'Outstanding Invoiceserman'},
@@ -243,6 +244,7 @@ showcustomerStatement() {
 //  this.showcustomerStatement();
   debugger;
   this.statementData={};
+  this.temp={};
   var body={};
   if (this.selectedCustomer !== undefined) {
    if(this.selectedstType=='outstanding'){
@@ -266,8 +268,26 @@ showcustomerStatement() {
     .subscribe(
         (data) => {
           console.log("statement",data)
-       
-             Object.assign(this.statementData, data);
+        
+          Object.assign(this.temp, data);
+             
+             //Object.assign(this.statementData, data);
+             this.temp.invoiceList.map((item) => {
+              debugger;
+              item.paidAmount=item.totalAmount;
+              if(item.status==1){
+               item.balanceAccAmount=0.00
+              }else{
+                this.totalAccBalance=0;
+                this.tempBalance+=Number(item.totalAmount);
+                var balAmnt=Number(this.temp.openingBalance)+this.tempBalance;
+                this.totalAccBalance=balAmnt.toFixed(2);
+                item.balanceAccAmount=balAmnt.toFixed(2);
+               
+              }
+           });
+         
+           this.statementData=this.temp;
              this.CalculateAmount();
             // this.model.phone = this.customer.phone;
             // this.model.email = this.customer.email;
@@ -293,13 +313,15 @@ openItemesModal(content: any) {
 getPaidAmount(item){
  
   if(item.status==1){
-    return 0.00;
-  }else{
     return item.totalAmount.toFixed(2);
+  }else{
+    return 0.00;
+   
   }
 }
 
 getBalanceAmount(item){
+  debugger;
   if(item.status==1){
     return 0.00;
   }else{
@@ -309,10 +331,11 @@ getBalanceAmount(item){
 }
 
 getBalanceAccAmount(item){
-  debugger;
+ // debugger;
   if(item.status==1){
     return 0.00;
   }else{
+    this.totalAccBalance=0;
     this.tempBalance+=Number(item.totalAmount);
     var balAmnt=Number(this.statementData.openingBalance)+this.tempBalance;
     this.totalAccBalance=balAmnt.toFixed(2);
@@ -344,16 +367,6 @@ closeItemesModal() {
         startY: 400, /* if start position is fixed from top */
         tableLineColor: [4, 6, 7], // choose RGB
           });
-          autoTable(doc, {
-            html: '#my-table1',
-            styles: {
-             // cellPadding: 0.5,
-            // fontSize: 12,
-         },
-         tableLineWidth: 0.5,
-         startY: 300, /* if start position is fixed from top */
-         tableLineColor: [4, 6, 7], // choose RGB
-           });
           const DATA = this.htmlData.nativeElement;
         doc.fromHTML(DATA.innerHTML, 30, 15);
         doc.output('dataurlnewwindow');
@@ -453,7 +466,7 @@ this.outStandingBalance = 0;
      this.overDueAmount += item.totalAmount;
      this.outStandingBalance += item.totalAmount;
    }
-   if (item.status === 1) {
+   if (item.status === 0) {
      this.totalDueAmount += item.totalAmount;
      this.outStandingBalance += item.totalAmount;
    }

@@ -42,6 +42,12 @@ import { SalesTaxAddComponent, SalesTaxEditComponent, SalesTaxDetailComponent, S
 import { QuotationAddComponent } from 'src/components/Quotation/Add/quotation.add/quotation.add.component';
 import { QuotationDetailComponent, QuotationManageComponent, QuotationEditComponent } from 'src/components/Quotation';
 import { CustomerStatementComponent } from 'src/components/customer-statement/customer-statement.component';
+import { AddRecurringinvoiceComponent } from 'src/components/recurring-invoice/add/add.recurringinvoice/add.recurringinvoice.component';
+import { EditRecurringInvoiceComponent } from 'src/components/recurring-invoice/Edit/edit-recurring-invoice/edit-recurring-invoice.component';
+import { ManageRecurringInvoiceComponent } from 'src/components/recurring-invoice/manage/manage.recurring-invoice/manage.recurring-invoice.component';
+import { RecurringInvoiceDetailsComponent } from 'src/components/recurring-invoice/detail/recurring-invoice.details/recurring-invoice.details.component';
+import { ChartOfAccountsComponent } from 'src/components/chart-of-account/chart-of-accounts/chart-of-accounts.component';
+import { ProfitAndLossComponent } from 'src/components/reports/profit-and-loss/profit-and-loss.component';
 
 
 const appRoutes: Routes = [
@@ -100,7 +106,15 @@ const appRoutes: Routes = [
     { path: 'Quotation/quotation-manage', component: QuotationManageComponent },
     { path: 'Quotation/edit/:id', component: QuotationEditComponent },
     { path: 'customerStatement', component: CustomerStatementComponent },
+    { path: 'recurring-invoice/add', component: AddRecurringinvoiceComponent },
+    { path: 'recurring-invoice/edit/:id', component: EditRecurringInvoiceComponent },
+    { path: 'recurring-invoice/manage', component: ManageRecurringInvoiceComponent },
+    { path: 'recurring-invoice/detail/:id', component: RecurringInvoiceDetailsComponent },
+    { path: 'chart-of-account/chart-of-account', component: ChartOfAccountsComponent },
 
+    { path: 'reports/profit-and-loss', component: ProfitAndLossComponent },
+
+   
    
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
