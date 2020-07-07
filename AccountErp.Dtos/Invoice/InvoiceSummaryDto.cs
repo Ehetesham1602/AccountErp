@@ -14,6 +14,7 @@ namespace AccountErp.Dtos.Invoice
         public decimal? Discount { get; set; }
         public decimal TotalAmount { get; set; }
         public decimal? Tax { get; set; }
+        public string InvoiceNumber { get; set; }
         public DateTime InvoiceDate { get; set; }
         public DateTime DueDate { get; set; }
         public decimal? PoSoNumber { get; set; }

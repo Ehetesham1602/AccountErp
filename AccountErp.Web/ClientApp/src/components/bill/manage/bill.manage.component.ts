@@ -125,10 +125,44 @@ export class BillManageComponent implements OnInit, AfterViewInit {
                     orderable: false,
                     className: 'text-center',
                     render: function (data, type, row) {
-                        const htmlString = (row.status === 0
-                            ? `<em class='fa fa-edit cursor-pointer m-r-3' title='Edit' action-type='edit'></em>`
-                            : '<em class="m-r-10">&nbsp;</em>')
-                            + `<em class='fa fa-trash cursor-pointer' title='Delete' action-type='delete'></em>`;
+                        const htmlString = (
+                            ` <button type="button" class="btn btn-outline-success btn-sm dropdown-toggle"
+                             data-toggle="dropdown">
+                             Action
+                         </button>
+                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
+                             <ul class="kt-nav">
+                                 <li class="kt-nav__item">
+                                     <a class="kt-nav__link">
+                                         <em class="kt-nav__link-icon la la-credit-card"></em>
+                                         <span class="kt-nav__link-text" action-type = 'pay-bill'> Pay Bill</span>
+                                     </a>
+                                 </li>
+                                 <li class="kt-nav__item">
+                                     <a  class="kt-nav__link">
+                                         <em class="kt-nav__link-icon la la-print"></em>
+                                         <span class="kt-nav__link-text" action-type='view-detail'>View Details</span>
+                                     </a>
+                                 </li>
+                                 <li class="kt-nav__item">
+                                     <a class="kt-nav__link">
+                                         <em class="kt-nav__link-icon la la-edit"></em>
+                                         <span class="kt-nav__link-text" action-type='edit'> Edit</span>
+                                     </a>
+                                 </li>
+                                 <li class="kt-nav__item">
+                                     <a class="kt-nav__link">
+                                         <em class="kt-nav__link-icon la la-trash"></em>
+                                         <span class="kt-nav__link-text" action-type='delete'>
+                                             Delete
+                                         </span>
+                                     </a>
+                                 </li>
+                             </ul>
+                         </div>`)
+                            // ? `<em class='fa fa-edit cursor-pointer m-r-3' title='Edit' action-type='edit'></em>`
+                            // : '<em class="m-r-10">&nbsp;</em>')
+                            // + `<em class='fa fa-trash cursor-pointer' title='Delete' action-type='delete'></em>`;
                         return htmlString;
                     }
                 }
@@ -150,6 +184,12 @@ export class BillManageComponent implements OnInit, AfterViewInit {
                 $(detailElem).unbind('click');
                 $(detailElem).on('click', function () {
                     self.router.navigate(['/bill/detail', data.id]);
+                });
+
+                const paybillElem = $(row).find('[action-type = pay-bill]');
+                $(paybillElem).unbind('click');
+                $(paybillElem).on('click', function () {
+                    self.router.navigate(['/bill/payment', data.id]);
                 });
             },
             drawCallback: function () {
@@ -177,7 +217,7 @@ export class BillManageComponent implements OnInit, AfterViewInit {
     }
 
     delete(id: number): void {
-        if (!confirm('Are you sure you want to delete the selected invoice?')) {
+        if (!confirm('Are you sure you want to delete the selected Bill?')) {
             return;
         }
         this.blockUI.start();

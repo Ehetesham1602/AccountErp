@@ -19,7 +19,15 @@ namespace AccountErp.Entities
         public string CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string UpdatedBy { get; set; }
-      
+
+        public string StrBillDate { get; set; }
+        public DateTime BillDate { get; set; }
+        public string StrDueDate { get; set; }
+        public decimal? PoSoNumber { get; set; }
+
+        public string Notes { get; set; }
+        public string BillNumber { get; set; }
+
         public Vendor Vendor { get; set; }
         public ICollection<BillItem> Items { get; set; }
         public ICollection<BillAttachment> Attachments { get; set; }

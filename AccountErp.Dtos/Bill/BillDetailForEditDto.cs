@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AccountErp.Dtos.Bill
 {
@@ -12,8 +13,14 @@ namespace AccountErp.Dtos.Bill
         public decimal TotalAmount { get; set; }
         public string Remark { get; set; }
         public decimal? Discount { get; set; }
-
-        public IEnumerable<int> Items { get; set; }
+        public DateTime BillDate { get; set; }
+        public DateTime DueDate { get; set; }
+        public decimal? PoSoNumber { get; set; }
+        public string StrBillDate { get; set; }
+        public string StrDueDate { get; set; }
+        public string Notes { get; set; }
+        public string BillNumber { get; set; }
+        public IEnumerable<BillServiceDto> Items { get; set; }
         public IEnumerable<BillAttachmentDto> Attachments { get; set; }
     }
 }

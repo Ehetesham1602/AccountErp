@@ -40,12 +40,16 @@
                   <app-customer-address-detail [model]="model" (moveBackward)="prev()" (moveForward)="next()"
                     *ngIf="wizardStep === 2">
                   </app-customer-address-detail>
+                  <app-customer-shippingaddress [model]="model" (moveBackward)="prev()" (moveForward)="next()"
+                  *ngIf="wizardStep === 3">
+                </app-customer-shippingaddress>
                   <app-customer-payment-detail [model]="model" (moveBackward)="prev()" (moveForward)="next()"
-                    *ngIf="wizardStep === 3">
+                    *ngIf="wizardStep === 4">
                   </app-customer-payment-detail>
                   <app-customer-discount-detail [model]="model" (moveBackward)="prev()" (moveForward)="next()"
-                    *ngIf="wizardStep === 4">
+                    *ngIf="wizardStep === 5">
                   </app-customer-discount-detail>
+                 
                 </div>
               </div>
             </div>

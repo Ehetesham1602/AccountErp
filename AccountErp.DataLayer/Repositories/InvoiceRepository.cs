@@ -61,6 +61,7 @@ namespace AccountErp.DataLayer.Repositories
                                      DueDate = i.DueDate,
                                      StrDueDate = i.StrDueDate,
                                      PoSoNumber = i.PoSoNumber,
+                                     InvoiceNumber = i.InvoiceNumber,
                                      Customer = new CustomerDetailDto
                                      {
                                          FirstName = c.FirstName,
@@ -124,6 +125,7 @@ namespace AccountErp.DataLayer.Repositories
                               DueDate = i.DueDate,
                               StrDueDate = i.StrDueDate,
                               PoSoNumber = i.PoSoNumber,
+                              InvoiceNumber = i.InvoiceNumber,
                               Customer = new CustomerDetailDto
                               {
                                   FirstName = c.FirstName,
@@ -182,7 +184,8 @@ namespace AccountErp.DataLayer.Repositories
                                 Tax = i.Tax,
                                 TotalAmount = i.TotalAmount,
                                 CreatedOn = i.CreatedOn,
-                                Status = i.Status
+                                Status = i.Status,
+                                InvoiceNumber = i.InvoiceNumber
                             })
                             .AsNoTracking();
 
@@ -222,7 +225,8 @@ namespace AccountErp.DataLayer.Repositories
                                 StrInvoiceDate = i.StrInvoiceDate,
                                 DueDate = i.DueDate,
                                 StrDueDate = i.StrDueDate,
-                                PoSoNumber = i.PoSoNumber
+                                PoSoNumber = i.PoSoNumber,
+                                InvoiceNumber = i.InvoiceNumber
                             })
                             .AsNoTracking();
 
@@ -253,7 +257,8 @@ namespace AccountErp.DataLayer.Repositories
                               StrInvoiceDate = i.StrInvoiceDate,
                               DueDate = i.DueDate,
                               StrDueDate = i.StrDueDate,
-                              PoSoNumber = i.PoSoNumber
+                              PoSoNumber = i.PoSoNumber,
+                              InvoiceNumber = i.InvoiceNumber
                           })
                           .AsNoTracking()
                           .SingleOrDefaultAsync();
@@ -271,6 +276,12 @@ namespace AccountErp.DataLayer.Repositories
             var invoice = await _dataContext.Invoices.FindAsync(id);
             invoice.Status = Constants.InvoiceStatus.Deleted;
             _dataContext.Invoices.Update(invoice);
+        }
+
+        public async Task<int> getCount()
+        {
+            int count = await _dataContext.Invoices.CountAsync();
+            return count;
         }
     }
 }

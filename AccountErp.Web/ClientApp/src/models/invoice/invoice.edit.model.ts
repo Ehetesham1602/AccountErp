@@ -10,8 +10,12 @@ export class InvoiceEditModel {
     public discount: number;
     public totalAmount: number;
     public remark: string;
+    public poso: number;
+    public memo: string;
+    public invoiceDate: string;
+    public dueDate: string;
 
-    public items: Array<number>;
+    public items: any;
     public attachments: Array<AttachmentEditModel>;
 
     constructor() {

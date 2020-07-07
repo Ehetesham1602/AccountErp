@@ -10,6 +10,7 @@ namespace AccountErp.Dtos.Quotation
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public decimal? Tax { get; set; }
+        public string QuotationNumber { get; set; }
         public decimal? Discount { get; set; }
         public decimal TotalAmount { get; set; }
         public string Remark { get; set; }

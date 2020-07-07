@@ -12,7 +12,7 @@
 
         public enum PaymentMode { Cash, Transfer, Check }
 
-        public enum InvoiceStatus { Pending, Paid, Deleted }
+        public enum InvoiceStatus { Pending, Paid, Deleted ,Overdue}
 
         public enum BillStatus { Pending, Paid, Deleted }
 

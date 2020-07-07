@@ -51,6 +51,7 @@ export class ItemAddComponent implements OnInit {
             .subscribe((data) => {
                 this.blockUI.stop();
                 Object.assign(this.salesTaxes, data);
+                console.log("taxlist",this.salesTaxes)
             },
                 error => {
                     this.blockUI.stop();

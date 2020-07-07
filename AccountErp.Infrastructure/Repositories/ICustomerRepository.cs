@@ -1,7 +1,9 @@
 ﻿using AccountErp.Dtos;
 using AccountErp.Dtos.Customer;
+using AccountErp.Dtos.Invoice;
 using AccountErp.Entities;
 using AccountErp.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -33,6 +35,9 @@ namespace AccountErp.Infrastructure.Repositories
         
         Task<CustomerPaymentInfoDto> GetPaymentInfoAsync(int id);
         Task<CustomerStatementDto> GetCustomerStatementAsync(CustomerStatementDto model);
+        Task<List<InvoiceListItemDto>> GetOpeningBalance(DateTime date, int custId);
+
+        Task SetOverdueStatus(int custId);
 
     }
 }

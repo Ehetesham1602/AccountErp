@@ -42,21 +42,23 @@ namespace AccountErp.Managers
 
             //model.Tax = items.Where(x => x.IsTaxable).Sum(x => x.Rate * x.SalesTax.TaxPercentage / 100);
 
-            var customer = await _customerRepository.GetAsync(model.CustomerId);
+            //var customer = await _customerRepository.GetAsync(model.CustomerId);
 
-            if (customer.Discount != null)
-            {
-                model.Discount = model.TotalAmount * customer.Discount / 100;
-                model.TotalAmount = model.TotalAmount - (model.Discount ?? 0);
-            }
+            //if (customer.Discount != null)
+            //{
+            //    model.Discount = model.TotalAmount * customer.Discount / 100;
+            //    model.TotalAmount = model.TotalAmount - (model.Discount ?? 0);
+            //}
 
-            if (model.Tax != null)
-            {
-                model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
-            }
+            //if (model.Tax != null)
+            //{
+            //    model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
+            //}
+
+            var count = await _invoiceRepository.getCount();
 
             //await _invoiceRepository.AddAsync(InvoiceFactory.Create(model, _userId, items));
-            await _invoiceRepository.AddAsync(InvoiceFactory.Create(model, _userId));
+            await _invoiceRepository.AddAsync(InvoiceFactory.Create(model, _userId, count));
 
             await _unitOfWork.SaveChangesAsync();
         }
@@ -69,18 +71,18 @@ namespace AccountErp.Managers
 
             //model.Tax = items.Where(x => x.IsTaxable).Sum(x => x.Rate * x.SalesTax.TaxPercentage / 100);
 
-            var customer = await _customerRepository.GetAsync(model.CustomerId);
+            //var customer = await _customerRepository.GetAsync(model.CustomerId);
 
-            if (customer.Discount != null)
-            {
-                model.Discount = model.TotalAmount * customer.Discount / 100;
-                model.TotalAmount = model.TotalAmount - (model.Discount ?? 0);
-            }
+            //if (customer.Discount != null)
+            //{
+            //    model.Discount = model.TotalAmount * customer.Discount / 100;
+            //    model.TotalAmount = model.TotalAmount - (model.Discount ?? 0);
+            //}
 
-            if (model.Tax != null)
-            {
-                model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
-            }
+            //if (model.Tax != null)
+            //{
+            //    model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
+            //}
 
             var invoice = await _invoiceRepository.GetAsync(model.Id);
 
@@ -121,6 +123,12 @@ namespace AccountErp.Managers
         {
             await _invoiceRepository.DeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<int> GetInvoiceNumber()
+        {
+            var count = await _invoiceRepository.getCount();
+            return (count + 1);
         }
     }
 }

@@ -34,58 +34,125 @@
               <div class="row">
 
 
-                <div class="col-6">
-                  <div class="form-group row" [ngClass]="{ 'validation-error' : f.submitted && customerId.invalid}">
-                    <label class="col-md-3">Customer Name:*</label>
-                    <div class="col-md-9">
-                      <select name="customerId" class="form-control" [(ngModel)]="model.customerId"
-                        (change)="getCustomerDetail()" #customerId="ngModel" [disabled]="disableCustomerId" required>
-                        <option value="" selected>[Select]</option>
-                        <option *ngFor="let item of customers" [value]="item.keyInt">
-                          {{item.value}}
-                        </option>
-                      </select>
-                      <div class="validation-error-message" *ngIf="f.submitted && customerId.invalid">
-                        Customer name is required
+                <div class="col-4">
+                  <div class="form-group row"
+                        [ngClass]="{ 'validation-error' : f.submitted && customerId.invalid}">
+                        <label class="col-md-3">Invoice#:</label>
+                        <div class="col-md-9">
+                          <input type="text" name="invnumber" class="form-control" autocomplete="off"
+                          [(ngModel)]="newInvNumber" maxlength="100" placeholder=""
+                          appAlphaNumericsLevelTwo readonly />
+                        </div>
+                    </div>
+                    <div class="form-group row"
+                        [ngClass]="{ 'validation-error' : f.submitted && customerId.invalid}">
+                        <label class="col-md-3">Customer:*</label>
+                        <div class="col-md-9">
+                            <ngx-select-dropdown  name="customerId" #customerId="ngModel" (change)="getCustomerDetail()" [multiple]="false" [(ngModel)]="selectedCustomer" [config]="config" [options]="customers"></ngx-select-dropdown>
+                        </div>
+                        <!-- <button type="button"
+                            class="btn btn-outline-success btn-elevate btn-icon btn-sm m-l-5"
+                            (click)="openCustomerModal(addCustomerModal)">
+                            <i class="la la-plus"></i></button> -->
+                    </div>
+
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group row"
+                        [ngClass]="{ 'validation-error' : f.submitted && customerId.invalid}">
+                        <label class="col-md-3">Date:*</label>
+                        <div class="col-md-9">
+                            
+                            <div class="input-group">
+                                <input class="form-control" name="quotationDate"
+                                    #quotationDate="ngModel" [(ngModel)]="invoiceDate" (dateSelect)="changeInvoiceDate()"
+                                    ngbDatepicker #d="ngbDatepicker"  readonly />
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary calendar"
+                                        (click)="d.toggle()" type="button">
+                                        <i class="la la-calendar"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-md-3 kt-portlet__label">Expires on:</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input class="form-control" name="quotationExpireDate" (dateSelect)="changeDuedate()"
+                                    #quotationExpireDate="ngModel"
+                                    [(ngModel)]="dueDate" ngbDatepicker
+                                    #d1="ngbDatepicker" [autoClose]=" true" readonly />
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary calendar"
+                                        (click)="d1.toggle()" type="button">
+                                        <i class="la la-calendar"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-4">
+
+                    <div class="form-group row">
+                        <label class="col-md-3 kt-portlet__label">P.O/S.O:</label>
+                        <div class="col-md-9">
+                            <input type="text" name="poso" class="form-control" autocomplete="off"
+                                [(ngModel)]="model.poSoNumber" maxlength="100" placeholder=""
+                                appNumbersOnly />
+
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-group row">
+                        <label class="col-md-3 kt-portlet__label">Memo:</label>
+                        <div class="col-md-9">
+                            <textarea name="remark" class="form-control" rows="2" maxlength="250"
+                                autocomplete="off" [(ngModel)]="model.remark" #remark="ngModel"
+                                appAlphaNumericsLevelTwo></textarea>
+                        </div>
+                    </div> -->
+
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group row">
+                      <label class="col-md-3 kt-portlet__label">Phone:</label>
+                      <div class="col-md-9">
+                          <p class="kt-portlet__data">{{model.phone | mask: '000-000-0000'}}</p>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-6">
-                  <div class="form-group row">
-                    <label class="col-md-3 kt-portlet__label">Phone:</label>
-                    <div class="col-md-9">
-                      <p class="kt-portlet__data">{{model.phone | mask: '000-000-0000'}}</p>
+                    
+                    <div class="col-md-4">
+                      <div class="form-group row">
+                      <label class="col-md-3 kt-portlet__label">Email:</label>
+                      <div class="col-md-9">
+                          <p class="kt-portlet__data">{{model.email}}</p>
+                      </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="form-group row">
-                    <label class="col-md-3 kt-portlet__label">Email:</label>
-                    <div class="col-md-9">
-                      <p class="kt-portlet__data">{{model.email}}</p>
+                    
+                    <div class="col-md-4">
+                      <div class="form-group row">
+                      <label class="col-md-3 kt-portlet__label">Discount:</label>
+                      <div class="col-md-9">
+                          <p class="kt-portlet__data" *ngIf="customer.discount">{{customer.discount}}%
+                          </p>
+                      </div>
                     </div>
+                      
                   </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-6">
-                  <div class="form-group row">
-                    <label class="col-md-3 kt-portlet__label">Customer Discount:</label>
-                    <div class="col-md-9">
-                      <p class="kt-portlet__data" *ngIf="customer.discount">{{customer.discount}}%</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            </div>
               <div class="row">
                 <div class="col-12">
                   <span class="kt-font-bolder">Items/Services</span>
-                  <button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-sm m-l-5"
-                    (click)="openItemesModal(itemesModal)">
-                    <i class="la la-plus"></i></button>
+               
                   <div class="kt-separator m-t-5">
                     <span></span>
                   </div>
@@ -93,8 +160,17 @@
               </div>
               <div class="row">
                 <div class="col-12">
-                  <app-item-selected [selectedItems]="selectedItems" [readOnly]="false" (deleteItem)="deleteItem($val)">
+                  <app-item-selected [selectedItems]="selectedItems" [itemId]="itemId" [selectedTax]="selectedTax" [readOnly]="false" (updateTotalAmount)="updateTotalAmount()" (deleteItem)="deleteItem($val)">
                   </app-item-selected>
+                  <div class="row">
+                    <div class="col-12">
+                        <div class="form-group text-right">
+                            <button type="button" class="btn btn-sm btn-outline-success"
+                                (click)="newRow()">
+                                <i class="la la-plus"></i> Add More</button>
+                        </div>
+                    </div>
+                </div>
                 </div>
               </div>
               <br>
@@ -187,7 +263,7 @@
               <div class="row">
                 <div class="col-12">
                   <div class="form-group text-right">
-                    <button type="button" class="btn btn-sm btn-success-primary" (click)="addNewAttachment()">
+                    <button type="button" class="btn btn-sm btn-outline-success" (click)="addNewAttachment()">
                       <i class="la la-plus"></i> Add More</button>
                   </div>
                 </div>
@@ -209,21 +285,24 @@
   </div>
 </div>
 
-<ng-template #itemesModal let-modal>
+
+
+<ng-template #addCustomerModal let-modal>
   <div class="modal-header">
-    <h5 class="modal-title">Select Items/Services</h5>
-    <button type="button" class="close" aria-label="Close" (click)="closeItemesModal()">
-      <span aria-hidden="true">&times;</span>
-    </button>
+      <h5 class="modal-title">Add Customer</h5>
+      <button type="button" class="close" aria-label="Close" (click)="closeCustomerModal()">
+          <span aria-hidden="true">&times;</span>
+      </button>
   </div>
   <div class="modal-body">
-    <app-item-selector [selectedItems]='selectedItems'></app-item-selector>
+      <!-- <app-item-selector [selectedItems]='selectedItems'></app-item-selector> -->
+      <app-add-customer-popup></app-add-customer-popup>
   </div>
   <div class="modal-footer">
-    <div class="col-md-12 text-right">
-      <button type="button" class="btn btn-success" (click)="closeItemesModal()">
-        <i class="la la-check"></i> Done
-      </button>
-    </div>
+      <div class="col-md-12 text-right">
+          <button type="button" class="btn btn-success" (click)="closeCustomerModal()">
+              <i class="la la-check"></i> Done
+          </button>
+      </div>
   </div>
 </ng-template>

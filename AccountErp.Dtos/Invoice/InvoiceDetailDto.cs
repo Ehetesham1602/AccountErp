@@ -10,6 +10,7 @@ namespace AccountErp.Dtos.Invoice
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public decimal? Tax { get; set; }
+        public string InvoiceNumber { get; set; }
         public decimal? Discount { get; set; }
         public decimal TotalAmount { get; set; }
         public string Remark { get; set; }

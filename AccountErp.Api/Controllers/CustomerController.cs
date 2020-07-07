@@ -145,6 +145,7 @@ namespace AccountErp.Api.Controllers
         [Route("get-customer-statement")]
         public async Task<CustomerStatementDto> GetCustomerStatementAsync(CustomerStatementDto model)
         {
+            await _customerManager.SetOverdueStatus(model.CustomerId);
             var pagedResult = await _customerManager.GetCustomerStatementAsync(model);
             return (pagedResult);
         }

@@ -1,5 +1,6 @@
 ﻿using AccountErp.Dtos;
 using AccountErp.Dtos.Customer;
+using AccountErp.Entities;
 using AccountErp.Factories;
 using AccountErp.Infrastructure.DataLayer;
 using AccountErp.Infrastructure.Managers;
@@ -8,6 +9,7 @@ using AccountErp.Models.Customer;
 using AccountErp.Utilities;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AccountErp.Managers
@@ -92,7 +94,25 @@ namespace AccountErp.Managers
 
         public async Task<CustomerStatementDto> GetCustomerStatementAsync(CustomerStatementDto model)
         {
-            return await _customerRepository.GetCustomerStatementAsync(model);
+            if(model.Status == 1)
+            {
+                var data = await _customerRepository.GetOpeningBalance(model.startDate,model.CustomerId);
+                model.openingBalance = data.Sum(x => x.Amount);
+                var customerData = await _customerRepository.GetCustomerStatementAsync(model);
+                customerData.InvoiceList = customerData.InvoiceList.Where(p => (p.InvoiceDate >= model.startDate && p.InvoiceDate <= model.endDate) && p.Status != Constants.InvoiceStatus.Deleted).ToList();
+                return customerData;
+
+            }
+            else
+            {
+                return await _customerRepository.GetCustomerStatementAsync(model);
+            }
+           
+        }
+        public async Task SetOverdueStatus(int custId)
+        {
+            await _customerRepository.SetOverdueStatus(custId);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

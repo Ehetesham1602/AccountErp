@@ -67,7 +67,14 @@ namespace AccountErp.DataLayer.Repositories
                                 Tax = b.Tax,
                                 TotalAmount = b.TotalAmount,
                                 Status = b.Status,
-                                CreatedOn = b.CreatedOn
+                                CreatedOn = b.CreatedOn,
+                                BillDate = b.BillDate,
+                                DueDate = b.DueDate.Value,
+                                StrBillDate = b.StrBillDate,
+                                StrDueDate = b.StrDueDate,
+                                Notes = b.Notes,
+                                BillNumber = b.BillNumber
+
                             })
                             .AsNoTracking();
 
@@ -97,7 +104,14 @@ namespace AccountErp.DataLayer.Repositories
                                 VendorName = v.Name,
                                 Tax = e.Tax ?? 0,
                                 TotalAmount = e.TotalAmount,
-                                Status = e.Status
+                                Status = e.Status,
+                                BillDate = e.BillDate,
+                                DueDate = e.DueDate.Value,
+                                StrBillDate = e.StrBillDate,
+                                StrDueDate = e.StrDueDate,
+                                Notes = e.Notes,
+                                BillNumber = e.BillNumber,
+                                PoSoNumber = e.PoSoNumber
                             })
                             .AsNoTracking();
 
@@ -122,6 +136,13 @@ namespace AccountErp.DataLayer.Repositories
                               Discount = b.Discount,
                               Status = b.Status,
                               CreatedOn = b.CreatedOn,
+                              BillDate = b.BillDate,
+                              DueDate = b.DueDate.Value,
+                              StrBillDate = b.StrBillDate,
+                              StrDueDate = b.StrDueDate,
+                              Notes = b.Notes,
+                              BillNumber = b.BillNumber,
+                              PoSoNumber = b.PoSoNumber,
                               Vendor = new VendorPersonallnfoDto
                               {
                                   Name = v.Name,
@@ -136,7 +157,13 @@ namespace AccountErp.DataLayer.Repositories
                                   Type = x.Item.Name,
                                   Rate = x.Rate,
                                   Name = x.Item.Name,
-                                  Description = x.Item.Description
+                                  Description = x.Item.Description,
+                                  Price = x.Price,
+                                  TaxId = x.TaxId,
+                                  TaxPercentage = x.TaxPercentage,
+                                  Quantity = x.Quantity
+                                  
+
                               }),
                               Attachments = b.Attachments.Select(x => new BillAttachmentDto
                               {
@@ -167,7 +194,25 @@ namespace AccountErp.DataLayer.Repositories
                               TotalAmount = e.TotalAmount,
                               Remark = e.Remark,
                               Discount = e.Discount,
-                              Items = e.Items.Select(x => x.ItemId),
+                              BillDate = e.BillDate,
+                              DueDate = e.DueDate.Value,
+                              StrBillDate = e.StrBillDate,
+                              StrDueDate = e.StrDueDate,
+                              Notes = e.Notes,
+                              BillNumber = e.BillNumber,
+                              PoSoNumber = e.PoSoNumber,
+                              Items = e.Items.Select(x => new BillServiceDto
+                              {
+                                  Id = x.ItemId,
+                                  Type = x.Item.Name,
+                                  Rate = x.Rate,
+                                  Name = x.Item.Name,
+                                  Description = x.Item.Description,
+                                  Quantity = x.Quantity,
+                                  Price = x.Price,
+                                  TaxId = x.TaxId,
+                                  TaxPercentage = x.TaxPercentage
+                              }),
                               Attachments = e.Attachments.Select(x => new BillAttachmentDto
                               {
                                   Id = x.Id,
@@ -194,7 +239,15 @@ namespace AccountErp.DataLayer.Repositories
                               Tax = e.Tax,
                               Discount = e.Discount,
                               TotalAmount = e.TotalAmount,
-                              Description = e.Remark
+                              Description = e.Remark,
+                              BillDate = e.BillDate,
+                              StrBillDate = e.StrBillDate,
+                              DueDate = e.DueDate.Value,
+                              StrDueDate = e.StrDueDate,
+                              PoSoNumber = e.PoSoNumber,
+                              Notes = e.Notes,
+                              BillNumber = e.BillNumber,
+
                           })
                 .AsNoTracking()
                 .SingleOrDefaultAsync();
@@ -225,6 +278,11 @@ namespace AccountErp.DataLayer.Repositories
             var bill = await _dataContext.Bills.FindAsync(id);
             bill.Status = Constants.BillStatus.Deleted;
             _dataContext.Bills.Update(bill);
+        }
+        public async Task<int> getCount()
+        {
+            int count = await _dataContext.Bills.CountAsync();
+            return count;
         }
     }
 }

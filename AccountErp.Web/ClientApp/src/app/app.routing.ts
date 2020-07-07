@@ -11,7 +11,7 @@ import {
     BankAccountAddComponent, BankAccountDetailComponent, BankAccountEditComponent, BankAccountManageComponent
 } from '../components/bank-account';
 
-import { CustomerAddComponent, CustomerEditComponent, CustomerDetailComponent, CustomerManageComponent } from 'src/components/customer';
+import { CustomerAddComponent, CustomerEditComponent, CustomerDetailComponent, CustomerManageComponent,CustomerShippingaddressComponent, AddCustomerPopupComponent } from 'src/components/customer';
 
 import {
     CreditCardAddComponent, CreditCardDetailComponent, CreditCardEditComponent, CreditCardManageComponent
@@ -39,6 +39,16 @@ import { CalendarManageComponent } from '../components/calendar/calendar.compone
 import { SettingComponent } from '../components/setting/setting.component';
 
 import { SalesTaxAddComponent, SalesTaxEditComponent, SalesTaxDetailComponent, SalesTaxManageComponent } from '../components/sales-tax';
+import { QuotationAddComponent } from 'src/components/Quotation/Add/quotation.add/quotation.add.component';
+import { QuotationDetailComponent, QuotationManageComponent, QuotationEditComponent } from 'src/components/Quotation';
+import { CustomerStatementComponent } from 'src/components/customer-statement/customer-statement.component';
+import { AddRecurringinvoiceComponent } from 'src/components/recurring-invoice/add/add.recurringinvoice/add.recurringinvoice.component';
+import { EditRecurringInvoiceComponent } from 'src/components/recurring-invoice/Edit/edit-recurring-invoice/edit-recurring-invoice.component';
+import { ManageRecurringInvoiceComponent } from 'src/components/recurring-invoice/manage/manage.recurring-invoice/manage.recurring-invoice.component';
+import { RecurringInvoiceDetailsComponent } from 'src/components/recurring-invoice/detail/recurring-invoice.details/recurring-invoice.details.component';
+import { ChartOfAccountsComponent } from 'src/components/chart-of-account/chart-of-accounts/chart-of-accounts.component';
+import { ProfitAndLossComponent } from 'src/components/reports/profit-and-loss/profit-and-loss.component';
+
 
 const appRoutes: Routes = [
     { path: '', component: DashboardComponent, pathMatch: 'full', canActivate: [AuthGuard] },
@@ -52,6 +62,7 @@ const appRoutes: Routes = [
     { path: 'bank-account/edit/:id', component: BankAccountEditComponent },
     { path: 'bank-account/manage', component: BankAccountManageComponent },
     { path: 'customer/add', component: CustomerAddComponent },
+    { path: 'customer/customer.shippingaddress', component: CustomerShippingaddressComponent },
     { path: 'customer/detail/:id', component: CustomerDetailComponent },
     { path: 'customer/edit/:id', component: CustomerEditComponent },
     { path: 'customer/manage', component: CustomerManageComponent },
@@ -68,10 +79,14 @@ const appRoutes: Routes = [
     { path: 'item/manage', component: ItemManageComponent },
     { path: 'item/detail/:id', component: ItemDetailComponent },
     { path: 'invoice/add', component: InvoiceAddComponent },
+    { path: 'invoice/add/:id', component: InvoiceAddComponent },
     { path: 'invoice/manage', component: InvoiceManageComponent },
     { path: 'invoice/edit/:id', component: InvoiceEditComponent },
     { path: 'invoice/detail/:id', component: InvoiceDetailComponent },
     { path: 'bill/add', component: BillAddComponent },
+    { path: 'bill/add/:id', component: BillAddComponent },
+    
+    { path: 'bill/payment/add', component: BillPaymentAddComponent },
     { path: 'bill/manage', component: BillManageComponent },
     { path: 'bill/detail/:id', component: BillDetailComponent },
     { path: 'bill/edit/:id', component: BillEditComponent },
@@ -85,6 +100,22 @@ const appRoutes: Routes = [
     { path: 'sales-tax/manage', component: SalesTaxManageComponent },
     { path: 'invoice/payment/:id', component: InvoicePaymentAddComponent },
     { path: 'invoice/payments', component: InvoicePaymentManageComponent },
+    { path: 'Quotation/add/quotation.add', component: QuotationAddComponent },
+    { path: 'Quotation/detail/:id', component: QuotationDetailComponent },
+    { path: 'Customer/addPopup/add-customer.popup', component: AddCustomerPopupComponent },
+    { path: 'Quotation/quotation-manage', component: QuotationManageComponent },
+    { path: 'Quotation/edit/:id', component: QuotationEditComponent },
+    { path: 'customerStatement', component: CustomerStatementComponent },
+    { path: 'recurring-invoice/add', component: AddRecurringinvoiceComponent },
+    { path: 'recurring-invoice/edit/:id', component: EditRecurringInvoiceComponent },
+    { path: 'recurring-invoice/manage', component: ManageRecurringInvoiceComponent },
+    { path: 'recurring-invoice/detail/:id', component: RecurringInvoiceDetailsComponent },
+    { path: 'chart-of-account/chart-of-account', component: ChartOfAccountsComponent },
+
+    { path: 'reports/profit-and-loss', component: ProfitAndLossComponent },
+
+   
+   
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
 ];

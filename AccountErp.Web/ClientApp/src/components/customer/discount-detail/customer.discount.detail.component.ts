@@ -13,7 +13,7 @@ export class CustomerDiscountDetailComponent {
     @Output() moveForward = new EventEmitter();
     @Output() moveBackward = new EventEmitter();
     @BlockUI('conatiner-blockui') blockUI: NgBlockUI;
-    wizardStep = 4;
+    wizardStep = 5;
 
     next() {
         this.moveForward.emit();

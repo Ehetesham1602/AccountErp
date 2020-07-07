@@ -161,6 +161,10 @@ namespace AccountErp.DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("BillDate");
+
+                    b.Property<string>("BillNumber");
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(40);
@@ -172,6 +176,11 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<DateTime?>("DueDate");
 
+                    b.Property<string>("Notes");
+
+                    b.Property<decimal?>("PoSoNumber")
+                        .HasColumnType("NUMERIC(12,2)");
+
                     b.Property<string>("ReferenceNumber")
                         .HasMaxLength(50);
 
@@ -179,6 +188,10 @@ namespace AccountErp.DataLayer.Migrations
                         .HasMaxLength(1000);
 
                     b.Property<int>("Status");
+
+                    b.Property<string>("StrBillDate");
+
+                    b.Property<string>("StrDueDate");
 
                     b.Property<decimal?>("Tax")
                         .HasColumnType("NUMERIC(12,2)");
@@ -242,8 +255,18 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int>("ItemId");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("NUMERIC(10,2)");
+
+                    b.Property<int>("Quantity");
+
                     b.Property<decimal>("Rate")
                         .HasColumnType("NUMERIC(10,2)");
+
+                    b.Property<int>("TaxId");
+
+                    b.Property<int?>("TaxPercentage")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -827,6 +850,124 @@ namespace AccountErp.DataLayer.Migrations
                     b.ToTable("QuotationServices");
                 });
 
+            modelBuilder.Entity("AccountErp.Entities.RecurringInvoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(40);
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<int>("CustomerId");
+
+                    b.Property<decimal?>("Discount")
+                        .HasColumnType("NUMERIC(12,2)");
+
+                    b.Property<decimal?>("PoSoNumber")
+                        .HasColumnType("NUMERIC(12,2)");
+
+                    b.Property<DateTime>("RecDueDate");
+
+                    b.Property<DateTime>("RecInvoiceDate");
+
+                    b.Property<string>("RecInvoiceNumber")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Remark")
+                        .HasMaxLength(1000);
+
+                    b.Property<int>("Status");
+
+                    b.Property<string>("StrRecDueDate");
+
+                    b.Property<string>("StrRecInvoiceDate");
+
+                    b.Property<decimal?>("Tax")
+                        .HasColumnType("NUMERIC(12,2)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("NUMERIC(12,2)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(40);
+
+                    b.Property<DateTime?>("UpdatedOn");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("RecurringInvoices");
+                });
+
+            modelBuilder.Entity("AccountErp.Entities.RecurringInvoiceAttachment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(40);
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<int>("RecInvoiceId");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecInvoiceId");
+
+                    b.ToTable("RecurringInvoiceAttachments");
+                });
+
+            modelBuilder.Entity("AccountErp.Entities.RecurringInvoiceService", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("NUMERIC(12,2)");
+
+                    b.Property<int>("Quantity");
+
+                    b.Property<decimal>("Rate")
+                        .HasColumnType("NUMERIC(12,2)");
+
+                    b.Property<int>("RecInvoiceId");
+
+                    b.Property<int>("ServiceId");
+
+                    b.Property<int>("TaxId");
+
+                    b.Property<int?>("TaxPercentage");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecInvoiceId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("RecurringInvoiceServices");
+                });
+
             modelBuilder.Entity("AccountErp.Entities.SalesTax", b =>
                 {
                     b.Property<int>("Id")
@@ -1212,6 +1353,35 @@ namespace AccountErp.DataLayer.Migrations
                     b.HasOne("AccountErp.Entities.Quotation")
                         .WithMany("Services")
                         .HasForeignKey("QuotationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AccountErp.Entities.Item", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AccountErp.Entities.RecurringInvoice", b =>
+                {
+                    b.HasOne("AccountErp.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AccountErp.Entities.RecurringInvoiceAttachment", b =>
+                {
+                    b.HasOne("AccountErp.Entities.RecurringInvoice")
+                        .WithMany("Attachments")
+                        .HasForeignKey("RecInvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AccountErp.Entities.RecurringInvoiceService", b =>
+                {
+                    b.HasOne("AccountErp.Entities.RecurringInvoice")
+                        .WithMany("Services")
+                        .HasForeignKey("RecInvoiceId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AccountErp.Entities.Item", "Service")

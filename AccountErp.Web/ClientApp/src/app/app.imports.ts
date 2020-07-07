@@ -1,21 +1,23 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTablesModule } from 'angular-datatables';
 import { ToastrModule } from 'ngx-toastr';
 import { BlockUIModule } from 'ng-block-ui';
 import { NgxMaskModule } from 'ngx-mask';
 import { appRouting } from './app.routing';
 import { FullCalendarModule } from 'ng-fullcalendar';
+import { SelectDropDownModule } from 'ngx-select-dropdown';
 
 export const appImports = [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     NgbModule,
+  
     CommonModule,
     BrowserAnimationsModule,
     DataTablesModule,
@@ -23,6 +25,9 @@ export const appImports = [
     NgxMaskModule.forRoot(),
     BlockUIModule.forRoot({ message: 'Loading...' }),
     appRouting,
-    FullCalendarModule
+    FullCalendarModule,
+    SelectDropDownModule,
+  
+    
 ];
 

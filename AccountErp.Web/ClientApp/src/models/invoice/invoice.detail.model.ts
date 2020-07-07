@@ -13,6 +13,12 @@ export class InvoiceDetailModel {
     public remark: string;
     public createdOn: string;
 
+    public description: string; //
+    public status: number; //
+    public invoiceDate: string;
+    public dueDate: string; //
+    public poSoNumber: number; //
+
     public customer: CustomerDetailModel;
 
     public items: Array<InvoiceItemModel>;

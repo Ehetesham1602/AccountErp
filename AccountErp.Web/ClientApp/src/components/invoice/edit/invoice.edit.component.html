@@ -32,66 +32,130 @@
             novalidate>
             <div class="kt-portlet__body">
               <div class="row">
-                <div class="col-6">
+                <!-- <div class="col-6"> -->
+                  <div class="col-4">
+                    <div class="form-group row"
+                    [ngClass]="{ 'validation-error' : f.submitted && customerId.invalid}">
+                    <label class="col-md-3">Invoice#:</label>
+                    <div class="col-md-9">
+                      <input type="text" name="invNumber" class="form-control" autocomplete="off"
+                      [(ngModel)]="model.invoiceNumber" maxlength="100" placeholder=""
+                      appAlphaNumericsLevelTwo readonly />
+                    </div>
+                </div>
                   <div class="form-group row" [ngClass]="{ 'validation-error' : f.submitted && customerId.invalid}">
                     <label class="col-md-3">Customer Name:*</label>
                     <div class="col-md-9">
-                      <select name="customerId" class="form-control" [(ngModel)]="model.customerId"
+                      <!-- <div class="col-md-9"> -->
+                      <!-- <select name="customerId" class="form-control" [(ngModel)]="model.customerId"
                         (change)="getCustomerDetail()" #customerId="ngModel" [disabled]="disableCustomerId" required>
                         <option value="" selected>[Select]</option>
                         <option *ngFor="let item of customers" [value]="item.keyInt">
                           {{item.value}}
                         </option>
-                      </select>
+                      </select> -->
+                      <ngx-select-dropdown  name="customerId" #customerId="ngModel" (change)="getCustomerDetail()" [multiple]="false" 
+                      [(ngModel)]="selectedCustomer" [config]="config" [options]="customers"></ngx-select-dropdown>
                       <div class="validation-error-message" *ngIf="f.submitted && customerId.invalid">
                         Customer name is required
                       </div>
                     </div>
                   </div>
+
+                
                 </div>
-                <div class="col-6">
-                  <div class="form-group row">
-                    <label class="col-md-3 kt-portlet__label">Phone:</label>
-                    <div class="col-md-9">
+                <div class="col-4">
+                  <div class="form-group row"
+                      [ngClass]="{ 'validation-error' : f.submitted && invoiceStartDate.invalid}">
+                      <label class="col-md-3">Date:*</label>
+                      <div class="col-md-9">
+                          
+                          <div class="input-group">
+                              <input class="form-control" name="invoiceStartDate"
+                                  #invoiceStartDate="ngModel" [(ngModel)]="invDate"
+                                  ngbDatepicker #d="ngbDatepicker" (dateSelect)="changeInvoiceDate()"  readonly />
+                              <div class="input-group-append">
+                                  <button class="btn btn-outline-secondary calendar"
+                                      (click)="d.toggle()" type="button">
+                                      <i class="la la-calendar"></i>
+                                  </button>
+                              </div>
+                              <div class="validation-error-message" *ngIf="f.submitted && invoiceStartDate.invalid">
+                                Please select a start date.
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="form-group row" [ngClass]="{ 'validation-error' : f.submitted && invoiceDueDate.invalid}">
+                      <label class="col-md-3 kt-portlet__label">Expires on:</label>
+                      <div class="col-md-9">
+                          <div class="input-group">
+                              <input class="form-control" name="invoiceDueDate"
+                                  #invoiceDueDate="ngModel" (dateSelect)="changeDuedate()"
+                                  [(ngModel)]="dueDate" ngbDatepicker
+                                  #d1="ngbDatepicker" [autoClose]=" true" readonly />
+                              <div class="input-group-append">
+                                  <button class="btn btn-outline-secondary calendar"
+                                      (click)="d1.toggle()" type="button">
+                                      <i class="la la-calendar"></i>
+                                  </button>
+                              </div>
+                              <div class="validation-error-message" *ngIf="f.submitted && invoiceDueDate.invalid">
+                                Please select a end date.
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="col-4">
+
+                  <div class="form-group row" [ngClass]="{ 'validation-error' : f.submitted && poSoNumber.invalid}">
+                      <label class="col-md-3 kt-portlet__label">P.O/S.O:</label>
+                      <div class="col-md-9">
+                          <input type="text" name="poSoNumber" class="form-control" autocomplete="off"
+                              [(ngModel)]="model.poSoNumber" maxlength="100" placeholder=""  #poSoNumber="ngModel"
+                              appNumbersOnly />
+                              <div class="validation-error-message" *ngIf="f.submitted && poSoNumber.invalid">
+                                P.O/S.O is required
+                              </div>
+                      </div>
+                  </div>
+             </div>
+             <div class="col-md-4">
+              <div class="form-group row">
+                  <label class="col-md-3 kt-portlet__label">Phone:</label>
+                  <div class="col-md-9">
                       <p class="kt-portlet__data">{{model.phone | mask: '000-000-0000'}}</p>
-                    </div>
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-6">
+                
+                <div class="col-md-4">
                   <div class="form-group row">
-                    <label class="col-md-3 kt-portlet__label">Email:</label>
-                    <div class="col-md-9">
+                  <label class="col-md-3 kt-portlet__label">Email:</label>
+                  <div class="col-md-9">
                       <p class="kt-portlet__data">{{model.email}}</p>
-                    </div>
+                  </div>
                   </div>
                 </div>
-                <div class="col-6">
+                
+                <div class="col-md-4">
                   <div class="form-group row">
-                    <label class="col-md-3 kt-portlet__label">Invoice#:</label>
-                    <div class="col-md-9">
-                      <p class="kt-portlet__data">{{model.invoiceNumber}}</p>
-                    </div>
+                  <label class="col-md-3 kt-portlet__label">Discount:</label>
+                  <div class="col-md-9">
+                      <p class="kt-portlet__data" *ngIf="customer.discount">{{customer.discount}}%
+                      </p>
                   </div>
                 </div>
+                  
               </div>
-              <div class="row">
-                <div class="col-6">
-                  <div class="form-group row">
-                    <label class="col-md-3 kt-portlet__label">Customer Discount:</label>
-                    <div class="col-md-9">
-                      <p class="kt-portlet__data" *ngIf="customer.discount">{{customer.discount}}%</p>
-                    </div>
-                  </div>
-                </div>
               </div>
               <div class="row">
                 <div class="col-12">
                   <span class="kt-font-bolder">Items/Services</span>
-                  <button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-sm m-l-5"
-                    (click)="openItemesModal(itemesModal)">
-                    <i class="la la-plus"></i></button>
+             
                   <div class="kt-separator m-t-5">
                     <span></span>
                   </div>
@@ -99,8 +163,16 @@
               </div>
               <div class="row">
                 <div class="col-12">
-                  <app-item-selected [selectedItems]="selectedItems" [readOnly]="false" (deleteItem)="deleteItem($val)">
+                  <app-item-selected [selectedItems]="selectedItems" [itemId]="itemId" [selectedTax]="selectedTax" (updateTotalAmount)="updateTotalAmount()" [readOnly]="false" (deleteItem)="deleteItem($event)">
                   </app-item-selected>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-group text-right">
+                    <button type="button" class="btn btn-sm btn-outline-success" (click)="newRow()">
+                      <i class="la la-plus"></i> Add More</button>
+                  </div>
                 </div>
               </div>
               <br>

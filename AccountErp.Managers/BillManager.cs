@@ -36,54 +36,56 @@ namespace AccountErp.Managers
 
         public async Task AddAsync(BillAddModel model)
         {
-            var items = (await _itemRepository.GetAsync(model.Items)).ToList();
+            //var items = (await _itemRepository.GetAsync(model.Items)).ToList();
 
-            model.TotalAmount = items.Sum(x => x.Rate);
+            //model.TotalAmount = items.Sum(x => x.Rate);
 
-            model.Tax = items.Where(x => x.IsTaxable).Sum(x => x.Rate * x.SalesTax.TaxPercentage / 100);
+            //model.Tax = items.Where(x => x.IsTaxable).Sum(x => x.Rate * x.SalesTax.TaxPercentage / 100);
 
-            var vendor = await _vendorRepository.GetAsync(model.VendorId);
+            //var vendor = await _vendorRepository.GetAsync(model.VendorId);
 
-            if (vendor.Discount != null)
-            {
-                model.Discount = model.TotalAmount * vendor.Discount / 100;
-                model.TotalAmount = model.TotalAmount - (model.Discount ?? 0);
-            }
+            //if (vendor.Discount != null)
+            //{
+            //    model.Discount = model.TotalAmount * vendor.Discount / 100;
+            //    model.TotalAmount = model.TotalAmount - (model.Discount ?? 0);
+            //}
 
-            if (model.Tax != null)
-            {
-                model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
-            }
+            //if (model.Tax != null)
+            //{
+            //    model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
+            //}
 
-            await _repository.AddAsync(BillFactory.Create(model, _userId, items));
+            var count = await _repository.getCount();
+
+            await _repository.AddAsync(BillFactory.Create(model, _userId, count));
 
             await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task Editsync(BillEditModel model)
         {
-            var items = (await _itemRepository.GetAsync(model.Items)).ToList();
+            //var items = (await _itemRepository.GetAsync(model.Items)).ToList();
 
-            model.TotalAmount = items.Sum(x => x.Rate);
+            //model.TotalAmount = items.Sum(x => x.Rate);
 
-            model.Tax = items.Where(x => x.IsTaxable).Sum(x => x.Rate * x.SalesTax.TaxPercentage / 100);
+            //model.Tax = items.Where(x => x.IsTaxable).Sum(x => x.Rate * x.SalesTax.TaxPercentage / 100);
 
-            var vendor = await _vendorRepository.GetAsync(model.VendorId);
+            //var vendor = await _vendorRepository.GetAsync(model.VendorId);
 
-            if (vendor.Discount != null)
-            {
-                model.Discount = model.TotalAmount * vendor.Discount / 100;
-                model.TotalAmount = model.TotalAmount - (model.Discount ?? 0);
-            }
+            //if (vendor.Discount != null)
+            //{
+            //    model.Discount = model.TotalAmount * vendor.Discount / 100;
+            //    model.TotalAmount = model.TotalAmount - (model.Discount ?? 0);
+            //}
 
-            if (model.Tax != null)
-            {
-                model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
-            }
+            //if (model.Tax != null)
+            //{
+            //    model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
+            //}
 
             var bill = await _repository.GetAsync(model.Id);
 
-            BillFactory.Edit(bill, model, _userId, items);
+            BillFactory.Edit(bill, model, _userId);
 
             _repository.Edit(bill);
 
@@ -125,6 +127,11 @@ namespace AccountErp.Managers
         {
             await _repository.DeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();
+        }
+        public async Task<int> GetBillNumber()
+        {
+            var count = await _repository.getCount();
+            return (count + 1);
         }
     }
 }

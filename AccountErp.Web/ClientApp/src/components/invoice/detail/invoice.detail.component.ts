@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
-
+import * as jsPDF from 'jspdf';
 import { AppUtils } from '../../../helpers';
 import { InvoiceDetailModel, ItemListItemModel } from '../../../models';
-import { InvoiceService, ItemService } from '../../../services';
+import { InvoiceService, ItemService, SalesTaxService } from '../../../services';
 
 @Component({
     selector: 'app-invoice-detail',
@@ -19,12 +19,18 @@ export class InvoiceDetailComponent implements OnInit {
     model: InvoiceDetailModel = new InvoiceDetailModel();
     items: Array<ItemListItemModel> = new Array<ItemListItemModel>();
     selectedItems: Array<ItemListItemModel> = new Array<ItemListItemModel>();
-
+    salesTaxItems;
+  
+    itemId: Array<ItemListItemModel> = new Array<ItemListItemModel>();
+    selectedTax;
+    
+    @ViewChild('htmlData', {static: false}) htmlData: ElementRef;
     constructor(private router: Router,
         private route: ActivatedRoute,
         private toastr: ToastrService,
         private appUtils: AppUtils,
         private invoiceService: InvoiceService,
+        private taxService:SalesTaxService,
         private itemService: ItemService) {
         this.route.params.subscribe((params) => {
             this.model.id = params['id'];
@@ -33,9 +39,33 @@ export class InvoiceDetailComponent implements OnInit {
 
     ngOnInit() {
         this.loadItems();
+        this.loadTaxes();
         this.loadInvoice();
     }
+    public openPDF(): void {
+        const DATA = this.htmlData.nativeElement;
+        
+        const doc = new jsPDF('p', 'pt', 'a4');
+        
+        doc.fromHTML(DATA.innerHTML, 15, 15);
+        doc.output('dataurlnewwindow');
 
+        
+      }
+    public downloadPDF(): void {
+        const DATA = this.htmlData.nativeElement;
+        const doc = new jsPDF('p', 'pt', 'a4');
+        const handleElement = {
+          '#editor': function(element, renderer) {
+            return true;
+          }
+        };
+        doc.fromHTML(DATA.innerHTML, 15, 15, {
+          'width': 200,
+          'elementHandlers': handleElement
+        });
+        doc.save('Invoice-Detail.pdf');
+      }
     loadInvoice() {
         this.blockUI.start();
         this.invoiceService.getDetail(this.model.id).subscribe(
@@ -43,6 +73,9 @@ export class InvoiceDetailComponent implements OnInit {
                 this.blockUI.stop();
                 Object.assign(this.model, data);
                 this.model.createdOn = this.appUtils.getFormattedDate(this.model.createdOn, null);
+                this.model.invoiceDate = this.appUtils.getFormattedDate(this.model.invoiceDate, null);
+                this.model.dueDate = this.appUtils.getFormattedDate(this.model.dueDate, null);
+
                 this.updateSelectedItems();
             },
             error => {
@@ -68,24 +101,63 @@ export class InvoiceDetailComponent implements OnInit {
     }
 
     updateSelectedItems() {
+     
         if (this.items.length === 0 || this.model.items.length === 0) {
             return;
         }
-
+    
         const tempArray = new Array<ItemListItemModel>();
-        this.model.amount = 0;
+         const tempTax=[]
+       // this.model.totalAmount = 0;
         this.model.items.map((invoiceItem) => {
             const item = this.items.find(x => x.id === invoiceItem.id);
+            console.log("itemss",invoiceItem)
             if (item) {
-                item.rate = invoiceItem.rate;
-                tempArray.push(item);
-                this.model.amount += item.rate;
+                 item.rate = invoiceItem.rate;
+                 item.qty= invoiceItem.quantity;
+                 item.rate=invoiceItem.rate;
+                 item.price=invoiceItem.price;
+                 item.description=invoiceItem.description;
+                 
+                 tempArray.push(item);
+    
+                //this.model.totalAmount += invoiceItem.rate;
+                //Get item taxes
+                debugger;
+                if(invoiceItem.taxId!=0){
+                    const taxitem=this.salesTaxItems.find(x=> x.id===invoiceItem.taxId);
+                    tempTax.push(taxitem);
+ 
+                }else{
+                    tempTax.push(null)
+                }
             }
+    
+            
         });
-
+    
         this.selectedItems = tempArray;
+       // this.itemId=[];
+        this.itemId=tempArray;
+        this.selectedTax=tempTax;
+        console.log("bindselecteditem",this.itemId);
     }
 
+    loadTaxes(){
+        this.taxService.getSelectListItems()
+            .subscribe((data: any) => {
+                if (!data || data.length === 0) {
+                    return;
+                }
+
+                this.salesTaxItems = data;
+
+                 this.updateSelectedItems();
+            },
+                error => {
+                    this.appUtils.ProcessErrorResponse(this.toastr, error);
+                });
+    }
 
     delete(): void {
         if (!confirm('Are you sure you want to delete the selected invoice?')) {

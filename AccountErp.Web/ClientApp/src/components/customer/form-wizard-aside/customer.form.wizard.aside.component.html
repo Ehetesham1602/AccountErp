@@ -17,6 +17,7 @@
                     </div>
                 </div>
             </a>
+
             <a class="kt-wizard-v2__nav-item" href="javascript:;" [ngClass]="{'active': wizardStep === 2}"
                 (click)="setWizardStep.emit(2)">
                 <div class="kt-wizard-v2__nav-body">
@@ -33,8 +34,26 @@
                     </div>
                 </div>
             </a>
+
             <a class="kt-wizard-v2__nav-item" href="javascript:;" [ngClass]="{'active': wizardStep === 3}"
-                (click)="setWizardStep.emit(3)">
+            (click)="setWizardStep.emit(3)">
+            <div class="kt-wizard-v2__nav-body">
+                <div class="kt-wizard-v2__nav-icon">
+                    <i class="flaticon-placeholder"></i>
+                </div>
+                <div class="kt-wizard-v2__nav-label">
+                    <div class="kt-wizard-v2__nav-label-title">
+                      Shipping  Address
+                    </div>
+                    <div class="kt-wizard-v2__nav-label-desc">
+                        Shipping Address
+                    </div>
+                </div>
+            </div>
+        </a>
+
+            <a class="kt-wizard-v2__nav-item" href="javascript:;" [ngClass]="{'active': wizardStep === 4}"
+                (click)="setWizardStep.emit(4)">
                 <div class="kt-wizard-v2__nav-body">
                     <div class="kt-wizard-v2__nav-icon">
                         <i class="flaticon-piggy-bank"></i>
@@ -49,8 +68,9 @@
                     </div>
                 </div>
             </a>
-            <a class="kt-wizard-v2__nav-item" href="javascript:;" [ngClass]="{'active': wizardStep === 4}"
-                (click)="setWizardStep.emit(4)">
+            
+            <a class="kt-wizard-v2__nav-item" href="javascript:;" [ngClass]="{'active': wizardStep === 5}"
+                (click)="setWizardStep.emit(5)">
                 <div class="kt-wizard-v2__nav-body">
                     <div class="kt-wizard-v2__nav-icon">
                         <i class="flaticon2-percentage"></i>
