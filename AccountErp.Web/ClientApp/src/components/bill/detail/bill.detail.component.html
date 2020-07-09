@@ -67,15 +67,41 @@
                     <div class="kt-form form-horizontal">
                         <div class="kt-portlet__body" *ngIf="isModelLoaded">
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-4">
                                     <div class="form-group row">
-                                        <label class="col-md-3 kt-portlet__label">Vendor Name:</label>
+                                        <label class="col-md-3 kt-portlet__label">Bill#:</label>
+                                        <div class="col-md-9">
+                                            <p class="kt-portlet__data">{{model.billNumber}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group row">
+                                        <label class="col-md-3  kt-portlet__label">Bill Date:</label>
+                                        <div class="col-md-9">
+                                            <p class="kt-portlet__data">{{model.billDate | date }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="form-group row">
+                                        <label class="col-md-3  kt-portlet__label">Due Date:</label>
+                                        <div class="col-md-9">
+                                            <p class="kt-portlet__data">{{model.dueDate | date}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group row">
+                                        <label class="col-md-3 kt-portlet__label">Vendor:</label>
                                         <div class="col-md-9">
                                             <p class="kt-portlet__data">{{model.name}}</p>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-6">
+
+                                <div class="col-4">
                                     <div class="form-group row">
                                         <label class="col-md-3  kt-portlet__label">Reference#:</label>
                                         <div class="col-md-9">
@@ -83,9 +109,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
+                                <div class="col-4">
                                     <div class="form-group row">
                                         <label class="col-md-3 kt-portlet__label">Phone:</label>
                                         <div class="col-md-9">
@@ -93,7 +117,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-4">
                                     <div class="form-group row">
                                         <label class="col-md-3 kt-portlet__label">Email:</label>
                                         <div class="col-md-9">
@@ -101,7 +125,24 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-4">
+                                    <div class="form-group row">
+                                        <label class="col-md-3 kt-portlet__label">PO/SO#:</label>
+                                        <div class="col-md-9">
+                                            <p class="kt-portlet__data">{{model.poSoNumber}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group row">
+                                        <label class="col-md-3 kt-portlet__label">Notes:</label>
+                                        <div class="col-md-9">
+                                            <p class="kt-portlet__data">{{model.notes}}</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                           
                             <div class="row">
                                 <div class="col-12">
                                     <span class="kt-font-bolder">Items/Services</span>

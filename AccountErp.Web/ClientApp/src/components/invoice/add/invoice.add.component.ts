@@ -30,7 +30,7 @@ export class InvoiceAddComponent implements OnInit {
     selectedItems: Array<ItemListItemModel> = new Array<ItemListItemModel>();
     customers : any=[];
     selectedItemListItemModel : ItemListItemModel=new ItemListItemModel();
-    config = {displayKey:"value",search:true,limitTo:10,height: 'auto',placeholder:'Select Item',customComparator: ()=>{},moreText: 'more',noResultsFound: 'No results found!',searchPlaceholder:'Search',searchOnKey: 'value',clearOnSelection: false,inputDirection: 'ltr',}
+    config = {displayKey:"value",search:true,limitTo:10,height: 'auto',placeholder:'Select Customer',customComparator: ()=>{},moreText: 'more',noResultsFound: 'No results found!',searchPlaceholder:'Search',searchOnKey: 'value',clearOnSelection: false,inputDirection: 'ltr',}
     selectedCustomer;
     customrlist:any=[{"id":1,"value":"cust1"}];
     invoiceDate;
@@ -73,7 +73,7 @@ export class InvoiceAddComponent implements OnInit {
     }
 
     ngOnInit() {
-
+        this.setDefaultDate();
         this.getNewInvoiceNumber();
         this.loadCustomers();
       
@@ -84,6 +84,18 @@ export class InvoiceAddComponent implements OnInit {
             const attachmentFile = new AttachmentAddModel();
             this.model.attachments.push(attachmentFile);
         }
+    }
+
+    setDefaultDate(){
+        
+        var qdt=new Date()
+        this.invoiceDate={ day: qdt.getDate(), month: qdt.getMonth()+1, year: qdt.getFullYear()};
+        const jsinvDate = new Date(this.invoiceDate.year, this.invoiceDate.month - 1, this.invoiceDate.day);
+        this.model.invoiceDate=jsinvDate.toISOString();
+
+        this.dueDate={ day: qdt.getDate()+1, month: qdt.getMonth()+1, year: qdt.getFullYear()};
+        const jsduevDate = new Date(this.dueDate.year, this.dueDate.month - 1, this.dueDate.day);
+        this.model.dueDate=jsduevDate.toISOString();
     }
 
     loadCustomers() {

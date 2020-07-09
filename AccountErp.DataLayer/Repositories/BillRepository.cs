@@ -85,7 +85,7 @@ namespace AccountErp.DataLayer.Repositories
                 RecordsTotal = await _dataContext.Bills.CountAsync(x => (model.VendorId == null || x.VendorId == model.VendorId.Value)
                     && x.Status != Constants.BillStatus.Deleted),
                 RecordsFiltered = await linqstmt.CountAsync(),
-                Data = await linqstmt.OrderBy(sortExpression).ToListAsync()
+                Data = await linqstmt.OrderBy(sortExpression).Skip(model.Start).Take(model.Length).ToListAsync()
             };
 
             return pagedResult;
@@ -115,7 +115,7 @@ namespace AccountErp.DataLayer.Repositories
                             })
                             .AsNoTracking();
 
-            return await linqstmt.OrderByDescending(x => x.Id).ToListAsync();
+            return await linqstmt.OrderByDescending(x => x.Id).Take(5).ToListAsync();
         }
 
         public async Task<BillDetailDto> GetDetailAsync(int id)

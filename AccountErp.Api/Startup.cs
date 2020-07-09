@@ -1,5 +1,8 @@
 ﻿using AccountErp.Config;
 using AccountErp.DataLayer;
+using AccountErp.Infrastructure.Managers;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +12,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
 using System.Text;
+using IRecurringJobManager = Hangfire.IRecurringJobManager;
 
 namespace AccountErp.Api
 {
@@ -82,9 +87,23 @@ namespace AccountErp.Api
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info { Title = "Account ERP", Version = "v1" }); });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddHangfire(config =>
+                config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseDefaultTypeSerializer()
+                .UseMemoryStorage()
+            );
+
+            services.AddHangfireServer();
+
+            //services.AddScoped<IRecurringJob, RecurringJob>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            IRecurringJobManager recurringJobManager,
+            IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -114,6 +133,12 @@ namespace AccountErp.Api
             });
             app.UseAuthentication();
             app.UseMvc();
+
+            recurringJobManager.AddOrUpdate(
+                "Run Every Minute",() => serviceProvider.GetService<Infrastructure.Managers.IRecurringJobManager>().SetOverdueStatus(),
+               Cron.Hourly
+                );
+
         }
     }
 }

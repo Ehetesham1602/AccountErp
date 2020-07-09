@@ -29,7 +29,7 @@ export class BillAddComponent implements OnInit {
     items: Array<ItemListItemModel> = new Array<ItemListItemModel>();
     selectedVendor;
     selectedItemListItemModel : ItemListItemModel=new ItemListItemModel();
-    config = {displayKey:"value",search:true,limitTo:10,height: 'auto',placeholder:'Select Item',customComparator: ()=>{},moreText: 'more',noResultsFound: 'No results found!',searchPlaceholder:'Search',searchOnKey: 'value',clearOnSelection: false,inputDirection: 'ltr',}
+    config = {displayKey:"value",search:true,limitTo:10,height: 'auto',placeholder:'Select Vendor',customComparator: ()=>{},moreText: 'more',noResultsFound: 'No results found!',searchPlaceholder:'Search',searchOnKey: 'value',clearOnSelection: false,inputDirection: 'ltr',}
     itemId: Array<ItemListItemModel> = new Array<ItemListItemModel>();
     selectedTax=[];
     Items: Array<ItemListItemModel> = new Array<ItemListItemModel>();
@@ -49,6 +49,7 @@ export class BillAddComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.setDefaultDate();
         this.getNewBillNumber();
         this.loadVendors();
 
@@ -446,6 +447,18 @@ export class BillAddComponent implements OnInit {
                     this.blockUI.stop();
                     this.appUtils.ProcessErrorResponse(this.toastr, error);
                 });
+    }
+
+    setDefaultDate(){
+        
+        var qdt=new Date()
+        this.billDate={ day: qdt.getDate(), month: qdt.getMonth()+1, year: qdt.getFullYear()};
+        const jsbillDate = new Date(this.billDate.year, this.billDate.month - 1, this.billDate.day);
+        this.model.billDate=jsbillDate.toISOString();
+
+        this.dueDate={ day: qdt.getDate()+1, month: qdt.getMonth()+1, year: qdt.getFullYear()};
+        const jsduevDate = new Date(this.dueDate.year, this.dueDate.month - 1, this.dueDate.day);
+        this.model.dueDate=jsduevDate.toISOString();
     }
 
 }

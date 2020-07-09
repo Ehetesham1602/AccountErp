@@ -12,30 +12,30 @@ import { quotationItemAddModel } from 'src/models/quotation/quotation.item.add.m
 import { QuotationService } from 'src/services/quotation.service.service';
 
 @Component({
-  selector: 'app-quotation-add',
-  templateUrl: './quotation.add.component.html',
- 
+    selector: 'app-quotation-add',
+    templateUrl: './quotation.add.component.html',
+
 })
 export class QuotationAddComponent implements OnInit {
 
-  @BlockUI('container-blockui') blockUI: NgBlockUI;
+    @BlockUI('container-blockui') blockUI: NgBlockUI;
     modalReference: any;
     disableCustomerId = false;
     model: quotationAddModel = new quotationAddModel();
     customer: CustomerDetailModel = new CustomerDetailModel();
     //customers: Array<SelectListItemModel> = new Array<SelectListItemModel>();
-    customers : any=[];
+    customers: any = [];
     Items: Array<quotationItemAddModel> = new Array<quotationItemAddModel>();
     selectedItems: Array<ItemListItemModel> = new Array<ItemListItemModel>();
-    selectedItemListItemModel : ItemListItemModel=new ItemListItemModel();
-    config = {displayKey:"value",search:true,height: 'auto',placeholder:'Select Item',customComparator: ()=>{},moreText: 'more',noResultsFound: 'No results found!',searchPlaceholder:'Search',searchOnKey: 'value',clearOnSelection: false,inputDirection: 'ltr',}
+    selectedItemListItemModel: ItemListItemModel = new ItemListItemModel();
+    config = { displayKey: "value", search: true, height: 'auto', placeholder: 'Select Customer', customComparator: () => { }, moreText: 'more', noResultsFound: 'No results found!', searchPlaceholder: 'Search', searchOnKey: 'value', clearOnSelection: false, inputDirection: 'ltr', }
     selectedCustomer;
-    customrlist:any=[{"id":1,"value":"cust1"}];
+    customrlist: any = [{ "id": 1, "value": "cust1" }];
     quotDate;
     expireDate;
     newQuotNumber;
     qtnNumber;
-    ConfirmationMessage="You want to save quotation?"
+    ConfirmationMessage = "You want to save quotation?"
     constructor(private router: Router,
         private route: ActivatedRoute,
         private modalService: NgbModal,
@@ -45,7 +45,7 @@ export class QuotationAddComponent implements OnInit {
         private customerService: CustomerService,
         private itemService: ItemService) {
 
-           
+
 
         this.route.queryParams.subscribe((params) => {
             if (params['cId']) {
@@ -57,9 +57,10 @@ export class QuotationAddComponent implements OnInit {
     }
 
     ngOnInit() {
-this.getNewInvoiceNumber();
+        this.setDefaultDate();
+        this.getNewInvoiceNumber();
         this.loadItems();
-      
+
         // var date=new Date();
         // this.sampleDate = new NgbDate(date.getFullYear(), date.getMonth(), date.getDate())
         // this.model.endDate="06/06/2020";
@@ -78,9 +79,9 @@ this.getNewInvoiceNumber();
             .subscribe((data) => {
                 debugger;
                 this.blockUI.stop();
-                console.log("customers",this.customers)
-               
-                this.customers=[];
+                console.log("customers", this.customers)
+
+                this.customers = [];
                 Object.assign(this.customers, data);
                 // if(this.customers.length>0){
                 //     this.customrlist=[];
@@ -88,7 +89,7 @@ this.getNewInvoiceNumber();
                 //         this.customrlist.push({"id":element.id,"value":element.value})
                 //     });
                 // }
-               
+
             },
                 error => {
                     this.blockUI.stop();
@@ -113,14 +114,13 @@ this.getNewInvoiceNumber();
     }
 
     deleteItem(index: number) {
-      debugger;
-     // alert(index)
+        debugger;
+        // alert(index)
         this.selectedItems.splice(index, 1);
-        if(this.selectedItems.length==0)
-        {
-          this.initiateGrid();
+        if (this.selectedItems.length == 0) {
+            this.initiateGrid();
         }
-        
+
         this.updateTotalAmount();
     }
 
@@ -191,32 +191,32 @@ this.getNewInvoiceNumber();
 
     getCustomerDetail() {
         debugger;
-        if(this.selectedCustomer!=undefined){
-            this.model.customerId=this.selectedCustomer.keyInt;
-        
-        if (this.model.customerId === null
-            || this.model.customerId === '') {
-            this.model.phone = '';
-            this.model.email = '';
-            //this.model.quotationNumber = '';
-            this.model.discount = 0;
-            return;
-        }
+        if (this.selectedCustomer != undefined) {
+            this.model.customerId = this.selectedCustomer.keyInt;
 
-        this.customerService.getDetail(Number(this.model.customerId))
-            .subscribe(
-                (data) => {
-                    Object.assign(this.customer, data);
-                    this.model.phone = this.customer.phone;
-                    this.model.email = this.customer.email;
-
-                    if (!this.customer.discount) {
-                        this.customer.discount = 0;
-                    }
-
-                    this.updateTotalAmount();
-                });
+            if (this.model.customerId === null
+                || this.model.customerId === '') {
+                this.model.phone = '';
+                this.model.email = '';
+                //this.model.quotationNumber = '';
+                this.model.discount = 0;
+                return;
             }
+
+            this.customerService.getDetail(Number(this.model.customerId))
+                .subscribe(
+                    (data) => {
+                        Object.assign(this.customer, data);
+                        this.model.phone = this.customer.phone;
+                        this.model.email = this.customer.email;
+
+                        if (!this.customer.discount) {
+                            this.customer.discount = 0;
+                        }
+
+                        this.updateTotalAmount();
+                    });
+        }
     }
 
     onItemSelectionDone() {
@@ -228,7 +228,7 @@ this.getNewInvoiceNumber();
     }
 
     updateTotalAmount() {
-      debugger;
+        debugger;
         this.model.totalAmount = 0;
         this.model.tax = 0;
         this.selectedItems.map((item: ItemListItemModel) => {
@@ -237,12 +237,12 @@ this.getNewInvoiceNumber();
                 this.model.tax += (item.rate * item.taxPercentage) / 100;
             }
 
-            if(item.qty!=null){
-                this.model.totalAmount += item.rate*item.qty;
-            }else{
+            if (item.qty != null) {
+                this.model.totalAmount += item.rate * item.qty;
+            } else {
                 this.model.totalAmount += item.rate;
             }
-            
+
         });
 
         if (this.customer.discount != null) {
@@ -269,97 +269,97 @@ this.getNewInvoiceNumber();
         this.modalReference.close();
     }
 
-    openCustomerModal(content: any){
-      this.modalReference = this.modalService.open(content,
-        {
-            //backdrop: 'static',
-            keyboard: false,
-            size: 'lg',
-            
-        });
+    openCustomerModal(content: any) {
+        this.modalReference = this.modalService.open(content,
+            {
+                //backdrop: 'static',
+                keyboard: false,
+                size: 'lg',
+
+            });
     }
 
     closeCustomerModal() {
-      //this.updateTotalAmount();
-      this.modalReference.close();
-  }
-
-  openConfirmationModal(content: any){
-    this.modalReference = this.modalService.open(content,
-      {
-          backdrop: 'static',
-          keyboard: false,
-          size: 'lg',
-          
-      });
-  }
-
-  closeConfirmatioModal() {
-    //this.updateTotalAmount();
-    this.modalReference.close();
-}
-
-  initiateGrid(){
-    debugger;
-    // alert("ng oninit called")
-  this.selectedItemListItemModel.id=0;
-  this.selectedItemListItemModel.itemTypeName="";
-  this.selectedItemListItemModel.name="";
-  this.selectedItemListItemModel.rate=0;
-  this.selectedItemListItemModel.taxCode="";
-  this.selectedItemListItemModel.taxPercentage=0;
-  this.selectedItemListItemModel.description="";
-  this.selectedItems.push(this.selectedItemListItemModel);
-}
-
-newRow(){
-    console.log("selerow",this.selectedItems)
-    if(this.selectedItems[this.selectedItems.length-1].id!=0){
-        this.initiateGrid();
+        //this.updateTotalAmount();
+        this.modalReference.close();
     }
-    else{
-        this.toastr.error("Please select an item")
+
+    openConfirmationModal(content: any) {
+        this.modalReference = this.modalService.open(content,
+            {
+                backdrop: 'static',
+                keyboard: false,
+                size: 'lg',
+
+            });
     }
- 
-}
 
-changeQuotDate(){
-    debugger;
-    console.log("quotatindate",this.quotDate);
-    const jsDate = new Date(this.quotDate.year, this.quotDate.month - 1, this.quotDate.day);
-    this.model.quotationDate=jsDate.toISOString();
-   }
+    closeConfirmatioModal() {
+        //this.updateTotalAmount();
+        this.modalReference.close();
+    }
 
-   changeExpire(){
-    debugger;
-    console.log("quotatindate",this.expireDate);
-    const jsDate = new Date(this.expireDate.year, this.expireDate.month - 1, this.expireDate.day);
-    this.model.expiryDate=jsDate.toISOString();
-   }
+    initiateGrid() {
+        debugger;
+        // alert("ng oninit called")
+        this.selectedItemListItemModel.id = 0;
+        this.selectedItemListItemModel.itemTypeName = "";
+        this.selectedItemListItemModel.name = "";
+        this.selectedItemListItemModel.rate = 0;
+        this.selectedItemListItemModel.taxCode = "";
+        this.selectedItemListItemModel.taxPercentage = 0;
+        this.selectedItemListItemModel.description = "";
+        this.selectedItems.push(this.selectedItemListItemModel);
+    }
+
+    newRow() {
+        console.log("selerow", this.selectedItems)
+        if (this.selectedItems[this.selectedItems.length - 1].id != 0) {
+            this.initiateGrid();
+        }
+        else {
+            this.toastr.error("Please select an item")
+        }
+
+    }
+
+    changeQuotDate() {
+        debugger;
+        console.log("quotatindate", this.quotDate);
+        const jsDate = new Date(this.quotDate.year, this.quotDate.month - 1, this.quotDate.day);
+        this.model.quotationDate = jsDate.toISOString();
+    }
+
+    changeExpire() {
+        debugger;
+        console.log("quotatindate", this.expireDate);
+        const jsDate = new Date(this.expireDate.year, this.expireDate.month - 1, this.expireDate.day);
+        this.model.expiryDate = jsDate.toISOString();
+    }
 
     submit() {
         debugger;
         if (!confirm('Are you sure you want to add Quotation?')) {
             return;
         }
-         this.model.items=[];
-        if (this.selectedItems.length > 0 && this.selectedItems[0].id!=0 ) {
-            if(this.selectedItems[this.selectedItems.length-1].id!=0){
-            this.selectedItems.map((item) => {
-                if(item.salesTaxId!=null){
-                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPrice": 0,"quantity":item.qty});
-                }else{
-                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPrice": 0,"quantity":item.qty});
-                }
-                
-               
-            });
-        }else{
-            this.toastr.error('Please select items/services to continue');
-            // this.selectedItems.splice(0,this.selectedItems.length-1);
-            return;
-            
-        }
+        this.model.items = [];
+        if (this.selectedItems.length > 0 && this.selectedItems[0].id != 0) {
+            if (this.selectedItems[this.selectedItems.length - 1].id != 0) {
+                this.selectedItems.map((item) => {
+                    if (item.salesTaxId != null) {
+                        this.model.items.push({ "serviceId": item.id, "rate": item.rate, "price": item.price, "taxId": item.salesTaxId, "taxPrice": 0, "quantity": item.qty });
+                    } else {
+                        this.model.items.push({ "serviceId": item.id, "rate": item.rate, "price": item.price, "taxId": 0, "taxPrice": 0, "quantity": item.qty });
+                    }
+
+
+                });
+            } else {
+                this.toastr.error('Please select items/services to continue');
+                // this.selectedItems.splice(0,this.selectedItems.length-1);
+                return;
+
+            }
         } else {
             this.toastr.error('Please select items/services to continue');
             return;
@@ -374,7 +374,7 @@ changeQuotDate(){
 
         this.blockUI.start();
 
-       
+
 
         this.quotationervice.add(this.model).subscribe(
             () => {
@@ -392,16 +392,28 @@ changeQuotDate(){
             });
     }
 
+    setDefaultDate() {
+
+        var qdt = new Date()
+        this.quotDate = { day: qdt.getDate(), month: qdt.getMonth() + 1, year: qdt.getFullYear() };
+        const jsqtnDate = new Date(this.quotDate.year, this.quotDate.month - 1, this.quotDate.day);
+        this.model.quotationDate = jsqtnDate.toISOString();
+
+        this.expireDate = { day: qdt.getDate() + 1, month: qdt.getMonth() + 1, year: qdt.getFullYear() };
+        const jsduevDate = new Date(this.expireDate.year, this.expireDate.month - 1, this.expireDate.day);
+        this.model.expiryDate = jsduevDate.toISOString();
+    }
+
     getNewInvoiceNumber() {
         this.blockUI.start();
         this.quotationervice.getNewQuotationNumber()
             .subscribe((data) => {
                 debugger;
                 this.blockUI.stop();
-                console.log("inv",data)
-                var today=new Date();
-                this.newQuotNumber="QUO-"+today.getFullYear().toString().match(/\d{2}$/)+"-"+data;
-               
+                console.log("inv", data)
+                var today = new Date();
+                this.newQuotNumber = "QUO-" + today.getFullYear().toString().match(/\d{2}$/) + "-" + data;
+
             },
                 error => {
                     this.blockUI.stop();

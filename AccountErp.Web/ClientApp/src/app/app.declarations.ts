@@ -63,6 +63,22 @@ import {
 import { SettingComponent } from '../components/setting/setting.component';
 import { QuotationAddComponent,QuotationDetailComponent,QuotationManageComponent,QuotationEditComponent } from '../components/Quotation';
 import { CustomerStatementComponent } from 'src/components/customer-statement/customer-statement.component';
+import {AddRecurringinvoiceComponent,EditRecurringInvoiceComponent,ManageRecurringInvoiceComponent,RecurringInvoiceDetailsComponent,
+    RecInvoiceFromWizarNavigatorComponent,RecInvoiceFromWizardAsideComponent, RecInvoiceBasicDetailComponent, SetrecinvoiceScheduleComponent, GetRecInvoicePaymentComponent, SendRecinvoiceComponent  } from '../components/recurring-invoice';
+import { ChartOfAccountsComponent } from 'src/components/chart-of-account/chart-of-accounts/chart-of-accounts.component';
+import { AssetsComponent, EquityComponent, ExpensesComponent, IncomeComponent, LiabilitiesAndCreditCardsComponent } from 'src/components/chart-of-account';
+import { AccountBalancesComponent } from 'src/components/reports/account-balances/account-balances.component';
+import { AccountTransactionsComponent } from 'src/components/reports/account-transactions/account-transactions.component';
+import { AgedPayablesComponent } from 'src/components/reports/aged-payables/aged-payables.component';
+import { AgedReceivablesComponent } from 'src/components/reports/aged-receivables/aged-receivables.component';
+import { BalanceSheetComponent } from 'src/components/reports/balance-sheet/balance-sheet.component';
+import { CashFlowComponent } from 'src/components/reports/cash-flow/cash-flow.component';
+import { IncomeByCustomerComponent } from 'src/components/reports/income-by-customer/income-by-customer.component';
+import { ProfitAndLossComponent } from 'src/components/reports/profit-and-loss/profit-and-loss.component';
+import { PurchasesByVendorComponent } from 'src/components/reports/purchases-by-vendor/purchases-by-vendor.component';
+import { SalesTaxReportComponent } from 'src/components/reports/sales-tax-report/sales-tax-report.component';
+import { TrialBalanceComponent } from 'src/components/reports/trial-balance/trial-balance.component';
+import { AddNewAccountComponent } from 'src/components/chart-of-account/add-new-account/add-new-account.component';
 
 export const appDeclarations = [
     DefaultIfEmpty,
@@ -161,5 +177,34 @@ export const appDeclarations = [
     QuotationDetailComponent,
     QuotationManageComponent,
     QuotationEditComponent,
-    CustomerStatementComponent
+    CustomerStatementComponent,
+    AddRecurringinvoiceComponent,
+    EditRecurringInvoiceComponent,
+    ManageRecurringInvoiceComponent,
+    RecurringInvoiceDetailsComponent,
+    RecInvoiceFromWizarNavigatorComponent,
+    RecInvoiceFromWizardAsideComponent,
+    RecInvoiceBasicDetailComponent,
+    SetrecinvoiceScheduleComponent,
+    GetRecInvoicePaymentComponent,
+    SendRecinvoiceComponent,
+    ChartOfAccountsComponent,
+    AssetsComponent,
+    EquityComponent,
+    ExpensesComponent,
+    IncomeComponent,
+    LiabilitiesAndCreditCardsComponent,
+    AccountBalancesComponent,
+    AccountTransactionsComponent,
+    AgedPayablesComponent,
+    AgedReceivablesComponent,
+    BalanceSheetComponent,
+    CashFlowComponent,
+    IncomeByCustomerComponent,
+    ProfitAndLossComponent,
+    PurchasesByVendorComponent,
+    SalesTaxReportComponent,
+    TrialBalanceComponent,
+    AddNewAccountComponent
+
 ];
