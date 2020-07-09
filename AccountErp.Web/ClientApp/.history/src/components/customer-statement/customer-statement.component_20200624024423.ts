@@ -454,7 +454,7 @@ this.outStandingBalance = 0;
      this.overDueAmount += item.totalAmount;
      this.outStandingBalance += item.totalAmount;
    }
-   if (item.status === 0) {
+   if (item.status === 1) {
      this.totalDueAmount += item.totalAmount;
      this.outStandingBalance += item.totalAmount;
    }
