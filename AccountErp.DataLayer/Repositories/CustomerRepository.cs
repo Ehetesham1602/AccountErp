@@ -307,26 +307,26 @@ namespace AccountErp.DataLayer.Repositories
 
             return await linqstmt.ToListAsync();
         }
-        public async Task SetOverdueStatus(int custId)
-        {
-            DateTime startDateTime = DateTime.Today;
-            var linqstmt = await (from i in _dataContext.Invoices
-                            where i.CustomerId == custId && i.Status != Constants.InvoiceStatus.Deleted && i.Status != Constants.InvoiceStatus.Paid && i.DueDate <= startDateTime
-                                  select i
-                            ).AsNoTracking()
-                            .ToListAsync();
+        //public async Task SetOverdueStatus()
+        //{
+        //    DateTime startDateTime = DateTime.Today;
+        //    var linqstmt = await (from i in _dataContext.Invoices
+        //                    where i.Status != Constants.InvoiceStatus.Deleted && i.Status != Constants.InvoiceStatus.Paid && i.DueDate <= startDateTime
+        //                          select i
+        //                    ).AsNoTracking()
+        //                    .ToListAsync();
 
-            foreach (var item in linqstmt)
-            {
-                item.Status = Constants.InvoiceStatus.Overdue;
-                _dataContext.Invoices.Update(item);
-            }
-          //  _dataContext.Invoices.Update(linqstmt);
+        //    foreach (var item in linqstmt)
+        //    {
+        //        item.Status = Constants.InvoiceStatus.Overdue;
+        //        _dataContext.Invoices.Update(item);
+        //    }
+        //  //  _dataContext.Invoices.Update(linqstmt);
 
-            //  return await linqstmt.ToListAsync();
+        //    //  return await linqstmt.ToListAsync();
 
 
-        }
+        //}
     }
 
 }

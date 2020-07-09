@@ -37,7 +37,7 @@ namespace AccountErp.Infrastructure.Repositories
         Task<CustomerStatementDto> GetCustomerStatementAsync(CustomerStatementDto model);
         Task<List<InvoiceListItemDto>> GetOpeningBalance(DateTime date, int custId);
 
-        Task SetOverdueStatus(int custId);
+        //Task SetOverdueStatus();
 
     }
 }

@@ -185,6 +185,10 @@ namespace AccountErp.DataLayer.Repositories
                                 TotalAmount = i.TotalAmount,
                                 CreatedOn = i.CreatedOn,
                                 Status = i.Status,
+                                RecDueDate = i.RecDueDate,
+                                RecInvoiceDate = i.RecInvoiceDate,
+                                StrRecDueDate = i.StrRecDueDate,
+                                StrRecInvoiceDate = i.StrRecInvoiceDate,
                                 RecInvoiceNumber = i.RecInvoiceNumber
                             })
                             .AsNoTracking();

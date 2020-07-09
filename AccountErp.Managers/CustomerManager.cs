@@ -109,10 +109,10 @@ namespace AccountErp.Managers
             }
            
         }
-        public async Task SetOverdueStatus(int custId)
-        {
-            await _customerRepository.SetOverdueStatus(custId);
-            await _unitOfWork.SaveChangesAsync();
-        }
+        //public async Task SetOverdueStatus()
+        //{
+        //    await _customerRepository.SetOverdueStatus();
+        //    await _unitOfWork.SaveChangesAsync();
+        //}
     }
 }

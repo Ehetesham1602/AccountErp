@@ -43,6 +43,7 @@ namespace AccountErp.Config
             services.AddScoped<IEmailManager, EmailManager>();
             services.AddScoped<IQuotationManager, QuotationManager>();
             services.AddScoped<IRecurringInvoiceManager, RecurringInvoiceManager>();
+            services.AddScoped<IRecurringJobManager, RecurringJobManager>();
         }
         public static void ConfigureRepository(IServiceCollection services)
         {
@@ -62,6 +63,7 @@ namespace AccountErp.Config
             services.AddScoped<IInvoicePaymentRepository, InvoicePaymentRepository>();
             services.AddScoped<IQuotationRepository, QuotationRepository>();
             services.AddScoped<IRecurringInvoiceRepository, RecurringInvoiceRepository>();
+            services.AddScoped<IRecurringJobRepository, RecuringJobRepository>();
         }
         public static void ConfigureServices(IServiceCollection services)
         {
