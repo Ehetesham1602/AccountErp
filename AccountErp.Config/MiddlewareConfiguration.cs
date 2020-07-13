@@ -9,6 +9,7 @@ using AccountErp.Managers;
 using AccountErp.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 
 namespace AccountErp.Config
 {
@@ -44,6 +45,7 @@ namespace AccountErp.Config
             services.AddScoped<IQuotationManager, QuotationManager>();
             services.AddScoped<IRecurringInvoiceManager, RecurringInvoiceManager>();
             services.AddScoped<IRecurringJobManager, RecurringJobManager>();
+            services.AddScoped<IReportManager, ReportManager>();
         }
         public static void ConfigureRepository(IServiceCollection services)
         {
@@ -64,6 +66,7 @@ namespace AccountErp.Config
             services.AddScoped<IQuotationRepository, QuotationRepository>();
             services.AddScoped<IRecurringInvoiceRepository, RecurringInvoiceRepository>();
             services.AddScoped<IRecurringJobRepository, RecuringJobRepository>();
+            services.AddScoped<IReportRepository, ReportRepository>();
         }
         public static void ConfigureServices(IServiceCollection services)
         {
