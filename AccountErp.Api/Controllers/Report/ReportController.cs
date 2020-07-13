@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using AccountErp.Infrastructure.Managers;
 using AccountErp.Dtos.Bill;
 using AccountErp.Dtos.Report;
+using AccountErp.Dtos.Customer;
 
 namespace AccountErp.Api.Controllers.Report
 {
@@ -29,6 +30,14 @@ namespace AccountErp.Api.Controllers.Report
         {
             var pagedResult = await _reportManager.GetVendorReportAsync(model);
             return pagedResult;
+        }
+
+        [HttpPost]
+        [Route("customer_report_details")]
+        public async Task<CustomerDetailsReportDto> GetCustomerReportAsync(CustomerReportsDto model)
+        {
+            var pageResult = await _reportManager.GetCustomerReportAsync(model);
+            return pageResult;
         }
     }
 }
