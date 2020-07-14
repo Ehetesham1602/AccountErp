@@ -9,6 +9,7 @@ using AccountErp.Infrastructure.Managers;
 using AccountErp.Dtos.Bill;
 using AccountErp.Dtos.Report;
 using AccountErp.Dtos.Customer;
+using AccountErp.Models.Report;
 
 namespace AccountErp.Api.Controllers.Report
 {
@@ -26,7 +27,7 @@ namespace AccountErp.Api.Controllers.Report
 
         [HttpPost]
         [Route("vendor_report_details")]
-        public async Task<VendorDetailsReportDto> GetVendorReportAsync(VendorReportsDto model)
+        public async Task<VendorDetailsReportDto> GetVendorReportAsync(VendorReportModel model)
         {
             var pagedResult = await _reportManager.GetVendorReportAsync(model);
             return pagedResult;
@@ -34,7 +35,7 @@ namespace AccountErp.Api.Controllers.Report
 
         [HttpPost]
         [Route("customer_report_details")]
-        public async Task<CustomerDetailsReportDto> GetCustomerReportAsync(CustomerReportsDto model)
+        public async Task<CustomerDetailsReportDto> GetCustomerReportAsync(CustomerReportModel model)
         {
             var pageResult = await _reportManager.GetCustomerReportAsync(model);
             return pageResult;

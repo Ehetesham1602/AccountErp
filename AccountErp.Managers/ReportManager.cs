@@ -8,6 +8,7 @@ using AccountErp.Infrastructure.DataLayer;
 using AccountErp.Infrastructure.Managers;
 using AccountErp.Infrastructure.Repositories;
 using AccountErp.Models.Customer;
+using AccountErp.Models.Report;
 using AccountErp.Utilities;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace AccountErp.Managers
             _reportRepository = reportRepository;
             _unitOfWork = unitOfWork;
         }
-        public async Task<VendorDetailsReportDto> GetVendorReportAsync(VendorReportsDto model)
+        public async Task<VendorDetailsReportDto> GetVendorReportAsync(VendorReportModel model)
         {
             VendorDetailsReportDto vendorDetailsReportDtoObj = new VendorDetailsReportDto();
             List<VendorReportsDto> tempModel = await _reportRepository.GetVendorReportAsync(model);
@@ -48,7 +49,7 @@ namespace AccountErp.Managers
             return vendorDetailsReportDtoObj;
         }
 
-        public async Task<CustomerDetailsReportDto> GetCustomerReportAsync(CustomerReportsDto model)
+        public async Task<CustomerDetailsReportDto> GetCustomerReportAsync(CustomerReportModel model)
         {
             CustomerDetailsReportDto customerDetailsReportDtoObj = new CustomerDetailsReportDto();
             List<CustomerReportsDto> customerList = await _reportRepository.GetCustomerReportAsync(model);

@@ -1,6 +1,7 @@
 ﻿using AccountErp.Dtos.Bill;
 using AccountErp.Dtos.Customer;
 using AccountErp.Dtos.Report;
+using AccountErp.Models.Report;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,8 +11,8 @@ namespace AccountErp.Infrastructure.Repositories
 {
     public interface IReportRepository
     {
-       Task<List<VendorReportsDto>> GetVendorReportAsync(VendorReportsDto model);
+       Task<List<VendorReportsDto>> GetVendorReportAsync(VendorReportModel model);
 
-       Task<List<CustomerReportsDto>> GetCustomerReportAsync(CustomerReportsDto model);
+       Task<List<CustomerReportsDto>> GetCustomerReportAsync(CustomerReportModel model);
     }
 }

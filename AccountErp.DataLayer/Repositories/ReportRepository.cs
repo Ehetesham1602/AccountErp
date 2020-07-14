@@ -6,6 +6,7 @@ using AccountErp.Dtos.RecurringInvoice;
 using AccountErp.Dtos.Report;
 using AccountErp.Entities;
 using AccountErp.Infrastructure.Repositories;
+using AccountErp.Models.Report;
 using AccountErp.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace AccountErp.DataLayer.Repositories
         {
             _dataContext = dataContext;
         }
-        public async Task<List<VendorReportsDto>> GetVendorReportAsync(VendorReportsDto model)
+        public async Task<List<VendorReportsDto>> GetVendorReportAsync(VendorReportModel model)
         {
             List<VendorReportsDto> vendorReportsList;
             if (model.VendorId == 0)
@@ -35,8 +36,8 @@ namespace AccountErp.DataLayer.Repositories
                                            {
                                                VendorId = v.Id,
                                                VendorName = v.Name,
-                                               TotalAmount = model.TotalAmount,
-                                               TotalPaidAmount = model.TotalPaidAmount
+                                               /*TotalAmount = model.TotalAmount,
+                                               TotalPaidAmount = model.TotalPaidAmount*/
 
                                            }).ToListAsync();
 
@@ -49,8 +50,8 @@ namespace AccountErp.DataLayer.Repositories
                                            {
                                                VendorId = v.Id,
                                                VendorName = v.Name,
-                                               TotalAmount = model.TotalAmount,
-                                               TotalPaidAmount = model.TotalPaidAmount
+                                             /*  TotalAmount = model.TotalAmount,
+                                               TotalPaidAmount = model.TotalPaidAmount*/
 
                                            }).ToListAsync();
 
@@ -77,7 +78,7 @@ namespace AccountErp.DataLayer.Repositories
 
         }
 
-        public async Task<List<CustomerReportsDto>> GetCustomerReportAsync(CustomerReportsDto model)
+        public async Task<List<CustomerReportsDto>> GetCustomerReportAsync(CustomerReportModel model)
         {
             List<CustomerReportsDto> customerReportsDtoList;
             if (model.CustomerId == 0)
@@ -87,8 +88,8 @@ namespace AccountErp.DataLayer.Repositories
                                                 {
                                                     CustomerId = c.Id,
                                                     CustomerName = c.FirstName + " " + c.MiddleName + " " + c.LastName,
-                                                    IncomeAmount = model.IncomeAmount,
-                                                    PaidAmount = model.PaidAmount
+                                                    /*IncomeAmount = model.IncomeAmount,
+                                                    PaidAmount = model.PaidAmount*/
 
                                                 }).ToListAsync();
             }
@@ -100,8 +101,8 @@ namespace AccountErp.DataLayer.Repositories
                                                 {
                                                     CustomerId = c.Id,
                                                     CustomerName = c.FirstName + " " + c.MiddleName + " " + c.LastName,
-                                                    IncomeAmount = model.IncomeAmount,
-                                                    PaidAmount = model.PaidAmount
+                                                  /*  IncomeAmount = model.IncomeAmount,
+                                                    PaidAmount = model.PaidAmount*/
 
                                                 }).ToListAsync();
             }
