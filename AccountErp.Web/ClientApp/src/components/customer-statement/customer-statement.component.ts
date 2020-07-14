@@ -409,8 +409,8 @@ closeItemesModal() {
       }
 
       onSubmit(form: NgForm) {
-        console.log(this.terms);
-         console.log(this.terms.nativeElement.checked);
+        // console.log(this.terms);
+        //  console.log(this.terms.nativeElement.checked);
     }
 
 changeStartDate(){
