@@ -6,13 +6,14 @@ using AccountErp.Dtos;
 using AccountErp.Dtos.Bill;
 using AccountErp.Dtos.Customer;
 using AccountErp.Dtos.Report;
+using AccountErp.Models.Report;
 
 namespace AccountErp.Infrastructure.Managers
 {
     public interface IReportManager
     {
-        Task<VendorDetailsReportDto> GetVendorReportAsync(VendorReportsDto model);
+        Task<VendorDetailsReportDto> GetVendorReportAsync(VendorReportModel model);
 
-        Task<CustomerDetailsReportDto> GetCustomerReportAsync(CustomerReportsDto model);
+        Task<CustomerDetailsReportDto> GetCustomerReportAsync(CustomerReportModel model);
     }
 }
