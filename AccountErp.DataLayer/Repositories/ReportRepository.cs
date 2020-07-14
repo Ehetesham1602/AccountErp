@@ -79,15 +79,33 @@ namespace AccountErp.DataLayer.Repositories
 
         public async Task<List<CustomerReportsDto>> GetCustomerReportAsync(CustomerReportsDto model)
         {
-            List<CustomerReportsDto> customerReportsDtoList = await (from c in _dataContext.Customers
-                                                                     select new CustomerReportsDto
-                                                                     {
-                                                                         Id = c.Id,
-                                                                         CustomerName = c.FirstName + " " + c.MiddleName + " " + c.LastName,
-                                                                         IncomeAmount = model.IncomeAmount,
-                                                                         PaidAmount = model.PaidAmount
+            List<CustomerReportsDto> customerReportsDtoList;
+            if (model.Id == 0)
+            {
+                customerReportsDtoList = await (from c in _dataContext.Customers
+                                                select new CustomerReportsDto
+                                                {
+                                                    Id = c.Id,
+                                                    CustomerName = c.FirstName + " " + c.MiddleName + " " + c.LastName,
+                                                    IncomeAmount = model.IncomeAmount,
+                                                    PaidAmount = model.PaidAmount
 
-                                                                     }).ToListAsync();
+                                                }).ToListAsync();
+            }
+            else
+            {
+                customerReportsDtoList = await (from c in _dataContext.Customers
+                                                where c.Id == model.Id
+                                                select new CustomerReportsDto
+                                                {
+                                                    Id = c.Id,
+                                                    CustomerName = c.FirstName + " " + c.MiddleName + " " + c.LastName,
+                                                    IncomeAmount = model.IncomeAmount,
+                                                    PaidAmount = model.PaidAmount
+
+                                                }).ToListAsync();
+            }
+
             foreach (var invoice in customerReportsDtoList)
             {
                 List<InvoiceListItemDto> invoiceListItemDtosList = await (from v in _dataContext.Invoices
