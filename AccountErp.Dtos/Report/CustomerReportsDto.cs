@@ -7,7 +7,8 @@ namespace AccountErp.Dtos.Report
 {
     public class CustomerReportsDto
     {
-        public int Id;
+        public int CustomerId;
+
         public string CustomerName;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

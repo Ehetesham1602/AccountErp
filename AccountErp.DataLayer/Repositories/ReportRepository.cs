@@ -28,12 +28,12 @@ namespace AccountErp.DataLayer.Repositories
         public async Task<List<VendorReportsDto>> GetVendorReportAsync(VendorReportsDto model)
         {
             List<VendorReportsDto> vendorReportsList;
-            if (model.Id == 0)
+            if (model.VendorId == 0)
             {
                 vendorReportsList = await (from v in _dataContext.Vendors
                                            select new VendorReportsDto
                                            {
-                                               Id = v.Id,
+                                               VendorId = v.Id,
                                                VendorName = v.Name,
                                                TotalAmount = model.TotalAmount,
                                                TotalPaidAmount = model.TotalPaidAmount
@@ -44,10 +44,10 @@ namespace AccountErp.DataLayer.Repositories
             else
             {
                 vendorReportsList = await (from v in _dataContext.Vendors
-                                           where v.Id == model.Id
+                                           where v.Id == model.VendorId
                                            select new VendorReportsDto
                                            {
-                                               Id = v.Id,
+                                               VendorId = v.Id,
                                                VendorName = v.Name,
                                                TotalAmount = model.TotalAmount,
                                                TotalPaidAmount = model.TotalPaidAmount
@@ -59,7 +59,7 @@ namespace AccountErp.DataLayer.Repositories
             foreach (var item in vendorReportsList)
             {
                 List<BillSummaryDto> billSummaryDtosList = await (from b in _dataContext.Bills
-                                                                  where b.VendorId == item.Id && b.Status != Constants.BillStatus.Deleted
+                                                                  where b.VendorId == item.VendorId && b.Status != Constants.BillStatus.Deleted
                                                                   select new BillSummaryDto
                                                                   {
                                                                       TotalAmount = b.TotalAmount,
@@ -67,7 +67,7 @@ namespace AccountErp.DataLayer.Repositories
                                                                       BillDate = b.BillDate
                                                                   }).ToListAsync();
 
-                billSummaryDtosList = billSummaryDtosList.Where(p => (p.BillDate >= model.startDate && p.BillDate <= model.endDate)).ToList();
+                billSummaryDtosList = billSummaryDtosList.Where(p => (p.BillDate >= model.StartDate && p.BillDate <= model.EndDate)).ToList();
 
                 item.TotalAmount = billSummaryDtosList.Sum(x => x.TotalAmount);
                 item.TotalPaidAmount = billSummaryDtosList.Where(x => x.status == Constants.BillStatus.Paid).Sum(x => x.TotalAmount);
@@ -80,12 +80,12 @@ namespace AccountErp.DataLayer.Repositories
         public async Task<List<CustomerReportsDto>> GetCustomerReportAsync(CustomerReportsDto model)
         {
             List<CustomerReportsDto> customerReportsDtoList;
-            if (model.Id == 0)
+            if (model.CustomerId == 0)
             {
                 customerReportsDtoList = await (from c in _dataContext.Customers
                                                 select new CustomerReportsDto
                                                 {
-                                                    Id = c.Id,
+                                                    CustomerId = c.Id,
                                                     CustomerName = c.FirstName + " " + c.MiddleName + " " + c.LastName,
                                                     IncomeAmount = model.IncomeAmount,
                                                     PaidAmount = model.PaidAmount
@@ -95,10 +95,10 @@ namespace AccountErp.DataLayer.Repositories
             else
             {
                 customerReportsDtoList = await (from c in _dataContext.Customers
-                                                where c.Id == model.Id
+                                                where c.Id == model.CustomerId
                                                 select new CustomerReportsDto
                                                 {
-                                                    Id = c.Id,
+                                                    CustomerId = c.Id,
                                                     CustomerName = c.FirstName + " " + c.MiddleName + " " + c.LastName,
                                                     IncomeAmount = model.IncomeAmount,
                                                     PaidAmount = model.PaidAmount
@@ -109,7 +109,7 @@ namespace AccountErp.DataLayer.Repositories
             foreach (var invoice in customerReportsDtoList)
             {
                 List<InvoiceListItemDto> invoiceListItemDtosList = await (from v in _dataContext.Invoices
-                                                                          where v.CustomerId == invoice.Id && v.Status != Constants.InvoiceStatus.Deleted
+                                                                          where v.CustomerId == invoice.CustomerId && v.Status != Constants.InvoiceStatus.Deleted
                                                                           select new InvoiceListItemDto
                                                                           {
                                                                               TotalAmount = v.TotalAmount,
