@@ -6,6 +6,6 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>E:\Ehetesham_AccountERP\Must Bhai Code\AccountErp_02_06_20\AccountErp\AccountErp.Api\bin\Debug\netcoreapp2.2\publish\</_PublishTargetUrl>
+    <_PublishTargetUrl>D:\accounterpBackend\AccountErp\AccountErp.Api\bin\Debug\netcoreapp2.2\publish\</_PublishTargetUrl>
   </PropertyGroup>
 </Project>

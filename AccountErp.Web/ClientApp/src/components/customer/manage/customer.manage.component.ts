@@ -57,7 +57,9 @@ export class CustomerManageComponent implements OnInit, AfterViewInit {
             pageLength: self.pageLength,
             lengthMenu: [10, 15, 25, 50, 100],
             ajax: (dataTablesParameters: any, callback) => {
+                debugger;
                 self.http
+
                     .post<DataTableResponseModel>(this.appSettings.ApiBaseUrl + 'Customer/paged-result', dataTablesParameters, {})
                     .subscribe(resp => {
                         callback({
