@@ -29,5 +29,6 @@ namespace AccountErp.Dtos.Bill
 
         public IEnumerable<BillServiceDto> Items { get; set; }
         public IEnumerable<BillAttachmentDto> Attachments { get; set; }
+        public BillServiceDto Bill { get; set; }
     }
 }

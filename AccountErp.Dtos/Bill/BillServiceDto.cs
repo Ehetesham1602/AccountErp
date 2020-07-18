@@ -12,5 +12,6 @@
         public int? TaxPercentage { get; set; }
 
         public int Quantity { get; set; }
+        public decimal TaxPrice { get; set; }
     }
 }

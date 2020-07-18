@@ -2,6 +2,7 @@
 using AccountErp.Dtos.Bill;
 using AccountErp.Dtos.Customer;
 using AccountErp.Dtos.Invoice;
+using AccountErp.Dtos.Item;
 using AccountErp.Dtos.RecurringInvoice;
 using AccountErp.Dtos.Report;
 using AccountErp.Entities;
@@ -35,7 +36,7 @@ namespace AccountErp.DataLayer.Repositories
                                            select new VendorReportsDto
                                            {
                                                VendorId = v.Id,
-                                               VendorName = v.Name,
+                                               VendorName = v.Name
                                                /*TotalAmount = model.TotalAmount,
                                                TotalPaidAmount = model.TotalPaidAmount*/
 
@@ -49,9 +50,9 @@ namespace AccountErp.DataLayer.Repositories
                                            select new VendorReportsDto
                                            {
                                                VendorId = v.Id,
-                                               VendorName = v.Name,
-                                             /*  TotalAmount = model.TotalAmount,
-                                               TotalPaidAmount = model.TotalPaidAmount*/
+                                               VendorName = v.Name
+                                               /*  TotalAmount = model.TotalAmount,
+                                                 TotalPaidAmount = model.TotalPaidAmount*/
 
                                            }).ToListAsync();
 
@@ -101,8 +102,8 @@ namespace AccountErp.DataLayer.Repositories
                                                 {
                                                     CustomerId = c.Id,
                                                     CustomerName = c.FirstName + " " + c.MiddleName + " " + c.LastName,
-                                                  /*  IncomeAmount = model.IncomeAmount,
-                                                    PaidAmount = model.PaidAmount*/
+                                                    /*  IncomeAmount = model.IncomeAmount,
+                                                      PaidAmount = model.PaidAmount*/
 
                                                 }).ToListAsync();
             }
@@ -122,6 +123,63 @@ namespace AccountErp.DataLayer.Repositories
                 invoice.PaidAmount = invoiceListItemDtosList.Where(x => x.Status == Constants.InvoiceStatus.Paid).Sum(x => x.TotalAmount);
             }
             return customerReportsDtoList;
+        }
+
+        public async Task<List<SalesTaxReportDto>> GetSalesTaxReportAsync(SalesReportModel model)
+        {
+            List<SalesTaxReportDto> salesTaxReportDtosList;
+            List<InvoiceDetailDto> invoiceDetailDtoList;
+            List<BillDetailDto> billDetailDtoList;
+            salesTaxReportDtosList = await (from s in _dataContext.SalesTaxes
+                                            select new SalesTaxReportDto
+                                            {
+                                                SalesId = s.Id,
+                                                Tax = s.TaxPercentage + " " + s.Code
+                                            }).ToListAsync();
+            foreach (var salesTax in salesTaxReportDtosList)
+            {
+                invoiceDetailDtoList = await (from i in _dataContext.InvoiceServices
+                                              join s in _dataContext.Invoices on i.InvoiceId equals s.Id
+                                               where i.TaxId == salesTax.SalesId
+                                               && s.Status != Constants.InvoiceStatus.Deleted
+                                              select new InvoiceDetailDto
+                                              {
+                                                  Status = s.Status,
+                                                  InvoiceDate = s.InvoiceDate,
+                                                  InvoiceServiceDto = new InvoiceServiceDto
+                                                  {
+                                                      Rate = i.Rate,
+                                                      Price = i.Price,
+                                                      TaxPrice = i.TaxPrice
+                                                  }
+
+                                              }).ToListAsync();
+
+                invoiceDetailDtoList = invoiceDetailDtoList.Where(p => (p.InvoiceDate >= model.StartDate && p.InvoiceDate <= model.EndDate)).ToList();
+                salesTax.SalesSubjectToTax = invoiceDetailDtoList.Sum(x => x.InvoiceServiceDto.Price);
+                salesTax.TaxAmountOnSales = invoiceDetailDtoList.Sum(x => x.InvoiceServiceDto.TaxPrice);
+
+                billDetailDtoList = await (from b in _dataContext.BillItems
+                                              join bs in _dataContext.Bills on b.BillId equals bs.Id
+                                              where b.TaxId == salesTax.SalesId
+                                              && bs.Status != Constants.BillStatus.Deleted
+                                              select new BillDetailDto
+                                              {
+                                                  Status = bs.Status,
+                                                  BillDate = bs.BillDate,
+                                                 Bill = new BillServiceDto
+                                                 {
+                                                     Rate = b.Rate,
+                                                     Price = b.Price,
+                                                     TaxPrice = b.TaxPrice
+                                                 }
+
+                                              }).ToListAsync();
+                billDetailDtoList = billDetailDtoList.Where(p => (p.BillDate >= model.StartDate && p.BillDate <= model.EndDate)).ToList();
+                salesTax.PurchaseSubjectToTax = billDetailDtoList.Sum(x => x.Bill.Price);
+                salesTax.TaxAmountOnPurchases = billDetailDtoList.Sum(x => x.Bill.TaxPrice);
+            }
+            return salesTaxReportDtosList;
         }
     }
 }
