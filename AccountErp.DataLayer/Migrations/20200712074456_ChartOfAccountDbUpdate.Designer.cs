@@ -4,14 +4,16 @@ using AccountErp.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200712074456_ChartOfAccountDbUpdate")]
+    partial class ChartOfAccountDbUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -335,7 +337,9 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<string>("AccountName");
 
-                    b.Property<int>("COA_AccountTypeId");
+                    b.Property<int?>("COA_AccountTypeId");
+
+                    b.Property<int>("COA_AccountntTypeId");
 
                     b.Property<string>("Description");
 
@@ -1307,8 +1311,7 @@ namespace AccountErp.DataLayer.Migrations
                 {
                     b.HasOne("AccountErp.Entities.COA_AccountType")
                         .WithMany("Account")
-                        .HasForeignKey("COA_AccountTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("COA_AccountTypeId");
                 });
 
             modelBuilder.Entity("AccountErp.Entities.COA_AccountType", b =>

@@ -7,6 +7,12 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200612041345_dbchangeforTaxPrice120620.cs" />
     <Compile Remove="Migrations\20200612041345_dbchangeforTaxPrice120620.Designer.cs" />
+    <Compile Remove="Migrations\20200711154803_ChartOfAccountDBUpdate.cs" />
+    <Compile Remove="Migrations\20200711154803_ChartOfAccountDBUpdate.Designer.cs" />
+    <Compile Remove="Migrations\20200712074054_ChartOfAccountDbUpdate.cs" />
+    <Compile Remove="Migrations\20200712074054_ChartOfAccountDbUpdate.Designer.cs" />
+    <Compile Remove="Migrations\20200715184406_shippingAddressChange.cs" />
+    <Compile Remove="Migrations\20200715184406_shippingAddressChange.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

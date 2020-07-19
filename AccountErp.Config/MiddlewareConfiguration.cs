@@ -44,6 +44,8 @@ namespace AccountErp.Config
             services.AddScoped<IQuotationManager, QuotationManager>();
             services.AddScoped<IRecurringInvoiceManager, RecurringInvoiceManager>();
             services.AddScoped<IRecurringJobManager, RecurringJobManager>();
+            services.AddScoped<IChartofAccountManager, ChartofAccountManager>();
+
         }
         public static void ConfigureRepository(IServiceCollection services)
         {
@@ -64,6 +66,8 @@ namespace AccountErp.Config
             services.AddScoped<IQuotationRepository, QuotationRepository>();
             services.AddScoped<IRecurringInvoiceRepository, RecurringInvoiceRepository>();
             services.AddScoped<IRecurringJobRepository, RecuringJobRepository>();
+            services.AddScoped<IChartOfAccountRepository, ChartOfAccountRepository>();
+
         }
         public static void ConfigureServices(IServiceCollection services)
         {

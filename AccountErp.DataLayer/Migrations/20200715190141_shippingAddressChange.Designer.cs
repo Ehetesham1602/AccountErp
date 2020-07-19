@@ -4,14 +4,16 @@ using AccountErp.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200715190141_shippingAddressChange")]
+    partial class shippingAddressChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1052,10 +1054,6 @@ namespace AccountErp.DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AddressLine1");
-
-                    b.Property<string>("AddressLine2");
-
                     b.Property<string>("City");
 
                     b.Property<int?>("CountryId");
@@ -1067,6 +1065,10 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<string>("ShipTo");
 
                     b.Property<string>("State");
+
+                    b.Property<string>("StreetName");
+
+                    b.Property<string>("StreetNumber");
 
                     b.HasKey("Id");
 
