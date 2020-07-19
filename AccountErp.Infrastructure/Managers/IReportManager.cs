@@ -15,5 +15,7 @@ namespace AccountErp.Infrastructure.Managers
         Task<VendorDetailsReportDto> GetVendorReportAsync(VendorReportModel model);
 
         Task<CustomerDetailsReportDto> GetCustomerReportAsync(CustomerReportModel model);
+
+        Task<SalesTaxDetailsReportDto> GetSalesTaxReportAsync(SalesReportModel model);
     }
 }

@@ -12,6 +12,7 @@ namespace AccountErp.Entities
         public int TaxId { get; set; }
         public int? TaxPercentage { get; set; }
         public int Quantity { get; set; }
-        public Item Item { get; set; }
+        public decimal TaxPrice { get; set; }
+        public Item Item { get; set; } 
     }
 }

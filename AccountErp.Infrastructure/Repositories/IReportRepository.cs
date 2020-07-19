@@ -11,8 +11,12 @@ namespace AccountErp.Infrastructure.Repositories
 {
     public interface IReportRepository
     {
-       Task<List<VendorReportsDto>> GetVendorReportAsync(VendorReportModel model);
+        Task<List<VendorReportsDto>> GetVendorReportAsync(VendorReportModel model);
 
-       Task<List<CustomerReportsDto>> GetCustomerReportAsync(CustomerReportModel model);
+        Task<List<CustomerReportsDto>> GetCustomerReportAsync(CustomerReportModel model);
+
+        Task<List<SalesTaxReportDto>> GetSalesTaxReportAsync(SalesReportModel model);
+
+
     }
 }

@@ -58,5 +58,15 @@ namespace AccountErp.Managers
             customerDetailsReportDtoObj.TotaPaidIncome = customerList.Sum(x => x.PaidAmount);
             return customerDetailsReportDtoObj;
         }
+        
+        public async Task<SalesTaxDetailsReportDto> GetSalesTaxReportAsync(SalesReportModel model)
+        {
+            SalesTaxDetailsReportDto salesTaxDetailsReportDtoObj = new SalesTaxDetailsReportDto();
+            List<SalesTaxReportDto> salesTaxReportDtosList = await _reportRepository.GetSalesTaxReportAsync(model);
+            salesTaxDetailsReportDtoObj.SalesTaxReportDtosList = salesTaxReportDtosList;
+            salesTaxDetailsReportDtoObj.TotalTaxAmountOnSales = salesTaxReportDtosList.Sum(x => x.TaxAmountOnSales);
+            salesTaxDetailsReportDtoObj.TotalTaxAmountOnPurchase = salesTaxReportDtosList.Sum(x => x.TaxAmountOnPurchases);
+            return salesTaxDetailsReportDtoObj;
+        }
     }
 }
