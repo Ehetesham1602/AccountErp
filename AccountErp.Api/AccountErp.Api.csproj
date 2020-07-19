@@ -20,7 +20,7 @@
     <ProjectReference Include="..\AccountErp.Config\AccountErp.Config.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup> 
     <Folder Include="wwwroot\invoice\" />
     <Folder Include="wwwroot\temp\" />
   </ItemGroup>

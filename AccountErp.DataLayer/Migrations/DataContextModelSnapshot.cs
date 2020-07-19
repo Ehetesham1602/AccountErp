@@ -268,6 +268,9 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<int?>("TaxPercentage")
                         .IsRequired();
 
+                    b.Property<decimal?>("TaxPrice")
+                        .IsRequired();
+
                     b.HasKey("Id");
 
                     b.HasIndex("BillId");

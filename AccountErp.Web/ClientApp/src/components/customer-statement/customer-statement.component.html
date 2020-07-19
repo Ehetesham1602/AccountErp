@@ -32,13 +32,13 @@
                               <i class="la la-search"></i> {{text1}}
                           </button> -->
                           <button type="submit" class="btn btn-success btn-elevate btn-icon-sm" [disabled]="!f.valid" 
-                          *ngIf = "isShow" (click)="toggleDisplay();showcustomerStatement()">
+                          (click)="toggleDisplay();showcustomerStatement()">
                           <i class="la la-search"></i> {{text1}}
                           </button>
                           <!-- (click)="changeText()"*ngIf = "!isShow" -->
-                          <button type="button" class="btn btn-success btn-elevate btn-icon-sm"
+                          <!-- <button type="button" class="btn btn-success btn-elevate btn-icon-sm"
                           *ngIf = "!isShow" (click)="exit()">Refresh
-                      </button>
+                      </button> -->
                   </div>
                       </div>
                       <div class="kt-portlet__body">
@@ -229,15 +229,15 @@
                                               <hr>
                                               <div class=" row">
                                                   <div class="col-md-4">Overdue</div>
-                                                  <div class="col-md-4 ml-auto">₹{{overDueAmount}}</div>
+                                                  <div class="col-md-4 ml-auto">{{overDueAmount | currency}}</div>
                                               </div>
                                               <div class=" row">
                                                   <div class="col-md-4">Not yet due</div>
-                                                  <div class="col-md-4 ml-auto">₹{{totalDueAmount}}</div>
+                                                  <div class="col-md-4 ml-auto">{{totalDueAmount | currency}}</div>
                                               </div><br>
                                               <div class=" row mark">
                                                   <label class="col-md-6">Outstanding balance (INR)	:</label>
-                                                  <div class="col-md-4 ml-auto">₹{{outStandingBalance}}</div>
+                                                  <div class="col-md-4 ml-auto">{{outStandingBalance | currency}}</div>
                                               </div>
                                         </div>
   
@@ -253,23 +253,23 @@
                                               <hr>
                                               <div class=" row">
                                                   <div class="col-md-7">Opening balance on {{fromDate | date}} (INR)</div>
-                                                  <div class="col-md-4 ml-auto">₹ {{statementData.openingBalance}}</div>
+                                                  <div class="col-md-4 ml-auto">{{statementData.openingBalance | currency}}</div>
                                               </div>
                                               <div class=" row">
                                                   <div class="col-md-4">Invoiced</div>
-                                                  <div class="col-md-4 ml-auto">₹ {{tempBalance}}</div>
+                                                  <div class="col-md-4 ml-auto">{{tempBalance | currency}}</div>
                                               </div>
                                               <div class=" row ">
                                                   <div class="col-md-6">Paid </div>
-                                                  <div class="col-md-4 ml-auto">₹0.00</div>
+                                                  <div class="col-md-4 ml-auto">0.00</div>
                                               </div>
                                               <div class=" row ">
                                                   <div class="col-md-6">Refunded </div>
-                                                  <div class="col-md-4 ml-auto">₹0.00</div>
+                                                  <div class="col-md-4 ml-auto">0.00</div>
                                               </div><br>
                                               <div class=" row mark">
                                                   <label class="col-md-8">Closing Balance on {{toDate | date}} (INR) </label>
-                                                  <div class="col-md-4 ml-auto">₹ {{getClosingBalanceAmount()}}</div>
+                                                  <div class="col-md-4 ml-auto">{{getClosingBalanceAmount() | currency}}</div>
                                               </div>
                                         </div>
                                       </div>
@@ -323,14 +323,14 @@
   
                                                   </td>
                                                   <td>
-                                                    ₹  {{item.totalAmount}}
+                                                    {{item.totalAmount | currency}}
                                                   </td>
                                                   <td>
-                                                    ₹ {{getPaidAmount(item)}}
+                                                    {{getPaidAmount(item) | currency}}
                                                   </td>
                                                  
                                                   <td>
-                                                    ₹ {{getBalanceAmount(item)}}
+                                                    {{getBalanceAmount(item) | currency}}
   
                                                   </td>
                                               </tr>
@@ -346,7 +346,7 @@
                               <div class="col-6"></div>
                             <div class="col-4">
                                 <div class="row">
-                                    <label class="col-md-8 kt-portlet__label">Outstanding Balance (INR) &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;₹ {{outStandingBalance}}</label>
+                                    <label class="col-md-8 kt-portlet__label">Outstanding Balance (INR) &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{outStandingBalance | currency}}</label>
                                 </div><br><br>
                             </div>
                             </div>
@@ -387,8 +387,8 @@
                                                 <td></td>
                                                 <td>{{fromDate | date}}</td>
                                                 <td> Opening Balance</td>
-                                                <td>{{statementData.openingBalance}}₹</td>
-                                                <td>{{statementData.openingBalance}}₹</td>
+                                                <td>{{statementData.openingBalance | currency}}</td>
+                                                <td>{{statementData.openingBalance | currency}}</td>
                                             </tr>
                                             <tr *ngFor="let item of statementData.invoiceList; index as $index;">
                                                 <td scope="row">
@@ -404,11 +404,11 @@
                                                     <div *ngIf="item.status==3">Due {{item.dueDate | date}}</div>
                                                 </td>
                                                 <td>
-                                                  ₹ {{item.paidAmount}}
+                                                  {{item.paidAmount | currency}}
                                                </td>
                                               
                                                <td>
-                                                ₹ {{item.balanceAccAmount}}
+                                                 {{item.balanceAccAmount | currency}}
   
                                                </td>
                                             </tr>
@@ -417,8 +417,8 @@
                                                 <td></td>
                                                 <td>{{toDate | date}}</td>
                                                 <td> Closing Balance</td>
-                                                <td>₹ {{getClosingBalanceAmount()}}</td>
-                                                <td>₹ {{getClosingBalanceAmount()}}</td>
+                                                <td>{{getClosingBalanceAmount() | currency}}</td>
+                                                <td>{{getClosingBalanceAmount() | currency}}</td>
                                             </tr>
                                         </tbody>
                                         </table>
@@ -436,7 +436,7 @@
                                           <!-- <label class="col-md-8 kt-portlet__label">Closing balance on {{toDate | date}} (INR): </label>
                                           <label class="col-md-8 kt-portlet__label">{{getClosingBalanceAmount()}}</label> -->
                                           <label class="col-md-8 kt-portlet__label">Closing balance on {{toDate | date}} (INR): </label>
-                                          <p class="kt-portlet__data col-sm-3">₹ {{getClosingBalanceAmount()}}</p>
+                                          <p class="kt-portlet__data col-sm-3">{{getClosingBalanceAmount() | currency}}</p>
                                       </div>
                                   </div>
                                   </div>

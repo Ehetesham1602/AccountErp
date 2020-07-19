@@ -26,5 +26,6 @@ namespace AccountErp.Dtos.Invoice
 
         public IEnumerable<InvoiceServiceDto> Items { get; set; }
         public IEnumerable<InvoiceAttachmentDto> Attachments { get; set; }
+        public InvoiceServiceDto InvoiceServiceDto { get; set; }
     }
 }

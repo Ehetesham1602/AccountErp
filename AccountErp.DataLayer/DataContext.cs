@@ -14,6 +14,7 @@ namespace AccountErp.DataLayer
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Bill> Bills { get; set; }
         public DbSet<BillAttachment> BillAttachments { get; set; }
+        public DbSet<BillItem> BillItems { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceAttachment> InvoiceAttachments { get; set; }
         public DbSet<InvoiceService> InvoiceServices { get; set; }

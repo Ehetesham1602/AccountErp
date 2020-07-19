@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccountErp.Utilities;
+using System;
+using System.Reflection.Metadata;
 
 namespace AccountErp.Dtos.Bill
 {
@@ -18,5 +20,8 @@ namespace AccountErp.Dtos.Bill
         public string StrDueDate { get; set; }
         public string BillNumber { get; set; }
         public string Notes { get; set; }
+
+         public Constants.BillStatus status { get; set; }
+
     }
 }
