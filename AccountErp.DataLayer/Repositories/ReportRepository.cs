@@ -10,9 +10,11 @@ using AccountErp.Infrastructure.Repositories;
 using AccountErp.Models.Report;
 using AccountErp.Utilities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
@@ -178,6 +180,9 @@ namespace AccountErp.DataLayer.Repositories
                 billDetailDtoList = billDetailDtoList.Where(p => (p.BillDate >= model.StartDate && p.BillDate <= model.EndDate)).ToList();
                 salesTax.PurchaseSubjectToTax = billDetailDtoList.Sum(x => x.Bill.Price);
                 salesTax.TaxAmountOnPurchases = billDetailDtoList.Sum(x => x.Bill.TaxPrice);
+                //Expression exp = Expression.Subtract(Expression.Constant(salesTax.TaxAmountOnSales), Expression.Constant(salesTax.TaxAmountOnPurchases));
+                //salesTax.NetTaxOwing = exp.
+                salesTax.NetTaxOwing = salesTax.TaxAmountOnSales - salesTax.TaxAmountOnPurchases;
             }
             return salesTaxReportDtosList;
         }

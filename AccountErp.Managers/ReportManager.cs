@@ -66,6 +66,7 @@ namespace AccountErp.Managers
             salesTaxDetailsReportDtoObj.SalesTaxReportDtosList = salesTaxReportDtosList;
             salesTaxDetailsReportDtoObj.TotalTaxAmountOnSales = salesTaxReportDtosList.Sum(x => x.TaxAmountOnSales);
             salesTaxDetailsReportDtoObj.TotalTaxAmountOnPurchase = salesTaxReportDtosList.Sum(x => x.TaxAmountOnPurchases);
+            salesTaxDetailsReportDtoObj.TotalNetTaxOwing = salesTaxReportDtosList.Sum(x => x.NetTaxOwing);
             return salesTaxDetailsReportDtoObj;
         }
     }
