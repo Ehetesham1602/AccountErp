@@ -124,5 +124,12 @@ namespace AccountErp.Api.Controllers
 
             return Ok();
         }
+
+        [HttpPost]
+        [Route("getDetailByLedgerType")]
+        public async Task<IActionResult> GetSelectItems(int typeId)
+        {
+            return Ok(await _bankAccountManager.GetDetailByLedgerTypeAsync(typeId));
+        }
     }
 }

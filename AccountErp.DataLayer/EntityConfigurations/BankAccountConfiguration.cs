@@ -16,10 +16,10 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
             builder.Property(x => x.AccountNumber).HasMaxLength(50);
-            builder.Property(x => x.BankName).HasMaxLength(100);
-            builder.Property(x => x.AccountHolderName).HasMaxLength(250);
-            builder.Property(x => x.BranchName).HasMaxLength(250);
-            builder.Property(x => x.Ifsc).HasMaxLength(20);
+            builder.Property(x => x.BankName).IsRequired(false).HasMaxLength(100);
+            builder.Property(x => x.AccountHolderName).IsRequired(false).HasMaxLength(250);
+            builder.Property(x => x.BranchName).IsRequired(false).HasMaxLength(250);
+            builder.Property(x => x.Ifsc).IsRequired(false).HasMaxLength(20);
             builder.Property(x => x.Status).IsRequired();
             builder.Property(x => x.CreatedOn).IsRequired();
             builder.Property(x => x.CreatedBy).IsRequired().HasMaxLength(40);
@@ -28,6 +28,10 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.COA_AccountTypeId).IsRequired(false);
             builder.Property(x => x.AccountCode).IsRequired(false);
             builder.Property(x => x.Description).HasMaxLength(250).IsRequired(false);
+            builder.Property(x => x.LedgerType).IsRequired(false);
+            builder.Property(x => x.AccountName).IsRequired(false);
+            builder.Property(x => x.AccountId).IsRequired(false);
+
         }
     }
 }

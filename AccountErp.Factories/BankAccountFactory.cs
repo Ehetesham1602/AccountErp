@@ -20,7 +20,10 @@ namespace AccountErp.Factories
                 CreatedOn = Utility.GetDateTime(),
                 AccountCode = model.AccountCode,
                 COA_AccountTypeId = model.COA_AccountTypeId,
-                Description = model.Description
+                Description = model.Description,
+                LedgerType = model.LedgerType,
+                AccountName = model.AccountName,
+                AccountId = model.AccountId
             };
             return bankAccount;
         }
@@ -36,6 +39,9 @@ namespace AccountErp.Factories
             entity.AccountCode = model.AccountCode;
             entity.Description = model.Description;
             entity.COA_AccountTypeId = model.COA_AccountTypeId;
+            entity.LedgerType = model.LedgerType;
+            entity.AccountId = model.AccountId;
+            model.AccountName = model.AccountName;
         }
     }
 }
