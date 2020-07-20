@@ -43,7 +43,10 @@ namespace AccountErp.DataLayer.Repositories
                               AccountNumber = ba.AccountNumber,
                               BankName = ba.BankName,
                               BranchName = ba.BranchName,
-                              Ifsc = ba.Ifsc
+                              Ifsc = ba.Ifsc,
+                              AccountCode = ba.AccountCode,
+                              Description = ba.Description,
+                              COA_AccountTypeId = ba.COA_AccountTypeId
                           })
                          .AsNoTracking()
                          .SingleOrDefaultAsync();
@@ -60,7 +63,10 @@ namespace AccountErp.DataLayer.Repositories
                               AccountNumber = ba.AccountNumber,
                               BankName = ba.BankName,
                               BranchName = ba.BranchName,
-                              Ifsc = ba.Ifsc
+                              Ifsc = ba.Ifsc,
+                              AccountCode = ba.AccountCode,
+                              Description = ba.Description,
+                              COA_AccountTypeId = ba.COA_AccountTypeId
                           })
                          .AsNoTracking()
                          .SingleOrDefaultAsync();

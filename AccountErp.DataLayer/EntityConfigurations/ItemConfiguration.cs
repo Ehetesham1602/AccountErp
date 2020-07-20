@@ -14,7 +14,6 @@ namespace AccountErp.DataLayer.EntityConfigurations
 
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.Property(x => x.ItemTypeId).IsRequired();
             builder.Property(x => x.Name).IsRequired().HasMaxLength(250);
             builder.Property(x => x.Rate).IsRequired().HasColumnType("NUMERIC(12,2)");
             builder.Property(x => x.Description).IsRequired(false).HasMaxLength(1000);
@@ -25,8 +24,8 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.CreatedBy).IsRequired().HasMaxLength(40);
             builder.Property(x => x.UpdatedOn).IsRequired(false);
             builder.Property(x => x.UpdatedBy).HasMaxLength(40);
-
-            builder.HasOne(x => x.ItemType).WithMany().HasForeignKey(x => x.ItemTypeId);
+            builder.Property(x => x.BankAccountId).IsRequired(false);
+            builder.Property(x => x.ItemFor).IsRequired(false);
         }
     }
 }

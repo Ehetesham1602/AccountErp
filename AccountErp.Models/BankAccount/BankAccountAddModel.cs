@@ -18,5 +18,9 @@ namespace AccountErp.Models.BankAccount
         public string BranchName { get; set; }
         [Required]
         public string Ifsc { get; set; }
+        [Required]
+        public int COA_AccountTypeId { get; set; }
+        public string AccountCode { get; set; }
+        public string Description { get; set; }
     }
 }

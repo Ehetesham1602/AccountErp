@@ -76,12 +76,13 @@ namespace AccountErp.DataLayer.Repositories
                                   Id = x.Id,
                                   AccountTypeName = x.AccountTypeName,
                                   COA_AccountMasterId = x.COA_AccountMasterId,
-                                  Account = x.Account.Select(y => new AccountDeatilDto
+                                  Account = x.BanKAccount.Select(y => new AccountDeatilDto
                                   {
                                       Id = y.Id,
-                                      AccountName = y.AccountName,
+                                      AccountName = y.AccountHolderName,
                                       AccountCode = y.AccountCode,
                                       Description = y.Description,
+                                      AccountNumber = y.AccountNumber,
                                       COA_AccountTypeId = y.COA_AccountTypeId
                                   })
                               }),

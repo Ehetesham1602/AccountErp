@@ -25,6 +25,9 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.CreatedBy).IsRequired().HasMaxLength(40);
             builder.Property(x => x.UpdatedOn).IsRequired(false);
             builder.Property(x => x.UpdatedBy).HasMaxLength(40);
+            builder.Property(x => x.COA_AccountTypeId).IsRequired(false);
+            builder.Property(x => x.AccountCode).IsRequired(false);
+            builder.Property(x => x.Description).HasMaxLength(250).IsRequired(false);
         }
     }
 }

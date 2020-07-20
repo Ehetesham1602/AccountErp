@@ -16,8 +16,11 @@ namespace AccountErp.Factories
                 BranchName = model.BranchName,
                 Ifsc = model.Ifsc,
                 Status = Constants.RecordStatus.Active,
-                CreatedBy = userId,
-                CreatedOn = Utility.GetDateTime()
+                CreatedBy = userId ?? "0",
+                CreatedOn = Utility.GetDateTime(),
+                AccountCode = model.AccountCode,
+                COA_AccountTypeId = model.COA_AccountTypeId,
+                Description = model.Description
             };
             return bankAccount;
         }
@@ -28,8 +31,11 @@ namespace AccountErp.Factories
             entity.BankName = model.BankName;
             entity.BranchName = model.BranchName;
             entity.Ifsc = model.Ifsc;
-            entity.UpdatedBy = userId;
+            entity.UpdatedBy = userId ?? "0";
             entity.UpdatedOn = Utility.GetDateTime();
+            entity.AccountCode = model.AccountCode;
+            entity.Description = model.Description;
+            entity.COA_AccountTypeId = model.COA_AccountTypeId;
         }
     }
 }

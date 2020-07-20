@@ -7,6 +7,7 @@ namespace AccountErp.Entities
     {
         public int Id { get; set; }
         public string AccountNumber { get; set; }
+        public int? COA_AccountTypeId { get; set; }
         public string AccountHolderName { get; set; }
         public string BankName { get; set; }
         public string BranchName { get; set; }
@@ -16,5 +17,7 @@ namespace AccountErp.Entities
         public string CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string UpdatedBy { get; set; }
+        public string AccountCode { get; set; }
+        public string Description { get; set; }
     }
 }

@@ -6,7 +6,6 @@ namespace AccountErp.Entities
     public class Item
     {
         public int Id { get; set; }
-        public int ItemTypeId { get; set; }
         public string Name { get; set; }
         public decimal Rate { get; set; }
         public string Description { get; set; }
@@ -18,8 +17,9 @@ namespace AccountErp.Entities
         public DateTime? UpdatedOn { get; set; }
         public string UpdatedBy { get; set; }
 
-        public SalesTax SalesTax { get; set; }
+        public bool? ItemFor { get; set; }
+        public int? BankAccountId { get; set; }
 
-        public ItemType ItemType { get; set; }
+        public SalesTax SalesTax { get; set; }
     }
 }
