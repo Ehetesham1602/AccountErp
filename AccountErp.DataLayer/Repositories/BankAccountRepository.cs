@@ -32,6 +32,28 @@ namespace AccountErp.DataLayer.Repositories
         {
             return await _dataContext.BankAccounts.FindAsync(id);
         }
+        public async Task<IEnumerable<BankAccountDetailDto>> GetDetailByLedgerTypeAsync(int typeId)
+        {
+            return await (from ba in _dataContext.BankAccounts
+                          where ba.LedgerType == typeId
+                          select new BankAccountDetailDto
+                          {
+                              Id = ba.Id,
+                              AccountHolderName = ba.AccountHolderName,
+                              AccountNumber = ba.AccountNumber,
+                              BankName = ba.BankName,
+                              BranchName = ba.BranchName,
+                              Ifsc = ba.Ifsc,
+                              AccountCode = ba.AccountCode,
+                              Description = ba.Description,
+                              COA_AccountTypeId = ba.COA_AccountTypeId,
+                              LedgerType = ba.LedgerType,
+                              AccountName = ba.AccountName,
+                              AccountId = ba.AccountId
+                          })
+                         .AsNoTracking()
+                         .ToListAsync();
+        }
         public async Task<BankAccountDetailDto> GetDetailAsync(int id)
         {
             return await (from ba in _dataContext.BankAccounts
@@ -43,7 +65,13 @@ namespace AccountErp.DataLayer.Repositories
                               AccountNumber = ba.AccountNumber,
                               BankName = ba.BankName,
                               BranchName = ba.BranchName,
-                              Ifsc = ba.Ifsc
+                              Ifsc = ba.Ifsc,
+                              AccountCode = ba.AccountCode,
+                              Description = ba.Description,
+                              COA_AccountTypeId = ba.COA_AccountTypeId,
+                              LedgerType = ba.LedgerType,
+                              AccountName = ba.AccountName,
+                              AccountId = ba.AccountId
                           })
                          .AsNoTracking()
                          .SingleOrDefaultAsync();
@@ -60,7 +88,13 @@ namespace AccountErp.DataLayer.Repositories
                               AccountNumber = ba.AccountNumber,
                               BankName = ba.BankName,
                               BranchName = ba.BranchName,
-                              Ifsc = ba.Ifsc
+                              Ifsc = ba.Ifsc,
+                              AccountCode = ba.AccountCode,
+                              Description = ba.Description,
+                              COA_AccountTypeId = ba.COA_AccountTypeId,
+                              LedgerType = ba.LedgerType,
+                              AccountName = ba.AccountName,
+                              AccountId = ba.AccountId
                           })
                          .AsNoTracking()
                          .SingleOrDefaultAsync();
@@ -87,7 +121,12 @@ namespace AccountErp.DataLayer.Repositories
                                 BankName = ba.BankName,
                                 BranchName = ba.BranchName,
                                 Ifsc = ba.Ifsc,
-                                Status = ba.Status
+                                Status = ba.Status,
+                                LedgerType = ba.LedgerType,
+                                AccountName = ba.AccountName,
+                                AccountId = ba.AccountId,
+                                AccountCode = ba.AccountCode,
+                                COA_AccountTypeId = ba.COA_AccountTypeId
                             })
                             .AsNoTracking();
 

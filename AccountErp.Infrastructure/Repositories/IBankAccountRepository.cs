@@ -25,6 +25,7 @@ namespace AccountErp.Infrastructure
 
         Task ToggleStatusAsync(int id);
         Task DeleteAsync(int id);
+        Task<IEnumerable<BankAccountDetailDto>> GetDetailByLedgerTypeAsync(int typeId);
 
     }
 }

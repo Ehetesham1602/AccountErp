@@ -8,8 +8,6 @@ namespace AccountErp.Models.Item
     public class ItemAddModel
     {
         [Required]
-        public int ItemTypeId { get; set; }
-        [Required]
         public string Name { get; set; }
         [Required]
         public decimal Rate { get; set; }
@@ -17,5 +15,7 @@ namespace AccountErp.Models.Item
         [Required]
         public string IsTaxable { get; set; }
         public int? SalesTaxId { get; set; }
+        public bool? ItemFor { get; set; }
+        public int? BankAccountId { get; set; }
     }
 }

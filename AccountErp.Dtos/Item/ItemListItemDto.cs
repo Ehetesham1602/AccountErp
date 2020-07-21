@@ -14,7 +14,8 @@ namespace AccountErp.Dtos.Item
 
         public string TaxCode { get; set; }
         public decimal? TaxPercentage { get; set; }
-
+        public bool? ItemFor { get; set; }
+        public int? BankAccountId { get; set; }
         public Constants.RecordStatus Status { get; set; }
     }
 }

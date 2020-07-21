@@ -122,8 +122,14 @@ namespace AccountErp.DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AccountCode");
+
                     b.Property<string>("AccountHolderName")
                         .HasMaxLength(250);
+
+                    b.Property<string>("AccountId");
+
+                    b.Property<string>("AccountName");
 
                     b.Property<string>("AccountNumber")
                         .HasMaxLength(50);
@@ -134,14 +140,21 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<string>("BranchName")
                         .HasMaxLength(250);
 
+                    b.Property<int?>("COA_AccountTypeId");
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(40);
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(250);
+
                     b.Property<string>("Ifsc")
                         .HasMaxLength(20);
+
+                    b.Property<int?>("LedgerType");
 
                     b.Property<int>("Status");
 
@@ -151,6 +164,8 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<DateTime?>("UpdatedOn");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("COA_AccountTypeId");
 
                     b.ToTable("BankAccounts");
                 });
@@ -325,6 +340,55 @@ namespace AccountErp.DataLayer.Migrations
                     b.HasIndex("BillId");
 
                     b.ToTable("BillPayments");
+                });
+
+            modelBuilder.Entity("AccountErp.Entities.COA_Account", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AccountCode");
+
+                    b.Property<string>("AccountName");
+
+                    b.Property<int>("COA_AccountTypeId");
+
+                    b.Property<string>("Description");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("COA_Account");
+                });
+
+            modelBuilder.Entity("AccountErp.Entities.COA_AccountMaster", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AccountMasterName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("COA_AccountMaster");
+                });
+
+            modelBuilder.Entity("AccountErp.Entities.COA_AccountType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AccountTypeName");
+
+                    b.Property<int>("COA_AccountMasterId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("COA_AccountMasterId");
+
+                    b.ToTable("COA_AccountType");
                 });
 
             modelBuilder.Entity("AccountErp.Entities.Contact", b =>
@@ -659,6 +723,8 @@ namespace AccountErp.DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("BankAccountId");
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(40);
@@ -670,7 +736,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<bool>("IsTaxable");
 
-                    b.Property<int>("ItemTypeId");
+                    b.Property<bool?>("ItemFor");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -689,8 +755,6 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<DateTime?>("UpdatedOn");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ItemTypeId");
 
                     b.HasIndex("SalesTaxId");
 
@@ -1213,6 +1277,13 @@ namespace AccountErp.DataLayer.Migrations
                         .HasForeignKey("CountryId1");
                 });
 
+            modelBuilder.Entity("AccountErp.Entities.BankAccount", b =>
+                {
+                    b.HasOne("AccountErp.Entities.COA_AccountType")
+                        .WithMany("BanKAccount")
+                        .HasForeignKey("COA_AccountTypeId");
+                });
+
             modelBuilder.Entity("AccountErp.Entities.Bill", b =>
                 {
                     b.HasOne("AccountErp.Entities.Vendor", "Vendor")
@@ -1251,6 +1322,14 @@ namespace AccountErp.DataLayer.Migrations
                     b.HasOne("AccountErp.Entities.Bill", "Bill")
                         .WithMany()
                         .HasForeignKey("BillId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AccountErp.Entities.COA_AccountType", b =>
+                {
+                    b.HasOne("AccountErp.Entities.COA_AccountMaster")
+                        .WithMany("AccountTypes")
+                        .HasForeignKey("COA_AccountMasterId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -1324,11 +1403,6 @@ namespace AccountErp.DataLayer.Migrations
 
             modelBuilder.Entity("AccountErp.Entities.Item", b =>
                 {
-                    b.HasOne("AccountErp.Entities.ItemType", "ItemType")
-                        .WithMany()
-                        .HasForeignKey("ItemTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("AccountErp.Entities.SalesTax", "SalesTax")
                         .WithMany()
                         .HasForeignKey("SalesTaxId");

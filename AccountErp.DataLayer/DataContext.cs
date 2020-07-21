@@ -35,6 +35,9 @@ namespace AccountErp.DataLayer
         public DbSet<RecurringInvoice> RecurringInvoice { get; set; }
         public DbSet<RecurringInvoiceAttachment> RecurringInvoiceAttachment { get; set; }
         public DbSet<RecurringInvoiceService> RecurringInvoiceService { get; set; }
+        public DbSet<COA_Account> COA_Account { get; set; }
+        public DbSet<COA_AccountType> COA_AccountType { get; set; }
+        public DbSet<COA_AccountMaster> COA_AccountMaster { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

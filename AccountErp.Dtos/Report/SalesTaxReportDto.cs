@@ -11,7 +11,7 @@ namespace AccountErp.Dtos.Report
         public Decimal? SalesSubjectToTax { get; set; }
         public Decimal? TaxAmountOnSales { get; set; }
         public Decimal PurchaseSubjectToTax { get; set; }
-        public Decimal TaxAmountOnPurchases { get; set; }
-        public Decimal NetTaxOwing { get; set; }
+        public Decimal? TaxAmountOnPurchases { get; set; }
+        public Decimal? NetTaxOwing { get; set; }
     }
 }

@@ -39,6 +39,12 @@ namespace AccountErp.Managers
             _bankAccountRepository.Edit(bankAccount);
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<BankAccountDetailDto>> GetDetailByLedgerTypeAsync(int typeId)
+        {
+            return await _bankAccountRepository.GetDetailByLedgerTypeAsync(typeId);
+        }
+
         public async Task<BankAccountDetailDto> GetDetailAsync(int id)
         {
             return await _bankAccountRepository.GetDetailAsync(id);
