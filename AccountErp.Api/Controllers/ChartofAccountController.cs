@@ -109,8 +109,8 @@ namespace AccountErp.Api.Controllers
 
             return Ok(accountList);
         }
-        [HttpGet]
-        [Route("getDetailsByMasterId")]
+        [HttpPost]
+        [Route("getDetailsByMasterId/{id}")]
         public async Task<IActionResult> getDetailsByMasterId(int id)
         {
 
