@@ -14,7 +14,7 @@
 
         public enum InvoiceStatus { Pending, Paid, Deleted ,Overdue}
 
-        public enum BillStatus { Pending, Paid, Deleted }
+        public enum BillStatus { Pending, Paid, Deleted, Overdue }
 
         public struct UserType
         {

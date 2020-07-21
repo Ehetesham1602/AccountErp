@@ -233,6 +233,34 @@ namespace AccountErp.DataLayer.Repositories
             return await linqstmt.OrderByDescending(x => x.CreatedOn).Take(5).ToListAsync();
         }
 
+        public async Task<List<InvoiceListItemDto>> GetAllUnpaidInvoiceAsync()
+        {
+            var linqstmt = await (from i in _dataContext.Invoices
+                            join c in _dataContext.Customers
+                            on i.CustomerId equals c.Id
+                            where i.Status != Constants.InvoiceStatus.Deleted && i.Status != Constants.InvoiceStatus.Paid
+                            select new InvoiceListItemDto
+                            {
+                                Id = i.Id,
+                                CustomerId = i.CustomerId,
+                                CustomerName = (c.FirstName ?? "") + " " + (c.MiddleName ?? "") + " " + (c.LastName ?? ""),
+                                Description = i.Remark,
+                                Tax = i.Tax ?? 0,
+                                Amount = i.TotalAmount,
+                                CreatedOn = i.CreatedOn,
+                                InvoiceDate = i.InvoiceDate,
+                                StrInvoiceDate = i.StrInvoiceDate,
+                                DueDate = i.DueDate,
+                                StrDueDate = i.StrDueDate,
+                                PoSoNumber = i.PoSoNumber,
+                                InvoiceNumber = i.InvoiceNumber
+                            })
+                            .AsNoTracking()
+                            .ToListAsync();
+
+                         return linqstmt;
+        }
+
         public async Task<InvoiceSummaryDto> GetSummaryAsunc(int id)
         {
             return await (from i in _dataContext.Invoices

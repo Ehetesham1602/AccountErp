@@ -39,5 +39,22 @@ namespace AccountErp.DataLayer.Repositories
 
 
         }
+
+        public async Task SetOverdueStatusBill()
+        {
+            DateTime startDateTime = DateTime.Today;
+            var linqstmt = await (from b in _dataContext.Bills
+                                  where b.Status == Constants.BillStatus.Pending && b.DueDate <= startDateTime
+                                  select b
+                            ).AsNoTracking()
+                            .ToListAsync();
+
+            foreach (var item in linqstmt)
+            {
+                item.Status = Constants.BillStatus.Overdue;
+                _dataContext.Bills.Update(item);
+            }
+          
+        }
     }
 }

@@ -182,5 +182,11 @@ namespace AccountErp.Api.Controllers
         {
             return Ok(await _manager.GetBillNumber());
         }
+        [HttpGet]
+        [Route("get-AllUnpaidBills")]
+        public async Task<IActionResult> GetAllUnpaidBills()
+        {
+            return Ok(await _manager.GetAllUnpaidAsync());
+        }
     }
 }

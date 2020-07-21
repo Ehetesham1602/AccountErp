@@ -25,6 +25,7 @@ namespace AccountErp.Managers
         public async Task SetOverdueStatus()
         {
             await _recurringJobRepository.SetOverdueStatus();
+            await _recurringJobRepository.SetOverdueStatusBill();
             await _unitOfWork.SaveChangesAsync();
         }
 

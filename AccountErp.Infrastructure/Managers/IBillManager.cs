@@ -27,5 +27,6 @@ namespace AccountErp.Infrastructure.Managers
 
         Task DeleteAsync(int id);
         Task<int> GetBillNumber();
+        Task<List<BillListItemDto>> GetAllUnpaidAsync();
     }
 }

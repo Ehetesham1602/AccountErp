@@ -201,5 +201,13 @@ namespace AccountErp.Api.Controllers
         {
             return Ok(await _invoiceManager.GetInvoiceNumber());
         }
+
+        [HttpGet]
+        [Route("get-AllUnPaid")]
+        public async Task<IActionResult> GetAllUnpaid()
+        {
+            var pagedResult = await _invoiceManager.GetAllUnpaidInvoiceAsync();
+            return Ok(pagedResult);
+        }
     }
 }

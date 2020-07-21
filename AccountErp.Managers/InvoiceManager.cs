@@ -114,6 +114,11 @@ namespace AccountErp.Managers
             return await _invoiceRepository.GetRecentAsync();
         }
 
+        public async Task<List<InvoiceListItemDto>> GetAllUnpaidInvoiceAsync()
+        {
+            return await _invoiceRepository.GetAllUnpaidInvoiceAsync();
+        }
+
         public async Task<InvoiceSummaryDto> GetSummaryAsunc(int id)
         {
             return await _invoiceRepository.GetSummaryAsunc(id);

@@ -133,5 +133,10 @@ namespace AccountErp.Managers
             var count = await _repository.getCount();
             return (count + 1);
         }
+        public async Task<List<BillListItemDto>> GetAllUnpaidAsync()
+        {
+            return await _repository.GetAllUnpaidAsync();
+        }
+
     }
 }

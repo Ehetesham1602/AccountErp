@@ -286,5 +286,33 @@ namespace AccountErp.DataLayer.Repositories
             int count = await _dataContext.Bills.CountAsync();
             return count;
         }
+
+        public async Task<List<BillListItemDto>> GetAllUnpaidAsync()
+        {
+            var linqstmt = await  (from e in _dataContext.Bills
+                            join v in _dataContext.Vendors
+                            on e.VendorId equals v.Id
+                            where e.Status == Constants.BillStatus.Pending && e.Status == Constants.BillStatus.Overdue
+                            select new BillListItemDto
+                            {
+                                Id = e.Id,
+                                VendorId = e.VendorId,
+                                VendorName = v.Name,
+                                Tax = e.Tax ?? 0,
+                                TotalAmount = e.TotalAmount,
+                                Status = e.Status,
+                                BillDate = e.BillDate,
+                                DueDate = e.DueDate.Value,
+                                StrBillDate = e.StrBillDate,
+                                StrDueDate = e.StrDueDate,
+                                Notes = e.Notes,
+                                BillNumber = e.BillNumber,
+                                PoSoNumber = e.PoSoNumber
+                            })
+                            .AsNoTracking()
+                            .ToListAsync();
+
+            return linqstmt;
+        }
     }
 }
