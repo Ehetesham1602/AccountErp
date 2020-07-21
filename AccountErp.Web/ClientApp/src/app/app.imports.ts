@@ -11,6 +11,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { appRouting } from './app.routing';
 import { FullCalendarModule } from 'ng-fullcalendar';
 import { SelectDropDownModule } from 'ngx-select-dropdown';
+import { ChartsModule } from 'ng2-charts';
 
 export const appImports = [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -27,6 +28,7 @@ export const appImports = [
     appRouting,
     FullCalendarModule,
     SelectDropDownModule,
+    ChartsModule,
   
     
 ];

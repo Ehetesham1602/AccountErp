@@ -18,6 +18,9 @@ export class ItemEditComponent implements OnInit {
     itemType: Array<SelectListItemModel> = new Array<SelectListItemModel>();
     salesTaxes: Array<SelectListItemModel> = new Array<SelectListItemModel>();
 
+    incomeAccount;
+    expenseAccount;
+
     constructor(private router: Router,
         private route: ActivatedRoute,
         private toastr: ToastrService,
@@ -33,6 +36,8 @@ export class ItemEditComponent implements OnInit {
     ngOnInit() {
         this.loadItemType();
         this.loadSalesTax();
+        this.loadIncomeAccounts();
+        this.loadExpenseAccounts();
         this.loadItem();
     }
 
@@ -75,7 +80,33 @@ export class ItemEditComponent implements OnInit {
             });
     }
 
+    loadIncomeAccounts(){
+        // this.blockUI.start();
+        // this.masterDataService.getIncomeAccounts()
+        //     .subscribe((data) => {
+        //         this.blockUI.stop();
+        //         Object.assign(this.incomeAccount, data);
+        //     },
+        //         error => {
+        //             this.blockUI.stop();
+        //             this.appUtils.ProcessErrorResponse(this.toastr, error);
+        //         });
+    }
+
+    loadExpenseAccounts(){
+        // this.blockUI.start();
+        // this.masterDataService.getExpenseAccounts()
+        //     .subscribe((data) => {
+        //         this.blockUI.stop();
+        //         Object.assign(this.expenseAccount, data);
+        //     },
+        //         error => {
+        //             this.blockUI.stop();
+        //             this.appUtils.ProcessErrorResponse(this.toastr, error);
+        //         });
+    }
     submit() {
+        debugger;
         this.blockUI.start();
         this.itemService.edit(this.model).subscribe(
             () => {

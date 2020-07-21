@@ -48,6 +48,19 @@ import { ManageRecurringInvoiceComponent } from 'src/components/recurring-invoic
 import { RecurringInvoiceDetailsComponent } from 'src/components/recurring-invoice/detail/recurring-invoice.details/recurring-invoice.details.component';
 import { ChartOfAccountsComponent } from 'src/components/chart-of-account/chart-of-accounts/chart-of-accounts.component';
 import { ProfitAndLossComponent } from 'src/components/reports/profit-and-loss/profit-and-loss.component';
+import { TransactionComponent } from 'src/components/transaction/transaction/transaction.component';
+import { AddCustomerPaymentComponent } from 'src/components/customer/add-customer-payment/add-customer-payment.component';
+import { PurchasesByVendorComponent } from 'src/components/reports/purchases-by-vendor/purchases-by-vendor.component';
+import { IncomeByCustomerComponent } from 'src/components/reports/income-by-customer/income-by-customer.component';
+import { SalesTaxReportComponent } from 'src/components/reports/sales-tax-report/sales-tax-report.component';
+import { AccountBalancesComponent } from 'src/components/reports/account-balances/account-balances.component';
+import { TrialBalanceComponent } from 'src/components/reports/trial-balance/trial-balance.component';
+import { AccountTransactionsComponent } from 'src/components/reports/account-transactions/account-transactions.component';
+import { AgedPayablesComponent } from 'src/components/reports/aged-payables/aged-payables.component';
+import { AgedReceivablesComponent } from 'src/components/reports/aged-receivables/aged-receivables.component';
+import { CashFlowComponent } from 'src/components/reports/cash-flow/cash-flow.component';
+import { BalanceSheetComponent } from 'src/components/reports/balance-sheet/balance-sheet.component';
+import { AddVendorPaymentComponent } from 'src/components/vendor/add-vendor-payment/add-vendor-payment.component';
 
 
 const appRoutes: Routes = [
@@ -100,6 +113,9 @@ const appRoutes: Routes = [
     { path: 'sales-tax/manage', component: SalesTaxManageComponent },
     { path: 'invoice/payment/:id', component: InvoicePaymentAddComponent },
     { path: 'invoice/payments', component: InvoicePaymentManageComponent },
+    { path: 'customer/add-customer-payment', component: AddCustomerPaymentComponent },
+    { path: 'customer/add-customer-payment/:id', component: AddCustomerPaymentComponent },
+    
     { path: 'Quotation/add/quotation.add', component: QuotationAddComponent },
     { path: 'Quotation/detail/:id', component: QuotationDetailComponent },
     { path: 'Customer/addPopup/add-customer.popup', component: AddCustomerPopupComponent },
@@ -111,9 +127,22 @@ const appRoutes: Routes = [
     { path: 'recurring-invoice/manage', component: ManageRecurringInvoiceComponent },
     { path: 'recurring-invoice/detail/:id', component: RecurringInvoiceDetailsComponent },
     { path: 'chart-of-account/chart-of-account', component: ChartOfAccountsComponent },
+    { path: 'transaction/transaction', component: TransactionComponent },
+    { path: 'vendor/add-vendor-payment', component: AddVendorPaymentComponent },
 
+    
+    
     { path: 'reports/profit-and-loss', component: ProfitAndLossComponent },
-
+    { path: 'reports/purchases-by-vendors', component: PurchasesByVendorComponent },
+    { path: 'reports/income-by-customer', component: IncomeByCustomerComponent },
+    { path: 'reports/sales-tax', component: SalesTaxReportComponent },
+    { path: 'reports/account-balances', component: AccountBalancesComponent },
+    { path: 'reports/trial-balances', component: TrialBalanceComponent },
+    { path: 'reports/account-transactions', component: AccountTransactionsComponent },
+    { path: 'reports/aged-payables', component: AgedPayablesComponent },
+    { path: 'reports/aged-receivables', component: AgedReceivablesComponent },
+    { path: 'reports/cash-flow', component: CashFlowComponent },
+    { path: 'reports/balance-sheet', component: BalanceSheetComponent },
    
    
     // otherwise redirect to home

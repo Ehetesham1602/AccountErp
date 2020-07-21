@@ -7,6 +7,7 @@ export class InvoicePaymentModel {
     public depositFrom: string;
     public chequeNumber:string;
     public description:string;
+    public customerId:string;
 
     constructor() {
         this.paymentMode = '';

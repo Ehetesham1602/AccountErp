@@ -79,6 +79,9 @@ import { PurchasesByVendorComponent } from 'src/components/reports/purchases-by-
 import { SalesTaxReportComponent } from 'src/components/reports/sales-tax-report/sales-tax-report.component';
 import { TrialBalanceComponent } from 'src/components/reports/trial-balance/trial-balance.component';
 import { AddNewAccountComponent } from 'src/components/chart-of-account/add-new-account/add-new-account.component';
+import { TransactionComponent } from 'src/components/transaction/transaction/transaction.component';
+import { AddCustomerPaymentComponent } from 'src/components/customer/add-customer-payment/add-customer-payment.component';
+import { AddVendorPaymentComponent } from 'src/components/vendor/add-vendor-payment/add-vendor-payment.component';
 
 export const appDeclarations = [
     DefaultIfEmpty,
@@ -205,6 +208,9 @@ export const appDeclarations = [
     PurchasesByVendorComponent,
     SalesTaxReportComponent,
     TrialBalanceComponent,
-    AddNewAccountComponent
+    AddNewAccountComponent,
+    TransactionComponent,
+    AddCustomerPaymentComponent,
+    AddVendorPaymentComponent
 
 ];

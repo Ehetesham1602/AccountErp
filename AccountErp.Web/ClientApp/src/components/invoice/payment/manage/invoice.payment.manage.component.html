@@ -2,7 +2,7 @@
     <div class="kt-subheader kt-grid__item" id="kt_subheader">
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">
-                Invoice Payments </h3>
+                Customer Payments </h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
             <div class="kt-subheader__breadcrumbs">
                 <a [routerLink]="['/']" class="kt-subheader__breadcrumbs-home">
@@ -21,6 +21,12 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="kt-portlet">
+                    <div class="kt-portlet__head">
+                        <div class="col-md-12 text-right m-t-10">
+                            <a [routerLink]="['/customer/add-customer-payment']" class="btn btn-success"> <i class="la la-plus"></i> New
+                                Payment</a>
+                        </div>
+                    </div>
                     <div class="kt-portlet__body">
                         <div class="row">
                             <div class="col-md-12">

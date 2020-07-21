@@ -19,6 +19,10 @@ export class ItemAddComponent implements OnInit {
     itemType: Array<SelectListItemModel> = new Array<SelectListItemModel>();
     salesTaxes: Array<SelectListItemModel> = new Array<SelectListItemModel>();
 
+    incomeAccount;
+    expenseAccount;
+
+
     constructor(private router: Router,
         private toastr: ToastrService,
         private appUtils: AppUtils,
@@ -59,7 +63,34 @@ export class ItemAddComponent implements OnInit {
                 });
     }
 
+    loadIncomeAccounts(){
+        // this.blockUI.start();
+        // this.masterDataService.getIncomeAccounts()
+        //     .subscribe((data) => {
+        //         this.blockUI.stop();
+        //         Object.assign(this.incomeAccount, data);
+        //     },
+        //         error => {
+        //             this.blockUI.stop();
+        //             this.appUtils.ProcessErrorResponse(this.toastr, error);
+        //         });
+    }
+
+    loadExpenseAccounts(){
+        // this.blockUI.start();
+        // this.masterDataService.getExpenseAccounts()
+        //     .subscribe((data) => {
+        //         this.blockUI.stop();
+        //         Object.assign(this.expenseAccount, data);
+        //     },
+        //         error => {
+        //             this.blockUI.stop();
+        //             this.appUtils.ProcessErrorResponse(this.toastr, error);
+        //         });
+    }
+
     submit() {
+        debugger;
         this.blockUI.start();
         this.itemService.add(this.model).subscribe(
             () => {
