@@ -7,16 +7,23 @@ namespace AccountErp.Models.BankAccount
 {
     public class BankAccountAddModel
     {
-        [Required]
+       
         public string AccountNumber { get; set; }
         
-        [Required]
+     
         public string AccountHolderName { get; set; }
-        [Required]
+     
         public string BankName { get; set; }
-        [Required]
+    
         public string BranchName { get; set; }
-        [Required]
+      
         public string Ifsc { get; set; }
+       
+        public int COA_AccountTypeId { get; set; }
+        public string AccountCode { get; set; }
+        public string Description { get; set; }
+        public int? LedgerType { get; set; }
+        public string AccountName { get; set; }
+        public string AccountId { get; set; }
     }
 }

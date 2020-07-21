@@ -11,7 +11,7 @@ namespace AccountErp.Api.Controllers
 {
     [Route("api/[controller]")]
     [Produces("application/json")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class BankAccountController : ControllerBase
     {
@@ -123,6 +123,13 @@ namespace AccountErp.Api.Controllers
             await _bankAccountManager.DeleteAsync(id);
 
             return Ok();
+        }
+
+        [HttpPost]
+        [Route("getDetailByLedgerType")]
+        public async Task<IActionResult> GetSelectItems(int typeId)
+        {
+            return Ok(await _bankAccountManager.GetDetailByLedgerTypeAsync(typeId));
         }
     }
 }

@@ -9,6 +9,6 @@ namespace AccountErp.Entities
         public int Id { get; set; }
         public int COA_AccountMasterId { get; set; }
         public String AccountTypeName { get; set; }
-        public ICollection<COA_Account> Account { get; set; }
+        public ICollection<BankAccount> BanKAccount { get; set; }
     }
 }

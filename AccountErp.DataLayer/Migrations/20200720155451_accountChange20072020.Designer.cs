@@ -4,14 +4,16 @@ using AccountErp.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200720155451_accountChange20072020")]
+    partial class accountChange20072020
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,10 +129,6 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<string>("AccountHolderName")
                         .HasMaxLength(250);
 
-                    b.Property<string>("AccountId");
-
-                    b.Property<string>("AccountName");
-
                     b.Property<string>("AccountNumber")
                         .HasMaxLength(50);
 
@@ -153,8 +151,6 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<string>("Ifsc")
                         .HasMaxLength(20);
-
-                    b.Property<int?>("LedgerType");
 
                     b.Property<int>("Status");
 

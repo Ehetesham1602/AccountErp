@@ -10,28 +10,30 @@ namespace AccountErp.Factories
         {
             var item = new Item
             {
-                ItemTypeId = model.ItemTypeId,
                 Name = model.Name,
                 Rate = model.Rate,
                 Description = model.Description,
                 IsTaxable = model.IsTaxable?.Equals("1") ?? false,
                 SalesTaxId = model.SalesTaxId,
                 Status = Constants.RecordStatus.Active,
-                CreatedBy = userId,
-                CreatedOn = Utility.GetDateTime()
+                CreatedBy = userId ?? "0",
+                CreatedOn = Utility.GetDateTime(),
+                ItemFor = model.ItemFor,
+                BankAccountId = model.BankAccountId
             };
             return item;
         }
         public static void Create(ItemEditModel model, Item entity, string userId)
         {
-            entity.ItemTypeId = model.ItemTypeId;
             entity.Name = model.Name;
             entity.Rate = model.Rate;
             entity.Description = model.Description;
             entity.IsTaxable = model.IsTaxable?.Equals("1") ?? false;
             entity.SalesTaxId = entity.IsTaxable ? model.SalesTaxId : null;
-            entity.UpdatedBy = userId;
+            entity.UpdatedBy = userId ?? "0";
             entity.UpdatedOn = Utility.GetDateTime();
+            entity.ItemFor = model.ItemFor;
+            entity.BankAccountId = model.BankAccountId;
         }
     }
 }

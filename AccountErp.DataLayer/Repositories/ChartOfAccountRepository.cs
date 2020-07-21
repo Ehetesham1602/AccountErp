@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using AccountErp.Infrastructure.Repositories;
+using AccountErp.Dtos.BankAccount;
 
 namespace AccountErp.DataLayer.Repositories
 {
@@ -76,13 +77,15 @@ namespace AccountErp.DataLayer.Repositories
                                   Id = x.Id,
                                   AccountTypeName = x.AccountTypeName,
                                   COA_AccountMasterId = x.COA_AccountMasterId,
-                                  Account = x.Account.Select(y => new AccountDeatilDto
+                                  BankAccount = x.BanKAccount.Select(y => new BankAccountDetailDto
                                   {
                                       Id = y.Id,
                                       AccountName = y.AccountName,
                                       AccountCode = y.AccountCode,
                                       Description = y.Description,
-                                      COA_AccountTypeId = y.COA_AccountTypeId
+                                      AccountNumber = y.AccountNumber,
+                                      COA_AccountTypeId = y.COA_AccountTypeId,
+                                      AccountHolderName = y.AccountHolderName
                                   })
                               }),
 

@@ -4,14 +4,16 @@ using AccountErp.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200720123706_dbUpdate20072020")]
+    partial class dbUpdate20072020
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,14 +124,8 @@ namespace AccountErp.DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AccountCode");
-
                     b.Property<string>("AccountHolderName")
                         .HasMaxLength(250);
-
-                    b.Property<string>("AccountId");
-
-                    b.Property<string>("AccountName");
 
                     b.Property<string>("AccountNumber")
                         .HasMaxLength(50);
@@ -140,21 +136,14 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<string>("BranchName")
                         .HasMaxLength(250);
 
-                    b.Property<int?>("COA_AccountTypeId");
-
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(40);
 
                     b.Property<DateTime>("CreatedOn");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(250);
-
                     b.Property<string>("Ifsc")
                         .HasMaxLength(20);
-
-                    b.Property<int?>("LedgerType");
 
                     b.Property<int>("Status");
 
@@ -164,8 +153,6 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<DateTime?>("UpdatedOn");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("COA_AccountTypeId");
 
                     b.ToTable("BankAccounts");
                 });
@@ -357,6 +344,8 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<string>("Description");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("COA_AccountTypeId");
 
                     b.ToTable("COA_Account");
                 });
@@ -1277,13 +1266,6 @@ namespace AccountErp.DataLayer.Migrations
                         .HasForeignKey("CountryId1");
                 });
 
-            modelBuilder.Entity("AccountErp.Entities.BankAccount", b =>
-                {
-                    b.HasOne("AccountErp.Entities.COA_AccountType")
-                        .WithMany("BanKAccount")
-                        .HasForeignKey("COA_AccountTypeId");
-                });
-
             modelBuilder.Entity("AccountErp.Entities.Bill", b =>
                 {
                     b.HasOne("AccountErp.Entities.Vendor", "Vendor")
@@ -1322,6 +1304,14 @@ namespace AccountErp.DataLayer.Migrations
                     b.HasOne("AccountErp.Entities.Bill", "Bill")
                         .WithMany()
                         .HasForeignKey("BillId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AccountErp.Entities.COA_Account", b =>
+                {
+                    b.HasOne("AccountErp.Entities.COA_AccountType")
+                        .WithMany("Account")
+                        .HasForeignKey("COA_AccountTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

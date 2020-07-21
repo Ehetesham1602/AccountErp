@@ -49,13 +49,14 @@ namespace AccountErp.DataLayer.Repositories
                           select new ItemDetailDto
                           {
                               Id = s.Id,
-                              ItemTypeName = s.ItemType.Name,
                               Name = s.Name,
                               Rate = s.Rate,
                               Description = s.Description,
                               IsTaxable = s.IsTaxable,
                               TaxCode = s.SalesTax.Code,
-                              Status = s.Status
+                              Status = s.Status,
+                              ItemFor = s.ItemFor,
+                              BankAccountId = s.BankAccountId
                           })
                           .AsNoTracking()
                           .SingleOrDefaultAsync();
@@ -71,7 +72,6 @@ namespace AccountErp.DataLayer.Repositories
                           select new ItemDetailDto
                           {
                               Id = s.Id,
-                              ItemTypeName = s.ItemType.Name,
                               Name = s.Name,
                               Rate = s.Rate,
                               Description = s.Description,
@@ -79,7 +79,9 @@ namespace AccountErp.DataLayer.Repositories
                               TaxCode = s.SalesTax.Code,
                               TaxPercentage = s.SalesTax.TaxPercentage,
                               Status = s.Status,
-                              SalesTaxId = s.SalesTaxId
+                              SalesTaxId = s.SalesTaxId,
+                              ItemFor = s.ItemFor,
+                              BankAccountId = s.BankAccountId
                           })
                           .AsNoTracking()
                             .ToListAsync();
@@ -92,12 +94,13 @@ namespace AccountErp.DataLayer.Repositories
                           select new ItemDetailForEditDto
                           {
                               Id = s.Id,
-                              ItemTypeId = s.ItemTypeId,
                               Name = s.Name,
                               Rate = s.Rate,
                               Description = s.Description,
                               IsTaxable = s.IsTaxable? "1":"0",
-                              SalesTaxId = s.SalesTaxId
+                              SalesTaxId = s.SalesTaxId,
+                              ItemFor = s.ItemFor,
+                              BankAccountId = s.BankAccountId
                           })
                          .AsNoTracking()
                          .SingleOrDefaultAsync();
@@ -114,21 +117,20 @@ namespace AccountErp.DataLayer.Repositories
 
             var linqStmt = (from s in _dataContext.Items
                             where s.Status != Constants.RecordStatus.Deleted
-                                && (model.ItemTypeId == null || s.ItemTypeId == model.ItemTypeId.Value)
                                 && (model.FilterKey == null
                                 || EF.Functions.Like(s.Name, "%" + model.FilterKey + "%")
                                 || EF.Functions.Like(s.Description, "%" + model.FilterKey + "%"))
                             select new ItemListItemDto
                             {
                                 Id = s.Id,
-                                ItemTypeId = s.ItemTypeId,
-                                ItemTypeName = s.ItemType.Name,
                                 Name = s.Name,
                                 Rate = s.Rate,
                                 Description = s.Description,
                                 Status = s.Status,
                                 TaxCode = s.SalesTax.Code,
-                                TaxPercentage = s.SalesTax.TaxPercentage
+                                TaxPercentage = s.SalesTax.TaxPercentage,
+                                ItemFor = s.ItemFor,
+                                BankAccountId = s.BankAccountId
                             })
                             .AsNoTracking();
 

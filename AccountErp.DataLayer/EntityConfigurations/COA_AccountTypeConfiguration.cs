@@ -17,7 +17,7 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.COA_AccountMasterId).IsRequired();
             builder.Property(x => x.AccountTypeName).IsRequired();
-            builder.HasMany(x => x.Account).WithOne().HasForeignKey(x => x.COA_AccountTypeId);
+            builder.HasMany(x => x.BanKAccount).WithOne().HasForeignKey(x => x.COA_AccountTypeId);
         }
     }
 }
