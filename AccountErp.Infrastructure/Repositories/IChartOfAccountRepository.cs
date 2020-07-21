@@ -20,5 +20,6 @@ namespace AccountErp.Infrastructure.Repositories
         Task<List<COADetailDto>> GetCOADetailAsync();
         Task<COA_Account> GetAsync(int id);
         Task<List<AccountDeatilDto>> getAccountByTypeId(int id);
+        Task<List<AccountTypeDetailDto>> GetDetailByMarterIdAsync(int id);
     }
 }

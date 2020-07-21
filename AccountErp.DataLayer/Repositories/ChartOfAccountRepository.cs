@@ -94,6 +94,30 @@ namespace AccountErp.DataLayer.Repositories
                            .ToListAsync();
         }
 
+        public async Task<List<AccountTypeDetailDto>> GetDetailByMarterIdAsync(int id)
+        {
+            return await (from i in _dataContext.COA_AccountType
+                          where i.COA_AccountMasterId == id
+                          select new AccountTypeDetailDto
+                          {
+                                  Id = i.Id,
+                                  AccountTypeName = i.AccountTypeName,
+                                  COA_AccountMasterId = i.COA_AccountMasterId,
+                                  BankAccount = i.BanKAccount.Select(y => new BankAccountDetailDto
+                                  {
+                                      Id = y.Id,
+                                      AccountName = y.AccountName,
+                                      AccountCode = y.AccountCode,
+                                      Description = y.Description,
+                                      AccountNumber = y.AccountNumber,
+                                      COA_AccountTypeId = y.COA_AccountTypeId,
+                                      AccountHolderName = y.AccountHolderName
+                                  })
+                          })
+                           .AsNoTracking()
+                           .ToListAsync();
+        }
+
         public async Task<COA_Account> GetAsync(int id)
         {
             return await _dataContext.COA_Account.SingleAsync(x => x.Id == id);

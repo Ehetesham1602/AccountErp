@@ -18,5 +18,6 @@ namespace AccountErp.Infrastructure.Managers
         Task<AccountDeatilDto> GetForEditAsync(int id);
         Task<List<COADetailDto>> GetCOADetailAsync();
         Task<List<AccountDeatilDto>> getAccountByTypeId(int id);
+        Task<List<AccountTypeDetailDto>> GetDetailByMarterIdAsync(int id);
     }
 }

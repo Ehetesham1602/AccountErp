@@ -23,73 +23,73 @@ namespace AccountErp.Api.Controllers
             _manager = Manager;
         }
 
-        [HttpPost]
-        [Route("add")]
-        public async Task<IActionResult> Add([FromBody] COA_AccountAddModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState.GetErrorList());
-            }
+        //[HttpPost]
+        //[Route("add")]
+        //public async Task<IActionResult> Add([FromBody] COA_AccountAddModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState.GetErrorList());
+        //    }
 
-            try
-            {
-                var accountId = await _manager.AddAsync(model);
+        //    try
+        //    {
+        //        var accountId = await _manager.AddAsync(model);
 
-                return Ok(accountId);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //        return Ok(accountId);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
-        [HttpGet]
-        [Route("get-detail/{id}")]
-        public async Task<IActionResult> GetDetail(int id)
-        {
+        //[HttpGet]
+        //[Route("get-detail/{id}")]
+        //public async Task<IActionResult> GetDetail(int id)
+        //{
 
-            var account = await _manager.GetDetailAsync(id);
-            if (account == null)
-            {
-                return NotFound();
-            }
-            return Ok(account);
+        //    var account = await _manager.GetDetailAsync(id);
+        //    if (account == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(account);
 
-        }
+        //}
 
-        [HttpGet]
-        [Route("get-for-edit/{id}")]
-        public async Task<IActionResult> GetForEdit(int id)
-        {
-            var account = await _manager.GetForEditAsync(id);
-            if (account == null)
-            {
-                return NotFound();
-            }
-            return Ok(account);
-        }
+        //[HttpGet]
+        //[Route("get-for-edit/{id}")]
+        //public async Task<IActionResult> GetForEdit(int id)
+        //{
+        //    var account = await _manager.GetForEditAsync(id);
+        //    if (account == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(account);
+        //}
 
-        [HttpPost]
-        [Route("edit")]
-        public async Task<IActionResult> Edit([FromBody] COA_AccountEditModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState.GetErrorList());
-            }
+        //[HttpPost]
+        //[Route("edit")]
+        //public async Task<IActionResult> Edit([FromBody] COA_AccountEditModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState.GetErrorList());
+        //    }
 
-            try
-            {
-                await _manager.EditAsync(model);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+        //    try
+        //    {
+        //        await _manager.EditAsync(model);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
 
         [HttpGet]
         [Route("getCOADetails")]
@@ -108,6 +108,15 @@ namespace AccountErp.Api.Controllers
             var accountList = await _manager.getAccountByTypeId(id);
 
             return Ok(accountList);
+        }
+        [HttpGet]
+        [Route("getDetailsByMasterId")]
+        public async Task<IActionResult> getDetailsByMasterId(int id)
+        {
+
+            var COA_Details = await _manager.GetDetailByMarterIdAsync(id);
+
+            return Ok(COA_Details);
         }
     }
 }
