@@ -132,18 +132,33 @@ namespace AccountErp.DataLayer.Repositories
             List<SalesTaxReportDto> salesTaxReportDtosList;
             List<InvoiceDetailDto> invoiceDetailDtoList;
             List<BillDetailDto> billDetailDtoList;
-            salesTaxReportDtosList = await (from s in _dataContext.SalesTaxes
-                                            select new SalesTaxReportDto
-                                            {
-                                                SalesId = s.Id,
-                                                Tax = s.TaxPercentage + " " + s.Code
-                                            }).ToListAsync();
+           if(model.SalesId == 0)
+            {
+                salesTaxReportDtosList = await (from s in _dataContext.SalesTaxes
+                                                select new SalesTaxReportDto
+                                                {
+                                                    SalesId = s.Id,
+                                                    Tax = s.TaxPercentage + " " + s.Code
+                                                }).ToListAsync();
+            }
+            else
+            {
+                salesTaxReportDtosList = await (from s in _dataContext.SalesTaxes
+                                                where s.Id == model.SalesId
+                                                select new SalesTaxReportDto
+                                                {
+                                                    SalesId = s.Id,
+                                                    Tax = s.TaxPercentage + " " + s.Code
+                                                }).ToListAsync();
+            }
+            
             foreach (var salesTax in salesTaxReportDtosList)
             {
                 invoiceDetailDtoList = await (from i in _dataContext.InvoiceServices
                                               join s in _dataContext.Invoices on i.InvoiceId equals s.Id
                                                where i.TaxId == salesTax.SalesId
-                                               && s.Status != Constants.InvoiceStatus.Deleted
+                                               && s.Status != Constants.InvoiceStatus.Deleted 
+                                               && s.Status != Constants.InvoiceStatus.Overdue
                                               select new InvoiceDetailDto
                                               {
                                                   Status = s.Status,
@@ -156,8 +171,11 @@ namespace AccountErp.DataLayer.Repositories
                                                   }
 
                                               }).ToListAsync();
-
-                invoiceDetailDtoList = invoiceDetailDtoList.Where(p => (p.InvoiceDate >= model.StartDate && p.InvoiceDate <= model.EndDate)).ToList();
+                if (model.ReportType == 1)
+                {
+                    invoiceDetailDtoList = invoiceDetailDtoList.Where(p => p.Status == Constants.InvoiceStatus.Paid).ToList();
+                } 
+                invoiceDetailDtoList = invoiceDetailDtoList.Where(p => (p.InvoiceDate >= model.StartDate && p.InvoiceDate <= model.EndDate )).ToList();
                 salesTax.SalesSubjectToTax = invoiceDetailDtoList.Sum(x => x.InvoiceServiceDto.Price);
                 salesTax.TaxAmountOnSales = invoiceDetailDtoList.Sum(x => x.InvoiceServiceDto.TaxPrice);
 
@@ -165,7 +183,7 @@ namespace AccountErp.DataLayer.Repositories
                                               join bs in _dataContext.Bills on b.BillId equals bs.Id
                                               where b.TaxId == salesTax.SalesId
                                               && bs.Status != Constants.BillStatus.Deleted
-                                              select new BillDetailDto
+                                           select new BillDetailDto
                                               {
                                                   Status = bs.Status,
                                                   BillDate = bs.BillDate,
@@ -177,6 +195,10 @@ namespace AccountErp.DataLayer.Repositories
                                                  }
 
                                               }).ToListAsync();
+                if(model.ReportType == 1)
+                {
+                    billDetailDtoList = billDetailDtoList.Where(p => p.Status == Constants.BillStatus.Paid).ToList();
+                }
                 billDetailDtoList = billDetailDtoList.Where(p => (p.BillDate >= model.StartDate && p.BillDate <= model.EndDate)).ToList();
                 salesTax.PurchaseSubjectToTax = billDetailDtoList.Sum(x => x.Bill.Price);
                 salesTax.TaxAmountOnPurchases = billDetailDtoList.Sum(x => x.Bill.TaxPrice);
@@ -185,6 +207,37 @@ namespace AccountErp.DataLayer.Repositories
                 salesTax.NetTaxOwing = salesTax.TaxAmountOnSales - salesTax.TaxAmountOnPurchases;
             }
             return salesTaxReportDtosList;
+        }
+
+        public async Task<List<AgedPayablesReportDto>> GetAgedPayablesReportAsync(AgedPayablesModel model)
+        {
+            List<AgedPayablesReportDto> agedPayablesReportsList;
+            List<BillDetailDto> billDetailDtoList;
+            var daysPassed = (DateTime.UtcNow - model.AsOfDate).Days;
+            agedPayablesReportsList = await (from v in _dataContext.Vendors
+                                             select new AgedPayablesReportDto
+                                             {
+                                                 VendorId = v.Id,
+                                                 VendorName = v.Name
+                                             }).ToListAsync();
+            foreach (var agedPayables in agedPayablesReportsList)
+            {
+                
+                billDetailDtoList = await (from b in _dataContext.Bills
+                                            where b.Status != Constants.BillStatus.Deleted
+                                            select new BillDetailDto
+                                            {
+                                                TotalAmount = b.TotalAmount
+                                            }).ToListAsync();
+               /* if (daysPassed > 30)
+                {
+                    
+                    agedPayables.TotalUnpaid = billDetailDtoList.Sum(x => x.TotalAmount);
+                }*/
+                billDetailDtoList = billDetailDtoList.Where(p => (p.DueDate >= model.AsOfDate)).ToList();
+                agedPayables.TotalUnpaid = billDetailDtoList.Sum(x => x.TotalAmount);
+            }
+            return agedPayablesReportsList;
         }
     }
 }

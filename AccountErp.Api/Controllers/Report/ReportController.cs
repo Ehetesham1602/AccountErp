@@ -48,5 +48,13 @@ namespace AccountErp.Api.Controllers.Report
             var pageResult = await _reportManager.GetSalesTaxReportAsync(model);
             return pageResult;
         }
+
+        [HttpPost]
+        [Route("aged_payables_report_details")]
+        public async Task<AgedPayablesDetailsReportDto> GetAgedPayablesReportAsync(AgedPayablesModel model)
+        {
+            var pageResult = await _reportManager.GetAgedPayablesReportAsync(model);
+            return pageResult;
+        }
     }
 }
