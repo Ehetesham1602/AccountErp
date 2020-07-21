@@ -102,7 +102,7 @@ namespace AccountErp.DataLayer.Repositories
 
         public async Task<List<AccountDeatilDto>> getAccountByTypeId(int id)
         {
-            var account = await (from c in _dataContext.COA_Account
+            var account = await (from c in _dataContext.BankAccounts
                                  where c.COA_AccountTypeId == id
                                  select new AccountDeatilDto
                                  {
