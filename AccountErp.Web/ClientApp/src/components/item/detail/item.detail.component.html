@@ -54,14 +54,14 @@
                     </div>
                     <div class="kt-portlet__body" *ngIf="isModelLoaded">
                         <div class="row">
-                            <div class="col-6">
+                            <!-- <div class="col-6">
                                 <div class="form-group row">
                                     <label class="col-md-3 kt-portlet__label">Item Type:</label>
                                     <div class="col-md-9">
                                         <p class="kt-portlet__data">{{model.itemTypeName}}</p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-6">
                                 <div class="form-group row">
                                     <label class="col-md-3 kt-portlet__label">Item/Service Name:</label>
@@ -117,6 +117,27 @@
                                     <label class="col-md-3 kt-portlet__label">Tax:</label>
                                     <div class="col-md-9">
                                         <p class="kt-portlet__data">{{model.taxCode}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+
+                          <div class="row" *ngIf='model.isForSell==1'>
+                            <div class="col-6">
+                                <div class="form-group row">
+                                    <label class="col-md-3 kt-portlet__label">Income Account:</label>
+                                    <div class="col-md-9">
+                                        <p class="kt-portlet__data">Income account</p>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="row" *ngIf='model.isForSell==0'>
+                            <div class="col-6">
+                                <div class="form-group row">
+                                    <label class="col-md-3 kt-portlet__label">Expense Account:</label>
+                                    <div class="col-md-9">
+                                        <p class="kt-portlet__data">Expense account</p>
                                     </div>
                                 </div>
                             </div>

@@ -14,8 +14,9 @@ export class ChartOfAccountsComponent implements OnInit {
   ngOnInit() {
   }
 
-  openAddAccountModal(content: any,accType){
+  openAddAccountModal(content: any,accType,accId){
     debugger;
+    alert(accId);
     this.accType=accType;
     this.modalReference = this.modalService.open(content,
       {

@@ -105,18 +105,66 @@ export class BankAccountManageComponent implements OnInit, AfterViewInit {
                     orderable: false,
                     className: 'text-center',
                     render: function (data, type, row) {
-                        const statusHtml =
+                        const htmlString = 
+                        ` <button type="button" class="btn btn-outline-success btn-sm dropdown-toggle"
+                        data-toggle="dropdown">
+                        Action
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
+                        <ul class="kt-nav">`
+                            const htmlStatus=
                             row.status === 1
-                                ? `<em class='fa fa-ban cursor-pointer m-r-5' title='Deactivate' action-type='toggle-status'></em>`
-                                : row.status === 2
-                                    ? `<em class='fa fa-check cursor-pointer m-r-5' title='Activate' action-type='toggle-status'></em>`
-                                    : '';
+                            ?`<li class="kt-nav__item">
+                            <a class="kt-nav__link">
+                                <em class="kt-nav__link-icon la la-ban"></em>
+                                <span class="kt-nav__link-text" action-type = 'toggle-status'>Deactivate</span>
+                            </a>
+                        </li>`
+                        :`<li class="kt-nav__item">
+                                <a  class="kt-nav__link">
+                                    <em class="kt-nav__link-icon la la-check"></em>
+                                    <span class="kt-nav__link-text" action-type = 'toggle-status'>Activate</span>
+                                </a>
+                            </li>`
 
-                        const htmlString = statusHtml
-                            + `<em class='fa fa-edit cursor-pointer m-r-3' title='Edit' action-type='edit'></em>`
-                            + `<em class='fa fa-trash cursor-pointer' title='Delete' action-type='delete'></em>`;
+                            const htmlString2=htmlString +htmlStatus
+                            
+                            +`<li class="kt-nav__item">
+                                <a class="kt-nav__link">
+                                    <em class="kt-nav__link-icon la la-edit"></em>
+                                    <span class="kt-nav__link-text" action-type='edit'> Edit</span>
+                                </a>
+                            </li>
+                            <li class="kt-nav__item">
+                                <a class="kt-nav__link">
+                                    <em class="kt-nav__link-icon la la-file"></em>
+                                    <span class="kt-nav__link-text" action-type='view-detail'>
+                                        View Detail
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="kt-nav__item">
+                            <a class="kt-nav__link">
+                                <em class="kt-nav__link-icon la la-trash"></em>
+                                <span class="kt-nav__link-text" action-type='delete'>
+                                    Delete
+                                </span>
+                            </a>
+                        </li>
+                        </ul>
+                    </div>`
+                        // const statusHtml =
+                        //     row.status === 1
+                        //         ? `<em class='fa fa-ban cursor-pointer m-r-5' title='Deactivate' action-type='toggle-status'></em>`
+                        //         : row.status === 2
+                        //             ? `<em class='fa fa-check cursor-pointer m-r-5' title='Activate' action-type='toggle-status'></em>`
+                        //             : '';
 
-                        return htmlString;
+                        // const htmlString = statusHtml
+                        //     + `<em class='fa fa-edit cursor-pointer m-r-3' title='Edit' action-type='edit'></em>`
+                        //     + `<em class='fa fa-trash cursor-pointer' title='Delete' action-type='delete'></em>`;
+
+                        return htmlString2;
                     }
                 }
             ],

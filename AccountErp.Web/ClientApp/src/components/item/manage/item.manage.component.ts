@@ -79,16 +79,12 @@ export class ItemManageComponent implements OnInit, AfterViewInit {
                 {
                     data: 'name',
                     title: 'Name',
-                    width: '25%',
+                    width: '15%',
                     render: function (data, type, row) {
                         return `<a href='javascript:;' action-type='view-detail'>${row.name}</a>`;
                     }
                 },
-                {
-                    data: 'itemTypeName',
-                    title: 'Type',
-                    width: '20%'
-                },
+               
                 {
                     className: 'text-right',
                     data: 'rate',

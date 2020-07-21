@@ -6,6 +6,8 @@ import { ToastrService } from 'ngx-toastr';
 import { AppUtils } from 'src/helpers';
 import { SalesTaxService } from 'src/services';
 import { chartOfAccountsList } from '../chartOfAccountsList';
+import { ChartOfAccountsService } from 'src/services/chart-of-accounts.service';
+import { customerAccountModel } from 'src/models/chartofaccount/customeraccount';
 
 @Component({
   selector: 'app-add-new-account',
@@ -14,7 +16,7 @@ import { chartOfAccountsList } from '../chartOfAccountsList';
 })
 export class AddNewAccountComponent implements OnInit {
   @BlockUI('container-blockui') blockUI: NgBlockUI;
-    model: SalesTaxAddModel = new SalesTaxAddModel();
+    model: customerAccountModel = new customerAccountModel();
     @Output() closeAddAccountModal = new EventEmitter();
     @Input() accType:string;
     acctypeList;
@@ -22,7 +24,7 @@ export class AddNewAccountComponent implements OnInit {
         private toastr: ToastrService,
         private appUtils: AppUtils,
         private accountList:chartOfAccountsList,
-        private salesTaxService: SalesTaxService) {
+        private chartofaccService: ChartOfAccountsService) {
           
     }
 
@@ -36,14 +38,14 @@ export class AddNewAccountComponent implements OnInit {
     submit() {
       debugger;
         this.blockUI.start();
-        this.salesTaxService.add(this.model).subscribe(
+        this.chartofaccService.add(this.model).subscribe(
             () => {
                 this.blockUI.stop();
                 setTimeout(() => {
-                    this.router.navigate(['/sales-tax/manage']);
+                  //  this.router.navigate(['/sales-tax/manage']);
                 }, 100);
                 setTimeout(() => {
-                    this.toastr.success('Sales Tax has been added successfully');
+                   // this.toastr.success('Sales Tax has been added successfully');
                 }, 500);
             },
             error => {
@@ -52,4 +54,19 @@ export class AddNewAccountComponent implements OnInit {
             });
     }
 
+    getForEdit() {
+      debugger;
+      this.blockUI.start();
+      this.chartofaccService.getForEdit(this.model.id).subscribe(
+          (data: any) => {
+              this.blockUI.stop();
+              Object.assign(this.model, data);
+          },
+          error => {
+              this.blockUI.stop();
+              this.appUtils.ProcessErrorResponse(this.toastr, error);
+          });
+    }
+
+    
 }

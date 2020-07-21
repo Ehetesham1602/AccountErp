@@ -19,4 +19,12 @@ export class MasterDataService {
     getVendorTaxType() {
         return this.http.get(this.appSettings.ApiBaseUrl + 'master/get-vendor-tax');
     }
+
+    getIncomeAccounts(){
+return null;
+    }
+
+    getExpenseAccounts(){
+        return null;
+    }
 }
