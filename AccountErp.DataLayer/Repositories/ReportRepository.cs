@@ -12,10 +12,12 @@ using AccountErp.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 
@@ -213,29 +215,85 @@ namespace AccountErp.DataLayer.Repositories
         {
             List<AgedPayablesReportDto> agedPayablesReportsList;
             List<BillDetailDto> billDetailDtoList;
-            var daysPassed = (DateTime.UtcNow - model.AsOfDate).Days;
-            agedPayablesReportsList = await (from v in _dataContext.Vendors
-                                             select new AgedPayablesReportDto
-                                             {
-                                                 VendorId = v.Id,
-                                                 VendorName = v.Name
-                                             }).ToListAsync();
+            if(model.VendorId == 0)
+            {
+                agedPayablesReportsList = await (from v in _dataContext.Vendors
+                                                 select new AgedPayablesReportDto
+                                                 {
+                                                     VendorId = v.Id,
+                                                     VendorName = v.Name
+                                                 }).ToListAsync();
+            }
+            else
+            {
+                agedPayablesReportsList = await (from v in _dataContext.Vendors
+                                                 where v.Id == model.VendorId
+                                                 select new AgedPayablesReportDto
+                                                 {
+                                                     VendorId = v.Id,
+                                                     VendorName = v.Name
+                                                 }).ToListAsync();
+            }
+           
             foreach (var agedPayables in agedPayablesReportsList)
             {
-                
+                //agedPayables.Count = 0;
                 billDetailDtoList = await (from b in _dataContext.Bills
-                                            where b.Status != Constants.BillStatus.Deleted
-                                            select new BillDetailDto
-                                            {
-                                                TotalAmount = b.TotalAmount
-                                            }).ToListAsync();
-               /* if (daysPassed > 30)
+                                           where b.VendorId == agedPayables.VendorId && b.Status != Constants.BillStatus.Deleted
+                                           select new BillDetailDto
+                                           {
+                                               TotalAmount = b.TotalAmount,
+                                               DueDate = b.DueDate
+                                           }).ToListAsync();
+                
+                foreach(var item in billDetailDtoList)
                 {
-                    
-                    agedPayables.TotalUnpaid = billDetailDtoList.Sum(x => x.TotalAmount);
-                }*/
+                    DateTime firstDate = new System.DateTime(item.DueDate.Value.Year, item.DueDate.Value.Month, item.DueDate.Value.Day);
+                    DateTime SecondDate = new System.DateTime(model.AsOfDate.Year, model.AsOfDate.Month, model.AsOfDate.Day);
+
+                    System.TimeSpan diff = SecondDate.Subtract(firstDate);
+                    System.TimeSpan diff1 = SecondDate - firstDate;
+
+                    String diff2 = (SecondDate - firstDate).TotalDays.ToString();
+                    var date = Int16.Parse(diff2);
+                    if (date <= 0)
+                    {
+                        agedPayables.NotYetOverDue += item.TotalAmount;
+                        agedPayables.TotalAmount += item.TotalAmount;
+                        agedPayables.CountNotYetOverDue++;
+                    }
+                    else if (date > 0 && date <= 30)
+                    {
+                        agedPayables.LessThan30 += item.TotalAmount;
+                        agedPayables.TotalAmount += item.TotalAmount;
+                        agedPayables.TotalUnpaid += item.TotalAmount;
+
+                        agedPayables.CountLessThan30++;
+                    }
+                    else if (date > 30  && date < 60 )
+                    {
+                        agedPayables.ThirtyFirstToSixty += item.TotalAmount;
+                        agedPayables.TotalAmount += item.TotalAmount;
+                        agedPayables.TotalUnpaid += item.TotalAmount;
+                        agedPayables.CountThirtyFirstToSixty++;
+                    }
+                    else if(date > 60)
+                    {
+                        agedPayables.SixtyOneToNinety += item.TotalAmount;
+                        agedPayables.TotalAmount += item.TotalAmount;
+                        agedPayables.TotalUnpaid += item.TotalAmount;
+                        agedPayables.CountSixtyOneToNinety++;
+                    }
+                    else{
+                        agedPayables.MoreThanNinety += item.TotalAmount;
+                        agedPayables.TotalAmount += item.TotalAmount;
+                        agedPayables.TotalUnpaid += item.TotalAmount;
+                        agedPayables.CountMoreThanNinety++;
+                    }
+                }
+                //agedPayables.DateForDue = billDetailDtoList.Where(p => p.DueDate == model.AsOfDate ? agedPayables.TotalAmount = p.TotalAmount  :  ).ToList();
                 billDetailDtoList = billDetailDtoList.Where(p => (p.DueDate >= model.AsOfDate)).ToList();
-                agedPayables.TotalUnpaid = billDetailDtoList.Sum(x => x.TotalAmount);
+                agedPayables.TotalUnpaid = billDetailDtoList.Sum(x => x.TotalAmount );
             }
             return agedPayablesReportsList;
         }

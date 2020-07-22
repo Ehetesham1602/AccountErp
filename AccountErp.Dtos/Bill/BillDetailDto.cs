@@ -19,7 +19,7 @@ namespace AccountErp.Dtos.Bill
         public DateTime CreatedOn { get; set; }
 
         public DateTime BillDate { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime? DueDate { get; set; }
         public decimal? PoSoNumber { get; set; }
         public string StrBillDate { get; set; }
         public string StrDueDate { get; set; }
