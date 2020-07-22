@@ -215,13 +215,26 @@ namespace AccountErp.DataLayer.Repositories
         {
             List<AgedPayablesReportDto> agedPayablesReportsList;
             List<BillDetailDto> billDetailDtoList;
-            
-            agedPayablesReportsList = await (from v in _dataContext.Vendors
-                                             select new AgedPayablesReportDto
-                                             {
-                                                 VendorId = v.Id,
-                                                 VendorName = v.Name
-                                             }).ToListAsync();
+            if(model.VendorId == 0)
+            {
+                agedPayablesReportsList = await (from v in _dataContext.Vendors
+                                                 select new AgedPayablesReportDto
+                                                 {
+                                                     VendorId = v.Id,
+                                                     VendorName = v.Name
+                                                 }).ToListAsync();
+            }
+            else
+            {
+                agedPayablesReportsList = await (from v in _dataContext.Vendors
+                                                 where v.Id == model.VendorId
+                                                 select new AgedPayablesReportDto
+                                                 {
+                                                     VendorId = v.Id,
+                                                     VendorName = v.Name
+                                                 }).ToListAsync();
+            }
+           
             foreach (var agedPayables in agedPayablesReportsList)
             {
                 //agedPayables.Count = 0;
