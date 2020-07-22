@@ -17,7 +17,7 @@ namespace AccountErp.Models.Item
         [Required]
         public string IsTaxable { get; set; }
         public int? SalesTaxId { get; set; }
-        public bool? ItemFor { get; set; }
+        public bool? isForSell { get; set; }
         public int? BankAccountId { get; set; }
     }
 }

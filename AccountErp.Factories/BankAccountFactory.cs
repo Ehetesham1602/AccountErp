@@ -41,7 +41,7 @@ namespace AccountErp.Factories
             entity.COA_AccountTypeId = model.COA_AccountTypeId;
             entity.LedgerType = model.LedgerType;
             entity.AccountId = model.AccountId;
-            model.AccountName = model.AccountName;
+            entity.AccountName = model.AccountName;
         }
     }
 }

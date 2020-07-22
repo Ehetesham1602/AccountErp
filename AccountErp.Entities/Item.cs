@@ -17,7 +17,7 @@ namespace AccountErp.Entities
         public DateTime? UpdatedOn { get; set; }
         public string UpdatedBy { get; set; }
 
-        public bool? ItemFor { get; set; }
+        public bool? isForSell { get; set; }
         public int? BankAccountId { get; set; }
 
         public SalesTax SalesTax { get; set; }

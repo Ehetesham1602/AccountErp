@@ -25,7 +25,7 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.UpdatedOn).IsRequired(false);
             builder.Property(x => x.UpdatedBy).HasMaxLength(40);
             builder.Property(x => x.BankAccountId).IsRequired(false);
-            builder.Property(x => x.ItemFor).IsRequired(false);
+            builder.Property(x => x.isForSell).IsRequired(false);
         }
     }
 }

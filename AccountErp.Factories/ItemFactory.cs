@@ -18,7 +18,7 @@ namespace AccountErp.Factories
                 Status = Constants.RecordStatus.Active,
                 CreatedBy = userId ?? "0",
                 CreatedOn = Utility.GetDateTime(),
-                ItemFor = model.ItemFor,
+                isForSell = model.isForSell,
                 BankAccountId = model.BankAccountId
             };
             return item;
@@ -32,7 +32,7 @@ namespace AccountErp.Factories
             entity.SalesTaxId = entity.IsTaxable ? model.SalesTaxId : null;
             entity.UpdatedBy = userId ?? "0";
             entity.UpdatedOn = Utility.GetDateTime();
-            entity.ItemFor = model.ItemFor;
+            entity.isForSell = model.isForSell;
             entity.BankAccountId = model.BankAccountId;
         }
     }

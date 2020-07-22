@@ -55,7 +55,7 @@ namespace AccountErp.DataLayer.Repositories
                               IsTaxable = s.IsTaxable,
                               TaxCode = s.SalesTax.Code,
                               Status = s.Status,
-                              ItemFor = s.ItemFor,
+                              isForSell = s.isForSell,
                               BankAccountId = s.BankAccountId
                           })
                           .AsNoTracking()
@@ -80,7 +80,7 @@ namespace AccountErp.DataLayer.Repositories
                               TaxPercentage = s.SalesTax.TaxPercentage,
                               Status = s.Status,
                               SalesTaxId = s.SalesTaxId,
-                              ItemFor = s.ItemFor,
+                              isForSell = s.isForSell,
                               BankAccountId = s.BankAccountId
                           })
                           .AsNoTracking()
@@ -99,7 +99,7 @@ namespace AccountErp.DataLayer.Repositories
                               Description = s.Description,
                               IsTaxable = s.IsTaxable? "1":"0",
                               SalesTaxId = s.SalesTaxId,
-                              ItemFor = s.ItemFor,
+                              isForSell = s.isForSell,
                               BankAccountId = s.BankAccountId
                           })
                          .AsNoTracking()
@@ -129,7 +129,7 @@ namespace AccountErp.DataLayer.Repositories
                                 Status = s.Status,
                                 TaxCode = s.SalesTax.Code,
                                 TaxPercentage = s.SalesTax.TaxPercentage,
-                                ItemFor = s.ItemFor,
+                                isForSell = s.isForSell,
                                 BankAccountId = s.BankAccountId
                             })
                             .AsNoTracking();
