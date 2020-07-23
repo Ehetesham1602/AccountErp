@@ -40,7 +40,7 @@ namespace AccountErp.Managers
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<BankAccountDetailDto>> GetDetailByLedgerTypeAsync(int typeId)
+        public async Task<IEnumerable<SelectListItemDto>> GetDetailByLedgerTypeAsync(int typeId)
         {
             return await _bankAccountRepository.GetDetailByLedgerTypeAsync(typeId);
         }
