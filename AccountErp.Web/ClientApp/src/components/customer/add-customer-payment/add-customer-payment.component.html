@@ -40,14 +40,14 @@
                                         <div class="col-md-9">
                                             <select name="paymentType" class="form-control"
                                                 (change)="chengePaymentType()" [(ngModel)]="model.paymentType"
-                                                #paymentMode="ngModel" required>
+                                                #paymentType="ngModel" required>
                                                 <option value="">[Select]</option>
                                                 <option value='1'>Advance payment</option>
                                                 <option value='2'>Invoice payment</option>
                                                 <option value='3'>Other payment</option>
                                             </select>
                                             <div class="validation-error-message"
-                                                *ngIf="f.submitted && !paymentMode.valid">
+                                                *ngIf="f.submitted && !paymentType.valid">
                                                 Please select payment type
                                             </div>
                                         </div>
@@ -96,11 +96,9 @@
                                         <div class="col-md-9">
                                             <select name="invoice" class="form-control"
                                             (change)="chengeInvoice()" [(ngModel)]="model.invoiceId"
-                                            #paymentMode="ngModel" required>
+                                            #invoice="ngModel" required>
                                             <option value="">[Select]</option>
-                                            <option value='1'>Invoice1</option>
-                                            <option value='2'>Invoice2</option>
-                                            <option value='3'>Invoice3</option>
+                                            <option *ngFor="let item of invoices" value={{item.id}}>{{item.invoiceNumber}}</option>
                                         </select>
                                         </div>
                                     </div>
@@ -112,7 +110,7 @@
                                     <div class="form-group row">
                                         <label class="col-md-3 kt-portlet__label">Invoice#:</label>
                                         <div class="col-md-9">
-                                            <p class="kt-portlet__data">{{invoiceSummaryModel.id}}</p>
+                                            <p class="kt-portlet__data">{{invoiceSummaryModel.invoiceNumber}}</p>
                                         </div>
                                     </div>
                                 </div>

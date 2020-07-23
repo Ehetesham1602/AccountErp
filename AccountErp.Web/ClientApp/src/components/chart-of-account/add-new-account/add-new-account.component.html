@@ -20,10 +20,10 @@
                                         <label class="col-md-12">Account Type:*</label>
                                         <div class="col-md-12">
                                            <select name="acctype" class="form-control" 
-                                                autocomplete="off" [(ngModel)]="model.accType" #acctype="ngModel"
+                                                autocomplete="off" [(ngModel)]="model.coA_AccountTypeId" #acctype="ngModel"
                                                  required>
                                                  <option>select type</option>
-                                                 <option *ngFor="let item of acctypeList" value={{item.keyInt}}>{{item.value}}</option>
+                                                 <option *ngFor="let item of acctypeList" value={{item.id}}>{{item.accountTypeName}}</option>
                                                 </select>
                                             <div class="validation-error-message" *ngIf="f.submitted && acctype.invalid">
                                                 Account type is required
@@ -37,7 +37,7 @@
                                         <label class="col-md-12">Ledger Type:*</label>
                                         <div class="col-md-12">
                                            <select name="ledgertype" class="form-control" 
-                                                autocomplete="off" [(ngModel)]="model.ledgertype" #ledgertype="ngModel"
+                                                autocomplete="off" [(ngModel)]="model.ledgerType" #ledgertype="ngModel"
                                                  required>
                                                  <option value=0>select ledger type</option>
                                                  <option value=1>Cash</option>
@@ -51,7 +51,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div *ngIf="model.ledgertype==2">
+                            <div *ngIf="model.ledgerType==2">
                                 <div class="row">
                                   <div class="col-6">
                                     <div class="form-group row" [ngClass]="{ 'validation-error' : f.submitted && accountNumber.invalid}">
@@ -130,7 +130,7 @@
                                         <div class="col-md-12">
                                             <div class="input-group">
                                                 <input type="text" name="accName" class="form-control"
-                                                     autocomplete="off" [(ngModel)]="model.accName"
+                                                     autocomplete="off" [(ngModel)]="model.accountName"
                                                     #accName="ngModel"  required />
                                             </div>
                                             <div class="validation-error-message"
@@ -147,7 +147,7 @@
                                         <div class="col-md-12">
                                             <div class="input-group">
                                                 <input type="text" name="accId" class="form-control"
-                                                     autocomplete="off" [(ngModel)]="model.accId"
+                                                     autocomplete="off" [(ngModel)]="model.accountId"
                                                     #accId="ngModel"  required />
                                             </div>
                                             <div class="validation-error-message"

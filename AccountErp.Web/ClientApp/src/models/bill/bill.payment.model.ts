@@ -8,6 +8,7 @@ export class BillPaymentModel {
     public depositTo: string;
     public chequeNumber:string;
     public description:string;
+    public vendorId:string;
 
     constructor() {
         this.paymentMode = '';

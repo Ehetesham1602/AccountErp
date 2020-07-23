@@ -93,12 +93,12 @@
                     <div class="col-9">
                       <div class="kt-radio-inline"></div>
                       <label class="kt-radio">
-                        <input type="radio" name="producttoSaleOrBuy" (change)="loadIncomeAccounts()" value="1" [(ngModel)]="model.isForSell">
+                        <input type="radio" name="producttoSaleOrBuy" (change)="loadIncomeAccounts()" value="1" [(ngModel)]="model.isForSell" >
                         Sell
                         <span></span>
                       </label>
                       <label class="kt-radio m-l-10">
-                        <input type="radio" name="producttoSaleOrBuy" (change)="loadExpenseAccounts()" value="0" [(ngModel)]="model.isForSell">
+                        <input type="radio" name="producttoSaleOrBuy" (change)="loadExpenseAccounts()" value="0" [(ngModel)]="model.isForSell" >
                         Buy
                         <span></span>
                       </label>
@@ -111,12 +111,11 @@
                   <div class="form-group row" [ngClass]="{ 'validation-error' : model.isForSell==1 && f.submitted && incomeAccountId.invalid}">
                     <label class="col-md-3">Income Account: *</label>
                     <div class="col-md-9">
-                      <select name="incomeAccountId" class="form-control" [(ngModel)]="model.incomeAccountId"
+                      <select name="incomeAccountId" class="form-control" [(ngModel)]="model.bankAccountId"
                         #incomeAccountId="ngModel" required>
                         <option value="">[Select]</option>
-                        <option value="1">Sales</option>
                         <option *ngFor="let item of incomeAccount" [value]="item.id">
-                          {{item.name}}
+                          {{item.accountName}}
                         </option>
                       </select>
                       <div class="validation-error-message" *ngIf="f.submitted && model.isForSell==1 && !incomeAccountId.valid">
@@ -131,12 +130,11 @@
                   <div class="form-group row" [ngClass]="{ 'validation-error' : f.submitted && model.isForSell==0 && expenseAccountId.invalid}">
                     <label class="col-md-3">Expense Account: *</label>
                     <div class="col-md-9">
-                      <select name="expenseAccountId" class="form-control" [(ngModel)]="model.expenseAccountId"
+                      <select name="expenseAccountId" class="form-control" [(ngModel)]="model.bankAccountId"
                         #expenseAccountId="ngModel" required>
                         <option value="">[Select]</option>
-                        <option value="1">expense</option>
                         <option *ngFor="let item of expenseAccount" [value]="item.id">
-                          {{item.name}}
+                          {{item.accountName}}
                         </option>
                       </select>
                       <div class="validation-error-message" *ngIf="f.submitted && model.isForSell==0 && !expenseAccountId.valid">

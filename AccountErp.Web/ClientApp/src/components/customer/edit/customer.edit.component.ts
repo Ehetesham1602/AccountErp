@@ -38,7 +38,6 @@ export class CustomerEditComponent implements OnInit {
         this.customerService.getForEdit(this.model.id)
             .subscribe(
                 (data) => {
-                   
                     this.blockUI.stop();
                     Object.assign(this.model, data);
                     if (this.model.address

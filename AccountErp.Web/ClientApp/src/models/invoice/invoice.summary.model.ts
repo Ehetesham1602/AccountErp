@@ -9,4 +9,5 @@ export class InvoiceSummaryModel {
     public discount: number;
     public totalAmount: number;
     public description: string;
+    
 }

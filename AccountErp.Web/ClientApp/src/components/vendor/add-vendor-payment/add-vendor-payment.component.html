@@ -75,26 +75,20 @@
                                     <div class="form-group row">
                                         <label class="col-md-3 kt-portlet__label">Select Vendor:</label>
                                         <div class="col-md-9">
-                                            <select name="customer" class="form-control"
-                                            (change)="chengeCustomer()" [(ngModel)]="model.customerId"
-                                            #paymentMode="ngModel" required>
-                                            <option *ngFor="let item of vendors" value="{{item.keyInt}}">{{item.value}}</option>
-                                           
-                                        </select>
+                                            <ngx-select-dropdown  name="vendorId" #vendorId="ngModel" (change)="getVendorDetail()" [multiple]="false" [(ngModel)]="selectedVendor" [config]="config" [options]="vendors"></ngx-select-dropdown>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" *ngIf="model.paymentType==1">
-                                    <div class="col-6">
+                              
+                                    <div class="col-6" *ngIf="model.paymentType==1">
                                         <div class="form-group row">
                                             <label class="col-md-3 kt-portlet__label">Vendor Details:</label>
                                             <div class="col-md-9">
-                                                <p class="kt-portlet__data">{{invoiceSummaryModel.firstName}}
-                                                    {{invoiceSummaryModel.middleName}} {{invoiceSummaryModel.lastName}}</p>
+                                                <p class="kt-portlet__data">{{vendor.name}}</p>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                              
                                 <div class="col-6" *ngIf="model.paymentType==2">
                                     <div class="form-group row">
                                         <label class="col-md-3 kt-portlet__label">Select Bill/Expense:</label>
@@ -103,9 +97,7 @@
                                             (change)="chengeInvoice()" [(ngModel)]="model.invoiceId"
                                             #paymentMode="ngModel" required>
                                             <option value="">[Select]</option>
-                                            <option value='1'>Bill1</option>
-                                            <option value='2'>Bill2</option>
-                                            <option value='3'>Bill3</option>
+                                            <option *ngFor="let item of vendors" value={{item.id}}>{{item.billNumber}}</option>
                                         </select>
                                         </div>
                                     </div>
@@ -117,7 +109,7 @@
                                     <div class="form-group row">
                                         <label class="col-md-3 kt-portlet__label">Bill#:</label>
                                         <div class="col-md-9">
-                                            <p class="kt-portlet__data">{{invoiceSummaryModel.id}}</p>
+                                            <p class="kt-portlet__data">{{expenseSummaryModel.id}}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -125,8 +117,8 @@
                                     <div class="form-group row">
                                         <label class="col-md-3 kt-portlet__label">Vendor Name:</label>
                                         <div class="col-md-9">
-                                            <p class="kt-portlet__data">{{invoiceSummaryModel.firstName}}
-                                                {{invoiceSummaryModel.middleName}} {{invoiceSummaryModel.lastName}}</p>
+                                            <p class="kt-portlet__data">{{expenseSummaryModel.firstName}}
+                                                {{expenseSummaryModel.middleName}} {{expenseSummaryModel.lastName}}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -137,7 +129,7 @@
                                     <div class="form-group row">
                                         <label class="col-md-3 kt-portlet__label">Tax:</label>
                                         <div class="col-md-9">
-                                            <p class="kt-portlet__data">{{invoiceSummaryModel.tax | currency }}</p>
+                                            <p class="kt-portlet__data">{{expenseSummaryModel.tax | currency }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -145,7 +137,7 @@
                                     <div class="form-group row">
                                         <label class="col-md-3 kt-portlet__label">Discount:</label>
                                         <div class="col-md-9">
-                                            <p class="kt-portlet__data">{{invoiceSummaryModel.discount | currency}}</p>
+                                            <p class="kt-portlet__data">{{expenseSummaryModel.discount | currency}}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -187,7 +179,7 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 kt-portlet__label">Amount:</label>
                                             <div class="col-md-9">
-                                                <p class="kt-portlet__data">{{invoiceSummaryModel.totalAmount | currency}}
+                                                <p class="kt-portlet__data">{{expenseSummaryModel.totalAmount | currency}}
                                                 </p>
                                             </div>
                                         </div>

@@ -6,6 +6,7 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { AppUtils } from '../../../helpers';
 import { ItemAddModel, SelectListItemModel } from '../../../models'
 import { ItemService, MasterDataService, SalesTaxService } from '../../../services';
+import { ChartOfAccountsService } from 'src/services/chart-of-accounts.service';
 
 @Component({
     selector: 'app-item-add',
@@ -22,18 +23,23 @@ export class ItemAddComponent implements OnInit {
     incomeAccount;
     expenseAccount;
 
+    incomeaccId=3;
+    expenseaccId=4;
 
     constructor(private router: Router,
         private toastr: ToastrService,
         private appUtils: AppUtils,
         private itemService: ItemService,
         private salesTaxSerivce : SalesTaxService,
+        private chartofaccService:ChartOfAccountsService,
         private masterDataService: MasterDataService) {
     }
 
     ngOnInit() {
         this.loadItemType();
         this.loadSalesTax();
+        this.loadIncomeAccounts();
+        this.loadExpenseAccounts();
     }
 
     loadItemType() {
@@ -41,6 +47,7 @@ export class ItemAddComponent implements OnInit {
         this.masterDataService.getItemType()
             .subscribe((data) => {
                 this.blockUI.stop();
+                
                 Object.assign(this.itemType, data);
             },
                 error => {
@@ -64,29 +71,68 @@ export class ItemAddComponent implements OnInit {
     }
 
     loadIncomeAccounts(){
-        // this.blockUI.start();
-        // this.masterDataService.getIncomeAccounts()
-        //     .subscribe((data) => {
-        //         this.blockUI.stop();
-        //         Object.assign(this.incomeAccount, data);
-        //     },
-        //         error => {
-        //             this.blockUI.stop();
-        //             this.appUtils.ProcessErrorResponse(this.toastr, error);
-        //         });
+      
+            debugger;
+          
+              this.chartofaccService.getAccountsByMasterType(this.incomeaccId).subscribe(
+                  (data: any) => {
+                      this.incomeAccount=[];
+                      var tempacc=[];
+                      var incacclist=[];
+                      Object.assign(tempacc, data);
+                     
+                      tempacc.map(function (item) {
+                          if(item.bankAccount.length!==0){
+                            item.bankAccount.map(function (acc) {
+                                  incacclist.push(acc)
+                             
+                            });
+                            
+                          }
+                        
+                       
+                      });
+                      this.incomeAccount=incacclist;
+                      console.log("icmacc",this.incomeAccount)
+                  },
+                  error => {
+                      this.blockUI.stop();
+                      this.appUtils.ProcessErrorResponse(this.toastr, error);
+                  });
+          
     }
 
     loadExpenseAccounts(){
-        // this.blockUI.start();
-        // this.masterDataService.getExpenseAccounts()
-        //     .subscribe((data) => {
-        //         this.blockUI.stop();
-        //         Object.assign(this.expenseAccount, data);
-        //     },
-        //         error => {
-        //             this.blockUI.stop();
-        //             this.appUtils.ProcessErrorResponse(this.toastr, error);
-        //         });
+       
+            debugger;
+          
+              this.chartofaccService.getAccountsByMasterType(this.expenseaccId).subscribe(
+                  (data: any) => {
+                      this.expenseAccount=[];
+                      var tempacc=[];
+                      var incacclist=[];
+                      Object.assign(tempacc, data);
+                     
+                      tempacc.map(function (item) {
+                          if(item.bankAccount.length!==0){
+                            item.bankAccount.map(function (acc) {
+                                  incacclist.push(acc)
+                             
+                            });
+                            
+                          }
+                        
+                       
+                      });
+                      this.expenseAccount=incacclist;
+                      console.log("icmacc",this.expenseAccount)
+                     
+                  },
+                  error => {
+                      this.blockUI.stop();
+                      this.appUtils.ProcessErrorResponse(this.toastr, error);
+                  });
+          
     }
 
     submit() {

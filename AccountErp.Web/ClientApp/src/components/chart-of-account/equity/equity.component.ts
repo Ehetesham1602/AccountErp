@@ -13,6 +13,7 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 export class EquityComponent implements OnInit {
   @Output() openAddAccountModal = new EventEmitter();
   @BlockUI('container-blockui') blockUI: NgBlockUI;
+  accType=5;
   accountList;
   constructor(
     router: Router,
@@ -23,17 +24,23 @@ export class EquityComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-  //      this.blockUI.start();
-  //   this.chartofaccService.getAssetAccounts().subscribe(
-  //       (data: any) => {
-  //           this.blockUI.stop();
-  //           Object.assign(this.accountList, data);
-            
-  //       },
-  //       error => {
-  //           this.blockUI.stop();
-  //           this.appUtils.ProcessErrorResponse(this.toastr, error);
-  //       });
+  this.getEquityAccounts();
    }
+
+   getEquityAccounts(){
+    debugger;
+ 
+    this.chartofaccService.getAccountsByMasterType(this.accType).subscribe(
+        (data: any) => {
+            this.accountList=[];
+            Object.assign(this.accountList, data);
+            console.log("equity",this.accountList)
+           
+        },
+        error => {
+            this.blockUI.stop();
+            this.appUtils.ProcessErrorResponse(this.toastr, error);
+        });
+  }
 
 }

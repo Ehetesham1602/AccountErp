@@ -12,4 +12,7 @@ export class InvoicePaymentService {
         return this.http.post(this.appSettings.ApiBaseUrl + 'invoicePayment/add', model);
     }
     
+    getUnpaidInvoice(){
+        return this.http.get(this.appSettings.ApiBaseUrl + 'Invoice/get-AllUnPaid');
+    }
 }
