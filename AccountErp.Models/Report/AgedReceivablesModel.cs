@@ -6,7 +6,7 @@ namespace AccountErp.Models.Report
 {
     public class AgedReceivablesModel
     {
-        public int VendorId { get; set; }
+        public int CustomerId { get; set; }
         public DateTime AsOfDate { get; set; }
         public int ReportType { get; set; }
     }
