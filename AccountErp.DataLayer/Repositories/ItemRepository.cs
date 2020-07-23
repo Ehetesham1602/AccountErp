@@ -99,7 +99,7 @@ namespace AccountErp.DataLayer.Repositories
                               Description = s.Description,
                               IsTaxable = s.IsTaxable? "1":"0",
                               SalesTaxId = s.SalesTaxId,
-                              isForSell = s.isForSell,
+                              isForSell = (bool)s.isForSell? "1" : "0",
                               BankAccountId = s.BankAccountId
                           })
                          .AsNoTracking()
@@ -129,7 +129,6 @@ namespace AccountErp.DataLayer.Repositories
                                 Status = s.Status,
                                 TaxCode = s.SalesTax.Code,
                                 TaxPercentage = s.SalesTax.TaxPercentage,
-                                isForSell = s.isForSell,
                                 BankAccountId = s.BankAccountId
                             })
                             .AsNoTracking();
