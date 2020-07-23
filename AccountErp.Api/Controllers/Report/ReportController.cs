@@ -56,5 +56,21 @@ namespace AccountErp.Api.Controllers.Report
             var pageResult = await _reportManager.GetAgedPayablesReportAsync(model);
             return pageResult;
         }
+
+        [HttpPost]
+        [Route("aged_receivables_report_details")]
+        public async Task<AgedPayablesDetailsReportDto> GetAgedReceivablesReportAsync(AgedReceivablesModel model)
+        {
+            var PageResult = await _reportManager.GetAgedReceivablesReportAsync(model);
+            return PageResult;
+        }
+
+        [HttpPost]
+        [Route("profit_and_loss_report")]
+        public async Task<ProfitAndLossSummaryReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model)            
+        {
+            var pageResult = await _reportManager.GetProfitAndLossReportAsync(model);
+            return pageResult;
+        }
     }
 }

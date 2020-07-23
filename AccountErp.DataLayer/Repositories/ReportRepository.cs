@@ -243,7 +243,8 @@ namespace AccountErp.DataLayer.Repositories
                                            select new BillDetailDto
                                            {
                                                TotalAmount = b.TotalAmount,
-                                               DueDate = b.DueDate
+                                               DueDate = b.DueDate,
+                                               Status = b.Status
                                            }).ToListAsync();
                 
                 foreach(var item in billDetailDtoList)
@@ -270,14 +271,14 @@ namespace AccountErp.DataLayer.Repositories
 
                         agedPayables.CountLessThan30++;
                     }
-                    else if (date > 30  && date < 60 )
+                    else if (date > 30  && date <= 60)
                     {
                         agedPayables.ThirtyFirstToSixty += item.TotalAmount;
                         agedPayables.TotalAmount += item.TotalAmount;
                         agedPayables.TotalUnpaid += item.TotalAmount;
                         agedPayables.CountThirtyFirstToSixty++;
                     }
-                    else if(date > 60)
+                    else if(date > 60 && date <= 90)
                     {
                         agedPayables.SixtyOneToNinety += item.TotalAmount;
                         agedPayables.TotalAmount += item.TotalAmount;
@@ -291,11 +292,112 @@ namespace AccountErp.DataLayer.Repositories
                         agedPayables.CountMoreThanNinety++;
                     }
                 }
-                //agedPayables.DateForDue = billDetailDtoList.Where(p => p.DueDate == model.AsOfDate ? agedPayables.TotalAmount = p.TotalAmount  :  ).ToList();
+                if (model.ReportType == 1)
+                {
+                    billDetailDtoList = billDetailDtoList.Where(p => p.Status == Constants.BillStatus.Paid).ToList();
+                }
                 billDetailDtoList = billDetailDtoList.Where(p => (p.DueDate >= model.AsOfDate)).ToList();
                 agedPayables.TotalUnpaid = billDetailDtoList.Sum(x => x.TotalAmount );
             }
             return agedPayablesReportsList;
         }
+
+        public async Task<List<AgedPayablesReportDto>> GetAgedReceivablesReportAsync(AgedReceivablesModel model)
+        {
+            List<AgedPayablesReportDto> agedReceivablesReportDtosList;
+            List<InvoiceDetailDto> invoiceDetailDtoList;
+            if (model.VendorId == 0)
+            {
+                agedReceivablesReportDtosList = await (from v in _dataContext.Vendors
+                                                 select new AgedPayablesReportDto
+                                                 {
+                                                     VendorId = v.Id,
+                                                     VendorName = v.Name
+                                                 }).ToListAsync();
+            }
+            else
+            {
+                agedReceivablesReportDtosList = await (from v in _dataContext.Vendors
+                                                 where v.Id == model.VendorId
+                                                 select new AgedPayablesReportDto
+                                                 {
+                                                     VendorId = v.Id,
+                                                     VendorName = v.Name
+                                                 }).ToListAsync();
+            }
+
+            foreach (var agedReceivables in agedReceivablesReportDtosList)
+            {
+                invoiceDetailDtoList = await (from i in _dataContext.Invoices
+                                           where i.Id == agedReceivables.VendorId && i.Status != Constants.InvoiceStatus.Deleted
+                                           select new InvoiceDetailDto
+                                           {
+                                               TotalAmount = i.TotalAmount,
+                                               DueDate = i.DueDate,
+                                               Status = i.Status
+                                           }).ToListAsync();
+
+                foreach (var item in invoiceDetailDtoList)
+                {
+                    DateTime firstDate = new System.DateTime(item.DueDate.Year, item.DueDate.Month, item.DueDate.Day);
+                    DateTime SecondDate = new System.DateTime(model.AsOfDate.Year, model.AsOfDate.Month, model.AsOfDate.Day);
+
+                    System.TimeSpan diff = SecondDate.Subtract(firstDate);
+                    System.TimeSpan diff1 = SecondDate - firstDate;
+
+                    String diff2 = (SecondDate - firstDate).TotalDays.ToString();
+                    var date = Int16.Parse(diff2);
+                    if (date <= 0)
+                    {
+                        agedReceivables.NotYetOverDue += item.TotalAmount;
+                        agedReceivables.TotalAmount += item.TotalAmount;
+                        agedReceivables.CountNotYetOverDue++;
+                    }
+                    else if (date > 0 && date <= 30)
+                    {
+                        agedReceivables.LessThan30 += item.TotalAmount;
+                        agedReceivables.TotalAmount += item.TotalAmount;
+                        agedReceivables.TotalUnpaid += item.TotalAmount;
+
+                        agedReceivables.CountLessThan30++;
+                    }
+                    else if (date > 30 && date <= 60)
+                    {
+                        agedReceivables.ThirtyFirstToSixty += item.TotalAmount;
+                        agedReceivables.TotalAmount += item.TotalAmount;
+                        agedReceivables.TotalUnpaid += item.TotalAmount;
+                        agedReceivables.CountThirtyFirstToSixty++;
+                    }
+                    else if (date > 60 && date <= 90)
+                    {
+                        agedReceivables.SixtyOneToNinety += item.TotalAmount;
+                        agedReceivables.TotalAmount += item.TotalAmount;
+                        agedReceivables.TotalUnpaid += item.TotalAmount;
+                        agedReceivables.CountSixtyOneToNinety++;
+                    }
+                    else
+                    {
+                        agedReceivables.MoreThanNinety += item.TotalAmount;
+                        agedReceivables.TotalAmount += item.TotalAmount;
+                        agedReceivables.TotalUnpaid += item.TotalAmount;
+                        agedReceivables.CountMoreThanNinety++;
+                    }
+                }
+                if (model.ReportType == 1)
+                {
+                    invoiceDetailDtoList = invoiceDetailDtoList.Where(p => p.Status == Constants.InvoiceStatus.Paid).ToList();
+                }
+                invoiceDetailDtoList = invoiceDetailDtoList.Where(p => (p.DueDate >= model.AsOfDate)).ToList();
+                agedReceivables.TotalUnpaid = invoiceDetailDtoList.Sum(x => x.TotalAmount);
+            }
+            return agedReceivablesReportDtosList;
+        }
+
+        public async Task<ProfitAndLossSummaryReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model)
+        {
+           // List<ProfitAndLossSummaryReportDto> profitAndLossSummaryReportDtosList;
+            return null;
+        }
+
     }
 }

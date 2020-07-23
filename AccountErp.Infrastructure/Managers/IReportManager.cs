@@ -13,11 +13,10 @@ namespace AccountErp.Infrastructure.Managers
     public interface IReportManager
     {
         Task<VendorDetailsReportDto> GetVendorReportAsync(VendorReportModel model);
-
         Task<CustomerDetailsReportDto> GetCustomerReportAsync(CustomerReportModel model);
-
         Task<SalesTaxDetailsReportDto> GetSalesTaxReportAsync(SalesReportModel model);
-
         Task<AgedPayablesDetailsReportDto> GetAgedPayablesReportAsync(AgedPayablesModel model);
+        Task<AgedPayablesDetailsReportDto> GetAgedReceivablesReportAsync(AgedReceivablesModel model);
+        Task<ProfitAndLossSummaryReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model);
     }
 }
