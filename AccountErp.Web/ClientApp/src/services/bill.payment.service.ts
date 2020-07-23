@@ -11,5 +11,8 @@ export class BillPaymentService {
     add(model: BillPaymentModel) {
         return this.http.post(this.appSettings.ApiBaseUrl + 'billPayment/add', model);
     }
+    getUnpaidBills(){
+        return this.http.get(this.appSettings.ApiBaseUrl + 'Bill/get-AllUnpaidBills');
+    }
     
 }

@@ -15,21 +15,29 @@ export class ChartOfAccountsService {
     private appSettings: AppSettings) { }
 
   add(model: customerAccountModel) {
-    return this.http.post(this.appSettings.ApiBaseUrl + 'Customer/Add', model);
+    return this.http.post(this.appSettings.ApiBaseUrl + 'bankAccount/Add', model);
   }
 
   getAssetAccounts(){
     
   }
 
-  getCustomerStatement(custDetail){
+  getAllAccountTypes(){
     debugger;
    
-    return this.http.post(this.appSettings.ApiBaseUrl + 'Customer/get-customer-statement',custDetail);
+    return this.http.get(this.appSettings.ApiBaseUrl + 'ChartofAccount/getCOADetails');
   }
 
-  toggleStatus(id: number) {
-    return this.http.post(this.appSettings.ApiBaseUrl + 'Customer/toggle-status/' + id, null);
+  getAccountsByType(id: number) {
+    return this.http.get(this.appSettings.ApiBaseUrl + 'ChartofAccount/getAccountByTypeId/' + id);
+  }
+
+  getAccountsByMasterType(id: number) {
+    return this.http.post(this.appSettings.ApiBaseUrl + 'ChartofAccount/getDetailsByMasterId/' + id,null);
+  }
+
+  getaccbyledgertype(id:number){
+    return this.http.post(this.appSettings.ApiBaseUrl + 'BankAccount/getDetailByLedgerType/?typeId=' + id,null);
   }
 
   delete(id: number) {
@@ -37,11 +45,11 @@ export class ChartOfAccountsService {
   }
 
   getForEdit(id: number) {
-    return this.http.get(this.appSettings.ApiBaseUrl + 'Customer/get-for-edit/' + id);
+    return this.http.get(this.appSettings.ApiBaseUrl + 'bankAccount/get-for-edit/' + id);
   }
 
-  edit(model: customerAccountEditModel) {
-    return this.http.post(this.appSettings.ApiBaseUrl + 'Customer/edit', model);
+  edit(model: customerAccountModel) {
+    return this.http.post(this.appSettings.ApiBaseUrl + 'bankAccount/edit', model);
   }
 
   getDetail(id: number) {

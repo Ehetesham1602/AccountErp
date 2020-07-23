@@ -14,7 +14,7 @@ export class AssetsComponent implements OnInit {
   @Output() openAddAccountModal = new EventEmitter();
   @Output() closeAddAccountModal = new EventEmitter();
   @BlockUI('container-blockui') blockUI: NgBlockUI;
-  accType;
+  accType=1;
   accountList;
   constructor(
     private router: Router,
@@ -24,17 +24,24 @@ export class AssetsComponent implements OnInit {
     private chartofaccService:ChartOfAccountsService) { }
 
   ngOnInit() {
-    // this.blockUI.start();
-    // this.chartofaccService.getAssetAccounts().subscribe(
-    //     (data: any) => {
-    //         this.blockUI.stop();
-    //         Object.assign(this.accountList, data);
-            
-    //     },
-    //     error => {
-    //         this.blockUI.stop();
-    //         this.appUtils.ProcessErrorResponse(this.toastr, error);
-    //     });
+    alert("dfjj")
+    this.getAssetAccounts();
+}
+
+getAssetAccounts(){
+  debugger;
+
+    this.chartofaccService.getAccountsByMasterType(this.accType).subscribe(
+        (data: any) => {
+            this.accountList=[];
+            Object.assign(this.accountList, data);
+            console.log("assets",this.accountList)
+           
+        },
+        error => {
+            this.blockUI.stop();
+            this.appUtils.ProcessErrorResponse(this.toastr, error);
+        });
 }
 
 }

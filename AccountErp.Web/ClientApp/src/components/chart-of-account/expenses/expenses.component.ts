@@ -13,6 +13,7 @@ import { ChartOfAccountsService } from 'src/services/chart-of-accounts.service';
 export class ExpensesComponent implements OnInit {
   @Output() openAddAccountModal = new EventEmitter();
   @BlockUI('container-blockui') blockUI: NgBlockUI;
+  accType=4;
   accountList;
   constructor(
     router: Router,
@@ -24,18 +25,24 @@ private chartofaccService:ChartOfAccountsService
 
   ngOnInit() {
 
-    //      this.blockUI.start();
-  //   this.chartofaccService.getAssetAccounts().subscribe(
-  //       (data: any) => {
-  //           this.blockUI.stop();
-  //           Object.assign(this.accountList, data);
-            
-  //       },
-  //       error => {
-  //           this.blockUI.stop();
-  //           this.appUtils.ProcessErrorResponse(this.toastr, error);
-  //       });
+   this.getExpenseAccounts();
 
+  }
+
+  getExpenseAccounts(){
+    debugger;
+ 
+    this.chartofaccService.getAccountsByMasterType(this.accType).subscribe(
+        (data: any) => {
+            this.accountList=[];
+            Object.assign(this.accountList, data);
+            console.log("equity",this.accountList)
+           
+        },
+        error => {
+            this.blockUI.stop();
+            this.appUtils.ProcessErrorResponse(this.toastr, error);
+        });
   }
 
 }

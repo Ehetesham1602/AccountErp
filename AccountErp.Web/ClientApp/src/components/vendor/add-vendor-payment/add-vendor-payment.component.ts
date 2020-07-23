@@ -21,6 +21,10 @@ export class AddVendorPaymentComponent implements OnInit {
   vendorPaymentInfoModel: VendorPaymentInfoModel = new VendorPaymentInfoModel();
   expenseSummaryModel: ExpenseSummaryModel = new ExpenseSummaryModel();
   vendors=[];
+  bills=[];
+  selectedVendor;
+  vendor:any={};
+  config = {displayKey:"value",search:true,limitTo:10,height: 'auto',placeholder:'Select Vendor',customComparator: ()=>{},moreText: 'more',noResultsFound: 'No results found!',searchPlaceholder:'Search',searchOnKey: 'value',clearOnSelection: false,inputDirection: 'ltr',}
 
   constructor(private router: Router,
       private route: ActivatedRoute,
@@ -43,6 +47,7 @@ export class AddVendorPaymentComponent implements OnInit {
       this.loadExpenseSummary();
       this.model.paymentDate = this.appUtils.getDateForNgDatePicker(null);
       this.loadVendors();
+      this.loadUnpaidBills();
   }
 
   loadBankAccounts() {
@@ -55,6 +60,40 @@ export class AddVendorPaymentComponent implements OnInit {
                   this.appUtils.ProcessErrorResponse(this.toastr, error);
               });
   }
+
+  getVendorDetail(){
+    debugger;
+    if(this.selectedVendor!=undefined){
+        this.model.vendorId=this.selectedVendor.keyInt;
+    
+    if (this.model.vendorId === null
+        || this.model.vendorId === '') {
+      
+        return;
+    }
+
+    this.vendorService.getDetail(Number(this.model.vendorId))
+        .subscribe(
+            (data) => {
+                Object.assign(this.vendor, data);
+                console.log("vendor",this.vendor)
+              
+            });
+        }
+  }
+
+  loadUnpaidBills(){
+        
+    this.billPaymentService.getUnpaidBills()
+    .subscribe(
+        data => {
+            Object.assign(this.bills, data);
+            console.log("bill",this.bills)
+        },
+        error => {
+            this.appUtils.ProcessErrorResponse(this.toastr, error);
+        });
+}
 
   loadCreditCards() {
       this.creditCardService.getSelectItems()

@@ -25,6 +25,7 @@ export class AddCustomerPaymentComponent implements OnInit {
     config = {displayKey:"value",search:true,limitTo:10,height: 'auto',placeholder:'Select Customer',customComparator: ()=>{},moreText: 'more',noResultsFound: 'No results found!',searchPlaceholder:'Search',searchOnKey: 'value',clearOnSelection: false,inputDirection: 'ltr',}
     selectedCustomer;
     customer:any={};
+    invoices:any=[];
 
     constructor(private router: Router,
         private route: ActivatedRoute,
@@ -45,6 +46,7 @@ export class AddCustomerPaymentComponent implements OnInit {
         this.loadBankAccounts();
         this.loadInvoiceSummary();
         this.loadCustomers();
+        this.loadUnpaidInvoices();
         this.model.paymentDate = this.appUtils.getDateForNgDatePicker(null);
     }
 
@@ -57,6 +59,19 @@ export class AddCustomerPaymentComponent implements OnInit {
                 error => {
                     this.appUtils.ProcessErrorResponse(this.toastr, error);
                 });
+    }
+
+    loadUnpaidInvoices(){
+        
+        this.invoicePaymentService.getUnpaidInvoice()
+        .subscribe(
+            data => {
+                Object.assign(this.invoices, data);
+                console.log("invoices",this.invoices)
+            },
+            error => {
+                this.appUtils.ProcessErrorResponse(this.toastr, error);
+            });
     }
 
     loadInvoiceSummary() {
@@ -98,22 +113,33 @@ export class AddCustomerPaymentComponent implements OnInit {
     }
 
     chengePaymentMode() {
-      
+      debugger;
+      var ledgerType=1;
         if (this.model.paymentMode !== '2') {
             this.model.chequeNumber = '';
         }
+        // if (this.model.paymentMode !== '0') {
+        //     ledgerType=1;
+        // }
+
+        
 
         if (this.model.paymentMode == '0') {
-        //     this.chartofaccService.getaccbyledgertype()
-        //     .subscribe(
-        //         data => {
-        //             Object.assign(this.bankAccounts, data);
-        //         },
-        //         error => {
-        //             this.appUtils.ProcessErrorResponse(this.toastr, error);
-        //         });
-        this.bankAccounts=[{keyInt:1,keyString:"",value:"Cash on hand"},{keyInt:2,keyString:"",value:"Petty cash"}]
+            this.chartofaccService.getaccbyledgertype(ledgerType)
+            .subscribe(
+                data => {
+                    this.bankAccounts=[];
+                    Object.assign(this.bankAccounts, data);
+                    console.log("cashacc",this.bankAccounts)
+                },
+                error => {
+                    this.appUtils.ProcessErrorResponse(this.toastr, error);
+                });
+        //this.bankAccounts=[{keyInt:1,keyString:"",value:"Cash on hand"},{keyInt:2,keyString:"",value:"Petty cash"}]
 
+         }
+         else{
+             this.loadBankAccounts();
          }
     }
 
@@ -145,6 +171,7 @@ export class AddCustomerPaymentComponent implements OnInit {
         debugger;
         if(this.selectedCustomer!=undefined){
             this.model.customerId=this.selectedCustomer.keyInt;
+            this.invoiceSummaryModel.customerId=this.selectedCustomer.keyInt;
         
         if (this.model.customerId === null
             || this.model.customerId === '') {
@@ -156,6 +183,7 @@ export class AddCustomerPaymentComponent implements OnInit {
             .subscribe(
                 (data) => {
                     Object.assign(this.customer, data);
+                    this.loadCustomerPaymentInfo();
                   
                 });
             }
@@ -173,17 +201,17 @@ export class AddCustomerPaymentComponent implements OnInit {
             return;
         }
         this.loadInvoiceSummary();
-        // this.blockUI.start();
-        // this.invoiceService.getDetail(this.model.invoiceId).subscribe(
-        //     (data: any) => {
-        //         this.blockUI.stop();
-        //         Object.assign(this.invoiceSummaryModel, data);
+        this.blockUI.start();
+        this.invoiceService.getDetail(this.model.invoiceId).subscribe(
+            (data: any) => {
+                this.blockUI.stop();
+                Object.assign(this.invoiceSummaryModel, data);
               
-        //     },
-        //     error => {
-        //         this.blockUI.stop();
-        //         this.appUtils.ProcessErrorResponse(this.toastr, error);
-        //     });
+            },
+            error => {
+                this.blockUI.stop();
+                this.appUtils.ProcessErrorResponse(this.toastr, error);
+            });
         }
     }
 

@@ -49,23 +49,23 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="kt_tabs_3_1" role="tabpanel">
-                  <app-assets (openAddAccountModal)="openAddAccountModal(addAccountModal,'assets',$event)"></app-assets>
+                  <app-assets  (openAddAccountModal)="openAddAccountModal(addAccountModal,'1',$event)"></app-assets>
                 </div>
 
                 <div class="tab-pane" id="kt_tabs_3_2" role="tabpanel">
-                  <app-liabilities-and-credit-cards (openAddAccountModal)="openAddAccountModal(addAccountModal)"></app-liabilities-and-credit-cards>
+                  <app-liabilities-and-credit-cards (openAddAccountModal)="openAddAccountModal(addAccountModal,'2',$event)"></app-liabilities-and-credit-cards>
                 </div>
 
                 <div class="tab-pane" id="kt_tabs_3_3" role="tabpanel">
-                   <app-income (openAddAccountModal)="openAddAccountModal(addAccountModal)"></app-income>
+                   <app-income (openAddAccountModal)="openAddAccountModal(addAccountModal,'3',$event)"></app-income>
                 </div>
 
                 <div class="tab-pane" id="kt_tabs_3_4" role="tabpanel">
-                   <app-expenses (openAddAccountModal)="openAddAccountModal(addAccountModal)"></app-expenses>
+                   <app-expenses (openAddAccountModal)="openAddAccountModal(addAccountModal,'4',$event)"></app-expenses>
                 </div>
 
                 <div class="tab-pane" id="kt_tabs_3_5" role="tabpanel">
-                   <app-equity (openAddAccountModal)="openAddAccountModal(addAccountModal)"></app-equity>
+                   <app-equity (openAddAccountModal)="openAddAccountModal(addAccountModal,'5',$event)"></app-equity>
                 </div>
             </div>
 
@@ -74,7 +74,7 @@
 </div>
 
 <ng-template #addAccountModal let-modal>
-   <app-add-new-account (closeAddAccountModal)="closeAddAccountModal()" [accType]="accType"></app-add-new-account>
+   <app-add-new-account (closeAddAccountModal)="closeAddAccountModal()" (reloadAccounts)="reloadAccounts()" [accType]="accType" [accId]="accId"></app-add-new-account>
   </ng-template>
 
   

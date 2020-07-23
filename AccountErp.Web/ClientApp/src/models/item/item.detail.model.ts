@@ -6,4 +6,8 @@ export class ItemDetailModel {
     public isTaxable:boolean;
     public taxCode:string;
     public discription: string;
+    public BankAccountId:string;
+    public isForSell:boolean;
+
+   
 }

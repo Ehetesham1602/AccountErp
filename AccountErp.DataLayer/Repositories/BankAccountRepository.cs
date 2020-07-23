@@ -32,24 +32,14 @@ namespace AccountErp.DataLayer.Repositories
         {
             return await _dataContext.BankAccounts.FindAsync(id);
         }
-        public async Task<IEnumerable<BankAccountDetailDto>> GetDetailByLedgerTypeAsync(int typeId)
+        public async Task<IEnumerable<SelectListItemDto>> GetDetailByLedgerTypeAsync(int typeId)
         {
             return await (from ba in _dataContext.BankAccounts
                           where ba.LedgerType == typeId
-                          select new BankAccountDetailDto
+                          select new SelectListItemDto
                           {
-                              Id = ba.Id,
-                              AccountHolderName = ba.AccountHolderName,
-                              AccountNumber = ba.AccountNumber,
-                              BankName = ba.BankName,
-                              BranchName = ba.BranchName,
-                              Ifsc = ba.Ifsc,
-                              AccountCode = ba.AccountCode,
-                              Description = ba.Description,
-                              COA_AccountTypeId = ba.COA_AccountTypeId,
-                              LedgerType = ba.LedgerType,
-                              AccountName = ba.AccountName,
-                              AccountId = ba.AccountId
+                              KeyInt = ba.Id,
+                              Value = ba.AccountName
                           })
                          .AsNoTracking()
                          .ToListAsync();
@@ -162,7 +152,7 @@ namespace AccountErp.DataLayer.Repositories
                 .Select(x => new SelectListItemDto
                 {
                     KeyInt = x.Id,
-                    Value = x.AccountNumber
+                    Value = x.AccountName
                 }).ToListAsync();
         }
 
