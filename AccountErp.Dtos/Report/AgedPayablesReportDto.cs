@@ -8,6 +8,8 @@ namespace AccountErp.Dtos.Report
     {
         public int VendorId { get; set; }
         public string VendorName { get; set; }
+        public int CustomerId { get; set; }
+        public string CustomerName { get; set; }
         public Decimal TotalAmount { get; set; }
         public Decimal TotalUnpaid { get; set; }
         public DateTime DateForDue { get; set; }
