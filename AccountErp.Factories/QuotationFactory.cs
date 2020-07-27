@@ -106,6 +106,7 @@ namespace AccountErp.Factories
                     alreadyExistServices.TaxPercentage = item.TaxPercentage;
                     alreadyExistServices.Rate = item.Rate;
                     alreadyExistServices.Quantity = item.Quantity;
+                    alreadyExistServices.TaxPrice = item.TaxPrice;
                     entity.Services.Add(alreadyExistServices);
                 }
             }
