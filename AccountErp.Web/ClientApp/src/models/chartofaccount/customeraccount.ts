@@ -24,7 +24,7 @@ export class customerAccountModel {
    
 
     constructor() {
-       this.accountNumber="";
+       this.accountNumber=null;
       
     }
 }

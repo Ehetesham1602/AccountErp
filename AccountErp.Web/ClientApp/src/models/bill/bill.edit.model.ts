@@ -13,6 +13,7 @@ export class BillEditModel {
     public totalAmount: number;
     public remark: string;
     public billNumber:string;
+    public subTotal:number;
 
     public items: any;
     public attachments: Array<AttachmentEditModel>;

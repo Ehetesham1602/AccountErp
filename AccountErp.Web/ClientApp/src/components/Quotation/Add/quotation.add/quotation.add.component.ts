@@ -228,21 +228,18 @@ export class QuotationAddComponent implements OnInit {
     }
 
     updateTotalAmount() {
-        debugger;
+      
         this.model.totalAmount = 0;
+        this.model.subTotal = 0;
         this.model.tax = 0;
         this.selectedItems.map((item: ItemListItemModel) => {
-            debugger;
             if (item.taxPercentage != null) {
-                this.model.tax += (item.rate * item.taxPercentage) / 100;
+                this.model.tax += (item.price * item.taxPercentage) / 100;
+                // this.model.tax += (item.rate * item.taxPercentage) / 100;
             }
-
-            if (item.qty != null) {
-                this.model.totalAmount += item.rate * item.qty;
-            } else {
-                this.model.totalAmount += item.rate;
-            }
-
+            this.model.totalAmount += item.price;
+            this.model.subTotal+=item.price;
+            //this.model.totalAmount += item.rate;
         });
 
         if (this.customer.discount != null) {
@@ -308,6 +305,7 @@ export class QuotationAddComponent implements OnInit {
         this.selectedItemListItemModel.rate = 0;
         this.selectedItemListItemModel.taxCode = "";
         this.selectedItemListItemModel.taxPercentage = 0;
+        this.selectedItemListItemModel.taxPrice = 0.00;
         this.selectedItemListItemModel.description = "";
         this.selectedItems.push(this.selectedItemListItemModel);
     }
@@ -346,10 +344,10 @@ export class QuotationAddComponent implements OnInit {
         if (this.selectedItems.length > 0 && this.selectedItems[0].id != 0) {
             if (this.selectedItems[this.selectedItems.length - 1].id != 0) {
                 this.selectedItems.map((item) => {
-                    if (item.salesTaxId != null) {
-                        this.model.items.push({ "serviceId": item.id, "rate": item.rate, "price": item.price, "taxId": item.salesTaxId, "taxPrice": 0, "quantity": item.qty });
-                    } else {
-                        this.model.items.push({ "serviceId": item.id, "rate": item.rate, "price": item.price, "taxId": 0, "taxPrice": 0, "quantity": item.qty });
+                    if(item.salesTaxId!=null){
+                        this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty});
+                    }else{
+                        this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty});
                     }
 
 

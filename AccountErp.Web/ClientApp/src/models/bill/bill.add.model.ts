@@ -11,6 +11,7 @@ export class BillAddModel {
     public discount: number;
     public totalAmount: number;
     public remark: string;
+    public subTotal:number;
 
     public items: any;
     public attachments: Array<AttachmentAddModel>;
