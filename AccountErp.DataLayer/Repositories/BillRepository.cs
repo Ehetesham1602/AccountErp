@@ -73,7 +73,8 @@ namespace AccountErp.DataLayer.Repositories
                                 StrBillDate = b.StrBillDate,
                                 StrDueDate = b.StrDueDate,
                                 Notes = b.Notes,
-                                BillNumber = b.BillNumber
+                                BillNumber = b.BillNumber,
+                                SubTotal = b.SubTotal
 
                             })
                             .AsNoTracking();
@@ -111,7 +112,8 @@ namespace AccountErp.DataLayer.Repositories
                                 StrDueDate = e.StrDueDate,
                                 Notes = e.Notes,
                                 BillNumber = e.BillNumber,
-                                PoSoNumber = e.PoSoNumber
+                                PoSoNumber = e.PoSoNumber,
+                                SubTotal = e.SubTotal
                             })
                             .AsNoTracking();
 
@@ -143,6 +145,7 @@ namespace AccountErp.DataLayer.Repositories
                               Notes = b.Notes,
                               BillNumber = b.BillNumber,
                               PoSoNumber = b.PoSoNumber,
+                              SubTotal = b.SubTotal,
                               Vendor = new VendorPersonallnfoDto
                               {
                                   Name = v.Name,
@@ -202,6 +205,7 @@ namespace AccountErp.DataLayer.Repositories
                               Notes = e.Notes,
                               BillNumber = e.BillNumber,
                               PoSoNumber = e.PoSoNumber,
+                              SubTotal = e.SubTotal,
                               Items = e.Items.Select(x => new BillServiceDto
                               {
                                   Id = x.ItemId,
@@ -249,6 +253,7 @@ namespace AccountErp.DataLayer.Repositories
                               PoSoNumber = e.PoSoNumber,
                               Notes = e.Notes,
                               BillNumber = e.BillNumber,
+                              SubTotal = e.SubTotal
 
                           })
                 .AsNoTracking()
@@ -307,7 +312,8 @@ namespace AccountErp.DataLayer.Repositories
                                 StrDueDate = e.StrDueDate,
                                 Notes = e.Notes,
                                 BillNumber = e.BillNumber,
-                                PoSoNumber = e.PoSoNumber
+                                PoSoNumber = e.PoSoNumber,
+                                SubTotal = e.SubTotal
                             })
                             .AsNoTracking()
                             .ToListAsync();

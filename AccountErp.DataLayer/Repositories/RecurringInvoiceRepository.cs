@@ -64,6 +64,7 @@ namespace AccountErp.DataLayer.Repositories
                                      StrRecDueDate = i.StrRecDueDate,
                                      PoSoNumber = i.PoSoNumber,
                                      RecInvoiceNumber = i.RecInvoiceNumber,
+                                     SubTotal = i.SubTotal,
                                      Customer = new CustomerDetailDto
                                      {
                                          FirstName = c.FirstName,
@@ -127,6 +128,7 @@ namespace AccountErp.DataLayer.Repositories
                               StrRecDueDate = i.StrRecDueDate,
                               PoSoNumber = i.PoSoNumber,
                               RecInvoiceNumber = i.RecInvoiceNumber,
+                              SubTotal = i.SubTotal,
                               Customer = new CustomerDetailDto
                               {
                                   FirstName = c.FirstName,
@@ -189,7 +191,8 @@ namespace AccountErp.DataLayer.Repositories
                                 RecInvoiceDate = i.RecInvoiceDate,
                                 StrRecDueDate = i.StrRecDueDate,
                                 StrRecInvoiceDate = i.StrRecInvoiceDate,
-                                RecInvoiceNumber = i.RecInvoiceNumber
+                                RecInvoiceNumber = i.RecInvoiceNumber,
+                                SubTotal = i.SubTotal
                             })
                             .AsNoTracking();
 
@@ -230,7 +233,8 @@ namespace AccountErp.DataLayer.Repositories
                                 RecDueDate = i.RecDueDate,
                                 StrRecDueDate = i.StrRecDueDate,
                                 PoSoNumber = i.PoSoNumber,
-                                RecInvoiceNumber = i.RecInvoiceNumber
+                                RecInvoiceNumber = i.RecInvoiceNumber,
+                                SubTotal = i.SubTotal
                             })
                             .AsNoTracking();
 
@@ -262,7 +266,8 @@ namespace AccountErp.DataLayer.Repositories
                               RecDueDate = i.RecDueDate,
                               StrRecDueDate = i.StrRecDueDate,
                               PoSoNumber = i.PoSoNumber,
-                              RecInvoiceNumber = i.RecInvoiceNumber
+                              RecInvoiceNumber = i.RecInvoiceNumber,
+                              SubTotal = i.SubTotal
                           })
                           .AsNoTracking()
                           .SingleOrDefaultAsync();

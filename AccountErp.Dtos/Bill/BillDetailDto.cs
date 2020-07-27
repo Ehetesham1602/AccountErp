@@ -25,6 +25,7 @@ namespace AccountErp.Dtos.Bill
         public string StrDueDate { get; set; }
         public string Notes { get; set; }
         public string BillNumber { get; set; }
+        public decimal? SubTotal { get; set; }
         public VendorPersonallnfoDto Vendor { get; set; }
 
         public IEnumerable<BillServiceDto> Items { get; set; }

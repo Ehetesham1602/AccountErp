@@ -18,6 +18,7 @@ namespace AccountErp.Dtos.Invoice
         public decimal? PoSoNumber { get; set; }
         public string StrInvoiceDate { get; set; }
         public string StrDueDate { get; set; }
+        public decimal? SubTotal { get; set; }
 
         public CustomerDetailDto Customer { get; set; }
 

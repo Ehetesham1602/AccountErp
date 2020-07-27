@@ -23,6 +23,7 @@ namespace AccountErp.Dtos.RecurringInvoice
         public string StrRecDueDate { get; set; }
         public string Description { get; set; }
         public string RecInvoiceNumber { get; set; }
+        public decimal? SubTotal { get; set; }
         public Constants.InvoiceStatus Status { get; set; }
         public DateTime CreatedOn { get; set; }
     }

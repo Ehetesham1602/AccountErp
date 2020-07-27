@@ -18,6 +18,7 @@ namespace AccountErp.Dtos.Invoice
         public decimal? PoSoNumber { get; set; }
         public string StrInvoiceDate { get; set; }
         public string StrDueDate { get; set; }
+        public decimal? SubTotal { get; set; }
         public decimal TotalAmount { get; set; }
         public DateTime CreatedOn { get; set; }
         public Constants.InvoiceStatus Status { get; set; }

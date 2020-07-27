@@ -19,7 +19,7 @@ namespace AccountErp.Dtos.RecurringInvoice
         public string RecInvoiceNumber { get; set; }
         public string StrRecInvoiceDate { get; set; }
         public string StrRecDueDate { get; set; }
-
+        public decimal? SubTotal { get; set; }
         public CustomerDetailDto Customer { get; set; }
 
         public IEnumerable<RecInvoiceServiceDto> Items { get; set; }

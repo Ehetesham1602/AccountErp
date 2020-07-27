@@ -30,8 +30,9 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.StrQuotationDate).IsRequired(false);
             builder.Property(x => x.ExpireDate).IsRequired();
             builder.Property(x => x.StrExpireDate).IsRequired(false);
-            builder.Property(x => x.PoSoNumber).IsRequired(false).HasColumnType("NUMERIC(12,2)"); ;
+            builder.Property(x => x.PoSoNumber).IsRequired(false).HasColumnType("NUMERIC(12,2)");
             builder.Property(x => x.Memo).IsRequired(false);
+            builder.Property(x => x.SubTotal).IsRequired(false).HasColumnType("NUMERIC(12,2)");
 
             builder.HasMany(x => x.Services).WithOne().HasForeignKey(x => x.QuotationId);
             builder.HasMany(x => x.Attachments).WithOne().HasForeignKey(x => x.QuotationId);

@@ -19,6 +19,8 @@
     <Compile Remove="Migrations\20200720115501_itemChange20072020.Designer.cs" />
     <Compile Remove="Migrations\20200720122422_itemChange20072020_2.cs" />
     <Compile Remove="Migrations\20200720122422_itemChange20072020_2.Designer.cs" />
+    <Compile Remove="Migrations\20200727073144_invoiceBillChangeForSubtotal27072020.cs" />
+    <Compile Remove="Migrations\20200727073144_invoiceBillChangeForSubtotal27072020.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -23,7 +23,7 @@ namespace AccountErp.Models.RecurringInvoice
         public DateTime RecInvoiceDate { get; set; }
         public DateTime RecDueDate { get; set; }
         public decimal? PoSoNumber { get; set; }
-
+        public decimal? SubTotal { get; set; }
         [Required]
         public List<RecInvoiceServiceModel> Items { get; set; }
 

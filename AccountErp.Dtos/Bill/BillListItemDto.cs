@@ -20,6 +20,7 @@ namespace AccountErp.Dtos.Bill
         public string StrDueDate { get; set; }
         public string Notes { get; set; }
         public string BillNumber { get; set; }
+        public decimal? SubTotal { get; set; }
         public Constants.BillStatus Status { get; set; }
         public DateTime CreatedOn { get; set; }
     }

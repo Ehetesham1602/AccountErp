@@ -23,6 +23,7 @@ namespace AccountErp.Dtos.Quotation
         public string Memo { get; set; }
         public decimal TotalAmount { get; set; }
         public DateTime CreatedOn { get; set; }
+        public decimal? SubTotal { get; set; }
         public Constants.InvoiceStatus Status { get; set; }
     }
 }

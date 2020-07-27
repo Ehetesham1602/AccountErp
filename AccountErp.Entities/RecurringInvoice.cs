@@ -27,6 +27,7 @@ namespace AccountErp.Entities
         public string StrRecDueDate { get; set; }
         public DateTime RecDueDate { get; set; }
         public decimal? PoSoNumber { get; set; }
+        public decimal? SubTotal { get; set; }
         public ICollection<RecurringInvoiceService> Services { get; set; }
         public ICollection<RecurringInvoiceAttachment> Attachments { get; set; }
     }

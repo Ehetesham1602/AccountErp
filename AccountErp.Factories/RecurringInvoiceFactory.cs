@@ -29,6 +29,7 @@ namespace AccountErp.Factories
                 RecDueDate = model.RecDueDate,
                 StrRecDueDate = model.RecDueDate.ToString("yyyy-MM-dd"),
                 PoSoNumber = model.PoSoNumber,
+                SubTotal =model.SubTotal,
                 Services = model.Items.Select(x => new RecurringInvoiceService
                 {
                     Id = Guid.NewGuid(),
@@ -79,6 +80,7 @@ namespace AccountErp.Factories
             entity.RecDueDate = model.RecDueDate;
             entity.StrRecDueDate = model.RecDueDate.ToString("yyyy-MM-dd");
             entity.PoSoNumber = model.PoSoNumber;
+            entity.SubTotal = model.SubTotal;
 
             //int[] arr = new int[100];
             ArrayList tempArr = new ArrayList();

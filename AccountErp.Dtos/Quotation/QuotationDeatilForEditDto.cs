@@ -20,7 +20,7 @@ namespace AccountErp.Dtos.Quotation
         public string StrExpiryDate { get; set; }
         public string StrQuotationDate { get; set; }
         public string Memo { get; set; }
-
+        public decimal? SubTotal { get; set; }
         public CustomerDetailDto Customer { get; set; }
 
         public IEnumerable<QuotationServiceDto> Items { get; set; }
