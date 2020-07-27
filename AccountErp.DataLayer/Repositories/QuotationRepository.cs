@@ -66,6 +66,7 @@ namespace AccountErp.DataLayer.Repositories
                                      PoSoNumber = i.PoSoNumber,
                                      Memo = i.Memo,
                                      QuotationNumber = i.QuotationNumber,
+                                     SubTotal = i.SubTotal,
                                      Customer = new CustomerDetailDto
                                      {
                                          FirstName = c.FirstName,
@@ -131,6 +132,7 @@ namespace AccountErp.DataLayer.Repositories
                               PoSoNumber = i.PoSoNumber,
                               Memo = i.Memo,
                               QuotationNumber = i.QuotationNumber,
+                              SubTotal = i.SubTotal,
                               Customer = new CustomerDetailDto
                               {
                                   FirstName = c.FirstName,
@@ -194,7 +196,8 @@ namespace AccountErp.DataLayer.Repositories
                                 StrQuotationDate = i.StrQuotationDate,
                                 ExpiryDate = i.ExpireDate,
                                 StrExpiryDate = i.StrExpireDate,
-                                QuotationNumber = i.QuotationNumber
+                                QuotationNumber = i.QuotationNumber,
+                                SubTotal = i.SubTotal
 
                             })
                             .AsNoTracking();
@@ -237,7 +240,8 @@ namespace AccountErp.DataLayer.Repositories
                                 StrExpiryDate = i.StrExpireDate,
                                 PoSoNumber = i.PoSoNumber,
                                 Memo = i.Memo,
-                                QuotationNumber = i.QuotationNumber
+                                QuotationNumber = i.QuotationNumber,
+                                SubTotal = i.SubTotal
                             })
                             .AsNoTracking();
 
@@ -270,7 +274,8 @@ namespace AccountErp.DataLayer.Repositories
                               StrExpiryDate = i.StrExpireDate,
                               PoSoNumber = i.PoSoNumber,
                               Memo = i.Memo,
-                              QuotationNumber = i.QuotationNumber
+                              QuotationNumber = i.QuotationNumber,
+                              SubTotal = i.SubTotal
                           })
                           .AsNoTracking()
                           .SingleOrDefaultAsync();

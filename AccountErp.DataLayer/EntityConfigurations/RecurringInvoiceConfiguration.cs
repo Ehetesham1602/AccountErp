@@ -31,6 +31,7 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.StrRecInvoiceDate).IsRequired(false);
             builder.Property(x => x.RecDueDate).IsRequired();
             builder.Property(x => x.StrRecDueDate).IsRequired(false);
+            builder.Property(x => x.SubTotal).IsRequired(false).HasColumnType("NUMERIC(12,2)");
 
             builder.HasMany(x => x.Services).WithOne().HasForeignKey(x => x.RecInvoiceId);
             builder.HasMany(x => x.Attachments).WithOne().HasForeignKey(x => x.RecInvoiceId);

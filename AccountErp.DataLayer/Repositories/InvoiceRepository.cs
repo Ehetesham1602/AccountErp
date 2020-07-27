@@ -62,6 +62,7 @@ namespace AccountErp.DataLayer.Repositories
                                      StrDueDate = i.StrDueDate,
                                      PoSoNumber = i.PoSoNumber,
                                      InvoiceNumber = i.InvoiceNumber,
+                                     SubTotal = i.SubTotal,
                                      Customer = new CustomerDetailDto
                                      {
                                          FirstName = c.FirstName,
@@ -185,7 +186,8 @@ namespace AccountErp.DataLayer.Repositories
                                 TotalAmount = i.TotalAmount,
                                 CreatedOn = i.CreatedOn,
                                 Status = i.Status,
-                                InvoiceNumber = i.InvoiceNumber
+                                InvoiceNumber = i.InvoiceNumber,
+                                SubTotal = i.SubTotal
                             })
                             .AsNoTracking();
 
@@ -226,7 +228,8 @@ namespace AccountErp.DataLayer.Repositories
                                 DueDate = i.DueDate,
                                 StrDueDate = i.StrDueDate,
                                 PoSoNumber = i.PoSoNumber,
-                                InvoiceNumber = i.InvoiceNumber
+                                InvoiceNumber = i.InvoiceNumber,
+                                SubTotal = i.SubTotal
                             })
                             .AsNoTracking();
 
@@ -253,7 +256,8 @@ namespace AccountErp.DataLayer.Repositories
                                 DueDate = i.DueDate,
                                 StrDueDate = i.StrDueDate,
                                 PoSoNumber = i.PoSoNumber,
-                                InvoiceNumber = i.InvoiceNumber
+                                InvoiceNumber = i.InvoiceNumber,
+                                SubTotal = i.SubTotal
                             })
                             .AsNoTracking()
                             .ToListAsync();

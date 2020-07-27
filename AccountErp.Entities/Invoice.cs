@@ -26,6 +26,7 @@ namespace AccountErp.Entities
         public string StrDueDate { get; set; }
         public DateTime DueDate { get; set; }
         public decimal? PoSoNumber { get; set; }
+        public decimal? SubTotal { get; set; }
         public ICollection<InvoiceService> Services { get; set; }
         public ICollection<InvoiceAttachment> Attachments { get; set; }
     }

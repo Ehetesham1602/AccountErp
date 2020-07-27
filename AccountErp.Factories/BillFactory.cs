@@ -29,6 +29,7 @@ namespace AccountErp.Factories
                 StrDueDate = model.DueDate.Value.ToString("dd/MM/yyyy"),
                 PoSoNumber = model.PoSoNumber,
                 Notes = model.Notes,
+                SubTotal = model.SubTotal,
                 Items = model.Items.Select(x => new BillItem
                 {
                     Id = Guid.NewGuid(),
@@ -82,6 +83,7 @@ namespace AccountErp.Factories
             bill.StrDueDate = model.DueDate.Value.ToString("dd/MM/yyyy");
             bill.PoSoNumber = model.PoSoNumber;
             bill.Notes = model.Notes;
+            bill.SubTotal = model.SubTotal;
 
            
             ArrayList tempArr = new ArrayList();

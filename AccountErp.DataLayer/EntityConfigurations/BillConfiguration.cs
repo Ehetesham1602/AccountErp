@@ -32,6 +32,7 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.StrDueDate).IsRequired(false);
             builder.Property(x => x.PoSoNumber).IsRequired(false).HasColumnType("NUMERIC(12,2)");
             builder.Property(x => x.BillNumber).IsRequired(false);
+            builder.Property(x => x.SubTotal).IsRequired(false).HasColumnType("NUMERIC(12,2)");
 
             builder.HasMany(x => x.Items).WithOne().HasForeignKey(x => x.BillId);
             builder.HasMany(x => x.Attachments).WithOne().HasForeignKey(x => x.BillId);

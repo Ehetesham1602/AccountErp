@@ -28,6 +28,7 @@ namespace AccountErp.Factories
                 DueDate = model.DueDate,
                 StrDueDate = model.DueDate.ToString("yyyy-MM-dd"),
                 PoSoNumber = model.PoSoNumber,
+                SubTotal = model.SubTotal,
                 Services = model.Items.Select(x => new InvoiceService
                 {
                     Id = Guid.NewGuid(),
@@ -195,6 +196,7 @@ namespace AccountErp.Factories
             entity.DueDate = model.DueDate;
             entity.StrDueDate = model.DueDate.ToString("yyyy-MM-dd");
             entity.PoSoNumber = model.PoSoNumber;
+            entity.SubTotal = model.SubTotal;
 
             //int[] arr = new int[100];
             ArrayList tempArr = new ArrayList();

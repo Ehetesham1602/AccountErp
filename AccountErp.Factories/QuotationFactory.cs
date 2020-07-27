@@ -31,6 +31,7 @@ namespace AccountErp.Factories
                 StrExpireDate = model.ExpiryDate.ToString("yyyy-MM-dd"),
                 PoSoNumber = model.PoSoNumber,
                 Memo = model.Memo,
+                SubTotal = model.SubTotal,
                 Services = model.Items.Select(x => new QuotationService
                 {
                     Id = Guid.NewGuid(),
@@ -83,6 +84,7 @@ namespace AccountErp.Factories
             entity.StrExpireDate = model.ExpiryDate.ToString("yyyy-MM-dd");
             entity.PoSoNumber = model.PoSoNumber;
             entity.Memo = model.Memo;
+            entity.SubTotal = model.SubTotal;
 
             //int[] arr = new int[100];
             ArrayList tempArr = new ArrayList();
