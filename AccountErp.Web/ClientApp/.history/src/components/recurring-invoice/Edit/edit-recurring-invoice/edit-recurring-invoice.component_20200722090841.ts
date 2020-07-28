@@ -144,8 +144,7 @@ selectedTax;
     "salesTaxId": null,
     "status": 1,
     "taxCode": null,
-    "taxPercentage": null,
-    "taxPrice":0.00, });
+    "taxPercentage": null});
 
   }
 
