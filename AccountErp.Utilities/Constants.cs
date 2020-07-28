@@ -16,7 +16,8 @@
 
         public enum BillStatus { Pending, Paid, Deleted, Overdue }
         public enum ContactType { Customer, Vendor }
-        public enum TransactionStatus { InvoicePayment,Billpayments}
+        public enum TransactionType { InvoicePayment,Billpayment,CustomerPayment,VendorPayment}
+        public enum TransactionStatus { Active, InActive }
 
         public struct UserType
         {

@@ -32,6 +32,8 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.AccountName).IsRequired(false);
             builder.Property(x => x.AccountId).IsRequired(false);
 
+            builder.HasMany(x => x.Transaction).WithOne().HasForeignKey(x => x.BankAccountId);
+
         }
     }
 }
