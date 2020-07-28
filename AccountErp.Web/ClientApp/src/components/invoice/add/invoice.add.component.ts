@@ -248,13 +248,17 @@ export class InvoiceAddComponent implements OnInit {
     }
 
     updateTotalAmount() {
+      
         this.model.totalAmount = 0;
+        this.model.subTotal = 0;
         this.model.tax = 0;
         this.selectedItems.map((item: ItemListItemModel) => {
             if (item.taxPercentage != null) {
-                this.model.tax += (item.rate * item.taxPercentage) / 100;
+                this.model.tax += (item.price * item.taxPercentage) / 100;
+                // this.model.tax += (item.rate * item.taxPercentage) / 100;
             }
             this.model.totalAmount += item.price;
+            this.model.subTotal+=item.price;
             //this.model.totalAmount += item.rate;
         });
 
@@ -316,10 +320,11 @@ export class InvoiceAddComponent implements OnInit {
         if (this.selectedItems.length > 0 && this.selectedItems[0].id!=0 ) {
             if(this.selectedItems[this.selectedItems.length-1].id!=0){
             this.selectedItems.map((item) => {
+               
                 if(item.salesTaxId!=null){
-                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPrice": 0,"quantity":item.qty});
+                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty});
                 }else{
-                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPrice": 0,"quantity":item.qty});
+                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty});
                 }
             });
         }else{
@@ -385,6 +390,7 @@ export class InvoiceAddComponent implements OnInit {
       "rate": 0.00,
       "salesTaxId": null,
       "status": 1,
+      "taxPrice":0.00,
       "taxCode": null,
       "taxPercentage": null});
 

@@ -12,7 +12,7 @@ export class InvoiceAddModel {
     public invoiceDate:string;
     public dueDate:string;
     public poSoNumber:string;
-
+    public subTotal:number;
    
   
 
