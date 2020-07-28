@@ -12,6 +12,7 @@ export class quotationAddModel {
     public remark: string;
     public quotationDate:string;
     public expiryDate:string;
+    public subTotal:number;
   
 
     public items: any;

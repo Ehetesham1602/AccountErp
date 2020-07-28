@@ -12,6 +12,7 @@ export class InvoiceEditModel {
     public remark: string;
     public poso: number;
     public memo: string;
+    public subTotal:number;
     public invoiceDate: string;
     public dueDate: string;
 

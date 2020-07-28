@@ -193,6 +193,7 @@ export class BillEditComponent implements OnInit {
       "rate": 0.00,
       "salesTaxId": null,
       "status": 1,
+      "taxPrice":0.00,
       "taxCode": null,
       "taxPercentage": null});
 
@@ -346,20 +347,26 @@ export class BillEditComponent implements OnInit {
     }
 
     updateTotalAmount() {
+      
         this.model.totalAmount = 0;
+        this.model.subTotal = 0;
         this.model.tax = 0;
         this.selectedItems.map((item: ItemListItemModel) => {
             if (item.taxPercentage != null) {
-                this.model.tax += (item.rate * item.taxPercentage) / 100;
+                this.model.tax += (item.price * item.taxPercentage) / 100;
+                // this.model.tax += (item.rate * item.taxPercentage) / 100;
             }
-            //this.model.totalAmount += item.rate;
             this.model.totalAmount += item.price;
+            this.model.subTotal+=item.price;
+            //this.model.totalAmount += item.rate;
         });
 
         if (this.vendor.discount != null) {
             this.model.discount = this.model.totalAmount * this.vendor.discount / 100;
             this.model.totalAmount -= this.model.discount;
         }
+
+
         this.model.totalAmount = this.model.totalAmount + this.model.tax;
         this.model.totalAmount = Math.round(this.model.totalAmount * 100) / 100;
     }
@@ -411,9 +418,10 @@ export class BillEditComponent implements OnInit {
             if(this.selectedItems[this.selectedItems.length-1].id!=0){
             this.selectedItems.map((item) => {
                 if(item.salesTaxId!=null){
-                    this.model.items.push({"itemId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage": item.taxPercentage,"quantity":item.qty});
+                    debugger;
+                    this.model.items.push({"itemId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty});
                 }else{
-                    this.model.items.push({"itemId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage": 0,"quantity":item.qty});
+                    this.model.items.push({"itemId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty});
                 }
             });
         }else{

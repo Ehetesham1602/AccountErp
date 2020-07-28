@@ -95,6 +95,7 @@ initiateGrid(){
   "qty": 1,
   "rate": 0.00,
   "salesTaxId": null,
+  "taxPrice":0.00,
   "status": 1,
   "taxCode": null,
   "taxPercentage": null});
@@ -377,24 +378,27 @@ initiateGrid(){
   }
 
   updateTotalAmount() {
-      debugger;
-      this.model.totalAmount = 0;
-      this.model.tax = 0;
-      this.selectedItems.map((item: ItemListItemModel) => {
-          if (item.taxPercentage != null) {
-              this.model.tax += (item.rate * item.taxPercentage) / 100;
-          }
-         // this.model.totalAmount += item.rate;
-         this.model.totalAmount += item.price;
-      });
+      
+    this.model.totalAmount = 0;
+    this.model.tax = 0;
+    this.selectedItems.map((item: ItemListItemModel) => {
+        if (item.taxPercentage != null) {
+            this.model.tax += (item.price * item.taxPercentage) / 100;
+            // this.model.tax += (item.rate * item.taxPercentage) / 100;
+        }
+        this.model.totalAmount += item.price;
+        //this.model.totalAmount += item.rate;
+    });
 
-      if (this.customer.discount != null) {
-          this.model.discount = this.model.totalAmount * this.customer.discount / 100;
-          this.model.totalAmount -= this.model.discount;
-      }
-      this.model.totalAmount = this.model.totalAmount + this.model.tax;
-      this.model.totalAmount = Math.round(this.model.totalAmount * 100) / 100;
-  }
+    if (this.customer.discount != null) {
+        this.model.discount = this.model.totalAmount * this.customer.discount / 100;
+        this.model.totalAmount -= this.model.discount;
+    }
+
+
+    this.model.totalAmount = this.model.totalAmount + this.model.tax;
+    this.model.totalAmount = Math.round(this.model.totalAmount * 100) / 100;
+}
 
 
   openItemesModal(content: any) {
@@ -477,9 +481,9 @@ submit() {
         if(this.selectedItems[this.selectedItems.length-1].id!=0){
         this.selectedItems.map((item) => {
             if(item.salesTaxId!=null){
-                this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPrice": 0,"quantity":item.qty});
+                this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty});
             }else{
-                this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPrice": 0,"quantity":item.qty});
+                this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty});
             }
         });
     }else{

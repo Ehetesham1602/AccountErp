@@ -5,6 +5,7 @@ export class ItemListItemModel {
     public rate: number;
     public price:number;
     public qty:number;
+    public taxPrice:number;
 
     public taxCode:string;
     public taxPercentage:number;
