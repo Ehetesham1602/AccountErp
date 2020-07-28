@@ -24,15 +24,18 @@ namespace AccountErp.Api.Controllers
 
         [HttpPost]
         [Route("add")]
-        public async Task<IActionResult> Add([FromBody]BankAccountAddModel model)
+        public async Task<IActionResult> Add([FromBody] BankAccountAddModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.GetErrorList());
             }
-            if (await _bankAccountManager.IsAccountNumberExistsAsync(model.AccountNumber))
+            if (model.LedgerType == 2)
             {
-                return BadRequest("Bank account number already exists");
+                if (await _bankAccountManager.IsAccountNumberExistsAsync(model.AccountNumber))
+                {
+                    return BadRequest("Bank account number already exists");
+                }
             }
             try
             {
@@ -71,15 +74,18 @@ namespace AccountErp.Api.Controllers
 
         [HttpPost]
         [Route("edit")]
-        public async Task<IActionResult> Edit([FromBody]BankAccountEditModel model)
+        public async Task<IActionResult> Edit([FromBody] BankAccountEditModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.GetErrorList());
             }
-            if (await _bankAccountManager.IsAccountNumberExistsForEditAsync(model.Id, model.AccountNumber))
+            if (model.LedgerType == 2)
             {
-                return BadRequest("Bank account number already exists");
+                if (await _bankAccountManager.IsAccountNumberExistsForEditAsync(model.Id, model.AccountNumber))
+                {
+                    return BadRequest("Bank account number already exists");
+                }
             }
             try
             {
