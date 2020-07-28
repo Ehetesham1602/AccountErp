@@ -297,8 +297,8 @@ namespace AccountErp.DataLayer.Repositories
             var linqstmt = await  (from e in _dataContext.Bills
                             join v in _dataContext.Vendors
                             on e.VendorId equals v.Id
-                            where e.Status == Constants.BillStatus.Pending && e.Status == Constants.BillStatus.Overdue
-                            select new BillListItemDto
+                            where e.Status != Constants.BillStatus.Deleted && e.Status != Constants.BillStatus.Paid
+                                   select new BillListItemDto
                             {
                                 Id = e.Id,
                                 VendorId = e.VendorId,
