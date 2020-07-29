@@ -22,6 +22,7 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.TaxId).IsRequired();
             builder.Property(x => x.Quantity).IsRequired();
             builder.Property(x => x.TaxPercentage).IsRequired(false);
+            builder.Property(x => x.TaxPrice).IsRequired().HasColumnType("NUMERIC(12,2)");
             builder.HasOne(x => x.Service).WithMany().HasForeignKey(x => x.ServiceId);
         }
     }

@@ -92,7 +92,9 @@ namespace AccountErp.DataLayer.Repositories
                                          Quantity = x.Quantity,
                                          Price = x.Price,
                                          TaxId = x.TaxId,
-                                         TaxPercentage = x.TaxPercentage
+                                         TaxPercentage = x.TaxPercentage,
+                                         TaxPrice = x.TaxPrice
+                                         
                                      }),
                                      Attachments = i.Attachments.Select(x => new RecInvoiceAttachmentDto
                                      {
@@ -145,7 +147,8 @@ namespace AccountErp.DataLayer.Repositories
                                   Quantity = x.Quantity,
                                   Price = x.Price,
                                   TaxId = x.TaxId,
-                                  TaxPercentage = x.TaxPercentage
+                                  TaxPercentage = x.TaxPercentage,
+                                  TaxPrice = x.TaxPrice
                               }),
                               Attachments = i.Attachments.Select(x => new RecInvoiceAttachmentDto
                               {

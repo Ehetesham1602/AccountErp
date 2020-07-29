@@ -38,7 +38,8 @@ namespace AccountErp.Factories
                     Quantity = x.Quantity,
                     Price = x.Price,
                     TaxId = x.TaxId,
-                    TaxPercentage = x.TaxPercentage
+                    TaxPercentage = x.TaxPercentage,
+                    TaxPrice = x.TaxPrice
                 }).ToList()
             };
 
@@ -102,6 +103,7 @@ namespace AccountErp.Factories
                     alreadyExistServices.TaxPercentage = item.TaxPercentage;
                     alreadyExistServices.Rate = item.Rate;
                     alreadyExistServices.Quantity = item.Quantity;
+                    alreadyExistServices.TaxPrice = item.TaxPrice;
                     entity.Services.Add(alreadyExistServices);
                 }
             }
@@ -128,7 +130,8 @@ namespace AccountErp.Factories
                     TaxId = service.TaxId,
                     Price = service.Price,
                     Quantity = service.Quantity,
-                    TaxPercentage = service.TaxPercentage
+                    TaxPercentage = service.TaxPercentage,
+                    TaxPrice = service.TaxPrice
                 });
             }
 
