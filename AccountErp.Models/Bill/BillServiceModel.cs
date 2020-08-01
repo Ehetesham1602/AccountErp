@@ -12,6 +12,8 @@ namespace AccountErp.Models.Bill
         public int TaxId { get; set; }
         public int? TaxPercentage { get; set; }
         public int Quantity { get; set; }
+        public int BankAccountId { get; set; }
+        public int TaxBankAccountId { get; set; }
         public decimal TaxPrice { get; set; }
     }
 }

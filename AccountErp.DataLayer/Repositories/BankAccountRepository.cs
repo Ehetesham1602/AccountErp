@@ -143,6 +143,21 @@ namespace AccountErp.DataLayer.Repositories
             return await _dataContext.BankAccounts.AnyAsync(x => x.AccountNumber == accountNumber && x.Id != id && x.Status != Constants.RecordStatus.Deleted);
         }
 
+        public async Task<SelectListItemDto> getAccountTypeByCode()
+        {
+            //var data =  await _dataContext.COA_AccountType.FirstOrDefaultAsync(x => x.AccountTypeCode == "SalesTax");
+            //return data;
+            return await (from ba in _dataContext.COA_AccountType
+                          where ba.AccountTypeCode == "SalesTaxes"
+                          select new SelectListItemDto
+                          {
+                              KeyInt = ba.Id,
+                              Value = ba.AccountTypeCode
+                          })
+                       .AsNoTracking()
+                       .SingleOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<SelectListItemDto>> GetSelectItemsAsync()
         {
             return await _dataContext.BankAccounts

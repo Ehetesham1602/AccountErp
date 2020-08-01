@@ -26,6 +26,7 @@ namespace AccountErp.Infrastructure
         Task ToggleStatusAsync(int id);
         Task DeleteAsync(int id);
         Task<IEnumerable<SelectListItemDto>> GetDetailByLedgerTypeAsync(int typeId);
+        Task<SelectListItemDto> getAccountTypeByCode();
 
     }
 }

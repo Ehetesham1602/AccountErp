@@ -23,6 +23,7 @@ namespace AccountErp.Entities
         public int? LedgerType { get; set; }
         public string AccountName { get; set; }
         public string AccountId { get; set; }
+        public bool IsForEdit { get; set; }
         public ICollection<Transaction> Transaction { get; set; }
     }
 }
