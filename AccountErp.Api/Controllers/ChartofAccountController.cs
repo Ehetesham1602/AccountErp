@@ -100,6 +100,15 @@ namespace AccountErp.Api.Controllers
 
             return Ok(COA_Details);
         }
+        [HttpGet]
+        [Route("getCOADetailsWithAccount")]
+        public async Task<IActionResult> GetCOADetailAccountAsync()
+        {
+
+            var COA_Details = await _manager.GetDetailForAccountAsync();
+
+            return Ok(COA_Details);
+        }
         [HttpPost]
         [Route("getAccountByTypeId/{id}")]
         public async Task<IActionResult> getAccountByTypeId(int id)
