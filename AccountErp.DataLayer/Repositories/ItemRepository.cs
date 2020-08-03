@@ -67,6 +67,8 @@ namespace AccountErp.DataLayer.Repositories
             return await (from s in _dataContext.Items
                           join c in _dataContext.SalesTaxes
                           on s.SalesTaxId equals c.Id
+                         into groupjoin_Sales
+                           from c in groupjoin_Sales.DefaultIfEmpty()
                           where status == null
                             ? s.Status != Constants.RecordStatus.Deleted
                             : s.Status == status.Value
