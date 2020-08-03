@@ -15,6 +15,7 @@ namespace AccountErp.Dtos.Item
         public int? SalesTaxId { get; set; }
         public bool? isForSell { get; set; }
         public int? BankAccountId { get; set; }
+        public int? TaxBankAccountId { get; set; }
         public Constants.RecordStatus Status { get; set; }
     }
 }
