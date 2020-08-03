@@ -18,19 +18,21 @@ namespace AccountErp.Managers
         private readonly IBillRepository _repository;
         private readonly IItemRepository _itemRepository;
         private readonly IVendorRepository _vendorRepository;
+        private readonly ITransactionRepository _transactionRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly string _userId;
 
         public BillManager(IHttpContextAccessor contextAccessor,
             IBillRepository repository, IItemRepository itemRepository,
-            IVendorRepository vendorRepository,
+            IVendorRepository vendorRepository, ITransactionRepository transactionRepository,
             IUnitOfWork unitOfWork)
         {
             _userId = contextAccessor.HttpContext.User.GetUserId();
             _repository = repository;
             _itemRepository = itemRepository;
             _vendorRepository = vendorRepository;
+            _transactionRepository = transactionRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -56,10 +58,39 @@ namespace AccountErp.Managers
             //}
 
             var count = await _repository.getCount();
-
-            await _repository.AddAsync(BillFactory.Create(model, _userId, count));
+            var bill = BillFactory.Create(model, _userId, count);
+            await _repository.AddAsync(bill);
 
             await _unitOfWork.SaveChangesAsync();
+            var transaction = TransactionFactory.CreateByBill(bill);
+            await _transactionRepository.AddAsync(transaction);
+            await _unitOfWork.SaveChangesAsync();
+
+            var itemsList = (model.Items.GroupBy(l => l.BankAccountId, l => new { l.BankAccountId, l.Price })
+      .Select(g => new { GroupId = g.Key, Values = g.ToList() })).ToList();
+
+            foreach (var item in itemsList)
+            {
+                var id = item.GroupId;
+                var amount = item.Values.Sum(x => x.Price);
+
+                var itemsData = TransactionFactory.CreateByBillItemsAndTax(bill, id, amount);
+                await _transactionRepository.AddAsync(itemsData);
+                await _unitOfWork.SaveChangesAsync();
+            }
+
+            var taxlistList = (model.Items.GroupBy(l => l.TaxBankAccountId, l => new { l.TaxBankAccountId, l.TaxPrice })
+       .Select(g => new { GroupId = g.Key, Values = g.ToList() })).ToList();
+
+            foreach (var item in taxlistList)
+            {
+                var id = item.GroupId;
+                var amount = item.Values.Sum(x => x.TaxPrice);
+
+                var taxData = TransactionFactory.CreateByBillItemsAndTax(bill, id, amount);
+                await _transactionRepository.AddAsync(taxData);
+                await _unitOfWork.SaveChangesAsync();
+            }
         }
 
         public async Task Editsync(BillEditModel model)

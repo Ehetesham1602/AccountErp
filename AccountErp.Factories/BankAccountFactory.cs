@@ -23,7 +23,8 @@ namespace AccountErp.Factories
                 Description = model.Description,
                 LedgerType = model.LedgerType,
                 AccountName = model.AccountName,
-                AccountId = model.AccountId
+                AccountId = model.AccountId,
+                IsForEdit = true
             };
             return bankAccount;
         }

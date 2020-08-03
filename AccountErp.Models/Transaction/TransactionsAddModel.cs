@@ -3,11 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AccountErp.Entities
+namespace AccountErp.Models
 {
-    public class Transaction
+    public class TransactionsAddModel
     {
-        public int Id { get; set; }
         public int TransactionId { get; set; }
         public int? CompanyId { get; set; }
         public int BankAccountId { get; set; }
@@ -19,7 +18,7 @@ namespace AccountErp.Entities
         public decimal DebitAmount { get; set; }
         public decimal CreditAmount { get; set; }
         public DateTime CreationDate { get; set; }
-        public DateTime? ModifyDate { get; set; }
+        public DateTime ModifyDate { get; set; }
         public Constants.ContactType ContactType { get; set; }
         public Constants.TransactionStatus Status { get; set; }
     }

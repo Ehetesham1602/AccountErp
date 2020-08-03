@@ -32,7 +32,8 @@ namespace AccountErp.DataLayer.Repositories
                     Id = x.Id,
                     Code = x.Code,
                     Description = x.Description,
-                    TaxPercentage = x.TaxPercentage
+                    TaxPercentage = x.TaxPercentage,
+                    BankAccountId = x.BankAccountId
                 }).ToListAsync();
         }
 
@@ -54,7 +55,8 @@ namespace AccountErp.DataLayer.Repositories
                                 Code = st.Code,
                                 Description = st.Description,
                                 TaxPercentage = st.TaxPercentage,
-                                Status = st.Status
+                                Status = st.Status,
+                                BankAccountId = st.BankAccountId
                             })
                 .AsNoTracking();
 
@@ -99,7 +101,8 @@ namespace AccountErp.DataLayer.Repositories
                               Id = st.Id,
                               Code = st.Code,
                               Description = st.Description,
-                              TaxPercentage = st.TaxPercentage
+                              TaxPercentage = st.TaxPercentage,
+                              BankAccountId = st.BankAccountId
                           })
                          .AsNoTracking()
                          .SingleOrDefaultAsync();

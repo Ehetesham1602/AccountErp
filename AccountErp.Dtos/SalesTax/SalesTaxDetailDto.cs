@@ -8,5 +8,6 @@ namespace AccountErp.Dtos.SalesTax
         public string Code { get; set; }
         public string Description { get; set; }
         public decimal TaxPercentage { get; set; }
+        public int? BankAccountId { get; set; }
     }
 }

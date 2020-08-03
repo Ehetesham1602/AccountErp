@@ -70,6 +70,7 @@ namespace AccountErp.Config
             services.AddScoped<IRecurringJobRepository, RecuringJobRepository>();
             services.AddScoped<IReportRepository, ReportRepository>();
             services.AddScoped<IChartOfAccountRepository, ChartOfAccountRepository>();
+            services.AddScoped<ITransactionRepository, TransactionRepository>();
 
         }
         public static void ConfigureServices(IServiceCollection services)
