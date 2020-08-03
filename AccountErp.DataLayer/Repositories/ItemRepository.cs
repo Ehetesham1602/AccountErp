@@ -65,6 +65,8 @@ namespace AccountErp.DataLayer.Repositories
         public async Task<IEnumerable<ItemDetailDto>> GetAllAsync(Constants.RecordStatus? status = null)
         {
             return await (from s in _dataContext.Items
+                          join c in _dataContext.SalesTaxes
+                          on s.SalesTaxId equals c.Id
                           where status == null
                             ? s.Status != Constants.RecordStatus.Deleted
                             : s.Status == status.Value
@@ -81,7 +83,8 @@ namespace AccountErp.DataLayer.Repositories
                               Status = s.Status,
                               SalesTaxId = s.SalesTaxId,
                               isForSell = s.isForSell,
-                              BankAccountId = s.BankAccountId
+                              BankAccountId = s.BankAccountId,
+                              TaxBankAccountId = c.BankAccountId
                           })
                           .AsNoTracking()
                             .ToListAsync();
