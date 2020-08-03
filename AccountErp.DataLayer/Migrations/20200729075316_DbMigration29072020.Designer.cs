@@ -4,14 +4,16 @@ using AccountErp.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200729075316_DbMigration29072020")]
+    partial class DbMigration29072020
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1037,10 +1039,6 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("TaxPercentage");
 
-                    b.Property<decimal?>("TaxPrice")
-                        .IsRequired()
-                        .HasColumnType("NUMERIC(12,2)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RecInvoiceId");
@@ -1104,51 +1102,6 @@ namespace AccountErp.DataLayer.Migrations
                     b.HasIndex("CountryId");
 
                     b.ToTable("ShippingAddress");
-                });
-
-            modelBuilder.Entity("AccountErp.Entities.Transaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BankAccountId");
-
-                    b.Property<int?>("CompanyId");
-
-                    b.Property<int>("ContactId");
-
-                    b.Property<int>("ContactType");
-
-                    b.Property<DateTime>("CreationDate");
-
-                    b.Property<decimal>("CreditAmount")
-                        .HasColumnType("NUMERIC(12,2)");
-
-                    b.Property<decimal>("DebitAmount")
-                        .HasColumnType("NUMERIC(12,2)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(100);
-
-                    b.Property<DateTime>("ModifyDate");
-
-                    b.Property<int>("Status");
-
-                    b.Property<DateTime>("TransactionDate");
-
-                    b.Property<int>("TransactionId");
-
-                    b.Property<string>("TransactionNumber")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("TransactionTypeId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BankAccountId");
-
-                    b.ToTable("Transaction");
                 });
 
             modelBuilder.Entity("AccountErp.Entities.Vendor", b =>
@@ -1532,14 +1485,6 @@ namespace AccountErp.DataLayer.Migrations
                     b.HasOne("AccountErp.Entities.Country", "Country")
                         .WithMany()
                         .HasForeignKey("CountryId");
-                });
-
-            modelBuilder.Entity("AccountErp.Entities.Transaction", b =>
-                {
-                    b.HasOne("AccountErp.Entities.BankAccount")
-                        .WithMany("Transaction")
-                        .HasForeignKey("BankAccountId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.Vendor", b =>
