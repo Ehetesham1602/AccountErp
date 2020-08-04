@@ -1,6 +1,7 @@
 ﻿using AccountErp.Dtos;
 using AccountErp.Dtos.SalesTax;
 using AccountErp.Factories;
+using AccountErp.Infrastructure;
 using AccountErp.Infrastructure.DataLayer;
 using AccountErp.Infrastructure.Managers;
 using AccountErp.Infrastructure.Repositories;
@@ -17,21 +18,28 @@ namespace AccountErp.Managers
     public class SalesTaxManager : ISalesTaxManager
     {
         private readonly ISalesTaxRepository _repository;
+        private readonly IBankAccountRepository _bankAccountRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly string _userId;
 
-        public SalesTaxManager(IHttpContextAccessor contextAccessor, ISalesTaxRepository repository,IUnitOfWork unitOfWork)
+        public SalesTaxManager(IHttpContextAccessor contextAccessor, ISalesTaxRepository repository, IBankAccountRepository bankAccountRepository, IUnitOfWork unitOfWork)
         {
             _userId = contextAccessor.HttpContext.User.GetUserId();
             _repository = repository;
+            _bankAccountRepository = bankAccountRepository;
             _unitOfWork = unitOfWork;
         }
 
         public async Task AddAsync(SalesTaxAddModel model)
         {
-            await _repository.AddAsync(SalesTaxFactory.Create(model,_userId));
-            await _unitOfWork.SaveChangesAsync();            
+            var result = await _bankAccountRepository.getAccountTypeByCode();
+            var bankAcc = SalesTaxFactory.AccountCreate(model, _userId, result.KeyInt);
+            await _bankAccountRepository.AddAsync(bankAcc);
+            await _unitOfWork.SaveChangesAsync();
+            await _repository.AddAsync(SalesTaxFactory.Create(model,_userId,bankAcc.Id));
+          
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task EditAsync(SalesTaxEditModel model)

@@ -4,14 +4,16 @@ using AccountErp.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200730104101_COAAccountMAsterTypeChange30072020")]
+    partial class COAAccountMAsterTypeChange30072020
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,8 +155,6 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<string>("Ifsc")
                         .HasMaxLength(20);
-
-                    b.Property<bool>("IsForEdit");
 
                     b.Property<int?>("LedgerType");
 
@@ -1060,8 +1060,6 @@ namespace AccountErp.DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BankAccountId");
-
                     b.Property<string>("Code");
 
                     b.Property<string>("CreatedBy");
@@ -1137,7 +1135,7 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(100);
 
-                    b.Property<DateTime?>("ModifyDate");
+                    b.Property<DateTime>("ModifyDate");
 
                     b.Property<int>("Status");
 

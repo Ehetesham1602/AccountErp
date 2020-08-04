@@ -1,4 +1,5 @@
-﻿using AccountErp.Dtos.ChartofAccount;
+﻿using AccountErp.Dtos.BankAccount;
+using AccountErp.Dtos.ChartofAccount;
 using AccountErp.Factories;
 using AccountErp.Infrastructure.DataLayer;
 using AccountErp.Infrastructure.Managers;
@@ -66,6 +67,28 @@ namespace AccountErp.Managers
         public async Task<List<AccountDeatilDto>> getAccountByTypeId(int id)
         {
             return await _repository.getAccountByTypeId(id);
+        }
+
+        public async Task<List<AccountDetailsWithMasterDto>> GetDetailForAccountAsync()
+        {
+            var data = await _repository.GetCOADetailAsync();
+            List<AccountDetailsWithMasterDto> accountDetailDto = new List<AccountDetailsWithMasterDto>();
+            foreach (var item in data)
+            {
+                AccountDetailsWithMasterDto accountMasterDto = new AccountDetailsWithMasterDto();
+                accountMasterDto.Id = item.Id;
+                accountMasterDto.AccountMasterName = item.AccountMasterName;
+                accountMasterDto.BankAccount = new List<BankAccountDetailDto>();
+                foreach (var accType in item.AccountTypes)
+                {
+                    foreach (var acc in accType.BankAccount)
+                    {
+                        accountMasterDto.BankAccount.Add(acc);
+                    }
+                }
+                accountDetailDto.Add(accountMasterDto);
+            }
+            return accountDetailDto;
         }
     }
 }

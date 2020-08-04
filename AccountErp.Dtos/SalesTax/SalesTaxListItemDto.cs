@@ -9,5 +9,6 @@ namespace AccountErp.Dtos.SalesTax
         public string Description { get; set; }
         public decimal TaxPercentage { get; set; }
         public Constants.RecordStatus Status { get; set; }
+        public int? BankAccountId { get; set; }
     }
 }

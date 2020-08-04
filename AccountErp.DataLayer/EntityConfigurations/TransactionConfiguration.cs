@@ -30,7 +30,7 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.DebitAmount).IsRequired().HasColumnType("NUMERIC(12,2)");
             builder.Property(x => x.CreditAmount).IsRequired().HasColumnType("NUMERIC(12,2)");
             builder.Property(x => x.CreationDate).IsRequired();
-            builder.Property(x => x.ModifyDate).IsRequired();
+            builder.Property(x => x.ModifyDate).IsRequired(false);
             builder.Property(x => x.ContactType).IsRequired();
         }
     }
