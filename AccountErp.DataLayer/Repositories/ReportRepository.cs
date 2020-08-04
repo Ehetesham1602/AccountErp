@@ -322,6 +322,7 @@ namespace AccountErp.DataLayer.Repositories
 
             foreach (var agedReceivables in agedReceivablesReportDtosList)
             {
+                var test = agedReceivables;
                 invoiceDetailDtoList = await (from i in _dataContext.Invoices
                                               where i.Id == agedReceivables.VendorId && i.Status != Constants.InvoiceStatus.Deleted
                                               select new InvoiceDetailDto
