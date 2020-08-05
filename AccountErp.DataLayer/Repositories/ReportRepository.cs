@@ -295,14 +295,14 @@ namespace AccountErp.DataLayer.Repositories
             return agedPayablesReportsList;
         }
 
-        public async Task<List<AgedPayablesReportDto>> GetAgedReceivablesReportAsync(AgedReceivablesModel model)
+        public async Task<List<AgedReceivablesReportDto>> GetAgedReceivablesReportAsync(AgedReceivablesModel model)
         {
-            List<AgedPayablesReportDto> agedReceivablesReportDtosList;
+            List<AgedReceivablesReportDto> agedReceivablesReportDtosList;
             List<InvoiceDetailDto> invoiceDetailDtoList;
             if (model.CustomerId == 0)
             {
                 agedReceivablesReportDtosList = await (from c in _dataContext.Customers
-                                                       select new AgedPayablesReportDto
+                                                       select new AgedReceivablesReportDto
                                                        {
                                                            CustomerId = c.Id,
                                                            CustomerName = c.FirstName + "" + c.MiddleName + "" + c.LastName
@@ -311,20 +311,20 @@ namespace AccountErp.DataLayer.Repositories
             else
             {
                 agedReceivablesReportDtosList = await (from c in _dataContext.Customers
-                                                        where c.Id == model.CustomerId
-                                                        select new AgedPayablesReportDto
-                                                        {
-                                                            CustomerId = c.Id,
-                                                            CustomerName = c.FirstName + "" + c.MiddleName + "" + c.LastName
+                                                       where c.Id == model.CustomerId
+                                                       select new AgedReceivablesReportDto
+                                                       {
+                                                           CustomerId = c.Id,
+                                                           CustomerName = c.FirstName + "" + c.MiddleName + "" + c.LastName
 
-                                                        }).ToListAsync();
+                                                       }).ToListAsync();
             }
 
             foreach (var agedReceivables in agedReceivablesReportDtosList)
             {
                 var test = agedReceivables;
                 invoiceDetailDtoList = await (from i in _dataContext.Invoices
-                                              where i.Id == agedReceivables.VendorId && i.Status != Constants.InvoiceStatus.Deleted
+                                              where i.CustomerId == agedReceivables.CustomerId && i.Status != Constants.InvoiceStatus.Deleted
                                               select new InvoiceDetailDto
                                               {
                                                   TotalAmount = i.TotalAmount,
@@ -388,11 +388,28 @@ namespace AccountErp.DataLayer.Repositories
             return agedReceivablesReportDtosList;
         }
 
-        public async Task<ProfitAndLossSummaryReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model)
+        public async Task<ProfitAndLossSummaryDetailsReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model)
         {
-            // List<ProfitAndLossSummaryReportDto> profitAndLossSummaryReportDtosList;
-            return null;
-        }
 
+            ProfitAndLossSummaryDetailsReportDto profitAndLossDetailsDto = new ProfitAndLossSummaryDetailsReportDto();
+            profitAndLossDetailsDto.billDetailDto = await (from b in _dataContext.Bills
+                                               where b.Status != Constants.BillStatus.Deleted
+                                               select new BillDetailDto
+                                               {
+                                                   BillDate = b.BillDate,
+                                                   Status = b.Status,
+                                                   SubTotal = b.SubTotal
+                                               }).ToListAsync();
+            profitAndLossDetailsDto.InvoiceDetailDto = await (from i in _dataContext.Invoices
+                                                  where i.Status != Constants.InvoiceStatus.Deleted
+                                                  select new InvoiceDetailDto
+                                                  {
+                                                      InvoiceDate = i.InvoiceDate,
+                                                      Status = i.Status,
+                                                      SubTotal = i.SubTotal
+                                                  }).ToListAsync();
+          
+            return profitAndLossDetailsDto;
+        }
     }
 }
