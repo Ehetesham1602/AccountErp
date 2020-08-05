@@ -28,6 +28,7 @@ namespace AccountErp.Entities
         public DateTime ExpireDate { get; set; }
         public decimal? PoSoNumber { get; set; }
         public decimal? SubTotal { get; set; }
+        public decimal? LineAmountSubTotal { get; set; }
         public string Memo { get; set; }
         public ICollection<QuotationService> Services { get; set; }
         public ICollection<QuotationAttachment> Attachments { get; set; }

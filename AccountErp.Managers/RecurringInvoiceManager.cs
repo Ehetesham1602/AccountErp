@@ -8,6 +8,7 @@ using AccountErp.Utilities;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,26 +38,26 @@ namespace AccountErp.Managers
 
     public async Task AddAsync(RecInvoiceAddModel model)
     {
-        // var items = (await _itemRepository.GetAsync(model.Items)).ToList();
+            // var items = (await _itemRepository.GetAsync(model.Items)).ToList();
 
-        //model.TotalAmount = items.Sum(x => x.Rate);
+            //model.TotalAmount = items.Sum(x => x.Rate);
 
-        //model.Tax = items.Where(x => x.IsTaxable).Sum(x => x.Rate * x.SalesTax.TaxPercentage / 100);
+            //model.Tax = items.Where(x => x.IsTaxable).Sum(x => x.Rate * x.SalesTax.TaxPercentage / 100);
 
-        //var customer = await _customerRepository.GetAsync(model.CustomerId);
+            //var customer = await _customerRepository.GetAsync(model.CustomerId);
 
-        //if (customer.Discount != null)
-        //{
-        //    model.Discount = model.TotalAmount * customer.Discount / 100;
-        //    model.TotalAmount = model.TotalAmount - (model.Discount ?? 0);
-        //}
+            //if (customer.Discount != null)
+            //{
+            //    model.Discount = model.TotalAmount * customer.Discount / 100;
+            //    model.TotalAmount = model.TotalAmount - (model.Discount ?? 0);
+            //}
 
-        //if (model.Tax != null)
-        //{
-        //    model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
-        //}
-
-        var count = await _recInvoiceRepository.getCount();
+            //if (model.Tax != null)
+            //{
+            //    model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
+            //}
+            model.LineAmountSubTotal = model.Items.Sum(x => x.LineAmount);
+            var count = await _recInvoiceRepository.getCount();
 
         //await _invoiceRepository.AddAsync(InvoiceFactory.Create(model, _userId, items));
         await _recInvoiceRepository.AddAsync(RecurringInvoiceFactory.Create(model, _userId, count));

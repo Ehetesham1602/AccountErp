@@ -30,6 +30,7 @@ namespace AccountErp.Factories
                 StrRecDueDate = model.RecDueDate.ToString("yyyy-MM-dd"),
                 PoSoNumber = model.PoSoNumber,
                 SubTotal =model.SubTotal,
+                LineAmountSubTotal = model.LineAmountSubTotal,
                 Services = model.Items.Select(x => new RecurringInvoiceService
                 {
                     Id = Guid.NewGuid(),
@@ -39,6 +40,7 @@ namespace AccountErp.Factories
                     Price = x.Price,
                     TaxId = x.TaxId,
                     TaxPercentage = x.TaxPercentage,
+                    LineAmount = x.LineAmount,
                     TaxPrice = x.TaxPrice
                 }).ToList()
             };
@@ -82,6 +84,7 @@ namespace AccountErp.Factories
             entity.StrRecDueDate = model.RecDueDate.ToString("yyyy-MM-dd");
             entity.PoSoNumber = model.PoSoNumber;
             entity.SubTotal = model.SubTotal;
+            entity.LineAmountSubTotal = model.LineAmountSubTotal;
 
             //int[] arr = new int[100];
             ArrayList tempArr = new ArrayList();
@@ -104,6 +107,7 @@ namespace AccountErp.Factories
                     alreadyExistServices.Rate = item.Rate;
                     alreadyExistServices.Quantity = item.Quantity;
                     alreadyExistServices.TaxPrice = item.TaxPrice;
+                    alreadyExistServices.LineAmount = item.LineAmount;
                     entity.Services.Add(alreadyExistServices);
                 }
             }

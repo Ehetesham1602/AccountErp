@@ -17,6 +17,7 @@ namespace AccountErp.Managers
         private readonly IBillRepository _billRepository;
         private readonly IVendorRepository _vendorRepository;
         private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly ITransactionRepository _transactionRepository;
         private readonly IBillPaymentRepository _billPaymentRepository;
 
         private readonly IUnitOfWork _unitOfWork;
@@ -27,6 +28,7 @@ namespace AccountErp.Managers
             IBillRepository billRepository,
             IVendorRepository vendorRepository,
             IBillPaymentRepository billPaymentRepository,
+            ITransactionRepository transactionRepository,
             IBankAccountRepository bankAccountRepository,
             IUnitOfWork unitOfWork)
         {
@@ -34,20 +36,34 @@ namespace AccountErp.Managers
             _billRepository = billRepository;
             _vendorRepository = vendorRepository;
             _billPaymentRepository = billPaymentRepository;
+            _transactionRepository = transactionRepository;
             _bankAccountRepository = bankAccountRepository;
             _unitOfWork = unitOfWork;
         }
 
         public async Task AddAsync(BillPaymentAddModel model)
         {
-            var billSummary = await _billRepository.GetSummaryAsunc(model.BillId);
-            var vendorPaymentInfo = await _vendorRepository.GetPaymentInfoAsync(billSummary.VendorId);
-            var billPayment = BillPaymentFactory.Create(model, vendorPaymentInfo.AccountNumber, billSummary.TotalAmount, _userId);
+            if(model.PaymentType == Constants.TransactionType.BillPayment)
+            {
+                var billSummary = await _billRepository.GetSummaryAsunc(model.BillId);
+                var vendorPaymentInfo = await _vendorRepository.GetPaymentInfoAsync(billSummary.VendorId);
+                var billPayment = BillPaymentFactory.Create(model, vendorPaymentInfo.AccountNumber, billSummary.TotalAmount, _userId);
 
-            await _billPaymentRepository.AddAsync(billPayment);
-            await _billRepository.UpdateStatusAsync(model.BillId, Constants.BillStatus.Paid);
+                await _billPaymentRepository.AddAsync(billPayment);
+                await _billRepository.UpdateStatusAsync(model.BillId, Constants.BillStatus.Paid);
 
-            await _unitOfWork.SaveChangesAsync();
+                //For Transaction Update
+                await _transactionRepository.SetTransactionAccountIdForBill(model.BillId, model.BankAccountId, model.PaymentDate);
+
+                await _unitOfWork.SaveChangesAsync();
+            }
+            else if(model.PaymentType == Constants.TransactionType.VendorAdvancePayment)
+            {
+                var transaction = TransactionFactory.CreateByVendorAdvancePayment(model);
+                await _transactionRepository.AddAsync(transaction);
+                await _unitOfWork.SaveChangesAsync();
+            }
+           
         }
 
         public async Task<JqDataTableResponse<BillPaymentListItemDto>> GetPagedResultAsync(ExpensePaymentJqDataTableRequestModel model)

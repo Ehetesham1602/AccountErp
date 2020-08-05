@@ -1,4 +1,5 @@
 ﻿using AccountErp.Entities;
+using AccountErp.Models.Bill;
 using AccountErp.Models.Invoice;
 using AccountErp.Utilities;
 using System;
@@ -22,7 +23,7 @@ namespace AccountErp.Factories
                 ContactType = Constants.ContactType.Customer,
                 ContactId = entity.CustomerId,
                 BankAccountId = 1,
-                DebitAmount = entity.SubTotal ?? 0,
+                DebitAmount = entity.TotalAmount,
                 CreditAmount = 0,
                 CreationDate = Utility.GetDateTime(),
                 ModifyDate = null
@@ -58,14 +59,14 @@ namespace AccountErp.Factories
             {
                 TransactionId = entity.Id,
                 CompanyId = null,
-                TransactionTypeId = Constants.TransactionType.Billpayment,
+                TransactionTypeId = Constants.TransactionType.BillPayment,
                 TransactionDate = Utility.GetDateTime(),
                 TransactionNumber = entity.BillNumber,
                 ContactType = Constants.ContactType.Vendor,
                 ContactId = entity.VendorId,
                 BankAccountId = 2,
                 DebitAmount = 0,
-                CreditAmount = entity.SubTotal ?? 0,
+                CreditAmount = entity.TotalAmount,
                 CreationDate = Utility.GetDateTime(),
                 ModifyDate = null
             };
@@ -79,7 +80,7 @@ namespace AccountErp.Factories
             {
                 TransactionId = entity.Id,
                 CompanyId = null,
-                TransactionTypeId = Constants.TransactionType.Billpayment,
+                TransactionTypeId = Constants.TransactionType.BillPayment,
                 TransactionDate = Utility.GetDateTime(),
                 TransactionNumber = entity.BillNumber,
                 ContactType = Constants.ContactType.Vendor,
@@ -94,7 +95,47 @@ namespace AccountErp.Factories
             return transaction;
         }
 
+        public static Transaction CreateByCustomerAdvancePayment(InvoicePaymentAddModel model)
+        {
+            var transaction = new Transaction
+            {
+                TransactionId = null,
+                CompanyId = null,
+                TransactionTypeId = Constants.TransactionType.CustomerAdvancePayment,
+                TransactionDate = model.PaymentDate,
+                TransactionNumber = null,
+                ContactType = Constants.ContactType.Customer,
+                ContactId = model.CustomerId,
+                BankAccountId = model.BankAccountId,
+                DebitAmount = model.Amount,
+                CreditAmount = 0,
+                CreationDate = model.PaymentDate,
+                ModifyDate = model.PaymentDate
+            };
+
+            return transaction;
+        }
+        public static Transaction CreateByVendorAdvancePayment(BillPaymentAddModel model)
+        {
+            var transaction = new Transaction
+            {
+                TransactionId = null,
+                CompanyId = null,
+                TransactionTypeId = Constants.TransactionType.VendorAdvancePayment,
+                TransactionDate = model.PaymentDate,
+                TransactionNumber = null,
+                ContactType = Constants.ContactType.Vendor,
+                ContactId = model.VendorId,
+                BankAccountId = model.BankAccountId,
+                DebitAmount = 0,
+                CreditAmount = model.Amount,
+                CreationDate = model.PaymentDate,
+                ModifyDate = model.PaymentDate
+            };
+
+            return transaction;
+        }
 
     }
-    }
+}
 

@@ -28,6 +28,7 @@ namespace AccountErp.Entities
         public string Notes { get; set; }
         public string BillNumber { get; set; }
         public decimal? SubTotal { get; set; }
+        public decimal? LineAmountSubTotal { get; set; }
         public Vendor Vendor { get; set; }
         public ICollection<BillItem> Items { get; set; }
         public ICollection<BillAttachment> Attachments { get; set; }

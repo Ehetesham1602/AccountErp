@@ -30,6 +30,7 @@ namespace AccountErp.Factories
                 PoSoNumber = model.PoSoNumber,
                 Notes = model.Notes,
                 SubTotal = model.SubTotal,
+                LineAmountSubTotal = model.LineAmountSubTotal,
                 Items = model.Items.Select(x => new BillItem
                 {
                     Id = Guid.NewGuid(),
@@ -39,7 +40,8 @@ namespace AccountErp.Factories
                     TaxId = x.TaxId,
                     TaxPercentage = x.TaxPercentage,
                     Quantity = x.Quantity,
-                    TaxPrice = x.TaxPrice
+                    TaxPrice = x.TaxPrice,
+                    LineAmount = x.LineAmount
                 }).ToList()
             };
 
@@ -84,6 +86,7 @@ namespace AccountErp.Factories
             bill.PoSoNumber = model.PoSoNumber;
             bill.Notes = model.Notes;
             bill.SubTotal = model.SubTotal;
+            bill.LineAmountSubTotal = model.LineAmountSubTotal;
 
            
             ArrayList tempArr = new ArrayList();
@@ -101,6 +104,7 @@ namespace AccountErp.Factories
                     alreadyExistServices.Rate = item.Rate;
                     alreadyExistServices.Quantity = item.Quantity;
                     alreadyExistServices.TaxPrice = item.TaxPrice;
+                    alreadyExistServices.LineAmount = item.LineAmount;
                     bill.Items.Add(alreadyExistServices);
                 }
             }

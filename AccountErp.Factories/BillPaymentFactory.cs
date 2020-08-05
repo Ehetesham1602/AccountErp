@@ -20,7 +20,7 @@ namespace AccountErp.Factories
                 PaymentDate = model.PaymentDate,
                 Description = model.Description,
                 Status = Constants.RecordStatus.Active,
-                CreatedBy = userId,
+                CreatedBy = userId ?? "0",
                 CreatedOn = Utility.GetDateTime()
             };
         }

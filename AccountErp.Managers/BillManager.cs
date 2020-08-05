@@ -56,7 +56,7 @@ namespace AccountErp.Managers
             //{
             //    model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
             //}
-
+            model.LineAmountSubTotal = model.Items.Sum(x => x.LineAmount);
             var count = await _repository.getCount();
             var bill = BillFactory.Create(model, _userId, count);
             await _repository.AddAsync(bill);
@@ -66,13 +66,13 @@ namespace AccountErp.Managers
             await _transactionRepository.AddAsync(transaction);
             await _unitOfWork.SaveChangesAsync();
 
-            var itemsList = (model.Items.GroupBy(l => l.BankAccountId, l => new { l.BankAccountId, l.Price })
+            var itemsList = (model.Items.GroupBy(l => l.BankAccountId, l => new { l.BankAccountId, l.LineAmount })
       .Select(g => new { GroupId = g.Key, Values = g.ToList() })).ToList();
 
             foreach (var item in itemsList)
             {
                 var id = item.GroupId;
-                var amount = item.Values.Sum(x => x.Price);
+                var amount = item.Values.Sum(x => x.LineAmount);
 
                 var itemsData = TransactionFactory.CreateByBillItemsAndTax(bill, id, amount);
                 await _transactionRepository.AddAsync(itemsData);
@@ -82,14 +82,18 @@ namespace AccountErp.Managers
             var taxlistList = (model.Items.GroupBy(l => l.TaxBankAccountId, l => new { l.TaxBankAccountId, l.TaxPrice })
        .Select(g => new { GroupId = g.Key, Values = g.ToList() })).ToList();
 
-            foreach (var item in taxlistList)
+            foreach (var tax in taxlistList)
             {
-                var id = item.GroupId;
-                var amount = item.Values.Sum(x => x.TaxPrice);
+                if(tax.GroupId > 0)
+                {
+                    var id = tax.GroupId;
+                    var amount = tax.Values.Sum(x => x.TaxPrice);
 
-                var taxData = TransactionFactory.CreateByBillItemsAndTax(bill, id, amount);
-                await _transactionRepository.AddAsync(taxData);
-                await _unitOfWork.SaveChangesAsync();
+                    var taxData = TransactionFactory.CreateByBillItemsAndTax(bill, id, amount);
+                    await _transactionRepository.AddAsync(taxData);
+                    await _unitOfWork.SaveChangesAsync();
+                }
+               
             }
         }
 

@@ -25,6 +25,7 @@ namespace AccountErp.Models.Quotation
 
         public string Memo { get; set; }
         public decimal? SubTotal { get; set; }
+        public decimal? LineAmountSubTotal { get; set; }
 
         [Required]
         public List<QuotationServiceModel> Items { get; set; }

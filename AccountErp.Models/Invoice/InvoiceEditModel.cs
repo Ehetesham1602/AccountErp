@@ -22,7 +22,7 @@ namespace AccountErp.Models.Invoice
         public DateTime DueDate { get; set; }
         public decimal? PoSoNumber { get; set; }
         public decimal? SubTotal { get; set; }
-
+        public decimal? LineAmountSubTotal { get; set; }
         [Required]
         public List<InvoiceServiceModel> Items { get; set; }
         //public List<int> Items { get; set; }

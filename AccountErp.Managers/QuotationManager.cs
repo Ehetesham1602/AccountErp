@@ -8,6 +8,7 @@ using AccountErp.Utilities;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -55,7 +56,7 @@ namespace AccountErp.Managers
             //{
             //    model.TotalAmount = model.TotalAmount + (model.Tax ?? 0);
             //}
-
+            model.LineAmountSubTotal = model.Items.Sum(x => x.LineAmount);
             var count = await _quotationRepository.getCount();
 
             //await _invoiceRepository.AddAsync(InvoiceFactory.Create(model, _userId, items));

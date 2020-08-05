@@ -4,14 +4,16 @@ using AccountErp.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200805155657_LineAmountSubTotalChange05082020")]
+    partial class LineAmountSubTotalChange05082020
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1142,7 +1144,7 @@ namespace AccountErp.DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BankAccountId");
+                    b.Property<int>("BankAccountId");
 
                     b.Property<int?>("CompanyId");
 
@@ -1167,7 +1169,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<DateTime>("TransactionDate");
 
-                    b.Property<int?>("TransactionId");
+                    b.Property<int>("TransactionId");
 
                     b.Property<string>("TransactionNumber")
                         .HasMaxLength(50);
@@ -1568,7 +1570,8 @@ namespace AccountErp.DataLayer.Migrations
                 {
                     b.HasOne("AccountErp.Entities.BankAccount")
                         .WithMany("Transaction")
-                        .HasForeignKey("BankAccountId");
+                        .HasForeignKey("BankAccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.Vendor", b =>

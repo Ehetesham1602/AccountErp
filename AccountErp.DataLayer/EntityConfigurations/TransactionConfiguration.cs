@@ -17,9 +17,9 @@ namespace AccountErp.DataLayer.EntityConfigurations
 
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.Property(x => x.TransactionId).IsRequired();
+            builder.Property(x => x.TransactionId).IsRequired(false);
             builder.Property(x => x.CompanyId).IsRequired(false);
-            builder.Property(x => x.BankAccountId).IsRequired();
+            builder.Property(x => x.BankAccountId).IsRequired(false);
             builder.Property(x => x.ContactId).IsRequired();
             builder.Property(x => x.TransactionTypeId).IsRequired();
             builder.Property(x => x.Description).IsRequired(false).HasMaxLength(100);

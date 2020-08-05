@@ -4,14 +4,16 @@ using AccountErp.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200805134848_LineAmountChange05082020")]
+    partial class LineAmountChange05082020
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,9 +194,6 @@ namespace AccountErp.DataLayer.Migrations
                         .HasColumnType("NUMERIC(12,2)");
 
                     b.Property<DateTime?>("DueDate");
-
-                    b.Property<decimal?>("LineAmountSubTotal")
-                        .HasColumnType("NUMERIC(12,2)");
 
                     b.Property<string>("Notes");
 
@@ -585,9 +584,6 @@ namespace AccountErp.DataLayer.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<decimal?>("LineAmountSubTotal")
-                        .HasColumnType("NUMERIC(12,2)");
-
                     b.Property<decimal?>("PoSoNumber")
                         .HasColumnType("NUMERIC(12,2)");
 
@@ -834,9 +830,6 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<DateTime>("ExpireDate");
 
-                    b.Property<decimal?>("LineAmountSubTotal")
-                        .HasColumnType("NUMERIC(12,2)");
-
                     b.Property<string>("Memo");
 
                     b.Property<decimal?>("PoSoNumber")
@@ -962,9 +955,6 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<int>("CustomerId");
 
                     b.Property<decimal?>("Discount")
-                        .HasColumnType("NUMERIC(12,2)");
-
-                    b.Property<decimal?>("LineAmountSubTotal")
                         .HasColumnType("NUMERIC(12,2)");
 
                     b.Property<decimal?>("PoSoNumber")
@@ -1142,7 +1132,7 @@ namespace AccountErp.DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BankAccountId");
+                    b.Property<int>("BankAccountId");
 
                     b.Property<int?>("CompanyId");
 
@@ -1167,7 +1157,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<DateTime>("TransactionDate");
 
-                    b.Property<int?>("TransactionId");
+                    b.Property<int>("TransactionId");
 
                     b.Property<string>("TransactionNumber")
                         .HasMaxLength(50);
@@ -1568,7 +1558,8 @@ namespace AccountErp.DataLayer.Migrations
                 {
                     b.HasOne("AccountErp.Entities.BankAccount")
                         .WithMany("Transaction")
-                        .HasForeignKey("BankAccountId");
+                        .HasForeignKey("BankAccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.Vendor", b =>

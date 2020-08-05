@@ -15,34 +15,49 @@ namespace AccountErp.Managers
         private readonly IInvoicePaymentRepository _invoicePaymentRepository;
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly ICustomerRepository _customerRepository;
+        private readonly ITransactionRepository _transactionRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly string _userId;
 
         public InvoicePaymentManager(IHttpContextAccessor contextAccessor,
             IInvoicePaymentRepository invoicePaymentRepository, ICustomerRepository customerRepository,
-            IInvoiceRepository invoiceRepository,
+             ITransactionRepository transactionRepository,IInvoiceRepository invoiceRepository,
             IUnitOfWork unitOfWork)
         {
             _userId = contextAccessor.HttpContext.User.GetUserId();
             _invoicePaymentRepository = invoicePaymentRepository;
             _invoiceRepository = invoiceRepository;
             _customerRepository = customerRepository;
+            _transactionRepository = transactionRepository;
             _unitOfWork = unitOfWork;
         }
 
         public async Task AddAsync(InvoicePaymentAddModel model)
         {
-            var invoiceSummary = await _invoiceRepository.GetSummaryAsunc(model.InvoiceId);
+            if(model.PaymentType == Constants.TransactionType.InvoicePayment)
+            {
+                var invoiceSummary = await _invoiceRepository.GetSummaryAsunc(model.InvoiceId);
 
-            var customerPaymentInfo = await _customerRepository.GetPaymentInfoAsync(invoiceSummary.CustomerId);
+                var customerPaymentInfo = await _customerRepository.GetPaymentInfoAsync(invoiceSummary.CustomerId);
 
-            var invoicePayment = InvoicePaymentFactory.Create(model, customerPaymentInfo.AccountNumber, invoiceSummary.TotalAmount, _userId);
+                var invoicePayment = InvoicePaymentFactory.Create(model, customerPaymentInfo.AccountNumber, invoiceSummary.TotalAmount, _userId);
 
-            await _invoicePaymentRepository.AddAsync(invoicePayment);
+                await _invoicePaymentRepository.AddAsync(invoicePayment);
 
-            await _invoiceRepository.UpdateStatusAsync(model.InvoiceId, Constants.InvoiceStatus.Paid);
+                await _invoiceRepository.UpdateStatusAsync(model.InvoiceId, Constants.InvoiceStatus.Paid);
 
-            await _unitOfWork.SaveChangesAsync();
+                //For Transaction Update
+                await _transactionRepository.SetTransactionAccountIdForInvoice(model.InvoiceId,model.BankAccountId,model.PaymentDate);
+
+                await _unitOfWork.SaveChangesAsync();
+            }
+            else if(model.PaymentType == Constants.TransactionType.CustomerAdvancePayment)
+            {
+                var transaction = TransactionFactory.CreateByCustomerAdvancePayment(model);
+                await _transactionRepository.AddAsync(transaction);
+                await _unitOfWork.SaveChangesAsync();
+            }
+          
         }
 
         public async Task<JqDataTableResponse<InvoicePaymentListItemDto>> GetPagedResultAsync(InvoiceJqDataTableRequestModel model)

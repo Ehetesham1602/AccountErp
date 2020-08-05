@@ -7,9 +7,9 @@ namespace AccountErp.Models
 {
     public class TransactionsAddModel
     {
-        public int TransactionId { get; set; }
+        public int? TransactionId { get; set; }
         public int? CompanyId { get; set; }
-        public int BankAccountId { get; set; }
+        public int? BankAccountId { get; set; }
         public int ContactId { get; set; }
         public Constants.TransactionType TransactionTypeId { get; set; }
         public string TransactionNumber { get; set; }
