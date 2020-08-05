@@ -39,7 +39,7 @@
                                         <label class="col-md-3 kt-portlet__label">Payment type:</label>
                                         <div class="col-md-9">
                                             <select name="paymentType" class="form-control"
-                                                (change)="chengePaymentType()" [(ngModel)]="model.paymentType"
+                                                 [(ngModel)]="model.paymentType"
                                                 #paymentMode="ngModel" required>
                                                 <option value="">[Select]</option>
                                                 <option value='1'>Advance payment</option>
@@ -192,12 +192,12 @@
                                     <div class="col-6" *ngIf='model.paymentMode>0'>
                                         <div class="form-group row"
                                             [ngClass]="{ 'validation-error' : f.submitted && depositFrom.invalid}">
-                                            <label class="col-md-3">Deposit From:*</label>
+                                            <label class="col-md-3">Deposit To:*</label>
                                             <div class="col-md-9">
                                                 <select name="depositFrom" class="form-control"
                                                     [(ngModel)]="model.depositFrom" #depositFrom="ngModel" required>
                                                     <option value="">[Select]</option>
-                                                    <option *ngFor="let item of depositFromAccounts"
+                                                    <option *ngFor="let item of depositToAccounts"
                                                         [value]="item.keyString">
                                                         {{item.value}}</option>
                                                 </select>
@@ -211,7 +211,7 @@
                                     <div class="col-6">
                                         <div class="form-group row"
                                             [ngClass]="{ 'validation-error' : f.submitted && bankAccountId.invalid}">
-                                            <label class="col-md-3">Deposit To:*</label>
+                                            <label class="col-md-3">Deposit From:*</label>
                                             <div class="col-md-9">
                                                 <select name="bankAccountId" class="form-control"
                                                     [(ngModel)]="model.bankAccountId" #bankAccountId="ngModel" required>

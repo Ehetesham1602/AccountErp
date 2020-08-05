@@ -8,6 +8,7 @@ import * as jsPDF from 'jspdf';
 import { NgForm } from '@angular/forms';
 import { SelectListItemModel, ItemListItemModel } from 'src/models';
 import { SalesTAxReportDetail } from 'src/models/sales-tax-report/sales.tax.report.model';
+import { NgBlockUI, BlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-sales-tax-report',
@@ -15,7 +16,10 @@ import { SalesTAxReportDetail } from 'src/models/sales-tax-report/sales.tax.repo
   styleUrls: ['./sales-tax-report.component.css']
 })
 export class SalesTaxReportComponent implements OnInit {
+  [x: string]: any;
+  @BlockUI('container-blockui-main') blockUI: NgBlockUI;
   @ViewChild('htmlData', {static: false}) htmlData: ElementRef;
+  @ViewChild ('terms', {static: false}) terms: ElementRef ;
   itemType: Array<SelectListItemModel> = new Array<SelectListItemModel>();
   @Output() updateTotalAmount = new EventEmitter();
   @Input() selectedTax: any=[];
@@ -28,7 +32,7 @@ export class SalesTaxReportComponent implements OnInit {
 
   model: SalesTAxReportDetail = new SalesTAxReportDetail();
 
-  selectedstType = 'accural';
+  reportType = 'accural';
   salesPurchaseData={totalTaxAmountOnSales:0,totalTaxAmountOnPurchase:0,totalNetTaxOwing:0,salesTaxReportDtosList:[{}]}; 
   paymentBalanceData;
   allPurchase;
@@ -39,6 +43,7 @@ export class SalesTaxReportComponent implements OnInit {
   allEndingBalance;
   allLessPaymenttoGovt;
   temp;
+  selectedReportType;
   // selectedTax;
    //salesTaxes:any[];
    sales:any;
@@ -47,7 +52,6 @@ export class SalesTaxReportComponent implements OnInit {
   fromDate;
   toDate;
   salesTaxItems;
-  blockUI: any;
   constructor(private appSettings: AppSettings,
     private salesTaxReportService: SalesTaxReportService,
     private toastr: ToastrService,
@@ -55,13 +59,18 @@ export class SalesTaxReportComponent implements OnInit {
         private salesTaxService: SalesTaxService,) { }
 
   ngOnInit() {
-this.loadSalesTax();
+    this.loadSalesTax();
     this.loadTaxes();
+    this.setDefaultDate();
+    this.showSalesTaxReport();
   }
+
+
+
   public openPDF(): void {
     const doc = new jsPDF('p', 'pt', 'a4');
     doc.setFontSize(15);
-    doc.text('Statement of Account', 400, 40);
+    doc.text('Sales Tax Report', 400, 40);
     autoTable(doc, {
        html: '#my-table',
        styles: {
@@ -81,8 +90,8 @@ this.loadSalesTax();
 public downloadPDF(): void {
     const doc = new jsPDF('p', 'pt', 'a4');
     doc.setFontSize(15);
-    doc.text('Statement of Account', 400, 40);
-    doc.text('Outstanding Invoices', 400, 70);
+    doc.text('Sales Tax Report', 400, 40);
+    doc.text('', 400, 70);
    autoTable(doc, {
     html: '#my-table',
     styles: {
@@ -100,7 +109,7 @@ public downloadPDF(): void {
    tableLineColor: [4, 6, 7], // choose RGB
      });
     const DATA = this.htmlData.nativeElement;
-    doc.save('Customer-statement.pdf');
+    doc.save('Sales-Tax.pdf');
   }
 
 
@@ -115,23 +124,27 @@ public downloadPDF(): void {
         // this.purchaseVendortData = {vendorReportsList={}};
    console.log("from",this.fromDate);
    console.log("from",this.toDate);
+   var body
    if (this.selectedTax !== undefined) {
-    if (this.selectedstType !== undefined) {
+    // if (this.selectedReportType !== undefined) {
     debugger;
-    var body={ 
-      // "salesId": 0,
-      "salesId": this.selectedTax.keyInt,
-      "reportType": this.selectedstType,
-      // "tax": "string",
-      // "salesSubjectToTax": 0,
-      // "taxAmountOnSales": 0,
-      // "purchaseSubjectToTax": 0,
-      // "taxAmountOnPurchases": 0,
-      // "netTaxOwing": 0
-      "startDate":  this.fromDate,
-    "endDate": this.toDate,
+    body={ 
+      "salesId": this.selectedTax.id,
+        "startDate":  this.fromDate,
+        "endDate":  this.toDate,
+
+        "reportType": 0
     };
-    
+  // }
+    }else{
+          body={ 
+            "salesId": 0,
+              "startDate":  this.fromDate,
+              "endDate":  this.toDate,
+      
+              "reportType": 0
+          }; 
+        }
 
     this.salesTaxReportService.getSalesTaxStatement(body)
     .subscribe(
@@ -159,8 +172,8 @@ public downloadPDF(): void {
            });
           //this.CalculateTotalPurchase();
         });
-      }
-    }
+      // }
+    // }
     }
 changeTax(index,event){
         debugger;
@@ -185,7 +198,19 @@ changeTax(index,event){
     this.toDate = jsDate.toISOString();
    }
 
-
+   setDefaultDate(){
+    debugger;
+          
+    var startDate = new Date(new Date().getFullYear(), 0, 1);
+    this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+    const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+    this.fromDate=jsbillDate.toISOString();
+  
+    var endDate = new Date();
+    this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+    const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+    this.toDate=jsduevDate.toISOString();
+  }
 //    getSalesTax() {
 //     debugger;
 //     if(this.selectedTax!=undefined){
@@ -252,5 +277,7 @@ loadSalesTax() {
               this.appUtils.ProcessErrorResponse(this.toastr, error);
           });
 }
+
+
 
 }

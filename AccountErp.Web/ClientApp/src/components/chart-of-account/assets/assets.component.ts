@@ -24,7 +24,7 @@ export class AssetsComponent implements OnInit {
     private chartofaccService:ChartOfAccountsService) { }
 
   ngOnInit() {
-    alert("dfjj")
+   
     this.getAssetAccounts();
 }
 

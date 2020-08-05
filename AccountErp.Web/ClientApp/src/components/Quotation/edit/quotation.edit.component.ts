@@ -98,6 +98,9 @@ initiateGrid(){
   "taxPrice":0.00,
   "status": 1,
   "taxCode": null,
+  "bankAccountId":null,
+  "taxBankAccountId":null,
+  "lineAmount":null,
   "taxPercentage": null});
 }
 

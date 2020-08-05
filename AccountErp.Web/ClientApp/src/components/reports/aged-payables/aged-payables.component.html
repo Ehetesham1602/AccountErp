@@ -71,14 +71,14 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="row">
-                                                 <!-- <div class="form-group col-md-2 row" >
+                                                 <div class="form-group col-md-2 row" >
                                                       <label class="col-md-9">Vendor :</label>
                                                       <div class="col-md-12" >
                                                          <ngx-select-dropdown  name="vendorId" #vendorId="ngModel" (change)="getVendorDetail()" 
                                                          [multiple]="false" [(ngModel)]="selectedVendor"
                                                           [config]="config" [options]="vendors"></ngx-select-dropdown>
                                                       </div>
-                                                </div> -->
+                                                </div>
                                                 
                                                 <div class="form-group col-md-2 row">
                                                     <label class="col-md-5"> </label>
@@ -147,7 +147,7 @@
                                             <label class="col-md-9"> </label>
                                             <div class="col-md-12">
                                                 <button type="submit" class="btn btn-success" (click)="showAgedPayablesReport()">
-                                                    <i class="la la-save"></i> Update Report</button>
+                                                    <i class="la la-save"></i> View Report</button>
                                             </div>
                                         </div>
                                         </div>
@@ -233,34 +233,29 @@
                                                                 {{(item.vendorName)}} 
                                                             </td>
                                                             <td scope="row">
-                                                                <!-- {{(item.notYetOverDue | currency)}}  -->
-                                                                {{(item.countNotYetOverDue | currency)}} 
-                                                                <!-- <div *ngIf="item.status==3" class="lblOverdue">Overdue</div> -->
+                                                                {{(item.notYetOverDue | currency)}} 
+                                                                <div  class="lblOverdue">{{(item.countNotYetOverDue)}} bills  </div>
                                                             </td>
                                                             <td scope="row" style="background-color:rgb(187, 220, 241)">
-                                                                <!-- {{item.lessThan30 | currency}} -->
-                                                                {{item.countLessThan30 | currency}}
-                                                                <!-- <div *ngIf="item.status==3" class="lblOverdue">Overdue</div> -->
+                                                                {{item.lessThan30 | currency}}
+                                                                <div class="lblOverdue">{{item.countLessThan30}} bills</div>
                                                             </td>
                                                             <td scope="row" style="background-color:rgb(187, 220, 241)">
-                                                                <!-- {{item.thirtyFirstToSixty | currency}} -->
-                                                                {{item.countThirtyFirstToSixty | currency}}
-                                                                <!-- <div *ngIf="item.status==3" class="lblOverdue">Overdue</div> -->
+                                                                {{item.thirtyFirstToSixty | currency}}
+                                                                <div class="lblOverdue">{{item.countThirtyFirstToSixty}} bills</div>
                                                             </td>
                                                             <td scope="row" style="background-color:rgb(187, 220, 241)">
-                                                                <!-- {{item.sixtyOneToNinety | currency}} -->
-                                                                {{item.countSixtyOneToNinety | currency}}
-                                                                <!-- <div *ngIf="item.status==3" class="lblOverdue">Overdue</div> -->
+                                                                {{item.sixtyOneToNinety | currency}}
+                                                                <div class="lblOverdue">{{item.countSixtyOneToNinety }} bills</div>
                                                             </td>
                                                             <td scope="row" style="background-color:rgb(187, 220, 241)">
-                                                                <!-- {{item.moreThanNinety | currency}} -->
-                                                                {{item.countMoreThanNinety | currency}}
-                                                                <!-- <div *ngIf="item.status==3" class="lblOverdue">Overdue</div> -->
+                                                                   {{item.moreThanNinety | currency}}
+                                                                   <div class="lblOverdue"> {{item.countMoreThanNinety}} bills</div>
                                                             </td>
                                                             <td scope="row">
                                                                 {{item.totalAmount | currency}}
-                                                                <div  class="lblOverdue">{{item.totalUnpaid | currency}} Overdue</div>
-                                                                <!-- <div *ngIf="item.status==3" class="lblOverdue">Overdue</div> -->
+                                                                <div  class="lblOverdue">{{item.totalUnpaid | currency}}</div>
+                                                                <div class="lblOverdue">Overdue</div>
                                                             </td>
                                                             
 
@@ -272,29 +267,29 @@
                                                             </td>
                                                             <td scope="row" class="Bold">
                                                                 {{allNotYetOverdue | currency}}
-                                                                <!-- <div *ngIf="item.status==3" class="lblOverdue">Overdue</div> -->
+                                                                <div  class="lblOverdue">{{allCountNotOverdue}} bills</div>
                                                             </td>
                                                             <td scope="row" class="Bold"style="background-color:rgb(187, 220, 241)" > 
                                                                 {{all30OrLess | currency}}
-                                                                <!-- <div *ngIf="item.status==3" class="lblOverdue">Overdue</div> -->
+                                                                <div class="lblOverdue">{{allCountLessThan30}} bill</div>
                                                             </td>
                                                             <td scope="row" style="background-color:rgb(187, 220, 241)" class="Bold">
                                                                 {{all31To60 | currency}}
-                                                                <!-- <div *ngIf="item.status==3" class="lblOverdue">Overdue</div> -->
+                                                                <div class="lblOverdue">{{allCount31To60}} bill</div>
                                                             </td>
     
                                                             <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)">
                                                                 {{all61To90 | currency}}
-                                                                <!-- <div *ngIf="item.status==3" class="lblOverdue">Overdue</div> -->
+                                                                <div class="lblOverdue">{{allCount61To90}} bill</div>
                                                             </td>
                                                             <td scope="row" style="background-color:rgb(187, 220, 241)" class="Bold">
                                                                 {{all91OrMore | currency}}
-                                                                <!-- <div *ngIf="item.status==3" class="lblOverdue">Overdue</div> -->
+                                                                <div class="lblOverdue">{{allCount91OrMore}} bill</div>
                                                             </td>
                                                             <td scope="row" class="Bold">
                                                                 {{allTotalAmount | currency}}
-                                                                <div  class="lblOverdue">{{allTotalUnpaid | currency}} Overdue</div>
-                                                                <!-- <div *ngIf="item.status==3" class="lblOverdue">Overdue</div> -->
+                                                                <div  class="lblOverdue">{{allTotalUnpaid | currency}} </div>
+                                                                <div  class="lblOverdue">Overdue</div>
                                                             </td>
                                                         </tr>
                                                     </tbody>

@@ -1,4 +1,4 @@
-
+<form name="form" (ngSubmit)="onSubmit(f)" #f="ngForm">
 
 <div class="kt-holder kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
     <div class="kt-subheader   kt-grid__item" id="kt_subheader">
@@ -29,21 +29,60 @@
                                 Profit & Loss
                             </h3>
                         </div>
+                        <div class="btn-group kt-portlet__head-label">
+                            <!-- <button type="button" class="btn btn-success btn-elevate btn-icon-sm dropdown-toggle" data-toggle="dropdown" 
+                                 aria-haspopup="true" aria-expanded="false">
+                              More Actions
+                            </button> -->
+                            <button type="button" class="btn btn-outline-success btn-sm dropdown-toggle"
+                            data-toggle="dropdown">
+                            Action
+                        </button>
+                            <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
+
+                              <ul class="kt-nav">
+                                <li class="kt-nav__item">
+                                  <a href="javascript:;" class="kt-nav__link" (click)="downloadPDF()">
+                                      <em class="kt-nav__link-icon la la-print"></em>
+                                      <span class="kt-nav__link-text"> Get share link</span>
+                                  </a>
+                              </li>
+                                <li class="kt-nav__item">
+                                  <a href="javascript:;" class="kt-nav__link" (click)="openPDF()">
+                                      <em class="kt-nav__link-icon la la-print"></em>
+                                      <span class="kt-nav__link-text"> Preview as customer</span>
+                                  </a>
+                              </li>
+                              <li class="kt-nav__item">
+                                <a href="javascript:;" class="kt-nav__link" (click)="downloadPDF()">
+                                    <em class="kt-nav__link-icon la la-print"></em>
+                                    <span class="kt-nav__link-text"> Print</span>
+                                </a>
+                            </li>
+                              </ul>
+
+                            </div>
+                          </div>
                     </div>
-                    <form class="kt-form form-horizontal" name="form" (ngSubmit)="f.form.valid && submit()" #f="ngForm"
-                        novalidate>
+                
                         <div class="kt-portlet__body">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="row">
-                                        <div class="form-group col-md-3 row" >
-                                        <label class="col-md-4"></label>
-                                        <div class="col-md-11">
-                                            Date range:
-                                        </div>
-                                    </div>
+                                        <div class="form-group col-md-2 row" >
+                                            <label class="col-md-9">Date Range :</label>
+                                                  <div class="col-md-12">
+                                                    <ngx-select-dropdown  name="dateId" #dateId="ngModel" (change)="getDateRangeDetail($event)"  id="customerId"
+                                                    [multiple]="false" [(ngModel)]="selectedDateRange" [config]="config" [options]="dates"></ngx-select-dropdown>
+                                                       <!-- <select class="form-control" name="role" [(ngModel)]="filterModel.vendorId">
+                                                          <option value="">[Select Vendor]</option>
+                                                          <option *ngFor="let item of vendors" [value]="item.keyInt">
+                                                              {{item.value}}</option>
+                                                      </select> -->
+                                                  </div>
+                                            </div>
                                   
-                                     <div class="form-group col-md-3 row">
+                                     <div class="form-group col-md-2 row">
                                         <label class="col-md-3">from:</label>
                                         <div class="col-md-12">
                                             <div class="input-group">
@@ -60,7 +99,7 @@
                                         </div>
                                     </div>
                             
-                                    <div class="form-group col-md-3 row">
+                                    <div class="form-group col-md-2 row">
                                         <label class="col-md-3">to:</label>
                                         <div class="col-md-12">
                                             <div class="input-group">
@@ -78,74 +117,367 @@
                                         </div>
                                     </div>
                             
+                                    <div class="form-group col-md-2 row" >
+                                        <label class="col-md-9">Report Type :</label>
+                                              <div class="col-md-12">
+                                                  <!-- <ngx-select-dropdown  name="reportType" #reportType="ngModel" (change)="getReportType()" 
+                                                  [multiple]="false" [(ngModel)]="selectedType"
+                                                   [config]="config" [options]="Type"></ngx-select-dropdown> -->
+                                                   <select class="form-control" id="reportType" [(ngModel)]="selectedstType" name="reportType" #reportType="ngModel">
+                                                    <!-- <option [ngValue]="statementType" *ngFor="let statementType of statementTypes">{{statementType.name}}</option> -->
+                                                    <option value="accrual">Accrual (Paid & Unpaid)</option>
+                                                    <option value="cash">Cash Basis (Paid)</option>
+                                                  </select>
+                                              </div>
+                                        </div>
+                                       <!-- <div class="form-group col-md-3 row text-right"></div> -->
+                                       <div  class="form-group row col-md-3">
+                                        <label class="col-md-10"></label>
+                                        <div class="col-md-12"><div class="input-group">
+                                            <button class="btn btn-success " type="submit" (click)="showProfitLoss()"> Update Report</button>
+                                             </div>
+                                         </div>
+                                        </div>
+
                                     </div>
                                 </div>
-                                <div class="col-md-12" *blockUI="'container-blockui'">
+                                <!-- <div class="col-md-12" *blockUI="'container-blockui'">
                                     <table datatable [dtOptions]="dtOptions" data-page="2" class="table table-striped">
                                     </table>
-                                </div>
+                                </div> -->
                             </div>
 
 
                         </div>
-                        <div class="kt-portlet__foot">
+                      
+                        <!-- <div class="kt-portlet__foot">
                             <div class="kt-form__actions text-right">
-                                <a [routerLink]="['/Quotation/quotation-manage']"
-                                    class="btn btn-outline-secondary m-r-5">
-                                    <i class="la la-arrow-left"></i> Back</a>
-                                <button type="submit" class="btn btn-success">
+                                <button type="submit" class="btn btn-success" (click)="showProfitandLoss()">
                                     <i class="la la-save"></i> Generate Report</button>
-                                <!-- <div (click)="openConfirmationModal(ConfirmationModal)" class="btn btn-success">
-                                        <i class="la la-save"></i> Submit</div> -->
                             </div>
-                        </div>
-                    </form>
+                        </div> -->
                 </div>
+
+                <div class="row">
+                  <!-- <div class="card" style="width: 18rem;"> </div> -->
+                  <div class="col-md-2"></div>
+                  <div class="card" style="width: 18rem;">
+                     
+                      <div class="card-body">
+                        <h5 class="card-title">Income</h5>
+                        <h5 class="card-text">{{allTotalIncome | currency}}  -</h5>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 18rem;">
+                      <div class="card-body">
+                        <h5 class="card-title">Cost of Goods</h5>
+                        <h5 class="card-text">{{allTotalCostOfGoodSold | currency}}  -</h5>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 18rem;">
+                      <div class="card-body">
+                        <h5 class="card-title">Operating Expenses</h5>
+                        <h5 class="card-text">{{allTotalOperatingExpenses| currency}} - </h5>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 18rem;">
+                      <div class="card-body">
+                        <h5 class="card-title">Net Profit</h5>
+                        <h5 class="card-text">= {{allNetProfit | currency}}</h5>
+                      </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <!-- <div class="card" style="width: 8rem;"> </div> -->
+              </div>
+                <div class="row"></div><br>
+                 <div class="container">
+                  <div class="row">
+                    <div class="col-sm-4"></div>
+                      <div class="btn-group btn-group-toggle col-sm-4" data-toggle="buttons">
+                          
+                          <label class="btn btn-secondary active">
+                          <input type="radio" name="options" id="option1" autocomplete="off" checked (click)="toggleSummary()"> Summary 
+                          </label>
+
+                          <label class="btn btn-secondary">
+                          <input type="radio" name="options" id="option2" autocomplete="off" (click)="toggleDetail()"> Details
+                          </label>
+                          
+                      </div>        
+                  </div>
+               </div>
+                 <br><br><br>
+                 <!-- <div class="kt-portlet">
+                    <div class="container">
+                        <div class="row justify-content-center">   -->
+                          <!-- <div class="row-12"></div> <br>
+                          <div class="col-12"><br>
+                          <div class="row">
+                            <h5 class="col-md-6">Accounts</h5>
+                            <h5 class="col-md-6 pull-right c"style="font-size:15px">{{fromDate | date}} to {{toDate | date}}</h5>
+                          </div>
+                        </div> -->
+                        
+
+
+                        <div class="kt-content kt-grid__item kt-grid__item--fluid" id="kt_content">
+                          <div class="row">
+                              <div class="col-md-12" *blockUI="'container-blockui'">
+                                  <div class="kt-portlet">
+                                          <div class="kt-portlet__body">
+                                              <div class="container">
+                                                  <div class="row justify-content-center">  
+                                                    <div class="row-12"></div> <br>
+                                                        <div class="col-12"> 
+                                                              <table class="table table-striped" id="my-table">
+                                                                  <thead>
+                                                                      <tr >
+                                                                          <th>ACCOUNTS</th>
+                                                                          <th style="width:15%"  style="font-size:15px"></th>
+                                                                          <th></th>
+                                                                          <th></th>
+                                                                          <th colspan="2" style="text-align:right"  style="font-size:15px">{{fromDate | date}} to {{toDate | date}}</th>
+                                                                          <!-- <th style="width:15%">{{fromDate | date}} to {{toDate | date}}</th> -->
+                                                                      </tr>
+                                                                  </thead>
+
+
+                                                                  <!-- SHOW SUMMARY STARTS -->
+                                                                  <tbody *ngIf="showSummary">
+                                                                                    <tr *ngFor="let item of profitAndLossData.agedPayablesReportDtoList">
+                                                                                              <td >Income
+                                                                                              <!-- <div  class="lblOverdue">As a percentage of Total Income</div> -->
+                                                                                              </td>
+                                                                                              <td class="Bold"></td>
+                                                                                              <td scope="row">  </td>
+                                                                                              <td scope="row" class="Bold" > </td>
+                                                                                              <td scope="row"> </td><td scope="row" class="Bold" >
+                                                                                                  <!-- {{item.netIncome | currency}} --> {{allTotalIncome | currency}} 
+                                                                                                  <!-- total income -->
+                                                                                              </td>
+                                                                                  </tr>
+
+                                                                                      <tr  *ngFor="let item of profitAndLossData.agedPayablesReportDtoList">
+                                                                                              <td>Cost of Goods Sold</td>
+                                                                                              <td class="Bold"></td>
+                                                                                              <td scope="row">  </td>
+                                                                                              <td scope="row" class="Bold" > </td>
+                                                                                              <td scope="row" ></td>  
+                                                                                              <td scope="row"> {{allTotalCostOfGoodSold | currency}}
+                                                                                                <!-- {{item.totalCostOfGoodsSold | currency}} -->
+                                                                                              </td>
+                                                                                    </tr>
+                                                                                    <tr  *ngFor="let item of profitAndLossData.agedPayablesReportDtoList">
+                                                                                              <td class="Bold" style="background-color:rgb(187, 220, 241)">Gross Profit
+                                                                                                    <div  class="lblOverdue">As a percentage of Total Income</div>
+                                                                                              </td>
+                                                                                              <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
+                                                                                              <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
+                                                                                              <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
+                                                                                              <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
+                                                                                              <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)">
+                                                                                                  {{allgrossProfit | currency}} 809
+                                                                                                  <div  class="lblOverdue">{{allGrossProfitPercentage | currency}} %</div>
+                                                                                              </td>
+                                                                                    </tr>
+                                                                                    <tr  *ngFor="let item of profitAndLossData.agedPayablesReportDtoList">
+                                                                                              <td >Operating Expenses  </td>
+                                                                                              <td class="Bold"></td>
+                                                                                              <td scope="row">  </td>
+                                                                                              <td scope="row" class="Bold" > </td>
+                                                                                              <td scope="row"> </td>
+                                                                                              <td scope="row" class="Bold">
+                                                                                                <!-- {{item.totalOperatingExpenses| currency}} -->
+                                                                                                {{allTotalOperatingExpenses| currency}}
+
+                                                                                              </td>
+                                                                                  </tr>
+                                                                                <tr  *ngFor="let item of profitAndLossData.agedPayablesReportDtoList">
+                                                                                            <td class="Bold" style="background-color:rgb(187, 220, 241)">Net Profit
+                                                                                            <div  class="lblOverdue">As a percentage of Total Income</div>
+                                                                                            </td>
+                                                                                            <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
+                                                                                            <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
+                                                                                            <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
+                                                                                            <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
+                                                                                              <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)">
+                                                                                                {{allNetProfit | currency}}98
+                                                                                                <div  class="lblOverdue">{{allNetProfitPercentage | currency}} Overdue</div>
+                                                                                            </td>
+                                                                                 </tr>
+                                                                  </tbody>
+
+                                                                  <!-- SHOW SUMMARY ENDS -->
+
+
+
+
+                                                                  <!-- SHOW DETAIL STARTS -->
+                                                                    <tbody *ngIf="showDetail">
+                                                                                <tr  *ngFor="let item of profitAndLossData.agedPayablesReportDtoList">
+                                                                                      <td style="background-color:rgb(187, 220, 241)" >Income
+                                                                                      <!-- <div  class="lblOverdue">As a percentage of Total Income</div> -->
+                                                                                      </td>
+                                                                                      <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
+                                                                                      <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
+                                                                                      <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
+                                                                                      <td scope="row"style="background-color:rgb(187, 220, 241)"> </td>
+                              
+                                                                                      <td scope="row" class="Bold"style="background-color:rgb(187, 220, 241)" >
+                                                                                          {{item.incomeDetail | currency}}
+                                                                                          <!-- <div  class="lblOverdue">{{item.percentageOfTotalIncome | currency}} Overdue</div> -->
+                                                                                      </td>
+                                                                              </tr>
+                                                                              
+                                                                                <tr  *ngFor="let item of profitAndLossData.agedPayablesReportDtoList; index as $index;">
+                                                                                        <td scope="row">
+                                                                                          {{($index + 1)}}
+                                                                                      </td>
+                                                                                        <td scope="row">
+                                                                                            {{item.incomeName}}
+                                                                                        </td>
+                                                                                        <td scope="row">
+                                                                                        </td>
+                                                                                        <td scope="row">
+                                                                                        </td>
+                                                                                        <td scope="row">
+                                                                                        </td>
+                                                                                        <td scope="row">
+                                                                                            {{item.incomeAmount | currency}}5665
+                                                                                        </td>
+                                                                                </tr>
+
+
+                                                                                <tr  *ngFor="let item of profitAndLossData.agedPayablesReportDtoList" >
+                                                                                        <td scope="row">Total Income  </td>
+                                                                                        <td scope="row"> </td>
+                                                                                        <td scope="row">
+                                                                                        </td>
+                                                                                        <td scope="row">
+                                                                                        </td>
+                                                                                        <td scope="row">
+                                                                                        </td>
+                                                                                        <td scope="row">
+                                                                                          <!-- {{item.netIncome | currency}} -->{{allTotalIncome | currency}} 
+                                                                                        </td>
+                                                                                </tr>
+
+                                                                                <br><br>
+                                                                                  <tr  *ngFor="let item of profitAndLossData.agedPayablesReportDtoList">
+                                                                                        <td style="background-color:rgb(187, 220, 241)"> Total Cost of Goods Sold</td>
+                                                                                        <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
+                                                                                        <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
+                                                                                        <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
+                                                                                        <td scope="row" style="background-color:rgb(187, 220, 241)" ></td>  
+                                                                                        <td scope="row" style="background-color:rgb(187, 220, 241)">
+                                                                                            <!-- {{item.totalCostOfGoodsSold | currency}} -->
+                                                                                            {{allTotalCostOfGoodSold | currency}}
+                                                                                          </td>
+                                                                                </tr>
+
+                                                                                <br><br>
+                                                                                <tr  *ngFor="let item of profitAndLossData.agedPayablesReportDtoList">
+                                                                                        <td class="Bold" style="background-color:rgb(187, 220, 241)">Gross Profit
+                                                                                            <div  class="lblOverdue">As a percentage of Total Income</div>
+                                                                                        </td>
+                                                                                        <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
+                                                                                        <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
+                                                                                        <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
+                                                                                        <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
+                                                                                        <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)">
+                                                                                            {{allgrossProfit | currency}}
+                                                                                            <div  class="lblOverdue">{{allGrossProfitPercentage | currency}} 100%</div>
+                                                                                            <!-- <div  class="lblOverdue">100%</div> -->
+                                                                                        </td>
+                                                                              </tr>
+                                                                              <br><br>
+                                                                              <tr  *ngFor="let item of profitAndLossData.agedPayablesReportDtoList">
+                                                                                    <td style="background-color:rgb(187, 220, 241)">Operating Expenses  </td>
+                                                                                    <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
+                                                                                    <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
+                                                                                    <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
+                                                                                    <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
+                                                                                    <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
+                                                                              </tr>
+
+
+                                                                            <tr  *ngFor="let item of profitAndLossData.agedPayablesReportDtoList; index as $index;">
+                                                                                      <td scope="row">
+                                                                                        {{($index + 1)}}
+                                                                                    </td>
+                                                                                    <td scope="row">
+                                                                                        {{item.operatingExpenseName }}
+                                                                                    </td>
+                                                                                    <td scope="row"> </td>
+                                                                                    <td scope="row"> </td>
+                                                                                    <td scope="row"> </td>
+                                                                                    <td scope="row">
+                                                                                      {{item.operatingExpenses| currency}}
+                                                                                    </td>
+                                                                            </tr>
+
+                                                                            <tr  *ngFor="let item of profitAndLossData.agedPayablesReportDtoList">
+                                                                                  <td >Unrealized Loss on Foreign Exchange
+                                                                                    <!-- <div  class="lblOverdue">As a percentage of Total Income</div> -->
+                                                                                  </td>
+                                                                                    <td class="Bold" ></td>
+                                                                                    <td scope="row">  </td>
+                                                                                    <td scope="row" class="Bold"> </td>
+                                                                                    <td scope="row" > </td>
+                                                                                    <td scope="row" >
+                                                                                        <!-- {{item.totalUnrealizedlossOnForeignExchange | currency}} -->
+                                                                                        {{allUnrealizedLossOnForeignEx| currency}}
+                                                                                    </td>
+                                                                          </tr>
+
+
+                                                                          <tr  *ngFor="let item of profitAndLossData.agedPayablesReportDtoList">
+                                                                                  <td class="Bold">Total Operating Expenses
+                                                                                    <!-- <div  class="lblOverdue">As a percentage of Total Income</div> -->
+                                                                                  </td>
+                                                                                    <td class="Bold" ></td>
+                                                                                    <td scope="row">  </td>
+                                                                                    <td scope="row"> </td>
+                                                                                    <td scope="row"></td>
+                                                                                    <td scope="row" class="Bold">
+                                                                                      {{allTotalOperatingExpenses| currency}}
+                                                                                    </td>
+                                                                          </tr>
+                                                                          <br><br>
+
+                                                                          <tr  *ngFor="let item of profitAndLossData.agedPayablesReportDtoList">
+                                                                                  <td class="Bold" style="background-color:rgb(187, 220, 241)">Net Profit
+                                                                                  <div  class="lblOverdue">As a percentage of Total Income</div>
+                                                                                  </td>
+                                                                                  <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
+                                                                                  <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
+                                                                                  <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
+                                                                                  <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
+                                                                                    <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)">
+                                                                                      {{allNetProfit | currency}}
+                                                                                      <div  class="lblOverdue">{{allNetProfitPercentage | currency}} 12%</div>
+                                                                                  </td>
+                                                                          </tr>
+                                                                     </tbody>
+
+                                                                  <!-- SHOW DETAIL ENDS -->
+                                                               </table>
+                                                         </div>
+                                                   </div>
+                                                  </div>
+                  
+                  
+                                          </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  
+
+                           
             </div>
         </div>
     </div>
 </div>
 
-
-
-<ng-template #addCustomerModal let-modal>
-    <div class="modal-header">
-        <h5 class="modal-title">Add Customer</h5>
-        <button type="button" class="close" aria-label="Close" (click)="closeCustomerModal()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <!-- <app-item-selector [selectedItems]='selectedItems'></app-item-selector> -->
-        <app-add-customer-popup></app-add-customer-popup>
-    </div>
-    <div class="modal-footer">
-        <div class="col-md-12 text-right">
-            <button type="button" class="btn btn-success" (click)="closeCustomerModal()">
-                <i class="la la-check"></i> Done
-            </button>
-        </div>
-    </div>
-</ng-template>
-
-<ng-template #ConfirmationModal let-modal>
-    <div class="modal-header">
-        <h5 class="modal-title">Add Customer</h5>
-        <button type="button" class="close" aria-label="Close" (click)="closeConfirmationModal()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        {{ConfirmationMessage}}
-    </div>
-    <div class="modal-footer">
-        <div class="col-md-12 text-right">
-            <button type="button" class="btn btn-success" (click)="submit()">
-                <i class="la la-check"></i> Yes
-            </button>
-            <button type="button" class="btn btn-success" (click)="closeConfirmationModal()">
-                <i class="la la-check"></i> Cancel
-            </button>
-        </div>
-    </div>
-</ng-template>
+</form>

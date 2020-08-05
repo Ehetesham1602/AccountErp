@@ -20,5 +20,6 @@ namespace AccountErp.Dtos.Report
         public int TotalCountMoreThanNinety { get; set; }
 
         public List<AgedPayablesReportDto> AgedPayablesReportDtoList { get; set; }
+        public List<AgedReceivablesReportDto> AgedReceivablesReportDtoList { get; set; }
     }
 }

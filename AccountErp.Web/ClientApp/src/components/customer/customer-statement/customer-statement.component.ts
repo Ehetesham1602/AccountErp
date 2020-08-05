@@ -117,7 +117,7 @@ changeInvoiceDate(){
  }
   getCustomerDetail() {
    debugger;
-   alert(this.selectedCustomer.keyInt);
+  
     if (this.selectedCustomer !== undefined) {
         this.model.customerId = this.selectedCustomer.keyInt;
     // if (this.model.customerId === null

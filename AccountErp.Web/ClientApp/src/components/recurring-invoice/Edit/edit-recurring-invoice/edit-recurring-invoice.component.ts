@@ -142,10 +142,13 @@ selectedTax;
     "qty": 1,
     "rate": 0.00,
     "salesTaxId": null,
+    "taxPrice":0.00,
     "status": 1,
     "taxCode": null,
-    "taxPercentage": null,
-    "taxPrice":0.00, });
+    "bankAccountId":null,
+    "taxBankAccountId":null,
+    "lineAmount":null,
+    "taxPercentage": null});
 
   }
 
@@ -424,9 +427,9 @@ selectedTax;
           if(this.selectedItems[this.selectedItems.length-1].id!=0){
           this.selectedItems.map((item) => {
               if(item.salesTaxId!=null){
-                  this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPrice": 0,"quantity":item.qty});
+                  this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId});
               }else{
-                  this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPrice": 0,"quantity":item.qty});
+                  this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId});
               }
              
           });

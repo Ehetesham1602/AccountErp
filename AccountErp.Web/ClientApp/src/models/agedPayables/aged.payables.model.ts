@@ -10,24 +10,30 @@ export class AgedPayablesDetail {
     public tax: number;
     public discount: number;
     public amount: number;
+
     public totalAmount: number;
     public totalLessThan30: number;
     public totalThirtyFirstToSixty: number;
     public totalSixtyOneToNinety:number;
     public totalMoreThanNinety:number;
-    public allPurchases: number;
-    public paidPurchases: number;
-    public remark: string;
     public createdOn: string;
-    public startDate: string; ///
-    public endDate: string; ///
+
     public allNotYetOverdue: number;
     public all30OrLess: number;
     public all31To60: number;
     public all61To90: number;
     public all91OrMore: number;
     public allTotalUnpaid: number;
+    public allTotalAmount: number;
     public asOfDate: string;
+    public agedPayableasOfDate:string;
+    public countNotYetOverDue: number;
+    public countLessThan30: number;
+    public countThirtyFirstToSixty: number;
+    public countSixtyOneToNinety: number;
+    public countMoreThanNinety: number;
+    public totalUnpaid: number;
+
     public description: string; //
     public status: number; //
     public invoiceDate: string;

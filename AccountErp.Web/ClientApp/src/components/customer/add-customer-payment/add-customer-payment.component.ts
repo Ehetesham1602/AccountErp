@@ -114,7 +114,7 @@ export class AddCustomerPaymentComponent implements OnInit {
 
     chengePaymentMode() {
       debugger;
-      var ledgerType=1;
+      var ledgerType;
         if (this.model.paymentMode !== '2') {
             this.model.chequeNumber = '';
         }
@@ -125,6 +125,7 @@ export class AddCustomerPaymentComponent implements OnInit {
         
 
         if (this.model.paymentMode == '0') {
+            ledgerType=1;
             this.chartofaccService.getaccbyledgertype(ledgerType)
             .subscribe(
                 data => {
@@ -137,10 +138,20 @@ export class AddCustomerPaymentComponent implements OnInit {
                 });
         //this.bankAccounts=[{keyInt:1,keyString:"",value:"Cash on hand"},{keyInt:2,keyString:"",value:"Petty cash"}]
 
+         }else{
+             ledgerType=2;
+             this.chartofaccService.getaccbyledgertype(ledgerType)
+             .subscribe(
+                 data => {
+                     this.bankAccounts=[];
+                     Object.assign(this.bankAccounts, data);
+                     console.log("cashacc",this.bankAccounts)
+                 },
+                 error => {
+                     this.appUtils.ProcessErrorResponse(this.toastr, error);
+                 });
          }
-         else{
-             this.loadBankAccounts();
-         }
+        
     }
 
     loadCustomers() {

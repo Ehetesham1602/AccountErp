@@ -51,25 +51,38 @@ export class PurchasesByVendorComponent implements OnInit {
 
   ngOnInit() {
     this.loadVendors();
-
+    this.setDefaultDate();
+    this.showpurchasebyVendor(); 
   }
 
   showpurchasebyVendor() {
    // this.purchaseVendortData = {vendorReportsList={}};
    console.log("from",this.fromDate);
    console.log("from",this.toDate);
+   var body
    if (this.selectedVendor !== undefined) {
     debugger;
-    var body={ 
-      "vendorId": this.selectedVendor.keyInt,
-    "vendorName": "string",
-    // "vendorId": this.selectedVendor.keyInt,
-    "startDate":  this.fromDate,
-    "endDate": this.toDate,
-    "totalPaidAmount": 0,
-    "totalAmount": 0,
-    "status": "string"};
-    
+        body={ 
+        "vendorId": this.selectedVendor.keyInt,
+        "vendorName": "string",
+        "startDate":  this.fromDate,
+        "endDate": this.toDate,
+        "totalPaidAmount": 0,
+        "totalAmount": 0,
+        "status": "string"
+      };
+    }
+      else{
+         body={ 
+          "vendorId": 0,
+          "vendorName": "string",
+          "startDate":  this.fromDate,
+          "endDate": this.toDate,
+          "totalPaidAmount": 0,
+          "totalAmount": 0,
+          "status": "string"};
+      
+   }
 
     this.purchaseVendorsService.getVendorStatement(body)
     .subscribe(
@@ -95,7 +108,6 @@ export class PurchasesByVendorComponent implements OnInit {
            });
           this.CalculateTotalPurchase();
         });
-      }
   }
 
   // getBalanceAccAmount(item){
@@ -209,6 +221,20 @@ loadVendors() {
           error => {
               this.appUtils.ProcessErrorResponse(this.toastr, error);
           });
+}
+
+setDefaultDate(){
+  debugger;
+        
+  var startDate = new Date(new Date().getFullYear(), 0, 1);
+  this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+  const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+  this.fromDate=jsbillDate.toISOString();
+
+  var endDate = new Date();
+  this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+  const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+  this.toDate=jsduevDate.toISOString();
 }
 
 }

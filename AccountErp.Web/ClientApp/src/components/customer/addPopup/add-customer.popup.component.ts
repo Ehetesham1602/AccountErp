@@ -63,7 +63,7 @@ export class AddCustomerPopupComponent{
 
     setWizardStep(step: number) {
         this.wizardStep = step;
-        alert(this.wizardStep);
+        // alert(this.wizardStep);
         // if (this.model.id) {
         //     this.wizardStep = step;
         // } else {

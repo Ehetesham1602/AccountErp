@@ -26,15 +26,15 @@ export class ItemSelectedComponent implements OnInit{
     @Input() taxList;
     config = {displayKey:"name",search:true,height: 'auto',placeholder:'Select Item',customComparator: ()=>{},moreText: 'more',noResultsFound: 'No results found!',searchPlaceholder:'Search',searchOnKey: 'name',clearOnSelection: false,inputDirection: 'ltr',}
     config2 = {displayKey:"code",search:true,height: 'auto',placeholder:'Select Item',customComparator: ()=>{},moreText: 'more',noResultsFound: 'No results found!',searchPlaceholder:'Search',searchOnKey: 'code',clearOnSelection: false,inputDirection: 'ltr',}
-   // taxList : Array<SalesTaxAddModel> =new Array<SalesTaxAddModel>();
-   // selectedTax: Array<SalesTaxAddModel> =new Array<SalesTaxAddModel>();
+    @Input() customerDiscount;
+
     @Input() selectedTax: any=[];
     @Input() disabled : boolean = true;
     
  
     @Output() deleteItem = new EventEmitter();
     @Output() updateTotalAmount = new EventEmitter();
-
+   
     constructor(private itemService: ItemCalculationService,
                 private QuotationService:QuotationService,
                 private toastr: ToastrService,
@@ -45,110 +45,23 @@ export class ItemSelectedComponent implements OnInit{
         debugger;
         this.loadItems();
         this.loadTaxes();
-        
-        //this.taxList=[{"code":"txt1","taxPercentage":"0.4","description":"",},{"code":"txt2","taxPercentage":"10","description":""}]
 
-//         this.itemsandservices=[
-// {"description": "DESC1",
-// "id": 1,
-// "itemTypeName": 1,
-// "name": "Sample Item1",
-// "price": 100,
-// "qty": 1,
-// "rate": 100,
-// "taxCode": "txt1",
-// "taxPercentage": 0.4
-//     },
-// {"description": "DESCdest22",
-// "id": 2,
-// "itemTypeName": 1,
-// "name": "Sample Item2",
-// "price": 200,
-// "qty": 1,
-// "rate": 200,
-// "taxCode": "txt2",
-// "taxPercentage": 10
-// },
-// {
-//     "description": "DESCdest33",
-//     "id": 3,
-//     "itemTypeName": 1,
-//     "name": "Sample Item3",
-//     "price": 100,
-//     "qty": 1,
-//     "rate": 100,
-//     "taxCode": "txt1",
-//     "taxPercentage": 0.4
-// }]
-
-console.log("itesm",this.itemsandservices)
-
-     
-
-    //    this.ItemListItemModel.id=1;
-    //    this.ItemListItemModel.itemTypeName=1;
-    //    this.ItemListItemModel.name="Sample Item";
-    //    this.ItemListItemModel.rate=10;
-    //    this.ItemListItemModel.taxCode="txt1";
-    //    this.ItemListItemModel.taxPercentage=10;
-    //    this.ItemListItemModel.description="DESC";
-    //    this.ItemListItemModel.price=0;
-    //    this.ItemListItemModel.qty=1;
-    //    this.itemsandservices.push(this.ItemListItemModel);
-
-    //    this.ItemListItemModel.id=2;
-    //    this.ItemListItemModel.itemTypeName=2;
-    //    this.ItemListItemModel.name="Sample Item2";
-    //    this.ItemListItemModel.rate=300;
-    //    this.ItemListItemModel.taxCode="txt2";
-    //    this.ItemListItemModel.taxPercentage=0.5;
-    //    this.ItemListItemModel.description="Sampleitem2";
-    //    this.ItemListItemModel.price=300;
-    //    this.ItemListItemModel.qty=1;
-    //    this.itemsandservices.push(this.ItemListItemModel);
-
-    //    this.ItemListItemModel.id=3;
-    //    this.ItemListItemModel.itemTypeName=1;
-    //    this.ItemListItemModel.name="Sample Item3";
-    //    this.ItemListItemModel.rate=100;
-    //    this.ItemListItemModel.taxCode="txt1";
-    //    this.ItemListItemModel.taxPercentage=0.40;
-    //    this.ItemListItemModel.description="DESCdest";
-    //    this.ItemListItemModel.price=100;
-    //    this.ItemListItemModel.qty=1;
-    //    this.itemsandservices.push(this.ItemListItemModel);
-
-
-
-       //alert(this.selectedItems.length)
     }
 
 
 
     getItemDetail(rowindx:any){
         debugger;
-//if(!this.selectedItems.find(e=> e.id==this.itemId[rowindx].id)){
     this.itemId[rowindx].qty=1;
     this.itemId[rowindx].price=this.itemId[rowindx].rate;
+    this.itemId[rowindx].lineAmount=Number(this.itemId[rowindx].price)-Number(this.itemId[rowindx].price*this.customerDiscount/100);
     this.selectedItems[rowindx]=this.itemId[rowindx];
     this.selectedTax[rowindx]=this.itemId[rowindx].taxCode;
-// }else{
-//     this.itemId.splice(0,rowindx);
-// }
-
-
- 
-
-
-
-
-
+   
     }
 
     initiateGrid(){
         debugger;
-        // alert("ng oninit called")
-       // this.itemId=null;
       this.selectedItemListItemModel.id=0;
       this.selectedItemListItemModel.itemTypeName="";
       this.selectedItemListItemModel.name="Select Item";
@@ -162,6 +75,8 @@ console.log("itesm",this.itemsandservices)
       console.log("kfjdkfj",this.itemId)
       
     }
+
+   
 
     loadItems() {
         debugger;
@@ -221,6 +136,8 @@ console.log("itesm",this.itemsandservices)
         console.log(this.selectedItems[rowindx])
         this.selectedItems[rowindx].rate=Number(event.target.value);
         this.selectedItems[rowindx].price=Number(this.selectedItems[rowindx].rate)*Number(this.selectedItems[rowindx].qty);
+
+        this.itemId[rowindx].lineAmount=Number(this.itemId[rowindx].price)-Number(this.itemId[rowindx].price*this.customerDiscount/100);
     }
 
     changeQty(event,rowindx){
@@ -229,7 +146,7 @@ console.log("itesm",this.itemsandservices)
         console.log(this.selectedItems[rowindx])
         this.selectedItems[rowindx].qty=Number(event.target.value);
         this.selectedItems[rowindx].price=Number(this.selectedItems[rowindx].rate)*Number(this.selectedItems[rowindx].qty);
-
+        this.itemId[rowindx].lineAmount=Number(this.itemId[rowindx].price)-Number(this.itemId[rowindx].price*this.customerDiscount/100);
     }
 
     deleteSelected(index){
@@ -243,6 +160,7 @@ console.log("itesm",this.itemsandservices)
        // alert(event.target.Value)
         this.selectedItems[index].salesTaxId=this.selectedTax[index].id;
         this.selectedItems[index].taxPercentage=Number(this.selectedTax[index].taxPercentage);
+        this.selectedItems[index].taxBankAccountId=this.selectedTax[index].bankAccountId;
     }
     
 }

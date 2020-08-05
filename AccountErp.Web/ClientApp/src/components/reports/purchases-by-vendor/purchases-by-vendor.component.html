@@ -83,13 +83,7 @@ novalidate> -->
                                             <div class="col-md-12">
                                                 <ngx-select-dropdown  name="vendorId" #vendorId="ngModel" (change)="getVendorDetail()" 
                                                 [multiple]="false" [(ngModel)]="selectedVendor"
-                                                 [config]="config" [options]="vendors"></ngx-select-dropdown>
-                                                 <!-- <select class="form-control" name="role" [(ngModel)]="filterModel.vendorId">
-                                                    <option value="">[Select Vendor]</option>
-                                                    <option *ngFor="let item of vendors" [value]="item.keyInt">
-                                                        {{item.value}}</option>
-                                                </select> -->
-                                            </div>
+                                                 [config]="config" [options]="vendors"></ngx-select-dropdown> </div>
                                       </div>
                                       <div class="form-group col-md-2 row">
                                         <label class="col-md-5"> </label>
@@ -226,10 +220,10 @@ novalidate> -->
                                                         </td>
                                                     </tr>
                                           <tr>
-                                              <td>Total Purchases</td>
+                                              <td  class="Bold">Total Purchases</td>
                                               <td></td>
-                                              <td>{{allPurchase | currency}}</td>
-                                              <td>{{paidPurchase | currency}}</td>
+                                              <td  class="Bold">{{allPurchase | currency}}</td>
+                                              <td  class="Bold">{{paidPurchase | currency}}</td>
                                           </tr>
                                                 </tbody>
                                              </table>

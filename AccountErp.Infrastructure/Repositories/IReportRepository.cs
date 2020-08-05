@@ -18,7 +18,7 @@ namespace AccountErp.Infrastructure.Repositories
         Task<List<SalesTaxReportDto>> GetSalesTaxReportAsync(SalesReportModel model);
 
         Task<List<AgedPayablesReportDto>> GetAgedPayablesReportAsync(AgedPayablesModel model);
-        Task<List<AgedPayablesReportDto>> GetAgedReceivablesReportAsync(AgedReceivablesModel model);
-        Task<ProfitAndLossSummaryReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model);
+        Task<List<AgedReceivablesReportDto>> GetAgedReceivablesReportAsync(AgedReceivablesModel model);
+        Task<ProfitAndLossSummaryDetailsReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model);
     }
 }
