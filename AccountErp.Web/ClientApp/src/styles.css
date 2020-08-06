@@ -262,3 +262,17 @@ div.dataTables_wrapper div.dataTables_processing {
     width: 250% !important;
 
 }
+
+.external-link{
+    background-image: url(assets/media/logos/icons8-external-link.svg);
+    background-repeat: no-repeat;
+    background-position: center right;
+    background-size: 9px 9px;
+    padding-right: 15px;
+    display: inline-block;
+    text-decoration: none;
+    color: #136acd;
+    font-weight: 500;
+   
+   
+}

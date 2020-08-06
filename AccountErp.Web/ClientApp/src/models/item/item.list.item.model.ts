@@ -12,8 +12,12 @@ export class ItemListItemModel {
     public salesTaxId:number;
     public isTaxable:boolean;
     public status:number;
+    public taxBankAccountId: number;
+    public bankAccountId:number;
 
     public description: string;
+
+    public lineAmount:number;
 
    
    

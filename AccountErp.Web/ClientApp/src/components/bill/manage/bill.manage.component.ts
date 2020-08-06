@@ -107,7 +107,9 @@ export class BillManageComponent implements OnInit, AfterViewInit {
                             ? `<span class='kt-badge kt-badge--dark kt-badge--inline'>Pending</span>`
                             : data === 1 ?
                                 `<span class='kt-badge kt-badge--success kt-badge--inline'>Paid</span>`
-                                : `<span class='kt-badge kt-badge--danger kt-badge--inline'>Deleted</span>`;
+                            : data === 2 ?
+                                `<span class='kt-badge kt-badge--danger kt-badge--inline'>Deleted</span>`
+                                : `<span class='kt-badge kt-badge--warning kt-badge--inline'>Overdue</span>`;
                     }
                 },
                 {

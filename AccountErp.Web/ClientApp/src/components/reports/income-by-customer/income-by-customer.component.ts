@@ -37,7 +37,8 @@ export class IncomeByCustomerComponent implements OnInit {
 
   // "totalPurchaseAmount": 9.65,
   // "totalPaidAmount": 3.92,
-  incomeCustomertData={totalIncomeAmount:0,paidAmount:0,customerReportsDtosList:[{}]};
+  // incomeCustomertData={totalIncomeAmount:0,paidAmount:0,customerReportsDtosList:[{}]};
+  incomeCustomertData={totalIncome:0,totaPaidIncome:0,customerReportsDtosList:[{}]};
   today = new Date();
   totalIncome;
   temp;
@@ -53,6 +54,8 @@ export class IncomeByCustomerComponent implements OnInit {
 
   ngOnInit() {
     this.loadCustomers();
+    this.setDefaultDate();
+    this.showincomebyCustomer();
   }
 
   // showincomebyCustomer(){
@@ -62,16 +65,22 @@ export class IncomeByCustomerComponent implements OnInit {
    // this.purchaseVendortData = {vendorReportsList={}};
    console.log("from",this.fromDate);
    console.log("from",this.toDate);
-
+ var body
     debugger;
     if (this.selectedCustomer !== undefined) {
 
-    var body={ 
+     body={ 
       "customerId": this.selectedCustomer.keyInt,
-   
     "startDate":  this.fromDate,
     "endDate": this.toDate,
   };
+}else{
+   body={ 
+    "customerId": 0,
+  "startDate":  this.fromDate,
+  "endDate": this.toDate,
+};
+}
     this.incomeCustomersService.getIncomeCustomer(body)
     .subscribe(
         (data) => {
@@ -79,24 +88,18 @@ export class IncomeByCustomerComponent implements OnInit {
           console.log("statement",data);
          // Object.assign(this.temp, data);
              Object.assign(this.incomeCustomertData, data);
-             this.allIncome=this.incomeCustomertData.totalIncomeAmount;
-             this.paidIncome=this.incomeCustomertData.paidAmount;
+            //  this.allIncome=this.incomeCustomertData.totalIncomeAmount;
+            this.allIncome=this.incomeCustomertData.totalIncome;
+
+            //  this.paidIncome=this.incomeCustomertData.paidAmount;
+            this.paidIncome=this.incomeCustomertData.totaPaidIncome;
+
              this.temp.customerReportsDtosList.map((item) => {
               debugger;
                item.paidAmount=item.totalIncomeAmount;
-              // if(item.status==1){
-              //  item.balanceAccAmount=0.00
-              // }else{
-              //   this.totalIncome=0;
-              //   this.tempBalance+=Number(item.totalAmount);
-              //   var balAmnt=Number(this.temp.openingBalance)+this.tempBalance;
-              //   this.totalIncome=balAmnt.toFixed(2);
-              //   item.balanceAccAmount=balAmnt.toFixed(2);
-              // }
            });
           this.CalculateTotalIncome();
         });
-    }
   }
 
   CalculateTotalIncome(){
@@ -116,7 +119,7 @@ export class IncomeByCustomerComponent implements OnInit {
     public openPDF(): void {
         const doc = new jsPDF('p', 'pt', 'a4');
         doc.setFontSize(15);
-        doc.text('Statement of Account', 400, 40);
+        doc.text('Income By Customer', 400, 40);
         autoTable(doc, {
            html: '#my-table',
            styles: {
@@ -136,8 +139,8 @@ export class IncomeByCustomerComponent implements OnInit {
     public downloadPDF(): void {
         const doc = new jsPDF('p', 'pt', 'a4');
         doc.setFontSize(15);
-        doc.text('Statement of Account', 400, 40);
-        doc.text('Outstanding Invoices', 400, 70);
+        doc.text('Income By Customer', 400, 40);
+        doc.text('', 400, 70);
        autoTable(doc, {
         html: '#my-table',
         styles: {
@@ -147,15 +150,15 @@ export class IncomeByCustomerComponent implements OnInit {
      tableLineColor: [4, 6, 7], // choose RGB
        });
         autoTable(doc, {
-          html: '#my-table1',
-          styles: {
-       },
+      //     html: '#my-table',
+      //     styles: {
+      //  },
        tableLineWidth: 0.5,
        startY: 300,
        tableLineColor: [4, 6, 7], // choose RGB
          });
         const DATA = this.htmlData.nativeElement;
-        doc.save('Customer-statement.pdf');
+        doc.save('Income-by-customer.pdf');
       }
 
 
@@ -220,6 +223,20 @@ loadCustomers() {
               this.blockUI.stop();
               this.appUtils.ProcessErrorResponse(this.toastr, error);
           });
+}
+
+setDefaultDate(){
+  debugger;
+        
+  var startDate = new Date(new Date().getFullYear(), 0, 1);
+  this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+  const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+  this.fromDate=jsbillDate.toISOString();
+
+  var endDate = new Date();
+  this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+  const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+  this.toDate=jsduevDate.toISOString();
 }
 
 }

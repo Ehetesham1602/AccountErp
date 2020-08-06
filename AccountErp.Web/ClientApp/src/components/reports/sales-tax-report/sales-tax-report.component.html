@@ -25,7 +25,7 @@
             <div class="col-md-12" *blockUI="'container-blockui'">
                 <div class="kt-portlet">
                     <div class="kt-portlet__head">
-                        <div class="kt-portlet__head-label">
+                        <div class="kt-portlet__head-label" id="htmlData" #htmlData>
                             <h3 class="kt-portlet__head-title">
                                 Sales Tax Report
                             </h3>
@@ -74,13 +74,6 @@
                                         <div class="form-group col-md-2 row" >
                                             <label class="col-md-9">Sales Tax :</label>
                                                   <div class="col-md-12" >
-                                                        <!-- <select name="salesTaxId" class="form-control" [(ngModel)]="model.salesTaxId"
-                                                        #salesTaxId="ngModel" required>
-                                                        <option value="">[Select]</option>
-                                                        <option *ngFor="let item of salesTaxes" [value]="item.keyInt">
-                                                            {{item.value}}
-                                                        </option>
-                                                        </select> -->
                                                         <ngx-select-dropdown (change)="getSalesTax()" [multiple]="false" [(ngModel)]="selectedTax"
                                                         [config]="config2" [options]="sales" name="salesId" #salesId="ngModel"></ngx-select-dropdown>
                                                   </div>
@@ -133,8 +126,8 @@
                                     <div class="form-group col-md-3 row">
                                         <label class="col-md-9">Report Type:</label>
                                              <div class="col-md-12" >
-                                                 <select class="form-control" id="statementType" [(ngModel)]="selectedstType" 
-                                                 name="statementType" #statementType="ngModel">
+                                                 <select class="form-control" id="statementType" [(ngModel)]="selectedReportType" 
+                                                 name="reportType" #reportType="ngModel">
                                                      <!-- <option [ngValue]="statementType" *ngFor="let statementType of statementTypes">{{statementType.name}}</option> -->
                                                      <option value="accural">Accural (Paid & Unpaid)</option>
                                                      <option value="cash">Cash Basis (Paid)</option>
@@ -148,7 +141,7 @@
                                         <label class="col-md-9"> </label>
                                         <div class="col-md-12">
                                             <button type="submit" class="btn btn-success" (click)="showSalesTaxReport()">
-                                                <i class="la la-save"></i> Update Report</button>
+                                                <i class="la la-save"></i> View Report</button>
                                         </div>
                                     </div>
                                     </div>
@@ -191,11 +184,10 @@
                                                         <th></th>
                                                         <th style="width:15%"  style="font-size:15px">SALES AND PURCHASES</th>
                                                         <th></th>
+                                                        <!-- <th></th>
                                                         <th></th>
-                                                        <th></th>
-                                                        <th colspan="2" style="text-align:right"  style="font-size:15px">{{fromDate | date}} to {{toDate | date}}</th>
-                                                        <!-- <th style="width:15%">{{fromDate | date}} to {{toDate | date}}</th> -->
-                                                    </tr>
+                                                        <th></th> -->
+                                                        <th colspan="2" style="text-align:right"  style="font-size:15px">{{fromDate | date}} to {{toDate | date}}</th>                                                    </tr>
                                                 </thead>
                                                 <tbody>
                                                     <!-- <tr *ngFor="let item of salesTaxData.invoiceList; index as $index;"> -->
@@ -292,7 +284,7 @@
                                 <div class="row justify-content-center">  
                                   <div class="row-12"></div> <br>
                                       <div class="col-12"> 
-                                            <table class="table table-striped" id="my-table">
+                                            <table class="table table-striped" id="my-table1">
                                                 <thead>
                                                     <tr >
                                                         <th></th>

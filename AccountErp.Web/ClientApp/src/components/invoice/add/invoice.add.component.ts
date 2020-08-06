@@ -41,7 +41,8 @@ export class InvoiceAddComponent implements OnInit {
   
     itemId: Array<ItemListItemModel> = new Array<ItemListItemModel>();
     selectedTax=[];
-
+    customerDiscount;
+   
     constructor(private router: Router,
         private route: ActivatedRoute,
         private modalService: NgbModal,
@@ -79,6 +80,7 @@ export class InvoiceAddComponent implements OnInit {
       
 
         this.loadItems();
+        alert(this.customerDiscount)
 
         if (!this.model.attachments || this.model.attachments.length === 0) {
             const attachmentFile = new AttachmentAddModel();
@@ -232,6 +234,8 @@ export class InvoiceAddComponent implements OnInit {
 
                     if (!this.customer.discount) {
                         this.customer.discount = 0;
+                    }else{
+                        this.customerDiscount=this.customer.discount;
                     }
 
                     this.updateTotalAmount();
@@ -322,9 +326,9 @@ export class InvoiceAddComponent implements OnInit {
             this.selectedItems.map((item) => {
                
                 if(item.salesTaxId!=null){
-                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty});
+                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId});
                 }else{
-                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty});
+                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0});
                 }
             });
         }else{
@@ -391,7 +395,10 @@ export class InvoiceAddComponent implements OnInit {
       "salesTaxId": null,
       "status": 1,
       "taxPrice":0.00,
+      "bankAccountId":null,
+      "taxBankAccountId":null,
       "taxCode": null,
+      "lineAmount":null,
       "taxPercentage": null});
 
     }

@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AppUtils } from 'src/helpers';
 import { BankAccountService,BillService, VendorService, BillPaymentService, CreditCardService } from 'src/services';
+import { ChartOfAccountsService } from 'src/services/chart-of-accounts.service';
 
 @Component({
   selector: 'app-add-vendor-payment',
@@ -34,6 +35,7 @@ export class AddVendorPaymentComponent implements OnInit {
       private bankAccountService: BankAccountService,
       private vendorService: VendorService,
       private billPaymentService: BillPaymentService,
+      private chartofaccService:ChartOfAccountsService,
       private creditCardService: CreditCardService) {
       this.route.params.subscribe((params) => {
           this.model.billId = params['id'];
@@ -65,6 +67,7 @@ export class AddVendorPaymentComponent implements OnInit {
     debugger;
     if(this.selectedVendor!=undefined){
         this.model.vendorId=this.selectedVendor.keyInt;
+        this.expenseSummaryModel.vendorId=this.selectedVendor.keyInt;
     
     if (this.model.vendorId === null
         || this.model.vendorId === '') {
@@ -76,8 +79,9 @@ export class AddVendorPaymentComponent implements OnInit {
         .subscribe(
             (data) => {
                 Object.assign(this.vendor, data);
+                this.loadVendorPaymentInfo();
                 console.log("vendor",this.vendor)
-              
+               
             });
         }
   }
@@ -94,6 +98,49 @@ export class AddVendorPaymentComponent implements OnInit {
             this.appUtils.ProcessErrorResponse(this.toastr, error);
         });
 }
+
+chengePaymentMode() {
+    debugger;
+    var ledgerType;
+      if (this.model.paymentMode !== '2') {
+          this.model.chequeNumber = '';
+      }
+      // if (this.model.paymentMode !== '0') {
+      //     ledgerType=1;
+      // }
+
+      
+
+      if (this.model.paymentMode == '0') {
+          ledgerType=1;
+          this.chartofaccService.getaccbyledgertype(ledgerType)
+          .subscribe(
+              data => {
+                  this.bankAccounts=[];
+                  Object.assign(this.bankAccounts, data);
+                  console.log("cashacc",this.bankAccounts)
+              },
+              error => {
+                  this.appUtils.ProcessErrorResponse(this.toastr, error);
+              });
+      //this.bankAccounts=[{keyInt:1,keyString:"",value:"Cash on hand"},{keyInt:2,keyString:"",value:"Petty cash"}]
+
+       }else{
+           ledgerType=2;
+           this.chartofaccService.getaccbyledgertype(ledgerType)
+           .subscribe(
+               data => {
+                   this.bankAccounts=[];
+                   Object.assign(this.bankAccounts, data);
+                   console.log("cashacc",this.bankAccounts)
+               },
+               error => {
+                   this.appUtils.ProcessErrorResponse(this.toastr, error);
+               });
+       }
+      
+  }
+
 
   loadCreditCards() {
       this.creditCardService.getSelectItems()
@@ -124,11 +171,13 @@ export class AddVendorPaymentComponent implements OnInit {
   }
 
   loadVendorPaymentInfo() {
+     
       this.blockUI.start();
       this.vendorService.getPaymentInfo(this.expenseSummaryModel.vendorId)
           .subscribe(
               data => {
                   this.blockUI.stop();
+                  debugger;
                   Object.assign(this.vendorPaymentInfoModel, data);
 
                   if (this.vendorPaymentInfoModel.accountNumber != null) {
@@ -137,6 +186,7 @@ export class AddVendorPaymentComponent implements OnInit {
                       selectListItem.value = this.vendorPaymentInfoModel.accountNumber;
                       this.depositToAccounts.push(selectListItem);
                   }
+
               },
               error => {
                   this.blockUI.stop();
@@ -144,24 +194,7 @@ export class AddVendorPaymentComponent implements OnInit {
               });
   }
 
-  chengePaymentMode() {
-      if (this.model.paymentMode !== '2') {
-          this.model.chequeNumber = '';
-      }
-
-      if (this.model.paymentMode == '0') {
-        //     this.chartofaccService.getaccbyledgertype()
-        //     .subscribe(
-        //         data => {
-        //             Object.assign(this.bankAccounts, data);
-        //         },
-        //         error => {
-        //             this.appUtils.ProcessErrorResponse(this.toastr, error);
-        //         });
-        this.bankAccounts=[{keyInt:1,keyString:"",value:"Cash on hand"},{keyInt:2,keyString:"",value:"Petty cash"}]
-
-         }
-  }
+ 
 
   loadVendors() {
     this.blockUI.start();

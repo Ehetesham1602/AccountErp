@@ -4,7 +4,7 @@
 <div class="kt-holder kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
     <div class="kt-subheader   kt-grid__item" id="kt_subheader">
         <div class="kt-subheader__main">
-            <div class="kt-subheader__breadcrumbs">
+            <div class="kt-subheader__breadcrumbs" id="htmlData" #htmlData>
                 <a [routerLink]="['/']" class="kt-subheader__breadcrumbs-home">
                     <em class="flaticon2-shelter"></em>
                 </a>
@@ -76,11 +76,6 @@
                                                     <ngx-select-dropdown  name="customerId" #customerId="ngModel" (change)="getCustomerDetail()"  id="customerId"
                                                     [multiple]="false" [(ngModel)]="selectedCustomer" [config]="config" [options]="customers"></ngx-select-dropdown>
 
-                                                    <!-- <select class="form-control" name="role" [(ngModel)]="filterModel.customerId">
-                                                        <option value="">[Select Customer]</option>
-                                                        <option *ngFor="let item of customers" [value]="item.keyInt">
-                                                            {{item.value}}</option>
-                                                    </select> -->
                                                   </div>
                                             </div>
                                             <div class="form-group col-md-2 row">
@@ -191,8 +186,8 @@
                                                 <tbody>
                                                     <tr >
                                                         <td>
-                                                            Income
-                                                        </td><td></td><td></td><td></td>
+                                                            
+                                                        </td><td class="Bold">Income</td><td></td><td></td>
                                                     </tr>
                                                     <tr *ngFor="let item of incomeCustomertData.customerReportsDtosList; index as $index;">
                                                        
@@ -209,15 +204,15 @@
                                                         </td>                                                        
                                                     </tr>
                                                     <tr>
-                                                       
-                                                        <td>
+                                                        <td></td>
+                                                        <td class="Bold">
                                                             Total Income
                                                         </td>
-                                                        <td></td>
-                                                        <td scope="row">
+                                                        
+                                                        <td scope="row" class="Bold">
                                                             {{allIncome | currency}}
                                                         </td>
-                                                        <td scope="row">
+                                                        <td scope="row" class="Bold">
                                                             {{paidIncome | currency}}
                                                         </td>
                                                         

@@ -27,6 +27,9 @@
             <th>
                 Price
             </th>
+            <th>
+                Amount
+            </th>
             <th *ngIf="!readOnly">
                 Action
             </th>
@@ -75,6 +78,9 @@
             </td>
             <td>
                 {{item.price}}
+            </td>
+            <td>
+                {{item.lineAmount}}
             </td>
             <td class="text-center" *ngIf="!readOnly">
                 <em class='fa fa-trash cursor-pointer' (click)='deleteSelected($index);deleteItem.emit($index)'></em>

@@ -307,6 +307,8 @@ export class QuotationAddComponent implements OnInit {
         this.selectedItemListItemModel.taxPercentage = 0;
         this.selectedItemListItemModel.taxPrice = 0.00;
         this.selectedItemListItemModel.description = "";
+        this.selectedItemListItemModel.bankAccountId=null;
+        this.selectedItemListItemModel.taxBankAccountId=null;
         this.selectedItems.push(this.selectedItemListItemModel);
     }
 

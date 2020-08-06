@@ -1041,6 +1041,10 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("TaxPercentage");
 
+                    b.Property<decimal?>("TaxPrice")
+                        .IsRequired()
+                        .HasColumnType("NUMERIC(12,2)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RecInvoiceId");

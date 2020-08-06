@@ -139,6 +139,8 @@ const appRoutes: Routes = [
     { path: 'reports/account-balances', component: AccountBalancesComponent },
     { path: 'reports/trial-balances', component: TrialBalanceComponent },
     { path: 'reports/account-transactions', component: AccountTransactionsComponent },
+    { path: 'reports/account-transactions/:id', component: AccountTransactionsComponent },
+    
     { path: 'reports/aged-payables', component: AgedPayablesComponent },
     { path: 'reports/aged-receivables', component: AgedReceivablesComponent },
     { path: 'reports/cash-flow', component: CashFlowComponent },

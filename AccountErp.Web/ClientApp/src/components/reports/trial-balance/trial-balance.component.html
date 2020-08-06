@@ -1,1 +1,357 @@
-<p>trial-balance works!</p>
+
+<form name="form" (ngSubmit)="onSubmit(f)" #f="ngForm">
+
+    <div class="kt-holder kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+        <div class="kt-subheader   kt-grid__item" id="kt_subheader">
+            <div class="kt-subheader__main">
+                <div class="kt-subheader__breadcrumbs">
+                    <a [routerLink]="['/']" class="kt-subheader__breadcrumbs-home">
+                        <em class="flaticon2-shelter"></em>
+                    </a>
+                    <span class="kt-subheader__breadcrumbs-separator"></span>
+                    <a [routerLink]="['/invoice/manage']" class="kt-subheader__breadcrumbs-link">
+                        Reports </a>
+                    <span class="kt-subheader__breadcrumbs-separator"></span>
+                    <span>Trial Balances</span>
+                </div>
+            </div>
+            <div class="kt-subheader__toolbar">
+                <div class="kt-subheader__wrapper">
+                </div>
+            </div>
+        </div>
+        <div class="kt-content kt-grid__item kt-grid__item--fluid" id="kt_content">
+            <div class="row">
+                <div class="col-md-12" *blockUI="'container-blockui'">
+                    <div class="kt-portlet">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title">
+                                    Trial Balance
+                                </h3>
+                            </div>
+    
+                            <div class="btn-group kt-portlet__head-label">
+                                <!-- <button type="button" class="btn btn-success btn-elevate btn-icon-sm dropdown-toggle" data-toggle="dropdown" 
+                                     aria-haspopup="true" aria-expanded="false">
+                                  More Actions
+                                </button> -->
+                                <button type="button" class="btn btn-outline-success btn-sm dropdown-toggle"
+                                data-toggle="dropdown">
+                                Action
+                            </button>
+                                <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
+    
+                                  <ul class="kt-nav">
+                                    <li class="kt-nav__item">
+                                      <a href="javascript:;" class="kt-nav__link" (click)="downloadPDF()">
+                                          <em class="kt-nav__link-icon la la-print"></em>
+                                          <span class="kt-nav__link-text"> Get share link</span>
+                                      </a>
+                                  </li>
+                                    <li class="kt-nav__item">
+                                      <a href="javascript:;" class="kt-nav__link" (click)="openPDF()">
+                                          <em class="kt-nav__link-icon la la-print"></em>
+                                          <span class="kt-nav__link-text"> Preview as customer</span>
+                                      </a>
+                                  </li>
+                                  <li class="kt-nav__item">
+                                    <a href="javascript:;" class="kt-nav__link" (click)="downloadPDF()">
+                                        <em class="kt-nav__link-icon la la-print"></em>
+                                        <span class="kt-nav__link-text"> Print</span>
+                                    </a>
+                                </li>
+                                  </ul>
+    
+                                </div>
+                              </div>
+                        </div>
+    
+                            <div class="kt-portlet__body">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                          
+                                            <div class="col-4">
+                                                <div class="form-group row">
+                                                    <label class="col-md-12">As of:</label>
+                                                    <div class="col-md-12">
+                                                        <div class="input-group">
+                                                            <input class="form-control" name="agedPayableasOfDate" id="agedPayableasOfDate"
+                                                                #agedPayableasOfDate="ngModel" (dateSelect)="changeAsOfdate()"
+                                                                [(ngModel)]="asOfDate" ngbDatepicker
+                                                                #d1="ngbDatepicker" [autoClose]=" true" readonly />
+                                                            <div class="input-group-append">
+                                                                <button class="btn btn-outline-secondary calendar"
+                                                                    (click)="d1.toggle()" type="button">
+                                                                    <i class="la la-calendar"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-4">
+                                                <div class="form-group row">
+                                                    <label class="col-md-12">Report Type:</label>
+                                                    <div class="col-md-12">
+                                                        <select class="form-control" id="statementType" [(ngModel)]="selectedstType" 
+                                                        name="statementType" #statementType="ngModel">
+                                                            <!-- <option [ngValue]="statementType" *ngFor="let statementType of statementTypes">{{statementType.name}}</option> -->
+                                                            <option value="accural">Accural (Paid & Unpaid)</option>
+                                                            <option value="cash">Cash Basis (Paid)</option>
+                                                          </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                         
+                                       
+                                        
+                                       
+                                     
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group row">
+                                            <label class="col-md-12">&nbsp;</label>
+                                            <div class="col-md-12">
+                                                <button type="submit" class="btn btn-success" (click)="showTrialBalance()">
+                                                    <i class="la la-save"></i> Update Report</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+    
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    
+        <div class="kt-content kt-grid__item kt-grid__item--fluid" id="kt_content">
+            <div class="row">
+                <div class="col-md-12" *blockUI="'container-blockui'">
+                    <div class="kt-portlet">
+                            <div class="kt-portlet__body">
+                                <div class="container">
+                                    <div class="row justify-content-center">  
+                                      <div class="row-12"></div> <br>
+                                          <div class="col-12"> 
+                                                <table class="table table-striped" id="my-table">
+                                                    <thead>
+                                                            <th colspan="4">ACCOUNTS</th>
+                                                            <th colspan="2">DEBIT</th>
+                                                            <th colspan="2"> CREDIT</th>
+                                                           
+
+                                                            <!-- <th style="width:15%">{{fromDate | date}} to {{toDate | date}}</th> -->
+                                                       
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- <tr *ngFor="let item of salesTaxData.invoiceList; index as $index;"> -->
+                                                        <tr>
+                                                            <td colspan="12" class="acchead" >
+                                                                Assets
+                                                            </td >
+                                                            
+                                                        </tr>
+                                                        <tr *ngFor="let item of assetAccDetails" class="accline">
+                                                        <!-- <tr> -->
+                                                            <td colspan="4">
+                                                                <a [routerLink]="['/reports/account-transactions/',item.id]" class="external-link">{{item.accName}}</a>
+                                                            </td>
+                                                            <td colspan="2">
+                                                                {{item.debit | currency}}
+                                                            </td>
+                                                            <td colspan="2">
+                                                                {{item.credit | currency}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="Bold" colspan="4">
+                                                                Total Assets
+                                                            </td>
+                                                            <td colspan="2" class="Bold">
+                                                                {{110 | currency}}
+                                                            </td>
+                                                            <td colspan="2"class="Bold" > 
+                                                                {{70 | currency}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+<br>
+                                                    <!-- liability starts  -->
+                                                    <tbody>
+                                                        <tr>
+                                                            <td colspan="10" class="acchead">
+                                                                Liabilities
+                                                            </td>
+                                                    </tr>
+                                                    <tr *ngFor="let item of liabilitiesAccDetails" class="accline">
+                                                        <!-- <tr> -->
+                                                            <td colspan="4">
+                                                                 <a [routerLink]="['/reports/account-transactions/',item.id]" class="external-link">{{item.accName}}</a>
+                                                            </td>
+                                                            <td colspan="2">
+                                                                {{item.debit | currency}}
+                                                            </td>
+                                                            <td colspan="2">
+                                                                {{item.credit | currency}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="Bold" colspan="4">
+                                                                Total Liabilities
+                                                            </td>
+                                                            <td colspan="2" class="Bold">
+                                                                {{0.00 | currency}}
+                                                            </td>
+                                                            <td colspan="2"class="Bold" > 
+                                                                {{70 | currency}}
+                                                            </td>
+                                                        </tr>
+                                                </tbody>
+
+                                                <!-- liability ends -->
+<br>
+
+                                                <!-- Equity starts -->
+                                                <tbody>
+                                                    <tr>
+                                                        <td colspan="10" class="acchead">
+                                                            Equity
+                                                        </td>
+                                                </tr>
+                                                
+                                                <tr *ngFor="let item of equityAccDetails" class="accline">
+                                                    <!-- <tr> -->
+                                                        <td colspan="4">
+                                                             <a [routerLink]="['/reports/account-transactions/',item.id]" class="external-link">{{item.accName}}</a>
+                                                        </td>
+                                                        <td colspan="2">
+                                                            {{item.debit | currency}}
+                                                        </td>
+                                                        <td colspan="2">
+                                                            {{item.credit | currency}}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="Bold" colspan="4">
+                                                            Total Equity
+                                                        </td>
+                                                        <td colspan="2" class="Bold">
+                                                            {{0.00 | currency}}
+                                                        </td>
+                                                        <td colspan="2"class="Bold" > 
+                                                            {{70 | currency}}
+                                                        </td>
+                                                    </tr>
+                                            </tbody>
+
+                                                    <!-- equity ends -->
+
+<br>
+                                                    <!-- income starts -->
+
+
+                                                    <tbody>
+                                                        <tr>
+                                                            <td colspan="10" class="acchead">
+                                                                Income
+                                                            </td>
+                                                    </tr>
+                                                    <tr *ngFor="let item of incomeAccDetails" class="accline">
+                                                        <!-- <tr> -->
+                                                            <td colspan="4">
+                                                                 <a [routerLink]="['/reports/account-transactions/',item.id]" class="external-link">{{item.accName}}</a>
+                                                            </td>
+                                                            <td colspan="2">
+                                                                {{item.debit | currency}}
+                                                            </td>
+                                                            <td colspan="2">
+                                                                {{item.credit | currency}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="Bold" colspan="4">
+                                                                Total Income
+                                                            </td>
+                                                            <td colspan="2" class="Bold">
+                                                                {{0.00 | currency}}
+                                                            </td>
+                                                            <td colspan="2"class="Bold" > 
+                                                                {{70 | currency}}
+                                                            </td>
+                                                        </tr>
+                                                </tbody>
+<br>
+                                                    <!-- income ends -->
+
+
+                                                    <!-- expenes starts -->
+
+                                                    <tbody>
+                                                        <tr>
+                                                            <td colspan="10" class="acchead">
+                                                                Expenses
+                                                            </td>
+                                                    </tr>
+                                                    <tr *ngFor="let item of expenseAccDetails" class="accline">
+                                                        <!-- <tr> -->
+                                                            <td colspan="4">
+                                                                 <a [routerLink]="['/reports/account-transactions/',item.id]" class="external-link">{{item.accName}}</a>
+                                                            </td>
+                                                            <td colspan="2">
+                                                                {{item.debit | currency}}
+                                                            </td>
+                                                            <td colspan="2">
+                                                                {{item.credit | currency}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="Bold" colspan="4">
+                                                                Total Expense
+                                                            </td>
+                                                            <td colspan="2" class="Bold">
+                                                                {{0.00 | currency}}
+                                                            </td>
+                                                            <td colspan="2"class="Bold" > 
+                                                                {{70 | currency}}
+                                                            </td>
+                                                        </tr>
+                                                    <tr></tr>
+                                                    <tr>
+                                                        <td colspan="4" class="Bold totaoblock">
+                                                           Total for all Accounts
+                                                        </td>
+                                                        <td colspan="2" class="totaoblock">
+                                                            {{100 | currency}}
+                                                        </td>
+                                                        <td colspan="2" class="totaoblock">
+                                                            {{100 | currency}}
+                                                        </td>
+                                                     </tr>
+                                                </tbody>
+                                                    <!-- expenses ends -->
+                                                 </table>
+                                           </div>
+                                     </div>
+                                    </div>
+    
+    
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
+    </div>
+    </form>
+    
+    
+    
