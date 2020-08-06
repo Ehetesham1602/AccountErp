@@ -80,7 +80,7 @@ export class InvoiceAddComponent implements OnInit {
       
 
         this.loadItems();
-        alert(this.customerDiscount)
+       
 
         if (!this.model.attachments || this.model.attachments.length === 0) {
             const attachmentFile = new AttachmentAddModel();
@@ -326,9 +326,9 @@ export class InvoiceAddComponent implements OnInit {
             this.selectedItems.map((item) => {
                
                 if(item.salesTaxId!=null){
-                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId});
+                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId,"lineAmount":item.lineAmount});
                 }else{
-                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0});
+                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0,"lineAmount":item.lineAmount});
                 }
             });
         }else{
@@ -560,6 +560,7 @@ getCustomerDetailForQuotation() {
                   this.selectedCustomer=custTemp;
                 this.model.phone = this.customer.phone;
                 this.model.email = this.customer.email;
+                this.customerDiscount=this.customer.discount;
 
                 if (!this.customer.discount) {
                     this.customer.discount = 0;

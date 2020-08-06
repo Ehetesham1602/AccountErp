@@ -20,6 +20,7 @@ export class InvoiceDetailModel {
     public poSoNumber: number; //
 
     public customer: CustomerDetailModel;
+    public lineAmountSubTotal: number;
 
     public items: Array<InvoiceItemModel>;
     public attachments: Array<AttachmentDetailModel>;

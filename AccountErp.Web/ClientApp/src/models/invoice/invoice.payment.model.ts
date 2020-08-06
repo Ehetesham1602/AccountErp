@@ -8,10 +8,13 @@ export class InvoicePaymentModel {
     public chequeNumber:string;
     public description:string;
     public customerId:string;
+    public paymentType:number;
+    public amount:number;
 
     constructor() {
         this.paymentMode = '';
         this.bankAccountId = '';
         this.depositFrom = '';
+        this.invoiceId=0;
     }
 }

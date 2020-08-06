@@ -37,6 +37,7 @@ export class BillAddComponent implements OnInit {
     newBillNumber;
     billDate;
     dueDate;
+    customerDiscount;
     constructor(private router: Router,
         private route: ActivatedRoute,
         private modalService: NgbModal,
@@ -99,6 +100,11 @@ export class BillAddComponent implements OnInit {
                 (data) => {
                     this.blockUI.stop();
                     Object.assign(this.vendor, data);
+                    if (!this.vendor.discount) {
+                        this.vendor.discount = 0;
+                    }else{
+                        this.customerDiscount=this.vendor.discount;
+                    }
                 },
                 error => {
                     this.blockUI.stop();
@@ -123,6 +129,7 @@ export class BillAddComponent implements OnInit {
                         "value": this.vendor.name
                       }
                       this.selectedVendor=custTemp;
+                      this.customerDiscount=this.vendor.discount;
                     //   this.model.vendorId=Number(this.vendor.id);
                 },
                 error => {
@@ -255,9 +262,9 @@ export class BillAddComponent implements OnInit {
                 console.log("taxPrice",item.taxPrice)
                 if(item.salesTaxId!=null){
                     debugger;
-                    this.model.items.push({"itemId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId});
+                    this.model.items.push({"itemId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId,"lineAmount":item.lineAmount});
                 }else{
-                    this.model.items.push({"itemId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId});
+                    this.model.items.push({"itemId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":0,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0,"lineAmount":item.lineAmount});
                 }
             });
         }else{

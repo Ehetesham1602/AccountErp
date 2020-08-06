@@ -15,6 +15,7 @@ export class InvoiceEditModel {
     public subTotal:number;
     public invoiceDate: string;
     public dueDate: string;
+    public lineAmountSubTotal: number;
 
     public items: any;
     public attachments: Array<AttachmentEditModel>;
@@ -23,5 +24,6 @@ export class InvoiceEditModel {
         this.customerId = '';
         this.items = new Array<number>();
         this.attachments = new Array<AttachmentEditModel>();
+        this.lineAmountSubTotal=0;
     }
 }

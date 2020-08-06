@@ -14,6 +14,7 @@ export class BillEditModel {
     public remark: string;
     public billNumber:string;
     public subTotal:number;
+    public lineAmountSubTotal: number;
 
     public items: any;
     public attachments: Array<AttachmentEditModel>;
@@ -22,5 +23,6 @@ export class BillEditModel {
         this.vendorId = '';
         this.items = new Array<number>();
         this.attachments = new Array<AttachmentEditModel>();
+        this.lineAmountSubTotal=0;
     }
 }

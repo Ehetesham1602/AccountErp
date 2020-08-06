@@ -42,9 +42,9 @@
                                                  [(ngModel)]="model.paymentType"
                                                 #paymentMode="ngModel" required>
                                                 <option value="">[Select]</option>
-                                                <option value='1'>Advance payment</option>
-                                                <option value='2'>Bill payment</option>
-                                                <option value='3'>Other payment</option>
+                                                <option value='2'>Advance payment</option>
+                                                <option value='3'>Bill payment</option>
+                                               
                                             </select>
                                             <div class="validation-error-message"
                                                 *ngIf="f.submitted && !paymentMode.valid">
@@ -71,7 +71,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-6" *ngIf="model.paymentType==1">
+                                <div class="col-6" *ngIf="model.paymentType==2">
                                     <div class="form-group row">
                                         <label class="col-md-3 kt-portlet__label">Select Vendor:</label>
                                         <div class="col-md-9">
@@ -80,7 +80,7 @@
                                     </div>
                                 </div>
                               
-                                    <div class="col-6" *ngIf="model.paymentType==1">
+                                    <div class="col-6" *ngIf="model.paymentType==2">
                                         <div class="form-group row">
                                             <label class="col-md-3 kt-portlet__label">Vendor Details:</label>
                                             <div class="col-md-9">
@@ -89,15 +89,15 @@
                                         </div>
                                     </div>
                               
-                                <div class="col-6" *ngIf="model.paymentType==2">
+                                <div class="col-6" *ngIf="model.paymentType==3">
                                     <div class="form-group row">
                                         <label class="col-md-3 kt-portlet__label">Select Bill/Expense:</label>
                                         <div class="col-md-9">
-                                            <select name="invoice" class="form-control"
-                                            (change)="chengeInvoice()" [(ngModel)]="model.invoiceId"
+                                            <select name="bill" class="form-control"
+                                            (change)="chengeBill()" [(ngModel)]="model.billId"
                                             #paymentMode="ngModel" required>
                                             <option value="">[Select]</option>
-                                            <option *ngFor="let item of vendors" value={{item.id}}>{{item.billNumber}}</option>
+                                            <option *ngFor="let item of bills" value={{item.id}}>{{item.billNumber}}</option>
                                         </select>
                                         </div>
                                     </div>
@@ -105,20 +105,19 @@
                               
                             </div>
                           <div class="row">
-                                <div class="col-6" *ngIf="model.paymentType==2">
+                                <div class="col-6" *ngIf="model.paymentType==3">
                                     <div class="form-group row">
                                         <label class="col-md-3 kt-portlet__label">Bill#:</label>
                                         <div class="col-md-9">
-                                            <p class="kt-portlet__data">{{expenseSummaryModel.id}}</p>
+                                            <p class="kt-portlet__data">{{expenseSummaryModel.billNumber}}</p>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-6" *ngIf="model.paymentType==2">
+                                <div class="col-6" *ngIf="model.paymentType==3">
                                     <div class="form-group row">
                                         <label class="col-md-3 kt-portlet__label">Vendor Name:</label>
                                         <div class="col-md-9">
-                                            <p class="kt-portlet__data">{{expenseSummaryModel.firstName}}
-                                                {{expenseSummaryModel.middleName}} {{expenseSummaryModel.lastName}}</p>
+                                            <p class="kt-portlet__data">{{expenseSummaryModel.vendorName}}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -165,21 +164,21 @@
                                     </div>
                                 </div>
                                 
-                                    <div class="col-6" *ngIf="model.paymentType==1">
+                                    <div class="col-6" *ngIf="model.paymentType==2">
                                         <div class="form-group row">
                                             <label class="col-md-3 kt-portlet__label">Amount:</label>
                                             <div class="col-md-9">
-                                              <input type="text" class="form-control">
+                                                <input type="text"  name="amount" #amount="ngModel" [(ngModel)]="model.amount" class="form-control">
                                             </div>
                                         </div>
                                     </div>
                                 
                               
-                                    <div class="col-6" *ngIf="model.paymentType==2">
+                                    <div class="col-6" *ngIf="model.paymentType==3">
                                         <div class="form-group row">
                                             <label class="col-md-3 kt-portlet__label">Amount:</label>
                                             <div class="col-md-9">
-                                                <p class="kt-portlet__data">{{expenseSummaryModel.totalAmount | currency}}
+                                                <p class="kt-portlet__data">{{model.amount | currency}}
                                                 </p>
                                             </div>
                                         </div>
@@ -263,7 +262,7 @@
                         </div>
                         <div class="kt-portlet__foot">
                             <div class="kt-form__actions text-right">
-                                <a [routerLink]="['/invoice/detail', model.invoiceId]"
+                                <a [routerLink]="['/invoice/detail', model.billId]"
                                     class="btn btn-outline-secondary m-r-5">
                                     <i class="la la-arrow-left"></i> Back</a>
                                 <button type="submit" class="btn btn-success">

@@ -41,6 +41,7 @@ export class QuotationEditComponent implements OnInit {
   quotDate;
   expireDate;
   newQuotNumber;
+  customerDiscount;
 
   constructor(private router: Router,
       private route: ActivatedRoute,
@@ -321,6 +322,8 @@ initiateGrid(){
 
                   if (!this.customer.discount) {
                       this.customer.discount = 0;
+                  }else{
+                      this.customerDiscount=this.customer.discount;
                   }
 
               });
@@ -484,9 +487,9 @@ submit() {
         if(this.selectedItems[this.selectedItems.length-1].id!=0){
         this.selectedItems.map((item) => {
             if(item.salesTaxId!=null){
-                this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty});
+                this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId,"lineAmount":item.lineAmount});
             }else{
-                this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty});
+                this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0,"lineAmount":item.lineAmount});
             }
         });
     }else{

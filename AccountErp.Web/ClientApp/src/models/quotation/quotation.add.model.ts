@@ -13,6 +13,7 @@ export class quotationAddModel {
     public quotationDate:string;
     public expiryDate:string;
     public subTotal:number;
+    public lineAmountSubTotal: number;
   
 
     public items: any;
@@ -22,6 +23,7 @@ export class quotationAddModel {
         this.customerId = '';
         this.items = new Array<quotationItemAddModel>();
         this.attachments = new Array<AttachmentAddModel>();
+        this.lineAmountSubTotal=0;
     }
 }
 

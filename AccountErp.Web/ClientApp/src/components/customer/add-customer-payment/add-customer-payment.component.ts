@@ -37,7 +37,10 @@ export class AddCustomerPaymentComponent implements OnInit {
         private invoicePaymentService: InvoicePaymentService,
         private chartofaccService:ChartOfAccountsService) {
         this.route.params.subscribe((params) => {
+            debugger;
             this.model.invoiceId = params['id'];
+            this.model.paymentType=1
+            this. loadInvoiceSummary();
         });
     }
 
@@ -81,6 +84,7 @@ export class AddCustomerPaymentComponent implements OnInit {
                 (data) => {
                     this.blockUI.stop();
                     Object.assign(this.invoiceSummaryModel, data);
+                    this.model.amount=this.invoiceSummaryModel.totalAmount;
                     setTimeout(() => {
                         this.loadCustomerPaymentInfo();
                     }, 100);
@@ -232,6 +236,7 @@ export class AddCustomerPaymentComponent implements OnInit {
         if (this.model.paymentDate) {
             this.model.paymentDate = this.appUtils.getFormattedDate(this.model.paymentDate, null);
         }
+        
         this.invoicePaymentService.add(this.model)
             .subscribe(
                 data => {

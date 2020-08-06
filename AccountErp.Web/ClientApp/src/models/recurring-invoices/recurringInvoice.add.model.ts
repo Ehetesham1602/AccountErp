@@ -14,6 +14,8 @@ export class RecurringInvoiceAddModel {
     public recDueDate:string;
     public poSoNumber:string;
 
+    public lineAmountSubTotal: number;
+
    
   
 
@@ -24,5 +26,6 @@ export class RecurringInvoiceAddModel {
         this.customerId = '';
         this.items = new Array<number>();
         this.attachments = new Array<AttachmentAddModel>();
+        this.lineAmountSubTotal=0
     }
 }

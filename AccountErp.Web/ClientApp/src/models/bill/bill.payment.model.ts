@@ -9,11 +9,14 @@ export class BillPaymentModel {
     public chequeNumber:string;
     public description:string;
     public vendorId:string;
+    public paymentType:number;
+    public amount: number;
 
     constructor() {
         this.paymentMode = '';
         this.creditCardId = '';
         this.bankAccountId = '';
         this.depositTo = '';
+        this.billId=0;
     }
 }

@@ -80,6 +80,7 @@ export class InvoiceEditComponent implements OnInit {
             (data: any) => {
                 this.blockUI.stop();
                 Object.assign(this.model, data);
+                console.log("editInvoice",this.model)
 
                 var qdt=new Date(this.model.invoiceDate)
                 this.invDate={ day: qdt.getDate(), month: qdt.getMonth()+1, year: qdt.getFullYear()};
@@ -430,9 +431,9 @@ export class InvoiceEditComponent implements OnInit {
             this.selectedItems.map((item) => {
                 if(item.salesTaxId!=null){
                     debugger;
-                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId});
+                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId,"lineAmount":item.lineAmount});
                 }else{
-                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId});
+                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0,"lineAmount":item.lineAmount});
                 }
                
             });

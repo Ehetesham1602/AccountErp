@@ -19,6 +19,7 @@ export class QuotationDetailModel {
     public attachments: Array<AttachmentDetailModel>;
     public quotationDate:string;
     public expiryDate:string;
+    public lineAmountSubTotal: number;
 
     constructor() {
         this.customer = new CustomerDetailModel();

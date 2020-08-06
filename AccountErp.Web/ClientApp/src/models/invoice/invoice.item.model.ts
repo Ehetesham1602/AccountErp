@@ -5,6 +5,7 @@ export class InvoiceItemModel {
     public rate: number;
     public price:number;
     public quantity:number;
+    public lineAmount:number;
 
     public taxCode:string;
     public taxPercentage:number;

@@ -190,43 +190,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-4">
-                                <div class="form-group row">
-                                    <label class="col-md-3 kt-portlet__label">Amount:</label>
-                                    <div class="col-md-9">
-                                        <p class="kt-portlet__data">{{model.amount | currency}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="form-group row">
-                                    <label class="col-md-3 kt-portlet__label">Tax:</label>
-                                    <div class="col-md-9">
-                                        <p class="kt-portlet__data">{{model.tax | currency}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="form-group row">
-                                    <label class="col-md-3 kt-portlet__label">Discount:</label>
-                                    <div class="col-md-9">
-                                        <p class="kt-portlet__data">{{model.discount | currency}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="form-group row">
-                                    <label class="col-md-3 kt-portlet__label">Payble Amount:</label>
-                                    <div class="col-md-9">
-                                        <p class="kt-portlet__data">{{model.totalAmount | currency}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
+                            <div class="col-8">
                                 <div class="form-group row">
                                     <label class="col-md-3 kt-portlet__label">Description:</label>
                                     <div class="col-md-9">
@@ -234,7 +198,37 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="col-4">
+                              <table class="table" id="my-table">
+                                <tbody>
+                                  <tr><td>Sub Total:</td><td class="Bold"><p class="kt-portlet__data">{{model.subTotal | currency}} </p></td></tr>
+                                  <tr><td>Total Discount:</td><td class="Bold"><p class="kt-portlet__data">{{model.discount | currency}} </p></td></tr>
+                                  <tr><td>Tax:</td><td class="Bold"><p class="kt-portlet__data">{{model.tax | currency}} </p></td></tr>
+                                  <tr class="Bold totaoblock"><td>Total Amount:</td><td><p class="kt-portlet__data">{{model.totalAmount | currency}} </p></td></tr>
+                                </tbody>
+                              </table>
+                              <!-- <div class="form-group row">
+                                <label class="col-md-8 kt-portlet__label">Tax:</label>
+                                <div class="col-md-4">
+                                  <p class="kt-portlet__data">{{model.tax | currency}} </p>
+                                </div>
+                              </div>
+          
+                              <div class="form-group row">
+                                <label class="col-md-8 kt-portlet__label">Total Discount:</label>
+                                <div class="col-md-4">
+                                  <p class="kt-portlet__data">{{model.discount | currency}} </p>
+                                </div>
+                              </div>
+          
+                              <div class="form-group row">
+                                <label class="col-md-8 kt-portlet__label">Total Amount:</label>
+                                <div class="col-md-4">
+                                  <p class="kt-portlet__data">{{model.totalAmount | currency}} </p>
+                                </div>
+                              </div> -->
+                            </div>
+                          </div>
                         <div class="row">
                             <div class="col-12">
                                 <span class="kt-font-bolder">Attachments</span>

@@ -62,7 +62,8 @@ export class InvoicePaymentManageComponent implements OnInit, AfterViewInit {
             stateSave: true,
             ajax: (dataTablesParameters: any, callback) => {
 
-                dataTablesParameters.customerId = self.filterModel.customerId;
+                // dataTablesParameters.customerId = self.filterModel.customerId;
+                dataTablesParameters.customerId = null;
                 dataTablesParameters.filterKey = self.filterModel.filterKey;
 
                 self.http

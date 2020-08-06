@@ -9,6 +9,7 @@ export class InvoicePaymentService {
         private appSettings: AppSettings) { }
 
     add(model: InvoicePaymentModel) {
+        debugger;
         return this.http.post(this.appSettings.ApiBaseUrl + 'invoicePayment/add', model);
     }
     

@@ -38,7 +38,11 @@ export class AddVendorPaymentComponent implements OnInit {
       private chartofaccService:ChartOfAccountsService,
       private creditCardService: CreditCardService) {
       this.route.params.subscribe((params) => {
+        
+          debugger;
           this.model.billId = params['id'];
+          this.model.paymentType=4
+          this.loadExpenseSummary();
       });
   }
 
@@ -63,43 +67,7 @@ export class AddVendorPaymentComponent implements OnInit {
               });
   }
 
-  getVendorDetail(){
-    debugger;
-    if(this.selectedVendor!=undefined){
-        this.model.vendorId=this.selectedVendor.keyInt;
-        this.expenseSummaryModel.vendorId=this.selectedVendor.keyInt;
-    
-    if (this.model.vendorId === null
-        || this.model.vendorId === '') {
-      
-        return;
-    }
-
-    this.vendorService.getDetail(Number(this.model.vendorId))
-        .subscribe(
-            (data) => {
-                Object.assign(this.vendor, data);
-                this.loadVendorPaymentInfo();
-                console.log("vendor",this.vendor)
-               
-            });
-        }
-  }
-
-  loadUnpaidBills(){
-        
-    this.billPaymentService.getUnpaidBills()
-    .subscribe(
-        data => {
-            Object.assign(this.bills, data);
-            console.log("bill",this.bills)
-        },
-        error => {
-            this.appUtils.ProcessErrorResponse(this.toastr, error);
-        });
-}
-
-chengePaymentMode() {
+  chengePaymentMode() {
     debugger;
     var ledgerType;
       if (this.model.paymentMode !== '2') {
@@ -141,6 +109,69 @@ chengePaymentMode() {
       
   }
 
+  getVendorDetail(){
+    debugger;
+    if(this.selectedVendor!=undefined){
+        this.model.vendorId=this.selectedVendor.keyInt;
+        this.expenseSummaryModel.vendorId=this.selectedVendor.keyInt;
+    
+    if (this.model.vendorId === null
+        || this.model.vendorId === '') {
+      
+        return;
+    }
+
+    this.vendorService.getDetail(Number(this.model.vendorId))
+        .subscribe(
+            (data) => {
+                Object.assign(this.vendor, data);
+                this.loadVendorPaymentInfo();
+                console.log("vendor",this.vendor)
+               
+            });
+        }
+  }
+
+  loadUnpaidBills(){
+        
+    this.billPaymentService.getUnpaidBills()
+    .subscribe(
+        data => {
+            Object.assign(this.bills, data);
+            console.log("bill",this.bills)
+        },
+        error => {
+            this.appUtils.ProcessErrorResponse(this.toastr, error);
+        });
+}
+
+
+
+  chengeBill(){
+    debugger;
+    if(this.model.billId!=undefined){
+      
+    
+    if (this.model.billId === null
+        || this.model.billId === 0) {
+      
+        return;
+    }
+    this.loadExpenseSummary();
+    this.blockUI.start();
+    this.billService.getDetail(this.model.billId).subscribe(
+        (data: any) => {
+            this.blockUI.stop();
+            Object.assign(this.expenseSummaryModel, data);
+            this.model.amount=this.expenseSummaryModel.totalAmount;
+          
+        },
+        error => {
+            this.blockUI.stop();
+            this.appUtils.ProcessErrorResponse(this.toastr, error);
+        });
+    }
+  }
 
   loadCreditCards() {
       this.creditCardService.getSelectItems()
@@ -213,6 +244,7 @@ chengePaymentMode() {
 
 
   submit() {
+      debugger;
       this.blockUI.start();
       if (this.model.paymentDate) {
           this.model.paymentDate = this.appUtils.getFormattedDate(this.model.paymentDate, null);
