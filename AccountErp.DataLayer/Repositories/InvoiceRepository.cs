@@ -91,7 +91,8 @@ namespace AccountErp.DataLayer.Repositories
                                          Price = x.Price,
                                          TaxId = x.TaxId,
                                          TaxPrice = x.TaxPrice,
-                                         TaxPercentage = x.TaxPercentage
+                                         TaxPercentage = x.TaxPercentage,
+                                         LineAmount = x.LineAmount
                                      }),
                                      Attachments = i.Attachments.Select(x => new InvoiceAttachmentDto
                                      {
@@ -127,6 +128,7 @@ namespace AccountErp.DataLayer.Repositories
                               StrDueDate = i.StrDueDate,
                               PoSoNumber = i.PoSoNumber,
                               InvoiceNumber = i.InvoiceNumber,
+                              SubTotal = i.SubTotal,
                               Customer = new CustomerDetailDto
                               {
                                   FirstName = c.FirstName,
@@ -144,7 +146,8 @@ namespace AccountErp.DataLayer.Repositories
                                   Price = x.Price,
                                   TaxId = x.TaxId,
                                   TaxPrice = x.TaxPrice,
-                                  TaxPercentage = x.TaxPercentage
+                                  TaxPercentage = x.TaxPercentage,
+                                  LineAmount = x.LineAmount
                               }),
                               Attachments = i.Attachments.Select(x => new InvoiceAttachmentDto
                               {

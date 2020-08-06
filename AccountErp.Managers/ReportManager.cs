@@ -1,5 +1,7 @@
 ﻿using AccountErp.Dtos;
+using AccountErp.Dtos.BankAccount;
 using AccountErp.Dtos.Bill;
+using AccountErp.Dtos.ChartofAccount;
 using AccountErp.Dtos.Customer;
 using AccountErp.Dtos.Report;
 using AccountErp.Entities;
@@ -142,6 +144,47 @@ namespace AccountErp.Managers
 
             profitAndLossSummaryReportDtosList.NetProfit = profitAndLossSummaryReportDtosList.Income - profitAndLossSummaryReportDtosList.CostOfGoodSold - profitAndLossSummaryReportDtosList.OperatingExpenses;
             return profitAndLossSummaryReportDtosList;
+        }
+        public async Task<List<TrialBalanceReportDto>> GetTrialBalance(TrialBalanaceReportModel model)
+        {
+            var data = await _reportRepository.GetCOADetailAsyncForTrialReport();
+
+            List<TrialBalanceReportDto> accountDetailDto = new List<TrialBalanceReportDto>();
+            foreach (var item in data)
+            {
+                TrialBalanceReportDto accountMasterDto = new TrialBalanceReportDto();
+                accountMasterDto.Id = item.Id;
+                accountMasterDto.AccountMasterName = item.AccountMasterName;
+                accountMasterDto.BankAccount = new List<TrialBalanceAccountDetailDto>();
+                foreach (var accType in item.AccountTypes)
+                {
+                    foreach (var acc in accType.BankAccount)
+                    {
+                        if(model.ReportType == 0)
+                        {
+                            acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate <= model.AsOfDate)).ToList();
+                        }
+                        else if(model.ReportType == 1)
+                        {
+                            acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate <= model.AsOfDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
+                        }
+                      
+                        TrialBalanceAccountDetailDto trialAcc = new TrialBalanceAccountDetailDto();
+                        trialAcc.Id = acc.Id;
+                        trialAcc.AccountName = acc.AccountName;
+                        trialAcc.CreditAmount = acc.Transactions.Sum(x => x.CreditAmount);
+                        trialAcc.DebitAmount = acc.Transactions.Sum(x => x.DebitAmount);
+                        accountMasterDto.BankAccount.Add(trialAcc);
+                    }
+                }
+                TrialBalanceAccountDetailDto trialTotalAcc = new TrialBalanceAccountDetailDto();
+                trialTotalAcc.AccountName = "Total " + item.AccountMasterName;
+                trialTotalAcc.CreditAmount = accountMasterDto.BankAccount.Sum(x => x.CreditAmount);
+                trialTotalAcc.DebitAmount = accountMasterDto.BankAccount.Sum(x => x.DebitAmount);
+                accountMasterDto.BankAccount.Add(trialTotalAcc);
+                accountDetailDto.Add(accountMasterDto);
+            }
+            return accountDetailDto;
         }
     }
 }

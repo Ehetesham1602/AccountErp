@@ -1,7 +1,9 @@
-﻿using AccountErp.Utilities;
+﻿using AccountErp.Dtos.Transaction;
+using AccountErp.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Transactions;
 
 namespace AccountErp.Dtos.BankAccount
 {
@@ -20,5 +22,7 @@ namespace AccountErp.Dtos.BankAccount
         public string AccountName { get; set; }
         public string AccountId { get; set; }
         public Constants.RecordStatus Status { get; set; }
+
+        public IEnumerable<TransactionDetailDto> Transactions { get; set; }
     }
 }

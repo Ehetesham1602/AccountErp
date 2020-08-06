@@ -12,7 +12,7 @@
         public int TaxId { get; set; }
         public decimal? TaxPrice { get; set; }
         public int? TaxPercentage { get; set; }
-
+        public decimal LineAmount { get; set; }
         public int Quantity { get; set; }
 
 

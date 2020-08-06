@@ -35,7 +35,7 @@ namespace AccountErp.DataLayer.Repositories
                             join i in _dataContext.Invoices
                                 on ip.InvoiceId equals i.Id
                             join c in _dataContext.Customers
-                                on i.Id equals c.Id
+                                on i.CustomerId equals c.Id
                             where (model.CustomerId == null
                                    || i.CustomerId == model.CustomerId.Value)
                                   && (model.FilterKey == null

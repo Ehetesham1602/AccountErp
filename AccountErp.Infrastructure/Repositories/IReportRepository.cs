@@ -1,4 +1,5 @@
 ﻿using AccountErp.Dtos.Bill;
+using AccountErp.Dtos.ChartofAccount;
 using AccountErp.Dtos.Customer;
 using AccountErp.Dtos.Report;
 using AccountErp.Models.Report;
@@ -20,5 +21,6 @@ namespace AccountErp.Infrastructure.Repositories
         Task<List<AgedPayablesReportDto>> GetAgedPayablesReportAsync(AgedPayablesModel model);
         Task<List<AgedReceivablesReportDto>> GetAgedReceivablesReportAsync(AgedReceivablesModel model);
         Task<ProfitAndLossSummaryDetailsReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model);
+        Task<List<COADetailDto>> GetCOADetailAsyncForTrialReport();
     }
 }

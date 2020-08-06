@@ -39,6 +39,7 @@ namespace AccountErp.DataLayer.Repositories
                     item.BankAccountId = AccId;
                 }
                 item.ModifyDate = date;
+                item.Status = Utilities.Constants.TransactionStatus.Paid;
                 _dataContext.Transaction.Update(item);
             }
            
@@ -58,6 +59,7 @@ namespace AccountErp.DataLayer.Repositories
                     item.BankAccountId = AccId;
                 }
                 item.ModifyDate = date;
+                item.Status = Utilities.Constants.TransactionStatus.Paid;
                 _dataContext.Transaction.Update(item);
             }
 

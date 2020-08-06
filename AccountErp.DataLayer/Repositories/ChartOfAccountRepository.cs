@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using AccountErp.Infrastructure.Repositories;
 using AccountErp.Dtos.BankAccount;
+using AccountErp.Dtos.Transaction;
 
 namespace AccountErp.DataLayer.Repositories
 {
@@ -100,19 +101,19 @@ namespace AccountErp.DataLayer.Repositories
                           where i.COA_AccountMasterId == id
                           select new AccountTypeDetailDto
                           {
-                                  Id = i.Id,
-                                  AccountTypeName = i.AccountTypeName,
-                                  COA_AccountMasterId = i.COA_AccountMasterId,
-                                  BankAccount = i.BanKAccount.Select(y => new BankAccountDetailDto
-                                  {
-                                      Id = y.Id,
-                                      AccountName = y.AccountName,
-                                      AccountCode = y.AccountCode,
-                                      Description = y.Description,
-                                      AccountNumber = y.AccountNumber,
-                                      COA_AccountTypeId = y.COA_AccountTypeId,
-                                      AccountHolderName = y.AccountHolderName
-                                  })
+                              Id = i.Id,
+                              AccountTypeName = i.AccountTypeName,
+                              COA_AccountMasterId = i.COA_AccountMasterId,
+                              BankAccount = i.BanKAccount.Select(y => new BankAccountDetailDto
+                              {
+                                  Id = y.Id,
+                                  AccountName = y.AccountName,
+                                  AccountCode = y.AccountCode,
+                                  Description = y.Description,
+                                  AccountNumber = y.AccountNumber,
+                                  COA_AccountTypeId = y.COA_AccountTypeId,
+                                  AccountHolderName = y.AccountHolderName
+                              })
                           })
                            .AsNoTracking()
                            .ToListAsync();

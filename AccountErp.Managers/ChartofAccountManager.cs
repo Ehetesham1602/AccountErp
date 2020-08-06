@@ -59,6 +59,7 @@ namespace AccountErp.Managers
         {
             return await _repository.GetCOADetailAsync();
         }
+
         public async Task<List<AccountTypeDetailDto>> GetDetailByMarterIdAsync(int id)
         {
             return await _repository.GetDetailByMarterIdAsync(id);

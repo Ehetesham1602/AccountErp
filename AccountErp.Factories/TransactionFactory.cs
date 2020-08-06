@@ -26,7 +26,8 @@ namespace AccountErp.Factories
                 DebitAmount = entity.TotalAmount,
                 CreditAmount = 0,
                 CreationDate = Utility.GetDateTime(),
-                ModifyDate = null
+                ModifyDate = null,
+                Status = Constants.TransactionStatus.Pending
             };
 
             return transaction;
@@ -47,7 +48,8 @@ namespace AccountErp.Factories
                 DebitAmount = 0,
                 CreditAmount =  amount ?? 0,
                 CreationDate = Utility.GetDateTime(),
-                ModifyDate = null
+                ModifyDate = null,
+                Status = Constants.TransactionStatus.Pending
             };
 
             return transaction;
@@ -68,7 +70,8 @@ namespace AccountErp.Factories
                 DebitAmount = 0,
                 CreditAmount = entity.TotalAmount,
                 CreationDate = Utility.GetDateTime(),
-                ModifyDate = null
+                ModifyDate = null,
+                Status = Constants.TransactionStatus.Pending
             };
 
             return transaction;
@@ -89,7 +92,8 @@ namespace AccountErp.Factories
                 DebitAmount = amount ?? 0,
                 CreditAmount = 0,
                 CreationDate = Utility.GetDateTime(),
-                ModifyDate = null
+                ModifyDate = null,
+                Status = Constants.TransactionStatus.Pending
             };
 
             return transaction;
