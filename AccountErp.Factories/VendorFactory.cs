@@ -18,7 +18,7 @@ namespace AccountErp.Factories
                 Fax = model.Fax,
                 Phone = model.Phone,
                 Website = model.Website,
-                CreatedBy = userId,
+                CreatedBy = userId ?? "0",
                 CreatedOn = Utility.GetDateTime(),
                 Status = Constants.RecordStatus.Active
             };

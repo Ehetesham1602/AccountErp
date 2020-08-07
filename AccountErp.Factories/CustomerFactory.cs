@@ -16,7 +16,7 @@ namespace AccountErp.Factories
                 Phone = model.Phone,
                 Email = model.Email,
 
-                CreatedBy = userId,
+                CreatedBy = userId ?? "0",
                 CreatedOn = Utility.GetDateTime(),
                 Status = Constants.RecordStatus.Active
             };

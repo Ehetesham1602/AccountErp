@@ -14,6 +14,8 @@
         public int? TaxPercentage { get; set; }
         public decimal LineAmount { get; set; }
         public int Quantity { get; set; }
+        public int? BankAccountId { get; set; }
+        public int? TaxBankAccountId { get; set; }
 
 
     }
