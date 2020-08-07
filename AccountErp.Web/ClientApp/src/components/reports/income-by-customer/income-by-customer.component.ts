@@ -2,7 +2,7 @@
 import { CustomerDetailModel } from './../../../models/customer/customer.detail.model';
 import { IncomeCustomerDetail } from './../../../models/incomeByCustomers/income.customer.model';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import * as jsPDF from 'jspdf';
+// import * as jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { NgForm } from '@angular/forms';
 import { AppSettings, AppUtils } from 'src/helpers';
@@ -11,6 +11,7 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { VendorService, CustomerService } from 'src/services';
 import { ToastrService } from 'ngx-toastr';
 import { IncomeCustomersService } from 'src/services/income-customers.service';
+declare let jsPDF;
 
 @Component({
   selector: 'app-income-by-customer',
@@ -117,9 +118,11 @@ export class IncomeByCustomerComponent implements OnInit {
 
   }
     public openPDF(): void {
+      debugger;
         const doc = new jsPDF('p', 'pt', 'a4');
         doc.setFontSize(15);
         doc.text('Income By Customer', 400, 40);
+       
         autoTable(doc, {
            html: '#my-table',
            styles: {
@@ -137,10 +140,12 @@ export class IncomeByCustomerComponent implements OnInit {
 
 
     public downloadPDF(): void {
+      debugger;
         const doc = new jsPDF('p', 'pt', 'a4');
         doc.setFontSize(15);
         doc.text('Income By Customer', 400, 40);
         doc.text('', 400, 70);
+        var  res = doc.autoTableHtmlToJson('#my-table');
        autoTable(doc, {
         html: '#my-table',
         styles: {

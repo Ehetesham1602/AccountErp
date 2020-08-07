@@ -202,7 +202,7 @@ export class InvoiceManageComponent implements OnInit, AfterViewInit {
                 const payElem = $(row).find('[action-type = pay-invoice]');
                 $(payElem).unbind('click');
                 $(payElem).on('click', function () {
-                    self.router.navigate(['/invoice/payment', data.id]);
+                    self.router.navigate(['customer/add-customer-payment', data.id]);
                 });
             },
             drawCallback: function () {

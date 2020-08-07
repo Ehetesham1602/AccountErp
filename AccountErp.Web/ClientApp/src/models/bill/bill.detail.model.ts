@@ -15,6 +15,7 @@ export class BillDetailModel {
     public totalAmount: number;
     public remark: string;
     public status: number;
+    public lineAmountSubTotal: number;
 
     public vendor: VendorPersonalInfoModel;
 

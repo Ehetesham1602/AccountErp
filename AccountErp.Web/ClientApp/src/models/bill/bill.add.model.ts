@@ -12,6 +12,7 @@ export class BillAddModel {
     public totalAmount: number;
     public remark: string;
     public subTotal:number;
+    public lineAmountSubTotal: number;
 
     public items: any;
     public attachments: Array<AttachmentAddModel>;
@@ -20,5 +21,6 @@ export class BillAddModel {
         this.vendorId = '';
         this.items = new Array<number>();
         this.attachments = new Array<AttachmentAddModel>();
+        this.lineAmountSubTotal=0;
     }
 }

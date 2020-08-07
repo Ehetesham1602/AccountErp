@@ -14,6 +14,7 @@ export class quotationEditModel {
     public quotationDate:string;
     public expiryDate:string;
     public posoNumber:string;
+    public lineAmountSubTotal: number;
   
 
     public items: any;
@@ -23,5 +24,6 @@ export class quotationEditModel {
         this.customerId = '';
         this.items = new Array<quotationItemAddModel>();
         this.attachments = new Array<AttachmentAddModel>();
+        this.lineAmountSubTotal=0;
     }
 }

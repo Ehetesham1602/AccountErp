@@ -13,6 +13,7 @@ export class InvoiceAddModel {
     public dueDate:string;
     public poSoNumber:string;
     public subTotal:number;
+    public lineAmountSubTotal: number;
    
   
 
@@ -23,5 +24,6 @@ export class InvoiceAddModel {
         this.customerId = '';
         this.items = new Array<number>();
         this.attachments = new Array<AttachmentAddModel>();
+        this.lineAmountSubTotal=0;
     }
 }

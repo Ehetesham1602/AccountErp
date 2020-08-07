@@ -129,6 +129,7 @@ const appRoutes: Routes = [
     { path: 'chart-of-account/chart-of-account', component: ChartOfAccountsComponent },
     { path: 'transaction/transaction', component: TransactionComponent },
     { path: 'vendor/add-vendor-payment', component: AddVendorPaymentComponent },
+    { path: 'vendor/add-vendor-payment/:id', component: AddVendorPaymentComponent },
 
     
     

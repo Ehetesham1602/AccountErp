@@ -77,8 +77,8 @@ export class BillManageComponent implements OnInit, AfterViewInit {
             },
             columns: [
                 {
-                    data: 'id',
-                    title: 'Reference#',
+                    data: 'billNumber',
+                    title: 'Bill#',
                     width: '15%',
                     render: function (data, type, row) {
                         return `<a href='javascript:;' action-type='view-detail'>${data} </a>`;
@@ -191,7 +191,7 @@ export class BillManageComponent implements OnInit, AfterViewInit {
                 const paybillElem = $(row).find('[action-type = pay-bill]');
                 $(paybillElem).unbind('click');
                 $(paybillElem).on('click', function () {
-                    self.router.navigate(['/bill/payment', data.id]);
+                    self.router.navigate(['vendor/add-vendor-payment', data.id]);
                 });
             },
             drawCallback: function () {
