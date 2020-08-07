@@ -165,8 +165,8 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-12">
-                    <app-item-selected [selectedItems]="selectedItems" [itemId]="itemId" [selectedTax]="selectedTax" (updateTotalAmount)="updateTotalAmount()" [readOnly]="false" (deleteItem)="deleteItem($event)">
+                  <div class="col-12" [ngClass]="{'disableDiv': customerDiscount==undefined}">
+                    <app-item-selected [selectedItems]="selectedItems" [customerDiscount]="customerDiscount" [itemId]="itemId" [selectedTax]="selectedTax" (updateTotalAmount)="updateTotalAmount()" [readOnly]="false" (deleteItem)="deleteItem($event)">
                     </app-item-selected>
                   </div>
                 </div>
@@ -189,35 +189,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-6">
-                      <div class="form-group row">
-                        <label class="col-md-3 kt-portlet__label">Tax:</label>
-                        <div class="col-md-9">
-                          <p class="kt-portlet__data">{{model.tax| currency}} </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-6">
-                      <div class="form-group row">
-                        <label class="col-md-3 kt-portlet__label">Total Discount:</label>
-                        <div class="col-md-9">
-                          <p class="kt-portlet__data">{{model.discount| currency}} </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-6">
-                      <div class="form-group row">
-                        <label class="col-md-3 kt-portlet__label">Total Amount:</label>
-                        <div class="col-md-9">
-                          <p class="kt-portlet__data">{{model.totalAmount| currency}} </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-6">
+                    <div class="col-8">
                       <div class="form-group row" [ngClass]="{ 'validation-error' : f.submitted && remark.invalid}">
                         <label class="col-md-3">Description :</label>
                         <div class="col-md-9">
@@ -229,7 +201,18 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                    <div class="col-4">
+                        <table class="table" id="my-table">
+                          <tbody>
+                            <tr><td>Sub Total:</td><td class="Bold"><p class="kt-portlet__data">{{model.subTotal | currency}} </p></td></tr>
+                            <tr><td>Total Discount:</td><td class="Bold"><p class="kt-portlet__data">{{model.discount | currency}} </p></td></tr>
+                            <tr><td>Tax:</td><td class="Bold"><p class="kt-portlet__data">{{model.tax | currency}} </p></td></tr>
+                            <tr class="Bold totaoblock"><td>Total Amount:</td><td><p class="kt-portlet__data">{{model.totalAmount | currency}} </p></td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                   
+                </div>
                 </div>
                 <div class="row">
                   <div class="col-12">

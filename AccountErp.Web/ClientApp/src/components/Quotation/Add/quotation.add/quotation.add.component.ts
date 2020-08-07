@@ -35,6 +35,7 @@ export class QuotationAddComponent implements OnInit {
     expireDate;
     newQuotNumber;
     qtnNumber;
+    customerDiscount;
     ConfirmationMessage = "You want to save quotation?"
     constructor(private router: Router,
         private route: ActivatedRoute,
@@ -212,6 +213,8 @@ export class QuotationAddComponent implements OnInit {
 
                         if (!this.customer.discount) {
                             this.customer.discount = 0;
+                        }else{
+                            this.customerDiscount=this.customer.discount;
                         }
 
                         this.updateTotalAmount();

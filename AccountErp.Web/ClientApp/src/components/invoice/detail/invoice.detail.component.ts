@@ -120,6 +120,7 @@ export class InvoiceDetailComponent implements OnInit {
                  item.rate=invoiceItem.rate;
                  item.price=invoiceItem.price;
                  item.description=invoiceItem.description;
+                 item.lineAmount=invoiceItem.lineAmount;
                  
                  tempArray.push(item);
     
@@ -137,6 +138,8 @@ export class InvoiceDetailComponent implements OnInit {
     
             
         });
+
+        debugger;
     
         this.selectedItems = tempArray;
        // this.itemId=[];

@@ -80,6 +80,7 @@ export class InvoiceEditComponent implements OnInit {
             (data: any) => {
                 this.blockUI.stop();
                 Object.assign(this.model, data);
+                console.log("editInvoice",this.model)
 
                 var qdt=new Date(this.model.invoiceDate)
                 this.invDate={ day: qdt.getDate(), month: qdt.getMonth()+1, year: qdt.getFullYear()};

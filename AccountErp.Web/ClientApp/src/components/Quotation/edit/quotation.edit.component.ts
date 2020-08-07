@@ -41,6 +41,7 @@ export class QuotationEditComponent implements OnInit {
   quotDate;
   expireDate;
   newQuotNumber;
+  customerDiscount;
 
   constructor(private router: Router,
       private route: ActivatedRoute,
@@ -321,6 +322,8 @@ initiateGrid(){
 
                   if (!this.customer.discount) {
                       this.customer.discount = 0;
+                  }else{
+                      this.customerDiscount=this.customer.discount;
                   }
 
               });
