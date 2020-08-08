@@ -155,7 +155,6 @@ namespace AccountErp.DataLayer.Repositories
                                               join s in _dataContext.Invoices on i.InvoiceId equals s.Id
                                               where i.TaxId == salesTax.SalesId
                                               && s.Status != Constants.InvoiceStatus.Deleted
-                                              && s.Status != Constants.InvoiceStatus.Overdue
                                               select new InvoiceDetailDto
                                               {
                                                   Status = s.Status,
@@ -172,7 +171,12 @@ namespace AccountErp.DataLayer.Repositories
                 {
                     invoiceDetailDtoList = invoiceDetailDtoList.Where(p => p.Status == Constants.InvoiceStatus.Paid).ToList();
                 }
-                invoiceDetailDtoList = invoiceDetailDtoList.Where(p => (p.InvoiceDate >= model.StartDate && p.InvoiceDate <= model.EndDate)).ToList();
+                DateTime NextDate = new System.DateTime(model.StartDate.Year, model.StartDate.Month, model.StartDate.Day);
+
+                var inv = invoiceDetailDtoList.Where(p => (p.InvoiceDate <= NextDate)).ToList();
+                var invTaxAmt = inv.Sum(x => x.InvoiceServiceDto.TaxPrice);
+
+                invoiceDetailDtoList = invoiceDetailDtoList.Where(p => (p.InvoiceDate >= model.StartDate && p.InvoiceDate <= model.EndDate && p.Status != Constants.InvoiceStatus.Overdue)).ToList();
                 salesTax.SalesSubjectToTax = invoiceDetailDtoList.Sum(x => x.InvoiceServiceDto.Price);
                 salesTax.TaxAmountOnSales = invoiceDetailDtoList.Sum(x => x.InvoiceServiceDto.TaxPrice);
 
@@ -196,12 +200,15 @@ namespace AccountErp.DataLayer.Repositories
                 {
                     billDetailDtoList = billDetailDtoList.Where(p => p.Status == Constants.BillStatus.Paid).ToList();
                 }
-                billDetailDtoList = billDetailDtoList.Where(p => (p.BillDate >= model.StartDate && p.BillDate <= model.EndDate)).ToList();
+                var bill = billDetailDtoList.Where(p => (p.BillDate <= model.StartDate)).ToList();
+               var billTaxAmt = bill.Sum(x => x.Bill.TaxPrice);
+                billDetailDtoList = billDetailDtoList.Where(p => (p.BillDate >= model.StartDate && p.BillDate <= model.EndDate && p.Status != Constants.BillStatus.Overdue)).ToList();
                 salesTax.PurchaseSubjectToTax = billDetailDtoList.Sum(x => x.Bill.Price);
                 salesTax.TaxAmountOnPurchases = billDetailDtoList.Sum(x => x.Bill.TaxPrice);
-                //Expression exp = Expression.Subtract(Expression.Constant(salesTax.TaxAmountOnSales), Expression.Constant(salesTax.TaxAmountOnPurchases));
-                //salesTax.NetTaxOwing = exp.
                 salesTax.NetTaxOwing = salesTax.TaxAmountOnSales - salesTax.TaxAmountOnPurchases;
+                salesTax.StartingBalance = invTaxAmt - billTaxAmt;
+                salesTax.LessPaymentsToGovernment = 2;
+                salesTax.EndingBalance = salesTax.StartingBalance + salesTax.NetTaxOwing - salesTax.LessPaymentsToGovernment;
             }
             return salesTaxReportDtosList;
         }
