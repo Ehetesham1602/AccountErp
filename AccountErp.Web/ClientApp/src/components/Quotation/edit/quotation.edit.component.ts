@@ -186,6 +186,7 @@ initiateGrid(){
              item.rate=invoiceItem.rate;
              item.price=invoiceItem.price;
              item.description=invoiceItem.description;
+             item.lineAmount=invoiceItem.lineAmount;
              
              tempArray.push(item);
 
