@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200805134848_LineAmountChange05082020")]
-    partial class LineAmountChange05082020
+    [Migration("20200807103852_DbMigrationNew20200708")]
+    partial class DbMigrationNew20200708
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -195,6 +195,9 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<DateTime?>("DueDate");
 
+                    b.Property<decimal?>("LineAmountSubTotal")
+                        .HasColumnType("NUMERIC(12,2)");
+
                     b.Property<string>("Notes");
 
                     b.Property<decimal?>("PoSoNumber")
@@ -300,6 +303,8 @@ namespace AccountErp.DataLayer.Migrations
                     b.HasIndex("BillId");
 
                     b.HasIndex("ItemId");
+
+                    b.HasIndex("TaxId");
 
                     b.ToTable("BillServices");
                 });
@@ -584,6 +589,9 @@ namespace AccountErp.DataLayer.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
+                    b.Property<decimal?>("LineAmountSubTotal")
+                        .HasColumnType("NUMERIC(12,2)");
+
                     b.Property<decimal?>("PoSoNumber")
                         .HasColumnType("NUMERIC(12,2)");
 
@@ -732,6 +740,8 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.HasIndex("ServiceId");
 
+                    b.HasIndex("TaxId");
+
                     b.ToTable("InvoiceServices");
                 });
 
@@ -829,6 +839,9 @@ namespace AccountErp.DataLayer.Migrations
                         .HasColumnType("NUMERIC(12,2)");
 
                     b.Property<DateTime>("ExpireDate");
+
+                    b.Property<decimal?>("LineAmountSubTotal")
+                        .HasColumnType("NUMERIC(12,2)");
 
                     b.Property<string>("Memo");
 
@@ -937,6 +950,8 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.HasIndex("ServiceId");
 
+                    b.HasIndex("TaxId");
+
                     b.ToTable("QuotationServices");
                 });
 
@@ -955,6 +970,9 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<int>("CustomerId");
 
                     b.Property<decimal?>("Discount")
+                        .HasColumnType("NUMERIC(12,2)");
+
+                    b.Property<decimal?>("LineAmountSubTotal")
                         .HasColumnType("NUMERIC(12,2)");
 
                     b.Property<decimal?>("PoSoNumber")
@@ -1065,6 +1083,8 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.HasIndex("ServiceId");
 
+                    b.HasIndex("TaxId");
+
                     b.ToTable("RecurringInvoiceServices");
                 });
 
@@ -1132,7 +1152,7 @@ namespace AccountErp.DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BankAccountId");
+                    b.Property<int?>("BankAccountId");
 
                     b.Property<int?>("CompanyId");
 
@@ -1157,7 +1177,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<DateTime>("TransactionDate");
 
-                    b.Property<int>("TransactionId");
+                    b.Property<int?>("TransactionId");
 
                     b.Property<string>("TransactionNumber")
                         .HasMaxLength(50);
@@ -1392,6 +1412,11 @@ namespace AccountErp.DataLayer.Migrations
                         .WithMany()
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AccountErp.Entities.SalesTax", "Taxes")
+                        .WithMany()
+                        .HasForeignKey("TaxId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.BillPayment", b =>
@@ -1480,6 +1505,11 @@ namespace AccountErp.DataLayer.Migrations
                         .WithMany()
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AccountErp.Entities.SalesTax", "Taxes")
+                        .WithMany()
+                        .HasForeignKey("TaxId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.Item", b =>
@@ -1516,6 +1546,11 @@ namespace AccountErp.DataLayer.Migrations
                         .WithMany()
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AccountErp.Entities.SalesTax", "Taxes")
+                        .WithMany()
+                        .HasForeignKey("TaxId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.RecurringInvoice", b =>
@@ -1545,6 +1580,11 @@ namespace AccountErp.DataLayer.Migrations
                         .WithMany()
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AccountErp.Entities.SalesTax", "Taxes")
+                        .WithMany()
+                        .HasForeignKey("TaxId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.ShippingAddress", b =>
@@ -1558,8 +1598,7 @@ namespace AccountErp.DataLayer.Migrations
                 {
                     b.HasOne("AccountErp.Entities.BankAccount")
                         .WithMany("Transaction")
-                        .HasForeignKey("BankAccountId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("BankAccountId");
                 });
 
             modelBuilder.Entity("AccountErp.Entities.Vendor", b =>

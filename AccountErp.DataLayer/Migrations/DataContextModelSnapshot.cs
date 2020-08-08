@@ -302,6 +302,8 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.HasIndex("ItemId");
 
+                    b.HasIndex("TaxId");
+
                     b.ToTable("BillServices");
                 });
 
@@ -736,6 +738,8 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.HasIndex("ServiceId");
 
+                    b.HasIndex("TaxId");
+
                     b.ToTable("InvoiceServices");
                 });
 
@@ -944,6 +948,8 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.HasIndex("ServiceId");
 
+                    b.HasIndex("TaxId");
+
                     b.ToTable("QuotationServices");
                 });
 
@@ -1074,6 +1080,8 @@ namespace AccountErp.DataLayer.Migrations
                     b.HasIndex("RecInvoiceId");
 
                     b.HasIndex("ServiceId");
+
+                    b.HasIndex("TaxId");
 
                     b.ToTable("RecurringInvoiceServices");
                 });
@@ -1402,6 +1410,11 @@ namespace AccountErp.DataLayer.Migrations
                         .WithMany()
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AccountErp.Entities.SalesTax", "Taxes")
+                        .WithMany()
+                        .HasForeignKey("TaxId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.BillPayment", b =>
@@ -1490,6 +1503,11 @@ namespace AccountErp.DataLayer.Migrations
                         .WithMany()
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AccountErp.Entities.SalesTax", "Taxes")
+                        .WithMany()
+                        .HasForeignKey("TaxId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.Item", b =>
@@ -1526,6 +1544,11 @@ namespace AccountErp.DataLayer.Migrations
                         .WithMany()
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AccountErp.Entities.SalesTax", "Taxes")
+                        .WithMany()
+                        .HasForeignKey("TaxId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.RecurringInvoice", b =>
@@ -1554,6 +1577,11 @@ namespace AccountErp.DataLayer.Migrations
                     b.HasOne("AccountErp.Entities.Item", "Service")
                         .WithMany()
                         .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AccountErp.Entities.SalesTax", "Taxes")
+                        .WithMany()
+                        .HasForeignKey("TaxId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

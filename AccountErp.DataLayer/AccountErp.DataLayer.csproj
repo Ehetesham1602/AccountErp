@@ -5,27 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200612041345_dbchangeforTaxPrice120620.cs" />
-    <Compile Remove="Migrations\20200612041345_dbchangeforTaxPrice120620.Designer.cs" />
-    <Compile Remove="Migrations\20200711154803_ChartOfAccountDBUpdate.cs" />
-    <Compile Remove="Migrations\20200711154803_ChartOfAccountDBUpdate.Designer.cs" />
-    <Compile Remove="Migrations\20200712074054_ChartOfAccountDbUpdate.cs" />
-    <Compile Remove="Migrations\20200712074054_ChartOfAccountDbUpdate.Designer.cs" />
-    <Compile Remove="Migrations\20200715184406_shippingAddressChange.cs" />
-    <Compile Remove="Migrations\20200715184406_shippingAddressChange.Designer.cs" />
-    <Compile Remove="Migrations\20200719065743_dbUpdate19072020.cs" />
-    <Compile Remove="Migrations\20200719065743_dbUpdate19072020.Designer.cs" />
-    <Compile Remove="Migrations\20200720115501_itemChange20072020.cs" />
-    <Compile Remove="Migrations\20200720115501_itemChange20072020.Designer.cs" />
-    <Compile Remove="Migrations\20200720122422_itemChange20072020_2.cs" />
-    <Compile Remove="Migrations\20200720122422_itemChange20072020_2.Designer.cs" />
-    <Compile Remove="Migrations\20200727073144_invoiceBillChangeForSubtotal27072020.cs" />
-    <Compile Remove="Migrations\20200727073144_invoiceBillChangeForSubtotal27072020.Designer.cs" />
-    <Compile Remove="Migrations\20200728193628_TransactionTabel29July2020.cs" />
-    <Compile Remove="Migrations\20200728193628_TransactionTabel29July2020.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
