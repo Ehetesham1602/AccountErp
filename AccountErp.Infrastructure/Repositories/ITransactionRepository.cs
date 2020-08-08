@@ -11,5 +11,6 @@ namespace AccountErp.Infrastructure.Repositories
         Task AddAsync(Transaction entity);
         Task SetTransactionAccountIdForInvoice(int invoiceId, int? AccId, DateTime date);
         Task SetTransactionAccountIdForBill(int billId, int? AccId, DateTime date);
+        Task DeleteTransaction(int id);
     }
 }
