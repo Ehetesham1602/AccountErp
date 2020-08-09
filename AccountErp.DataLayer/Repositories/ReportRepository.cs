@@ -506,7 +506,7 @@ namespace AccountErp.DataLayer.Repositories
         {
 
             return await (from a in _dataContext.COA_AccountMaster
-                          where a.Id == 3 && a.Id == 4
+                          where a.Id == 3 || a.Id == 4
                           select new COADetailDto
                           {
                               Id = a.Id,
@@ -531,6 +531,7 @@ namespace AccountErp.DataLayer.Repositories
                                           BankAccountId = z.BankAccountId,
                                           Id = z.Id,
                                           CreditAmount = z.CreditAmount,
+                                          DebitAmount = z.DebitAmount,
                                           TransactionDate = z.TransactionDate,
                                           Status = z.Status
                                       })
