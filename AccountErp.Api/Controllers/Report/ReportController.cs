@@ -101,11 +101,6 @@ namespace AccountErp.Api.Controllers.Report
         [Route("Balance_Sheet_Report")]
         public async Task<List<BalanceSheetReportDto>> GetBalanceSheetReportAsync(BalanceSheetModel model)
         {
-            //var pageResult = 0;
-            /* if (model.Tab == 0)
-             {
-               var  pageResult = await _reportManager.GetBalanceSheetReportAsync(model);
-             }*/
             var pageResult = await _reportManager.GetBalanceSheetReportAsync(model);
             return pageResult;
         }

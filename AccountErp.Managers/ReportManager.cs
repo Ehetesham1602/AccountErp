@@ -316,22 +316,32 @@ namespace AccountErp.Managers
                         {
                             acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate <= model.AsOfDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
                         }
+                        if(model.Tab == 0)
+                        {
+                            BalanceSheetDetailsReportDto trialAcc = new BalanceSheetDetailsReportDto();
+                            trialAcc.Id = acc.Id;
+                            trialAcc.AccountName = "Total " + acc.AccountName;
+                            trialAcc.Amount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
+                            accountMasterDto.BankAccount.Add(trialAcc);
+                        }
+                        else
+                        {
+                            BalanceSheetDetailsReportDto trialAcc = new BalanceSheetDetailsReportDto();
+                            trialAcc.Id = acc.Id;
+                            trialAcc.AccountName = acc.AccountName;
+                            trialAcc.Amount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
+                            accountMasterDto.BankAccount.Add(trialAcc);
 
-                        BalanceSheetDetailsReportDto trialAcc = new BalanceSheetDetailsReportDto();
-                        trialAcc.Id = acc.Id;
-                        trialAcc.AccountName = acc.AccountName;
-                        trialAcc.DebitAmount = acc.Transactions.Sum(x => x.DebitAmount);
-                        accountMasterDto.BankAccount.Add(trialAcc);
-
-                        trialAcc = new BalanceSheetDetailsReportDto();
-                        trialAcc.AccountName = "Total " + acc.AccountName;
-                        trialAcc.DebitAmount = acc.Transactions.Sum(x => x.DebitAmount);
-                        accountMasterDto.BankAccount.Add(trialAcc);
+                            trialAcc = new BalanceSheetDetailsReportDto();
+                            trialAcc.AccountName = "Total " + acc.AccountName;
+                            trialAcc.Amount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
+                            accountMasterDto.BankAccount.Add(trialAcc);
+                        }
                     }
                 }
                 BalanceSheetDetailsReportDto trialTotalAcc = new BalanceSheetDetailsReportDto();
                 trialTotalAcc.AccountName = "Total " + item.AccountMasterName;
-                trialTotalAcc.DebitAmount = accountMasterDto.BankAccount.Where(x => x.Id == 0).Sum(x => x.DebitAmount);
+                trialTotalAcc.Amount = accountMasterDto.BankAccount.Where(x => x.Id != 0).Sum(x => x.Amount);
                 accountMasterDto.BankAccount.Add(trialTotalAcc);
                 accountDetailDto.Add(accountMasterDto);
             }

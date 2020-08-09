@@ -568,8 +568,8 @@ namespace AccountErp.DataLayer.Repositories
                                           TransactionId = z.TransactionId,
                                           BankAccountId = z.BankAccountId,
                                           Id = z.Id,
-                                          CreditAmount = z.CreditAmount,
                                           DebitAmount = z.DebitAmount,
+                                          CreditAmount = z.CreditAmount,
                                           TransactionDate = z.TransactionDate,
                                           Status = z.Status
                                       })

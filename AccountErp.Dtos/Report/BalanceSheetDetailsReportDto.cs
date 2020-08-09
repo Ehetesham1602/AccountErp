@@ -8,6 +8,6 @@ namespace AccountErp.Dtos.Report
     {
         public int Id { get; set; }
         public string AccountName { get; set; }
-        public decimal DebitAmount { get; set; }
+        public decimal Amount { get; set; }
     }
 }
