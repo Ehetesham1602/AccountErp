@@ -165,7 +165,10 @@ namespace AccountErp.DataLayer.Repositories
                                   TaxId = x.TaxId,
                                   TaxPercentage = x.TaxPercentage,
                                   Quantity = x.Quantity,
-                                  TaxPrice = x.TaxPrice
+                                  TaxPrice = x.TaxPrice,
+                                  LineAmount = x.LineAmount,
+                                  BankAccountId = x.Item.BankAccountId,
+                                  TaxBankAccountId = x.Taxes.BankAccountId
                                   
 
                               }),
@@ -217,7 +220,11 @@ namespace AccountErp.DataLayer.Repositories
                                   Price = x.Price,
                                   TaxId = x.TaxId,
                                   TaxPercentage = x.TaxPercentage,
-                                  TaxPrice = x.TaxPrice 
+                                  TaxPrice = x.TaxPrice,
+                                  LineAmount = x.LineAmount,
+                                  BankAccountId = x.Item.BankAccountId,
+                                  TaxBankAccountId = x.Taxes.BankAccountId
+
                               }),
                               Attachments = e.Attachments.Select(x => new BillAttachmentDto
                               {

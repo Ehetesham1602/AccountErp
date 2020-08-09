@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AccountErp.DataLayer.Migrations
 {
-    public partial class SchemaSetup : Migration
+    public partial class DbMigrationNew20200708 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -54,46 +54,32 @@ namespace AccountErp.DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BankAccounts",
+                name: "COA_Account",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AccountNumber = table.Column<string>(maxLength: 50, nullable: true),
-                    AccountHolderName = table.Column<string>(maxLength: 250, nullable: true),
-                    BankName = table.Column<string>(maxLength: 100, nullable: true),
-                    BranchName = table.Column<string>(maxLength: 250, nullable: true),
-                    Ifsc = table.Column<string>(maxLength: 20, nullable: true),
-                    Status = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<string>(maxLength: 40, nullable: false),
-                    UpdatedOn = table.Column<DateTime>(nullable: true),
-                    UpdatedBy = table.Column<string>(maxLength: 40, nullable: true)
+                    COA_AccountTypeId = table.Column<int>(nullable: false),
+                    AccountName = table.Column<string>(nullable: true),
+                    AccountCode = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BankAccounts", x => x.Id);
+                    table.PrimaryKey("PK_COA_Account", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cheques",
+                name: "COA_AccountMaster",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    VendorId = table.Column<int>(nullable: false),
-                    PayeeAccountId = table.Column<int>(nullable: false),
-                    AddressId = table.Column<int>(nullable: false),
-                    Balance = table.Column<decimal>(nullable: false),
-                    Date = table.Column<DateTime>(nullable: false),
-                    Amount = table.Column<decimal>(nullable: false),
-                    AmountInWords = table.Column<string>(maxLength: 250, nullable: false),
-                    Memo = table.Column<string>(maxLength: 500, nullable: false),
-                    Status = table.Column<int>(nullable: false)
+                    AccountMasterName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cheques", x => x.Id);
+                    table.PrimaryKey("PK_COA_AccountMaster", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -144,27 +130,6 @@ namespace AccountErp.DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MemorizedPayments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    VendorId = table.Column<int>(nullable: false),
-                    PaymentTitle = table.Column<string>(nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PayeeId = table.Column<int>(nullable: false),
-                    ReceiverId = table.Column<int>(nullable: false),
-                    PaymentIntervalId = table.Column<int>(nullable: false),
-                    NextPaymentDate = table.Column<DateTime>(nullable: false),
-                    TimesToRepeat = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MemorizedPayments", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PaymentMethods",
                 columns: table => new
                 {
@@ -191,6 +156,7 @@ namespace AccountErp.DataLayer.Migrations
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
+                    BankAccountId = table.Column<int>(nullable: true),
                     UpdatedBy = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -305,6 +271,27 @@ namespace AccountErp.DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "COA_AccountType",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    COA_AccountMasterId = table.Column<int>(nullable: false),
+                    AccountTypeName = table.Column<string>(nullable: true),
+                    AccountTypeCode = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_COA_AccountType", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_COA_AccountType_COA_AccountMaster_COA_AccountMasterId",
+                        column: x => x.COA_AccountMasterId,
+                        principalTable: "COA_AccountMaster",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Addresses",
                 columns: table => new
                 {
@@ -336,34 +323,29 @@ namespace AccountErp.DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Charges",
+                name: "ShippingAddress",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CreditCardId = table.Column<int>(nullable: false),
-                    VendorId = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(maxLength: 100, nullable: false),
-                    Date = table.Column<DateTime>(nullable: false),
-                    Amount = table.Column<decimal>(nullable: false),
-                    Tax = table.Column<decimal>(nullable: false),
-                    TotalAmount = table.Column<decimal>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    Status = table.Column<int>(nullable: false),
-                    CreatedBy = table.Column<string>(maxLength: 40, nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    UpdatedBy = table.Column<string>(maxLength: 40, nullable: true),
-                    UpdatedOn = table.Column<DateTime>(nullable: true)
+                    CountryId = table.Column<int>(nullable: true),
+                    ShipTo = table.Column<string>(nullable: true),
+                    AddressLine1 = table.Column<string>(nullable: true),
+                    AddressLine2 = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: true),
+                    State = table.Column<string>(nullable: true),
+                    PostalCode = table.Column<string>(nullable: true),
+                    DeliveryInstruction = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Charges", x => x.Id);
+                    table.PrimaryKey("PK_ShippingAddress", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Charges_CreditCards_CreditCardId",
-                        column: x => x.CreditCardId,
-                        principalTable: "CreditCards",
+                        name: "FK_ShippingAddress_Countries_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Countries",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -372,9 +354,8 @@ namespace AccountErp.DataLayer.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ItemTypeId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 250, nullable: false),
-                    Rate = table.Column<decimal>(nullable: false),
+                    Rate = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
                     IsTaxable = table.Column<bool>(nullable: false),
                     SalesTaxId = table.Column<int>(nullable: true),
@@ -382,17 +363,13 @@ namespace AccountErp.DataLayer.Migrations
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 40, nullable: false),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
-                    UpdatedBy = table.Column<string>(maxLength: 40, nullable: true)
+                    UpdatedBy = table.Column<string>(maxLength: 40, nullable: true),
+                    isForSell = table.Column<bool>(nullable: true),
+                    BankAccountId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Items_ItemTypes_ItemTypeId",
-                        column: x => x.ItemTypeId,
-                        principalTable: "ItemTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Items_SalesTaxes_SalesTaxId",
                         column: x => x.SalesTaxId,
@@ -402,35 +379,36 @@ namespace AccountErp.DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Customers",
+                name: "BankAccounts",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AddressId = table.Column<int>(nullable: true),
-                    FirstName = table.Column<string>(maxLength: 250, nullable: false),
-                    MiddleName = table.Column<string>(maxLength: 250, nullable: true),
-                    LastName = table.Column<string>(maxLength: 250, nullable: true),
-                    Email = table.Column<string>(maxLength: 250, nullable: false),
-                    Phone = table.Column<string>(maxLength: 50, nullable: true),
+                    AccountNumber = table.Column<string>(maxLength: 50, nullable: true),
+                    COA_AccountTypeId = table.Column<int>(nullable: true),
+                    AccountHolderName = table.Column<string>(maxLength: 250, nullable: true),
+                    BankName = table.Column<string>(maxLength: 100, nullable: true),
+                    BranchName = table.Column<string>(maxLength: 250, nullable: true),
+                    Ifsc = table.Column<string>(maxLength: 20, nullable: true),
                     Status = table.Column<int>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 40, nullable: false),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
                     UpdatedBy = table.Column<string>(maxLength: 40, nullable: true),
-                    AccountNumber = table.Column<string>(maxLength: 50, nullable: true),
-                    BankName = table.Column<string>(maxLength: 250, nullable: true),
-                    BankBranch = table.Column<string>(maxLength: 250, nullable: true),
-                    Ifsc = table.Column<string>(maxLength: 50, nullable: true),
-                    Discount = table.Column<decimal>(nullable: true)
+                    AccountCode = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(maxLength: 250, nullable: true),
+                    LedgerType = table.Column<int>(nullable: true),
+                    AccountName = table.Column<string>(nullable: true),
+                    AccountId = table.Column<string>(nullable: true),
+                    IsForEdit = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
+                    table.PrimaryKey("PK_BankAccounts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Customers_Addresses_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Addresses",
+                        name: "FK_BankAccounts_COA_AccountType_COA_AccountTypeId",
+                        column: x => x.COA_AccountTypeId,
+                        principalTable: "COA_AccountType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -453,7 +431,7 @@ namespace AccountErp.DataLayer.Migrations
                     BankName = table.Column<string>(maxLength: 250, nullable: true),
                     BankBranch = table.Column<string>(maxLength: 250, nullable: true),
                     Ifsc = table.Column<string>(maxLength: 50, nullable: true),
-                    Discount = table.Column<decimal>(nullable: true),
+                    Discount = table.Column<decimal>(type: "NUMERIC(5,2)", nullable: true),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 40, nullable: false),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
@@ -478,85 +456,76 @@ namespace AccountErp.DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Invoices",
+                name: "Customers",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CustomerId = table.Column<int>(nullable: false),
-                    InvoiceNumber = table.Column<string>(maxLength: 50, nullable: false),
-                    Tax = table.Column<decimal>(nullable: true),
-                    Discount = table.Column<decimal>(nullable: true),
-                    TotalAmount = table.Column<decimal>(nullable: false),
-                    Remark = table.Column<string>(maxLength: 1000, nullable: true),
+                    AddressId = table.Column<int>(nullable: true),
+                    ShippingAddressId = table.Column<int>(nullable: true),
+                    FirstName = table.Column<string>(maxLength: 250, nullable: false),
+                    MiddleName = table.Column<string>(maxLength: 250, nullable: true),
+                    LastName = table.Column<string>(maxLength: 250, nullable: true),
+                    Email = table.Column<string>(maxLength: 250, nullable: false),
+                    Phone = table.Column<string>(maxLength: 50, nullable: true),
                     Status = table.Column<int>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 40, nullable: false),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
                     UpdatedBy = table.Column<string>(maxLength: 40, nullable: true),
-                    CustomerId1 = table.Column<int>(nullable: true)
+                    AccountNumber = table.Column<string>(maxLength: 50, nullable: true),
+                    BankName = table.Column<string>(maxLength: 250, nullable: true),
+                    BankBranch = table.Column<string>(maxLength: 250, nullable: true),
+                    Ifsc = table.Column<string>(maxLength: 50, nullable: true),
+                    Discount = table.Column<decimal>(type: "NUMERIC(5,2)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Invoices", x => x.Id);
+                    table.PrimaryKey("PK_Customers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Invoices_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
+                        name: "FK_Customers_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Invoices_Customers_CustomerId1",
-                        column: x => x.CustomerId1,
-                        principalTable: "Customers",
+                        name: "FK_Customers_ShippingAddress_ShippingAddressId",
+                        column: x => x.ShippingAddressId,
+                        principalTable: "ShippingAddress",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Payments",
+                name: "Transaction",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ReferenceNumber = table.Column<string>(maxLength: 50, nullable: false),
-                    CustomerId = table.Column<int>(nullable: false),
-                    PaymentDate = table.Column<DateTime>(nullable: false),
-                    AccountNumber = table.Column<string>(maxLength: 50, nullable: false),
-                    DepositTo = table.Column<string>(maxLength: 250, nullable: false),
-                    PaymentMethodId = table.Column<int>(nullable: false),
-                    ChequeNumber = table.Column<string>(maxLength: 50, nullable: true),
-                    Amount = table.Column<decimal>(nullable: false),
-                    Balance = table.Column<decimal>(nullable: false),
-                    Remark = table.Column<string>(maxLength: 1000, nullable: true),
-                    Status = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    UpdatedOn = table.Column<DateTime>(nullable: true),
-                    UpdatedBy = table.Column<string>(nullable: true),
-                    CustomerId1 = table.Column<int>(nullable: true)
+                    TransactionId = table.Column<int>(nullable: true),
+                    CompanyId = table.Column<int>(nullable: true),
+                    BankAccountId = table.Column<int>(nullable: true),
+                    ContactId = table.Column<int>(nullable: false),
+                    TransactionTypeId = table.Column<int>(nullable: false),
+                    TransactionNumber = table.Column<string>(maxLength: 50, nullable: true),
+                    Description = table.Column<string>(maxLength: 100, nullable: true),
+                    TransactionDate = table.Column<DateTime>(nullable: false),
+                    DebitAmount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    CreditAmount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    CreationDate = table.Column<DateTime>(nullable: false),
+                    ModifyDate = table.Column<DateTime>(nullable: true),
+                    ContactType = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Payments", x => x.Id);
+                    table.PrimaryKey("PK_Transaction", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Payments_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Payments_Customers_CustomerId1",
-                        column: x => x.CustomerId1,
-                        principalTable: "Customers",
+                        name: "FK_Transaction_BankAccounts_BankAccountId",
+                        column: x => x.BankAccountId,
+                        principalTable: "BankAccounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Payments_PaymentMethods_PaymentMethodId",
-                        column: x => x.PaymentMethodId,
-                        principalTable: "PaymentMethods",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -567,16 +536,24 @@ namespace AccountErp.DataLayer.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     VendorId = table.Column<int>(nullable: false),
                     ReferenceNumber = table.Column<string>(maxLength: 50, nullable: true),
-                    Tax = table.Column<decimal>(nullable: true),
-                    Discount = table.Column<decimal>(nullable: true),
-                    TotalAmount = table.Column<decimal>(nullable: false),
+                    Tax = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    Discount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    TotalAmount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
                     Remark = table.Column<string>(maxLength: 1000, nullable: true),
                     Status = table.Column<int>(nullable: false),
                     DueDate = table.Column<DateTime>(nullable: true),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 40, nullable: false),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
-                    UpdatedBy = table.Column<string>(maxLength: 40, nullable: true)
+                    UpdatedBy = table.Column<string>(maxLength: 40, nullable: true),
+                    StrBillDate = table.Column<string>(nullable: true),
+                    BillDate = table.Column<DateTime>(nullable: false),
+                    StrDueDate = table.Column<string>(nullable: true),
+                    PoSoNumber = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    Notes = table.Column<string>(nullable: true),
+                    BillNumber = table.Column<string>(nullable: true),
+                    SubTotal = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    LineAmountSubTotal = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -622,111 +599,117 @@ namespace AccountErp.DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InvoiceAttachments",
+                name: "Invoices",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    InvoiceId = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(maxLength: 255, nullable: false),
-                    FileName = table.Column<string>(maxLength: 255, nullable: false),
-                    OriginalFileName = table.Column<string>(maxLength: 255, nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<string>(maxLength: 40, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InvoiceAttachments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_InvoiceAttachments_Invoices_InvoiceId",
-                        column: x => x.InvoiceId,
-                        principalTable: "Invoices",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "InvoicePayments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    InvoiceId = table.Column<int>(nullable: false),
-                    PaymentMode = table.Column<int>(nullable: false),
-                    PaymentDate = table.Column<DateTime>(nullable: true),
-                    DepositFrom = table.Column<string>(maxLength: 50, nullable: true),
-                    BankAccountId = table.Column<int>(nullable: true),
-                    ChequeNumber = table.Column<string>(nullable: true),
-                    Amount = table.Column<decimal>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
+                    CustomerId = table.Column<int>(nullable: false),
+                    InvoiceNumber = table.Column<string>(maxLength: 50, nullable: false),
+                    Tax = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    Discount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    TotalAmount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    Remark = table.Column<string>(maxLength: 1000, nullable: true),
                     Status = table.Column<int>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 40, nullable: false),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
-                    UpdatedBy = table.Column<string>(maxLength: 40, nullable: true)
+                    UpdatedBy = table.Column<string>(maxLength: 40, nullable: true),
+                    CustomerId1 = table.Column<int>(nullable: true),
+                    StrInvoiceDate = table.Column<string>(nullable: true),
+                    InvoiceDate = table.Column<DateTime>(nullable: false),
+                    StrDueDate = table.Column<string>(nullable: true),
+                    DueDate = table.Column<DateTime>(nullable: false),
+                    PoSoNumber = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    SubTotal = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    LineAmountSubTotal = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InvoicePayments", x => x.Id);
+                    table.PrimaryKey("PK_Invoices", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_InvoicePayments_BankAccounts_BankAccountId",
-                        column: x => x.BankAccountId,
-                        principalTable: "BankAccounts",
+                        name: "FK_Invoices_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Invoices_Customers_CustomerId1",
+                        column: x => x.CustomerId1,
+                        principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_InvoicePayments_Invoices_InvoiceId",
-                        column: x => x.InvoiceId,
-                        principalTable: "Invoices",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "InvoiceServices",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    InvoiceId = table.Column<int>(nullable: false),
-                    ServiceId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InvoiceServices", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_InvoiceServices_Invoices_InvoiceId",
-                        column: x => x.InvoiceId,
-                        principalTable: "Invoices",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_InvoiceServices_Items_ServiceId",
-                        column: x => x.ServiceId,
-                        principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PaymentAttachments",
+                name: "Quotations",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    PaymentId = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(maxLength: 255, nullable: false),
-                    FileName = table.Column<string>(maxLength: 255, nullable: false),
-                    OriginalFileName = table.Column<string>(maxLength: 255, nullable: false),
+                    CustomerId = table.Column<int>(nullable: false),
+                    QuotationNumber = table.Column<string>(maxLength: 50, nullable: false),
+                    Tax = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    Discount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    TotalAmount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    Remark = table.Column<string>(maxLength: 1000, nullable: true),
+                    Status = table.Column<int>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<string>(maxLength: 40, nullable: false)
+                    CreatedBy = table.Column<string>(maxLength: 40, nullable: false),
+                    UpdatedOn = table.Column<DateTime>(nullable: true),
+                    UpdatedBy = table.Column<string>(maxLength: 40, nullable: true),
+                    StrQuotationDate = table.Column<string>(nullable: true),
+                    QuotationDate = table.Column<DateTime>(nullable: false),
+                    StrExpireDate = table.Column<string>(nullable: true),
+                    ExpireDate = table.Column<DateTime>(nullable: false),
+                    PoSoNumber = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    SubTotal = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    LineAmountSubTotal = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    Memo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PaymentAttachments", x => x.Id);
+                    table.PrimaryKey("PK_Quotations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PaymentAttachments_Payments_PaymentId",
-                        column: x => x.PaymentId,
-                        principalTable: "Payments",
+                        name: "FK_Quotations_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecurringInvoices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CustomerId = table.Column<int>(nullable: false),
+                    RecInvoiceNumber = table.Column<string>(maxLength: 50, nullable: false),
+                    Tax = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    Discount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    TotalAmount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    Remark = table.Column<string>(maxLength: 1000, nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(maxLength: 40, nullable: false),
+                    UpdatedOn = table.Column<DateTime>(nullable: true),
+                    UpdatedBy = table.Column<string>(maxLength: 40, nullable: true),
+                    StrRecInvoiceDate = table.Column<string>(nullable: true),
+                    RecInvoiceDate = table.Column<DateTime>(nullable: false),
+                    StrRecDueDate = table.Column<string>(nullable: true),
+                    RecDueDate = table.Column<DateTime>(nullable: false),
+                    PoSoNumber = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    SubTotal = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true),
+                    LineAmountSubTotal = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecurringInvoices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecurringInvoices_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -768,7 +751,7 @@ namespace AccountErp.DataLayer.Migrations
                     CreditCardId = table.Column<int>(nullable: true),
                     DepositTo = table.Column<string>(maxLength: 50, nullable: true),
                     ChequeNumber = table.Column<string>(nullable: true),
-                    Amount = table.Column<decimal>(nullable: false),
+                    Amount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
@@ -799,7 +782,14 @@ namespace AccountErp.DataLayer.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     BillId = table.Column<int>(nullable: false),
-                    ItemId = table.Column<int>(nullable: false)
+                    ItemId = table.Column<int>(nullable: false),
+                    Rate = table.Column<decimal>(type: "NUMERIC(10,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "NUMERIC(10,2)", nullable: false),
+                    TaxId = table.Column<int>(nullable: false),
+                    TaxPercentage = table.Column<int>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false),
+                    TaxPrice = table.Column<decimal>(nullable: false),
+                    LineAmount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -814,6 +804,235 @@ namespace AccountErp.DataLayer.Migrations
                         name: "FK_BillServices_Items_ItemId",
                         column: x => x.ItemId,
                         principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BillServices_SalesTaxes_TaxId",
+                        column: x => x.TaxId,
+                        principalTable: "SalesTaxes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InvoiceAttachments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    InvoiceId = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(maxLength: 255, nullable: false),
+                    FileName = table.Column<string>(maxLength: 255, nullable: false),
+                    OriginalFileName = table.Column<string>(maxLength: 255, nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(maxLength: 40, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InvoiceAttachments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InvoiceAttachments_Invoices_InvoiceId",
+                        column: x => x.InvoiceId,
+                        principalTable: "Invoices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InvoicePayments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    InvoiceId = table.Column<int>(nullable: false),
+                    PaymentMode = table.Column<int>(nullable: false),
+                    PaymentDate = table.Column<DateTime>(nullable: true),
+                    DepositFrom = table.Column<string>(maxLength: 50, nullable: true),
+                    BankAccountId = table.Column<int>(nullable: true),
+                    ChequeNumber = table.Column<string>(nullable: true),
+                    Amount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(maxLength: 40, nullable: false),
+                    UpdatedOn = table.Column<DateTime>(nullable: true),
+                    UpdatedBy = table.Column<string>(maxLength: 40, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InvoicePayments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InvoicePayments_BankAccounts_BankAccountId",
+                        column: x => x.BankAccountId,
+                        principalTable: "BankAccounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_InvoicePayments_Invoices_InvoiceId",
+                        column: x => x.InvoiceId,
+                        principalTable: "Invoices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InvoiceServices",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    InvoiceId = table.Column<int>(nullable: false),
+                    ServiceId = table.Column<int>(nullable: false),
+                    Rate = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    TaxId = table.Column<int>(nullable: false),
+                    TaxPrice = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    TaxPercentage = table.Column<int>(nullable: true),
+                    LineAmount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    Quantity = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InvoiceServices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InvoiceServices_Invoices_InvoiceId",
+                        column: x => x.InvoiceId,
+                        principalTable: "Invoices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InvoiceServices_Items_ServiceId",
+                        column: x => x.ServiceId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InvoiceServices_SalesTaxes_TaxId",
+                        column: x => x.TaxId,
+                        principalTable: "SalesTaxes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuotationAttachments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    QuotationId = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(maxLength: 255, nullable: false),
+                    FileName = table.Column<string>(maxLength: 255, nullable: false),
+                    OriginalFileName = table.Column<string>(maxLength: 255, nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(maxLength: 40, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuotationAttachments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_QuotationAttachments_Quotations_QuotationId",
+                        column: x => x.QuotationId,
+                        principalTable: "Quotations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuotationServices",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    QuotationId = table.Column<int>(nullable: false),
+                    ServiceId = table.Column<int>(nullable: false),
+                    Rate = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    TaxId = table.Column<int>(nullable: false),
+                    TaxPrice = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    TaxPercentage = table.Column<int>(nullable: true),
+                    Quantity = table.Column<int>(nullable: false),
+                    LineAmount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuotationServices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_QuotationServices_Quotations_QuotationId",
+                        column: x => x.QuotationId,
+                        principalTable: "Quotations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_QuotationServices_Items_ServiceId",
+                        column: x => x.ServiceId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_QuotationServices_SalesTaxes_TaxId",
+                        column: x => x.TaxId,
+                        principalTable: "SalesTaxes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecurringInvoiceAttachments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    RecInvoiceId = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(maxLength: 255, nullable: false),
+                    FileName = table.Column<string>(maxLength: 255, nullable: false),
+                    OriginalFileName = table.Column<string>(maxLength: 255, nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(maxLength: 40, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecurringInvoiceAttachments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecurringInvoiceAttachments_RecurringInvoices_RecInvoiceId",
+                        column: x => x.RecInvoiceId,
+                        principalTable: "RecurringInvoices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecurringInvoiceServices",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    RecInvoiceId = table.Column<int>(nullable: false),
+                    ServiceId = table.Column<int>(nullable: false),
+                    Rate = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    TaxId = table.Column<int>(nullable: false),
+                    TaxPercentage = table.Column<int>(nullable: true),
+                    Quantity = table.Column<int>(nullable: false),
+                    TaxPrice = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false),
+                    LineAmount = table.Column<decimal>(type: "NUMERIC(12,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecurringInvoiceServices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecurringInvoiceServices_RecurringInvoices_RecInvoiceId",
+                        column: x => x.RecInvoiceId,
+                        principalTable: "RecurringInvoices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecurringInvoiceServices_Items_ServiceId",
+                        column: x => x.ServiceId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecurringInvoiceServices_SalesTaxes_TaxId",
+                        column: x => x.TaxId,
+                        principalTable: "SalesTaxes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -868,6 +1087,11 @@ namespace AccountErp.DataLayer.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BankAccounts_COA_AccountTypeId",
+                table: "BankAccounts",
+                column: "COA_AccountTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BillAttachments_BillId",
                 table: "BillAttachments",
                 column: "BillId");
@@ -898,9 +1122,14 @@ namespace AccountErp.DataLayer.Migrations
                 column: "ItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Charges_CreditCardId",
-                table: "Charges",
-                column: "CreditCardId");
+                name: "IX_BillServices_TaxId",
+                table: "BillServices",
+                column: "TaxId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_COA_AccountType_COA_AccountMasterId",
+                table: "COA_AccountType",
+                column: "COA_AccountMasterId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contacts_AddressId",
@@ -916,6 +1145,11 @@ namespace AccountErp.DataLayer.Migrations
                 name: "IX_Customers_AddressId",
                 table: "Customers",
                 column: "AddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customers_ShippingAddressId",
+                table: "Customers",
+                column: "ShippingAddressId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InvoiceAttachments_InvoiceId",
@@ -953,9 +1187,9 @@ namespace AccountErp.DataLayer.Migrations
                 column: "ServiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_ItemTypeId",
-                table: "Items",
-                column: "ItemTypeId");
+                name: "IX_InvoiceServices_TaxId",
+                table: "InvoiceServices",
+                column: "TaxId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Items_SalesTaxId",
@@ -963,24 +1197,64 @@ namespace AccountErp.DataLayer.Migrations
                 column: "SalesTaxId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PaymentAttachments_PaymentId",
-                table: "PaymentAttachments",
-                column: "PaymentId");
+                name: "IX_QuotationAttachments_QuotationId",
+                table: "QuotationAttachments",
+                column: "QuotationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payments_CustomerId",
-                table: "Payments",
+                name: "IX_Quotations_CustomerId",
+                table: "Quotations",
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payments_CustomerId1",
-                table: "Payments",
-                column: "CustomerId1");
+                name: "IX_QuotationServices_QuotationId",
+                table: "QuotationServices",
+                column: "QuotationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payments_PaymentMethodId",
-                table: "Payments",
-                column: "PaymentMethodId");
+                name: "IX_QuotationServices_ServiceId",
+                table: "QuotationServices",
+                column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuotationServices_TaxId",
+                table: "QuotationServices",
+                column: "TaxId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurringInvoiceAttachments_RecInvoiceId",
+                table: "RecurringInvoiceAttachments",
+                column: "RecInvoiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurringInvoices_CustomerId",
+                table: "RecurringInvoices",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurringInvoiceServices_RecInvoiceId",
+                table: "RecurringInvoiceServices",
+                column: "RecInvoiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurringInvoiceServices_ServiceId",
+                table: "RecurringInvoiceServices",
+                column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurringInvoiceServices_TaxId",
+                table: "RecurringInvoiceServices",
+                column: "TaxId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShippingAddress_CountryId",
+                table: "ShippingAddress",
+                column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transaction_BankAccountId",
+                table: "Transaction",
+                column: "BankAccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vendors_BillingAddressId",
@@ -1020,13 +1294,13 @@ namespace AccountErp.DataLayer.Migrations
                 name: "BillServices");
 
             migrationBuilder.DropTable(
-                name: "Charges");
-
-            migrationBuilder.DropTable(
-                name: "Cheques");
+                name: "COA_Account");
 
             migrationBuilder.DropTable(
                 name: "Contacts");
+
+            migrationBuilder.DropTable(
+                name: "CreditCards");
 
             migrationBuilder.DropTable(
                 name: "InvoiceAttachments");
@@ -1038,10 +1312,25 @@ namespace AccountErp.DataLayer.Migrations
                 name: "InvoiceServices");
 
             migrationBuilder.DropTable(
-                name: "MemorizedPayments");
+                name: "ItemTypes");
 
             migrationBuilder.DropTable(
-                name: "PaymentAttachments");
+                name: "PaymentMethods");
+
+            migrationBuilder.DropTable(
+                name: "QuotationAttachments");
+
+            migrationBuilder.DropTable(
+                name: "QuotationServices");
+
+            migrationBuilder.DropTable(
+                name: "RecurringInvoiceAttachments");
+
+            migrationBuilder.DropTable(
+                name: "RecurringInvoiceServices");
+
+            migrationBuilder.DropTable(
+                name: "Transaction");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -1053,37 +1342,40 @@ namespace AccountErp.DataLayer.Migrations
                 name: "Bills");
 
             migrationBuilder.DropTable(
-                name: "CreditCards");
-
-            migrationBuilder.DropTable(
-                name: "BankAccounts");
-
-            migrationBuilder.DropTable(
                 name: "Invoices");
+
+            migrationBuilder.DropTable(
+                name: "Quotations");
+
+            migrationBuilder.DropTable(
+                name: "RecurringInvoices");
 
             migrationBuilder.DropTable(
                 name: "Items");
 
             migrationBuilder.DropTable(
-                name: "Payments");
+                name: "BankAccounts");
 
             migrationBuilder.DropTable(
                 name: "Vendors");
 
             migrationBuilder.DropTable(
-                name: "ItemTypes");
+                name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "SalesTaxes");
 
             migrationBuilder.DropTable(
-                name: "Customers");
-
-            migrationBuilder.DropTable(
-                name: "PaymentMethods");
+                name: "COA_AccountType");
 
             migrationBuilder.DropTable(
                 name: "Addresses");
+
+            migrationBuilder.DropTable(
+                name: "ShippingAddress");
+
+            migrationBuilder.DropTable(
+                name: "COA_AccountMaster");
 
             migrationBuilder.DropTable(
                 name: "Countries");

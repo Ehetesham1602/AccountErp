@@ -14,6 +14,7 @@ namespace AccountErp.Entities
         public int Quantity { get; set; }
         public decimal TaxPrice { get; set; }
         public decimal LineAmount { get; set; }
-        public Item Item { get; set; } 
+        public Item Item { get; set; }
+        public SalesTax Taxes { get; set; }
     }
 }
