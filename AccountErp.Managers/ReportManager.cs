@@ -13,6 +13,7 @@ using AccountErp.Models.Customer;
 using AccountErp.Models.Report;
 using AccountErp.Utilities;
 using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -120,7 +121,17 @@ namespace AccountErp.Managers
         public async Task<ProfitAndLossSummaryReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model)
         {
             ProfitAndLossSummaryReportDto profitAndLossSummaryReportDtosList = new ProfitAndLossSummaryReportDto();
-            ProfitAndLossSummaryDetailsReportDto profitAndLossSummaryList = await _reportRepository.GetProfitAndLossReportAsync(model);
+            ProfitAndLossSummaryDetailsReportDto profitAndLossSummaryList;
+            profitAndLossSummaryList = await _reportRepository.GetProfitAndLossReportAsync(model);
+
+            /*if (model.StatusTab == "Summary")
+            {
+            }
+            else
+            {
+                profitAndLossSummaryList = await _reportRepository.GetProfitAndLossDetailsReportAsync(model);
+                  
+            }*/
 
             profitAndLossSummaryReportDtosList.Income = 0;
             profitAndLossSummaryReportDtosList.OperatingExpenses = 0;
@@ -188,6 +199,112 @@ namespace AccountErp.Managers
                 accountDetailDto.Add(accountMasterDto);
             }
             return accountDetailDto;
+        }
+        public async Task<AccountTotalBalanceDto> GetAccountBalanceReportAsync(AccountBalanceModel model)
+        {
+            var data = await _reportRepository.GetAccountBalanceReportAsync();
+            
+            List<AccountBalanceReportDto> accountBalanceList = new List<AccountBalanceReportDto>();
+            AccountBalanceReportDto accBalObj = new AccountBalanceReportDto();
+            AccountTotalBalanceDto accountTotalBalanceDtoObj = new AccountTotalBalanceDto();
+           
+            foreach (var item in data)
+            {
+                AccountBalanceReportDto accountMasterDto = new AccountBalanceReportDto();
+                accountMasterDto.Id = item.Id;
+                accountMasterDto.AccountMasterName = item.AccountMasterName;
+                accountMasterDto.BankAccount = new List<AccountBalanceAccountDetailDto>();
+                foreach (var accType in item.AccountTypes)
+                {
+                    foreach (var acc in accType.BankAccount)
+                    {
+                        var bank = acc.Transactions.Where(p => (p.TransactionDate <= model.StartDate)).ToList();
+                        var invAmount = bank.Sum(x => x.DebitAmount);
+
+                        acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.StartDate && p.TransactionDate <= model.EndDate)).ToList();
+
+                        AccountBalanceAccountDetailDto AccountBalance = new AccountBalanceAccountDetailDto();
+                        AccountBalance.Id = acc.Id;
+                        AccountBalance.AccountName = acc.AccountName;
+                        AccountBalance.StartingBalance = invAmount;
+                        AccountBalance.CreditAmount = acc.Transactions.Sum(x => x.CreditAmount);
+                        AccountBalance.DebitAmount = acc.Transactions.Sum(x => x.DebitAmount);
+                        AccountBalance.NetMovement = AccountBalance.DebitAmount - AccountBalance.CreditAmount;
+                        AccountBalance.EndingBalance = AccountBalance.StartingBalance + AccountBalance.NetMovement;
+                        accountMasterDto.BankAccount.Add(AccountBalance);
+                    }
+                }
+                AccountBalanceAccountDetailDto TotalAccountBalance = new AccountBalanceAccountDetailDto();
+                TotalAccountBalance.AccountName = "Total " + item.AccountMasterName;
+                TotalAccountBalance.StartingBalance = accountMasterDto.BankAccount.Sum(x => x.StartingBalance);
+                TotalAccountBalance.CreditAmount = accountMasterDto.BankAccount.Sum(x => x.CreditAmount);
+                TotalAccountBalance.DebitAmount = accountMasterDto.BankAccount.Sum(x => x.DebitAmount);
+                TotalAccountBalance.NetMovement = accountMasterDto.BankAccount.Sum(x => x.NetMovement);
+                TotalAccountBalance.EndingBalance = accountMasterDto.BankAccount.Sum(x => x.EndingBalance);
+                accountMasterDto.BankAccount.Add(TotalAccountBalance);
+                accountBalanceList.Add(accountMasterDto);
+            }
+
+            accountTotalBalanceDtoObj.accountBalanceReportDtoList = accountBalanceList;
+            foreach (var totalAcc in accountBalanceList)
+            {
+                accountTotalBalanceDtoObj.TotalCreditAmount += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.CreditAmount);
+                accountTotalBalanceDtoObj.TotalDebitAmount += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.DebitAmount);
+            }
+
+            return accountTotalBalanceDtoObj;
+        }
+
+        public async Task<ProfitAndLossMainDto> GetProfitAndLossDetailsReportAsync(ProfitAndLossModel model)
+        {
+            var data = await _reportRepository.GetProfitAndLossDetailsReportAsync();
+
+            List<ProfitAndLossDetailsDto> profitAndLossList = new List<ProfitAndLossDetailsDto>();
+            //ProfitAndLossDetailsDto profitAndLossDetailsObj = new ProfitAndLossDetailsDto();
+            ProfitAndLossMainDto mainProfitAndLossDtoObj = new ProfitAndLossMainDto();
+
+            foreach (var item in data)
+            {
+                ProfitAndLossDetailsDto profitAndLossMasterDto = new ProfitAndLossDetailsDto();
+                profitAndLossMasterDto.Id = item.Id;
+                profitAndLossMasterDto.AccountMasterName = item.AccountMasterName;
+                profitAndLossMasterDto.BankAccount = new List<ProfitAndLossDetailsReportDto>();
+                foreach (var accType in item.AccountTypes)
+                {
+                    foreach (var acc in accType.BankAccount)
+                    {
+                        acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.StartDate && p.TransactionDate <= model.EndDate)).ToList();
+
+                        ProfitAndLossDetailsReportDto AccountBalance = new ProfitAndLossDetailsReportDto();
+                        AccountBalance.Id = acc.Id;
+                        AccountBalance.AccountName = acc.AccountName;
+                        if (acc.Id == 11)
+                        {
+                            AccountBalance.IncomeCreditAmount = acc.Transactions.Sum(x => x.CreditAmount);
+                        }
+                        else
+                        {
+                            AccountBalance.OperatingExpensesDebitAmount = acc.Transactions.Sum(x => x.DebitAmount);
+                        }
+                        profitAndLossMasterDto.BankAccount.Add(AccountBalance);
+                    }
+                }
+                ProfitAndLossDetailsReportDto TotalAccountBalance = new ProfitAndLossDetailsReportDto();
+                TotalAccountBalance.AccountName = "Total " + item.AccountMasterName;
+                TotalAccountBalance.IncomeCreditAmount = profitAndLossMasterDto.BankAccount.Sum(x => x.IncomeCreditAmount);
+                TotalAccountBalance.OperatingExpensesDebitAmount = profitAndLossMasterDto.BankAccount.Sum(x => x.OperatingExpensesDebitAmount);
+                profitAndLossMasterDto.BankAccount.Add(TotalAccountBalance);
+                profitAndLossList.Add(profitAndLossMasterDto);
+            }
+
+            mainProfitAndLossDtoObj.mainProfitAndLossDetailsList = profitAndLossList;
+            foreach (var totalAcc in profitAndLossList)
+            {
+                mainProfitAndLossDtoObj.GrossProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeCreditAmount);
+                mainProfitAndLossDtoObj.NetProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeCreditAmount - x.OperatingExpensesDebitAmount);
+            }
+
+            return mainProfitAndLossDtoObj;
         }
     }
 }

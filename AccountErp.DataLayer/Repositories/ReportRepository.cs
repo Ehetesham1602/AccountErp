@@ -201,7 +201,7 @@ namespace AccountErp.DataLayer.Repositories
                     billDetailDtoList = billDetailDtoList.Where(p => p.Status == Constants.BillStatus.Paid).ToList();
                 }
                 var bill = billDetailDtoList.Where(p => (p.BillDate <= model.StartDate)).ToList();
-               var billTaxAmt = bill.Sum(x => x.Bill.TaxPrice);
+                var billTaxAmt = bill.Sum(x => x.Bill.TaxPrice);
                 billDetailDtoList = billDetailDtoList.Where(p => (p.BillDate >= model.StartDate && p.BillDate <= model.EndDate && p.Status != Constants.BillStatus.Overdue)).ToList();
                 salesTax.PurchaseSubjectToTax = billDetailDtoList.Sum(x => x.Bill.Price);
                 salesTax.TaxAmountOnPurchases = billDetailDtoList.Sum(x => x.Bill.TaxPrice);
@@ -403,22 +403,22 @@ namespace AccountErp.DataLayer.Repositories
 
             ProfitAndLossSummaryDetailsReportDto profitAndLossDetailsDto = new ProfitAndLossSummaryDetailsReportDto();
             profitAndLossDetailsDto.billDetailDto = await (from b in _dataContext.Bills
-                                               where b.Status != Constants.BillStatus.Deleted
-                                               select new BillDetailDto
-                                               {
-                                                   BillDate = b.BillDate,
-                                                   Status = b.Status,
-                                                   SubTotal = b.SubTotal
-                                               }).ToListAsync();
+                                                           where b.Status != Constants.BillStatus.Deleted
+                                                           select new BillDetailDto
+                                                           {
+                                                               BillDate = b.BillDate,
+                                                               Status = b.Status,
+                                                               SubTotal = b.SubTotal
+                                                           }).ToListAsync();
             profitAndLossDetailsDto.InvoiceDetailDto = await (from i in _dataContext.Invoices
-                                                  where i.Status != Constants.InvoiceStatus.Deleted
-                                                  select new InvoiceDetailDto
-                                                  {
-                                                      InvoiceDate = i.InvoiceDate,
-                                                      Status = i.Status,
-                                                      SubTotal = i.SubTotal
-                                                  }).ToListAsync();
-          
+                                                              where i.Status != Constants.InvoiceStatus.Deleted
+                                                              select new InvoiceDetailDto
+                                                              {
+                                                                  InvoiceDate = i.InvoiceDate,
+                                                                  Status = i.Status,
+                                                                  SubTotal = i.SubTotal
+                                                              }).ToListAsync();
+
             return profitAndLossDetailsDto;
         }
 
@@ -460,6 +460,84 @@ namespace AccountErp.DataLayer.Repositories
                           })
                            .AsNoTracking()
                            .ToListAsync();
+        }
+
+        public async Task<List<COADetailDto>> GetAccountBalanceReportAsync()
+        {
+            return await (from i in _dataContext.COA_AccountMaster
+                          select new COADetailDto
+                          {
+                              Id = i.Id,
+                              AccountMasterName = i.AccountMasterName,
+                              AccountTypes = i.AccountTypes.Select(x => new AccountTypeDetailDto
+                              {
+                                  Id = x.Id,
+                                  AccountTypeName = x.AccountTypeName,
+                                  COA_AccountMasterId = x.COA_AccountMasterId,
+                                  BankAccount = x.BanKAccount.Select(y => new BankAccountDetailDto
+                                  {
+                                      Id = y.Id,
+                                      AccountName = y.AccountName,
+                                      AccountCode = y.AccountCode,
+                                      Description = y.Description,
+                                      AccountNumber = y.AccountNumber,
+                                      COA_AccountTypeId = y.COA_AccountTypeId,
+                                      AccountHolderName = y.AccountHolderName,
+                                      Transactions = y.Transaction.Select(z => new TransactionDetailDto
+                                      {
+                                          TransactionId = z.TransactionId,
+                                          BankAccountId = z.BankAccountId,
+                                          Id = z.Id,
+                                          CreditAmount = z.CreditAmount,
+                                          DebitAmount = z.DebitAmount,
+                                          TransactionDate = z.TransactionDate,
+                                          Status = z.Status
+                                      })
+
+                                  })
+                              }),
+
+                          })
+                            .AsNoTracking()
+                            .ToListAsync();
+        }
+
+        public async Task<List<COADetailDto>> GetProfitAndLossDetailsReportAsync()
+        {
+
+            return await (from a in _dataContext.COA_AccountMaster
+                          where a.Id == 3 && a.Id == 4
+                          select new COADetailDto
+                          {
+                              Id = a.Id,
+                              AccountMasterName = a.AccountMasterName,
+                              AccountTypes = a.AccountTypes.Select(x => new AccountTypeDetailDto
+                              {
+                                  Id = x.Id,
+                                  AccountTypeName = x.AccountTypeName,
+                                  COA_AccountMasterId = x.COA_AccountMasterId,
+                                  BankAccount = x.BanKAccount.Select(y => new BankAccountDetailDto
+                                  {
+                                      Id = y.Id,
+                                      AccountName = y.AccountName,
+                                      AccountCode = y.AccountCode,
+                                      Description = y.Description,
+                                      AccountNumber = y.AccountNumber,
+                                      COA_AccountTypeId = y.COA_AccountTypeId,
+                                      AccountHolderName = y.AccountHolderName,
+                                      Transactions = y.Transaction.Select(z => new TransactionDetailDto
+                                      {
+                                          TransactionId = z.TransactionId,
+                                          BankAccountId = z.BankAccountId,
+                                          Id = z.Id,
+                                          CreditAmount = z.CreditAmount,
+                                          TransactionDate = z.TransactionDate,
+                                          Status = z.Status
+                                      })
+
+                                  })
+                              }),
+                          }).AsNoTracking().ToListAsync();
         }
     }
 }
