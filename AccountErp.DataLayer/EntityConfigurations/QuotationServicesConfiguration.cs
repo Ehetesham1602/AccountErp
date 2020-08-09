@@ -18,7 +18,7 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.Rate).IsRequired().HasColumnType("NUMERIC(12,2)");
             builder.Property(x => x.Price).IsRequired().HasColumnType("NUMERIC(12,2)");
             builder.Property(x => x.TaxPrice).IsRequired().HasColumnType("NUMERIC(12,2)");
-            builder.Property(x => x.TaxId).IsRequired();
+            builder.Property(x => x.TaxId).IsRequired(false);
             builder.Property(x => x.Quantity).IsRequired();
             builder.Property(x => x.TaxPercentage).IsRequired(false);
             builder.Property(x => x.LineAmount).IsRequired().HasColumnType("NUMERIC(12,2)");
