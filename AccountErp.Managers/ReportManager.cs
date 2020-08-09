@@ -238,7 +238,6 @@ namespace AccountErp.Managers
 
             return accountTotalBalanceDtoObj;
         }
-
         public async Task<ProfitAndLossMainDto> GetProfitAndLossDetailsReportAsync(ProfitAndLossModel model)
         {
             var data = await _reportRepository.GetProfitAndLossDetailsReportAsync();
@@ -294,5 +293,50 @@ namespace AccountErp.Managers
 
             return mainProfitAndLossDtoObj;
         }
+        public async Task<List<BalanceSheetReportDto>> GetBalanceSheetReportAsync(BalanceSheetModel model)
+        {
+            var data = await _reportRepository.GetBalanceSheetReportAsync();
+
+            List<BalanceSheetReportDto> accountDetailDto = new List<BalanceSheetReportDto>();
+            foreach (var item in data)
+            {
+                BalanceSheetReportDto accountMasterDto = new BalanceSheetReportDto();
+                accountMasterDto.Id = item.Id;
+                accountMasterDto.AccountMasterName = item.AccountMasterName;
+                accountMasterDto.BankAccount = new List<BalanceSheetDetailsReportDto>();
+                foreach (var accType in item.AccountTypes)
+                {
+                    foreach (var acc in accType.BankAccount)
+                    {
+                        if (model.ReportType == 0)
+                        {
+                            acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate <= model.AsOfDate)).ToList();
+                        }
+                        else if (model.ReportType == 1)
+                        {
+                            acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate <= model.AsOfDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
+                        }
+
+                        BalanceSheetDetailsReportDto trialAcc = new BalanceSheetDetailsReportDto();
+                        trialAcc.Id = acc.Id;
+                        trialAcc.AccountName = acc.AccountName;
+                        trialAcc.DebitAmount = acc.Transactions.Sum(x => x.DebitAmount);
+                        accountMasterDto.BankAccount.Add(trialAcc);
+
+                        trialAcc = new BalanceSheetDetailsReportDto();
+                        trialAcc.AccountName = "Total " + acc.AccountName;
+                        trialAcc.DebitAmount = acc.Transactions.Sum(x => x.DebitAmount);
+                        accountMasterDto.BankAccount.Add(trialAcc);
+                    }
+                }
+                BalanceSheetDetailsReportDto trialTotalAcc = new BalanceSheetDetailsReportDto();
+                trialTotalAcc.AccountName = "Total " + item.AccountMasterName;
+                trialTotalAcc.DebitAmount = accountMasterDto.BankAccount.Where(x => x.Id == 0).Sum(x => x.DebitAmount);
+                accountMasterDto.BankAccount.Add(trialTotalAcc);
+                accountDetailDto.Add(accountMasterDto);
+            }
+            return accountDetailDto;
+        }
+
     }
 }
