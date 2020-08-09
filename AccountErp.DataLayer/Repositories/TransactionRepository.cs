@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
+using AccountErp.Utilities;
 
 namespace AccountErp.DataLayer.Repositories
 {
@@ -63,6 +64,15 @@ namespace AccountErp.DataLayer.Repositories
                 _dataContext.Transaction.Update(item);
             }
 
+        }
+
+        public async Task DeleteTransaction(int id)
+        {
+           var delItem = await _dataContext.Transaction.Where(x => x.TransactionId == id && x.Status != Constants.TransactionStatus.Paid).ToListAsync();
+            foreach(var item in delItem)
+            {
+                _dataContext.Transaction.Remove(item);
+            }
         }
     }
 }

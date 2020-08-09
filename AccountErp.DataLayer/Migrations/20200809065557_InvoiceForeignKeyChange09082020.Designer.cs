@@ -4,14 +4,16 @@ using AccountErp.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200809065557_InvoiceForeignKeyChange09082020")]
+    partial class InvoiceForeignKeyChange09082020
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,7 +291,7 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<decimal>("Rate")
                         .HasColumnType("NUMERIC(10,2)");
 
-                    b.Property<int?>("TaxId");
+                    b.Property<int>("TaxId");
 
                     b.Property<int?>("TaxPercentage")
                         .IsRequired();
@@ -935,7 +937,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int>("ServiceId");
 
-                    b.Property<int?>("TaxId");
+                    b.Property<int>("TaxId");
 
                     b.Property<int?>("TaxPercentage");
 
@@ -1067,7 +1069,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int>("ServiceId");
 
-                    b.Property<int?>("TaxId");
+                    b.Property<int>("TaxId");
 
                     b.Property<int?>("TaxPercentage");
 
@@ -1154,9 +1156,9 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("CompanyId");
 
-                    b.Property<int?>("ContactId");
+                    b.Property<int>("ContactId");
 
-                    b.Property<int?>("ContactType");
+                    b.Property<int>("ContactType");
 
                     b.Property<DateTime>("CreationDate");
 
@@ -1413,7 +1415,8 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.HasOne("AccountErp.Entities.SalesTax", "Taxes")
                         .WithMany()
-                        .HasForeignKey("TaxId");
+                        .HasForeignKey("TaxId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.BillPayment", b =>
@@ -1545,7 +1548,8 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.HasOne("AccountErp.Entities.SalesTax", "Taxes")
                         .WithMany()
-                        .HasForeignKey("TaxId");
+                        .HasForeignKey("TaxId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.RecurringInvoice", b =>
@@ -1578,7 +1582,8 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.HasOne("AccountErp.Entities.SalesTax", "Taxes")
                         .WithMany()
-                        .HasForeignKey("TaxId");
+                        .HasForeignKey("TaxId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.ShippingAddress", b =>

@@ -4,14 +4,16 @@ using AccountErp.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200809080900_BillQuotationTaxForeignKeyChange09082020")]
+    partial class BillQuotationTaxForeignKeyChange09082020
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1154,9 +1156,9 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("CompanyId");
 
-                    b.Property<int?>("ContactId");
+                    b.Property<int>("ContactId");
 
-                    b.Property<int?>("ContactType");
+                    b.Property<int>("ContactType");
 
                     b.Property<DateTime>("CreationDate");
 
