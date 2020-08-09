@@ -18,5 +18,6 @@ namespace AccountErp.Models.Invoice
         public int CustomerId { get; set; }
         public Constants.TransactionType PaymentType { get; set; }
         public decimal Amount { get; set; }
+        public int CreditBankAccountId { get; set; }
     }
 }
