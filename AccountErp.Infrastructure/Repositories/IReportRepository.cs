@@ -22,5 +22,11 @@ namespace AccountErp.Infrastructure.Repositories
         Task<List<AgedReceivablesReportDto>> GetAgedReceivablesReportAsync(AgedReceivablesModel model);
         Task<ProfitAndLossSummaryDetailsReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model);
         Task<List<COADetailDto>> GetCOADetailAsyncForTrialReport();
+        Task<List<COADetailDto>> GetAccountBalanceReportAsync();
+        Task<List<COADetailDto>> GetProfitAndLossDetailsReportAsync();
+        /*        Task<List<AccountBalanceAccountDetailDto>> GetAccountBalanceReportAsync(AccountBalanceModel model);
+        */
+        //Task<ProfitAndLossDetailsReportDto> GetProfitAndLossDetailsReportAsync(ProfitAndLossModel model);
+        //Task<List<COADetailDto>> GetProfitAndLossDetailsReportAsync(ProfitAndLossModel model);
     }
 }

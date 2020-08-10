@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using AccountErp.Dtos;
-using AccountErp.Dtos.Bill;
-using AccountErp.Dtos.Customer;
 using AccountErp.Dtos.Report;
 using AccountErp.Models.Report;
 
@@ -19,5 +16,7 @@ namespace AccountErp.Infrastructure.Managers
         Task<AgedPayablesDetailsReportDto> GetAgedReceivablesReportAsync(AgedReceivablesModel model);
         Task<ProfitAndLossSummaryReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model);
         Task<List<TrialBalanceReportDto>> GetTrialBalance(TrialBalanaceReportModel model);
+        Task<AccountTotalBalanceDto> GetAccountBalanceReportAsync(AccountBalanceModel model);
+        Task<ProfitAndLossMainDto> GetProfitAndLossDetailsReportAsync(ProfitAndLossModel model);
     }
 }

@@ -67,7 +67,7 @@ namespace AccountErp.Api.Controllers.Report
 
         [HttpPost]
         [Route("profit_and_loss_report")]
-        public async Task<ProfitAndLossSummaryReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model)            
+        public async Task<ProfitAndLossSummaryReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model)
         {
             var pageResult = await _reportManager.GetProfitAndLossReportAsync(model);
             return pageResult;
@@ -80,5 +80,22 @@ namespace AccountErp.Api.Controllers.Report
             var pageResult = await _reportManager.GetTrialBalance(model);
             return pageResult;
         }
+
+        [HttpPost]
+        [Route("account_balances_report")]
+        public async Task<AccountTotalBalanceDto> GetAccountBalanceReportAsync(AccountBalanceModel model)
+        {
+            var pageResult = await _reportManager.GetAccountBalanceReportAsync(model);
+            return pageResult;
+        }
+
+        [HttpPost]
+        [Route("profit_and_loss_details_report")]
+        public async Task<ProfitAndLossMainDto> GetProfitAndLossDetailsReportAsync(ProfitAndLossModel model)
+        {
+            var pageResult = await _reportManager.GetProfitAndLossDetailsReportAsync(model);
+            return pageResult;
+        }
+
     }
 }
