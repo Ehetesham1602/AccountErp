@@ -11,7 +11,7 @@ namespace AccountErp.Entities
         public int? TransactionId { get; set; }
         public int? CompanyId { get; set; }
         public int? BankAccountId { get; set; }
-        public int ContactId { get; set; }
+        public int? ContactId { get; set; }
         public Constants.TransactionType TransactionTypeId { get; set; }
         public string TransactionNumber { get; set; }
         public string Description { get; set; }
@@ -20,7 +20,7 @@ namespace AccountErp.Entities
         public decimal CreditAmount { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime? ModifyDate { get; set; }
-        public Constants.ContactType ContactType { get; set; }
+        public Constants.ContactType? ContactType { get; set; }
         public Constants.TransactionStatus Status { get; set; }
     }
 }

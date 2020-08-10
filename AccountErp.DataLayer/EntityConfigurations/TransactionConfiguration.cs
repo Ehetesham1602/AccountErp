@@ -20,7 +20,7 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.TransactionId).IsRequired(false);
             builder.Property(x => x.CompanyId).IsRequired(false);
             builder.Property(x => x.BankAccountId).IsRequired(false);
-            builder.Property(x => x.ContactId).IsRequired();
+            builder.Property(x => x.ContactId).IsRequired(false);
             builder.Property(x => x.TransactionTypeId).IsRequired();
             builder.Property(x => x.Description).IsRequired(false).HasMaxLength(100);
             builder.Property(x => x.TransactionNumber).IsRequired(false).HasMaxLength(50);
@@ -31,7 +31,7 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.CreditAmount).IsRequired().HasColumnType("NUMERIC(12,2)");
             builder.Property(x => x.CreationDate).IsRequired();
             builder.Property(x => x.ModifyDate).IsRequired(false);
-            builder.Property(x => x.ContactType).IsRequired();
+            builder.Property(x => x.ContactType).IsRequired(false);
         }
     }
 }

@@ -57,7 +57,15 @@ namespace AccountErp.Managers
                 await _transactionRepository.AddAsync(transaction);
                 await _unitOfWork.SaveChangesAsync();
             }
-          
+            else if (model.PaymentType == Constants.TransactionType.AccountIncome)
+            {
+                var transactionforCredit = TransactionFactory.CreateByTaxPaymentByCustomer(model, model.CreditBankAccountId, model.Amount, 0);
+                await _transactionRepository.AddAsync(transactionforCredit);
+                var transactionforDebit = TransactionFactory.CreateByTaxPaymentByCustomer(model, model.BankAccountId, 0, model.Amount);
+                await _transactionRepository.AddAsync(transactionforDebit);
+                await _unitOfWork.SaveChangesAsync();
+            }
+
         }
 
         public async Task<JqDataTableResponse<InvoicePaymentListItemDto>> GetPagedResultAsync(InvoiceJqDataTableRequestModel model)

@@ -63,6 +63,14 @@ namespace AccountErp.Managers
                 await _transactionRepository.AddAsync(transaction);
                 await _unitOfWork.SaveChangesAsync();
             }
+            else if(model.PaymentType == Constants.TransactionType.AccountExpence)
+            {
+                var transactionforCredit = TransactionFactory.CreateByTaxPaymentByVendor(model,model.BankAccountId,model.Amount,0);
+                await _transactionRepository.AddAsync(transactionforCredit);
+                var transactionforDebit = TransactionFactory.CreateByTaxPaymentByVendor(model, model.DebitBankAccountId, 0, model.Amount);
+                await _transactionRepository.AddAsync(transactionforDebit);
+                await _unitOfWork.SaveChangesAsync();
+            }
            
         }
 

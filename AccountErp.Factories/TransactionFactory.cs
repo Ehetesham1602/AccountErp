@@ -140,6 +140,48 @@ namespace AccountErp.Factories
             return transaction;
         }
 
+        public static Transaction CreateByTaxPaymentByVendor(BillPaymentAddModel model, int? accId, decimal creditAmt, decimal debitAmt)
+        {
+            var transaction = new Transaction
+            {
+                TransactionId = null,
+                CompanyId = null,
+                TransactionTypeId = Constants.TransactionType.AccountExpence,
+                TransactionDate = model.PaymentDate,
+                TransactionNumber = null,
+                ContactType = null,
+                ContactId = null,
+                BankAccountId = accId,
+                DebitAmount = debitAmt,
+                CreditAmount = creditAmt,
+                CreationDate = model.PaymentDate,
+                ModifyDate = model.PaymentDate,
+                Status = Constants.TransactionStatus.Paid
+            };
+
+            return transaction;
+        }
+        public static Transaction CreateByTaxPaymentByCustomer(InvoicePaymentAddModel model, int? accId, decimal creditAmt, decimal debitAmt)
+        {
+            var transaction = new Transaction
+            {
+                TransactionId = null,
+                CompanyId = null,
+                TransactionTypeId = Constants.TransactionType.AccountExpence,
+                TransactionDate = model.PaymentDate,
+                TransactionNumber = null,
+                ContactType = null,
+                ContactId = null,
+                BankAccountId = accId,
+                DebitAmount = debitAmt,
+                CreditAmount = creditAmt,
+                CreationDate = model.PaymentDate,
+                ModifyDate = model.PaymentDate,
+                Status = Constants.TransactionStatus.Paid
+            };
+
+            return transaction;
+        }
     }
 }
 
