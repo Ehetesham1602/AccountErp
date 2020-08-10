@@ -4,12 +4,10 @@ using System.Text;
 
 namespace AccountErp.Models.Report
 {
-    public class ProfitAndLossModel
+    public class CashFlowModel
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public int ReportType { get; set; }
         public int TabId { get; set; }
-
     }
 }
