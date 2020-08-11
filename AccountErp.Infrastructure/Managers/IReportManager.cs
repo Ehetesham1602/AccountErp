@@ -20,6 +20,8 @@ namespace AccountErp.Infrastructure.Managers
         Task<ProfitAndLossMainDto> GetProfitAndLossDetailsReportAsync(ProfitAndLossModel model);
         Task<List<BalanceSheetReportDto>> GetBalanceSheetReportAsync(BalanceSheetModel model);
         Task<AccountTransactionReportMasterDto> GetAccountTransaction(AccountTransactionReportModel model);
+        Task<List<CashFlowReportDto>> GetCashFlowReportAsync(CashFlowModel model);
+        //Task<CashFlowReportDto> GetCashFlowReportAsync(CashFlowModel model);
 
     }
 }

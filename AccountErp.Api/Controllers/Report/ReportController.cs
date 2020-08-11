@@ -113,6 +113,13 @@ namespace AccountErp.Api.Controllers.Report
             return pageResult;
         }
 
+        [HttpPost]
+        [Route("cash_fLow_report")]
+        public async Task<List<CashFlowReportDto>> GetCashFlowReportAsync(CashFlowModel model)
+        {
+            var pageResult = await _reportManager.GetCashFlowReportAsync(model);
+            return pageResult;
+        }
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using AccountErp.Dtos.Bill;
+﻿using AccountErp.Dtos.BankAccount;
+using AccountErp.Dtos.Bill;
 using AccountErp.Dtos.ChartofAccount;
 using AccountErp.Dtos.Customer;
 using AccountErp.Dtos.Report;
@@ -26,6 +27,8 @@ namespace AccountErp.Infrastructure.Repositories
         Task<List<COADetailDto>> GetProfitAndLossDetailsReportAsync();
         Task<List<COADetailDto>> GetBalanceSheetReportAsync();
         Task<List<COADetailDto>> GetCOADetailAsyncForAccountTransactionReport();
+        //Task<List<BankAccountDetailDto>> GetCashFlowReportAsync();
+        Task<List<COADetailDto>> GetCashFlowReportAsync();
 
     }
 }
