@@ -581,5 +581,48 @@ namespace AccountErp.DataLayer.Repositories
                            .AsNoTracking()
                            .ToListAsync();
         }
+
+        public async Task<List<COADetailDto>> GetCOADetailAsyncForAccountTransactionReport()
+        {
+            return await (from i in _dataContext.COA_AccountMaster
+                          select new COADetailDto
+                          {
+                              Id = i.Id,
+                              AccountMasterName = i.AccountMasterName,
+                              AccountTypes = i.AccountTypes.Select(x => new AccountTypeDetailDto
+                              {
+                                  Id = x.Id,
+                                  AccountTypeName = x.AccountTypeName,
+                                  COA_AccountMasterId = x.COA_AccountMasterId,
+                                  BankAccount = x.BanKAccount.Select(y => new BankAccountDetailDto
+                                  {
+                                      Id = y.Id,
+                                      AccountName = y.AccountName,
+                                      AccountCode = y.AccountCode,
+                                      Description = y.Description,
+                                      AccountNumber = y.AccountNumber,
+                                      COA_AccountTypeId = y.COA_AccountTypeId,
+                                      AccountHolderName = y.AccountHolderName,
+                                      Transactions = y.Transaction.Select(z => new TransactionDetailDto
+                                      {
+                                          TransactionId = z.TransactionId,
+                                          BankAccountId = z.BankAccountId,
+                                          Id = z.Id,
+                                          CreditAmount = z.CreditAmount,
+                                          DebitAmount = z.DebitAmount,
+                                          TransactionDate = z.TransactionDate,
+                                          Status = z.Status,
+                                          TransactionType = z.TransactionTypeId,
+                                          ContactType = z.ContactType ?? 0,
+                                          ContactId = z.ContactId ?? 0
+                                      })
+
+                                  })
+                              }),
+
+                          })
+                           .AsNoTracking()
+                           .ToListAsync();
+        }
     }
 }

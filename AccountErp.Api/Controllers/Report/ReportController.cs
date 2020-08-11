@@ -105,6 +105,14 @@ namespace AccountErp.Api.Controllers.Report
             return pageResult;
         }
 
+        [HttpPost]
+        [Route("Account_Transaction")]
+        public async Task<AccountTransactionReportMasterDto> GetAccpuuntTransactionReportAsync(AccountTransactionReportModel model)
+        {
+            var pageResult = await _reportManager.GetAccountTransaction(model);
+            return pageResult;
+        }
+
 
     }
 }

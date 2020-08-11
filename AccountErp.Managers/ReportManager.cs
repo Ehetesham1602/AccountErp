@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
@@ -346,6 +347,85 @@ namespace AccountErp.Managers
                 accountDetailDto.Add(accountMasterDto);
             }
             return accountDetailDto;
+        }
+
+        public async Task<AccountTransactionReportMasterDto> GetAccountTransaction(AccountTransactionReportModel model)
+        {
+            var data = await _reportRepository.GetCOADetailAsyncForAccountTransactionReport();
+
+            AccountTransactionReportMasterDto accountDetailDtoMasterList = new AccountTransactionReportMasterDto();
+            accountDetailDtoMasterList.BankList = new List<AccountTransactionReportDto>();
+            foreach (var item in data)
+            {
+             //  List<AccountTransactionReportDto> accountDetailDtoList = new List<AccountTransactionReportDto>();
+              
+                //accountMasterDto.Id = item.Id;
+                //accountMasterDto.AccountMasterName = item.AccountMasterName;
+                //accountMasterDto.BankAccount = new List<TrialBalanceAccountDetailDto>();
+                foreach (var accType in item.AccountTypes)
+                {
+                    foreach (var acc in accType.BankAccount)
+                    {
+                        AccountTransactionReportDto accountDetailDto = new AccountTransactionReportDto();
+                        accountDetailDto.Transactions = new List<AccountTransactionReportDetailDto>();
+                        accountDetailDto.AccountMasterName = item.AccountMasterName;
+                        accountDetailDto.AccountTypeName = accType.AccountTypeName;
+                        accountDetailDto.AccountName = acc.AccountName;
+                        var transListForStartingbalance = acc.Transactions.Where(p => (p.TransactionDate <= model.FromDate)).ToList();
+                        var creditAmount = transListForStartingbalance.Sum(x => x.CreditAmount);
+                        var debitAmount = transListForStartingbalance.Sum(x => x.DebitAmount);
+                        accountDetailDto.StartingBalance = debitAmount - creditAmount;
+                        if (model.AccountId > 0)
+                        {
+                            acc.Transactions = acc.Transactions.Where(x => x.BankAccountId == model.AccountId).ToList();
+                        }
+                        if (model.ContactId > 0)
+                        {
+                            acc.Transactions = acc.Transactions.Where(x => x.ContactId == model.ContactId && x.ContactType == model.ContactType).ToList();
+                        }
+
+                        if (model.ReportType == 0)
+                        {
+                            acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.FromDate && p.TransactionDate <= model.ToDate)).ToList();
+                        }
+                        else if (model.ReportType == 1)
+                        {
+                            acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.FromDate && p.TransactionDate <= model.ToDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
+                        }
+
+                        foreach (var trans in acc.Transactions)
+                        {
+                            AccountTransactionReportDetailDto accountMasterDto = new AccountTransactionReportDetailDto();
+                            accountMasterDto.Id = trans.TransactionId ?? 0;
+                            accountMasterDto.CreditAmount = trans.CreditAmount;
+                            accountMasterDto.TransactionDate = trans.TransactionDate;
+                            accountMasterDto.TransactionType = trans.TransactionType;
+                            accountMasterDto.DebitAmount = trans.DebitAmount;
+                            accountDetailDto.Transactions.Add(accountMasterDto);
+                        }
+                        decimal openingBal = accountDetailDto.StartingBalance;
+                        foreach(var setBal in accountDetailDto.Transactions)
+                        {
+                            setBal.Balance = openingBal + setBal.DebitAmount - setBal.CreditAmount;
+                            openingBal = setBal.Balance;
+                        }
+                        accountDetailDto.BalanceChange = openingBal;
+                        accountDetailDto.TotalAndEndingBalance = openingBal;
+                        accountDetailDto.TotalAndEndingBalanceCreditAmount = accountDetailDto.Transactions.Sum(x => x.CreditAmount);
+                        accountDetailDto.TotalAndEndingBalanceDebitAmount = accountDetailDto.Transactions.Sum(x => x.DebitAmount);
+                        accountDetailDtoMasterList.BankList.Add(accountDetailDto);
+                        //AccountTransactionReportDetailDto totalEndingBalDto = new AccountTransactionReportDetailDto();
+                        //totalEndingBalDto.Id =  0;
+                        //accountMasterDto.CreditAmount = trans.CreditAmount;
+                        //accountMasterDto.TransactionDate = trans.TransactionDate;
+                        //accountMasterDto.TransactionType = trans.TransactionType;
+                        //accountMasterDto.DebitAmount = trans.DebitAmount;
+                        //accountDetailDto.Transactions.Add(accountMasterDto);
+                    }
+                }
+               // accountDetailDtoMasterList.BankList.Add(accountDetailDtoList);
+            }
+            return accountDetailDtoMasterList;
         }
 
     }

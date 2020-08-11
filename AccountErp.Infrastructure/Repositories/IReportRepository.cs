@@ -25,6 +25,7 @@ namespace AccountErp.Infrastructure.Repositories
         Task<List<COADetailDto>> GetAccountBalanceReportAsync();
         Task<List<COADetailDto>> GetProfitAndLossDetailsReportAsync();
         Task<List<COADetailDto>> GetBalanceSheetReportAsync();
+        Task<List<COADetailDto>> GetCOADetailAsyncForAccountTransactionReport();
 
     }
 }
