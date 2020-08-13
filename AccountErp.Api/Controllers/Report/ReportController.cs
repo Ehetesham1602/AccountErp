@@ -114,10 +114,17 @@ namespace AccountErp.Api.Controllers.Report
         }
 
         [HttpPost]
-        [Route("cash_fLow_report")]
-        public async Task<List<CashFlowReportDto>> GetCashFlowReportAsync(CashFlowModel model)
+        [Route("cash_fLow_report_Summary")]
+        public async Task<CashFlowReportDto> GetCashFlowReportAsync(CashFlowModel model)
         {
-            var pageResult = await _reportManager.GetCashFlowReportAsync(model);
+            var pageResult = await _reportManager.GetCashFlowReportForSummaryAsync(model);
+            return pageResult;
+        }
+        [HttpPost]
+        [Route("cash_fLow_report_Detail")]
+        public async Task<CashFlowMasterDetailDto> GetCashFlowDetailReportAsync(CashFlowModel model)
+        {
+            var pageResult = await _reportManager.GetCashFlowReportForDetailAsync(model);
             return pageResult;
         }
 
