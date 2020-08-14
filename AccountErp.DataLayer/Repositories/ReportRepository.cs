@@ -629,7 +629,6 @@ namespace AccountErp.DataLayer.Repositories
         public async Task<List<COADetailDto>> GetCashFlowReportAsync()
         {
             return await (from i in _dataContext.COA_AccountMaster
-                          where i.Id == 1 || i.Id == 3 
                           select new COADetailDto
                           {
                               Id = i.Id,
