@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200807103852_DbMigrationNew20200708")]
-    partial class DbMigrationNew20200708
+    [Migration("20200809063650_DbMigration_08_08_20_5")]
+    partial class DbMigration_08_08_20_5
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

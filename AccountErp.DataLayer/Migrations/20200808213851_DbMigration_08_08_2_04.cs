@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AccountErp.DataLayer.Migrations
 {
-    public partial class DbMigrationNew20200708 : Migration
+    public partial class DbMigration_08_08_2_04 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
