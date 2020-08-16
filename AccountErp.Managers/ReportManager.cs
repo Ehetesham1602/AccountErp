@@ -467,8 +467,8 @@ namespace AccountErp.Managers
                    
                     foreach (var acc in accType.BankAccount)
                     {
-                        debitAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid).Sum(x => x.DebitAmount);
-                        creditAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid).Sum(x => x.CreditAmount);
+                        debitAmount += acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid).Sum(x => x.DebitAmount);
+                        creditAmount += acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid).Sum(x => x.CreditAmount);
                     }
                 }
                 if (debitAmount > 0)
