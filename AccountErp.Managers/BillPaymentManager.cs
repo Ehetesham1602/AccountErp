@@ -59,8 +59,10 @@ namespace AccountErp.Managers
             }
             else if(model.PaymentType == Constants.TransactionType.VendorAdvancePayment)
             {
-                var transaction = TransactionFactory.CreateByVendorAdvancePayment(model);
+                var transaction = TransactionFactory.CreateByVendorAdvancePayment( model, model.BankAccountId, model.Amount, 0);
                 await _transactionRepository.AddAsync(transaction);
+                var transactionForDebit = TransactionFactory.CreateByVendorAdvancePayment(model, model.DebitBankAccountId, 0, model.Amount);
+                await _transactionRepository.AddAsync(transactionForDebit);
                 await _unitOfWork.SaveChangesAsync();
             }
             else if(model.PaymentType == Constants.TransactionType.AccountExpence)

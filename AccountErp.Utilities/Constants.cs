@@ -18,6 +18,11 @@
         public enum ContactType { Customer, Vendor }
         public enum TransactionType {CustomerAdvancePayment, InvoicePayment, VendorAdvancePayment, BillPayment, AccountIncome, AccountExpence}
         public enum TransactionStatus { Pending, Paid }
+        public struct Account
+        {
+            public const int AccountReceiveable = 1;
+            public const int AccountPayable = 2;
+        }
 
         public struct UserType
         {
