@@ -22,7 +22,7 @@ namespace AccountErp.Factories
                 TransactionNumber = entity.InvoiceNumber,
                 ContactType = Constants.ContactType.Customer,
                 ContactId = entity.CustomerId,
-                BankAccountId = 1,
+                BankAccountId = Constants.Account.AccountReceiveable,
                 DebitAmount = entity.TotalAmount,
                 CreditAmount = 0,
                 CreationDate = Utility.GetDateTime(),
@@ -66,7 +66,7 @@ namespace AccountErp.Factories
                 TransactionNumber = entity.BillNumber,
                 ContactType = Constants.ContactType.Vendor,
                 ContactId = entity.VendorId,
-                BankAccountId = 2,
+                BankAccountId = Constants.Account.AccountPayable,
                 DebitAmount = 0,
                 CreditAmount = entity.TotalAmount,
                 CreationDate = Utility.GetDateTime(),
@@ -99,7 +99,7 @@ namespace AccountErp.Factories
             return transaction;
         }
 
-        public static Transaction CreateByCustomerAdvancePayment(InvoicePaymentAddModel model)
+        public static Transaction CreateByCustomerAdvancePayment(InvoicePaymentAddModel model, int? accId, decimal creditAmt, decimal debitAmt)
         {
             var transaction = new Transaction
             {
@@ -110,16 +110,17 @@ namespace AccountErp.Factories
                 TransactionNumber = null,
                 ContactType = Constants.ContactType.Customer,
                 ContactId = model.CustomerId,
-                BankAccountId = model.BankAccountId,
-                DebitAmount = model.Amount,
-                CreditAmount = 0,
+                BankAccountId = accId,
+                DebitAmount = debitAmt,
+                CreditAmount = creditAmt,
                 CreationDate = model.PaymentDate,
-                ModifyDate = model.PaymentDate
+                ModifyDate = model.PaymentDate,
+                Status = Constants.TransactionStatus.Paid
             };
 
             return transaction;
         }
-        public static Transaction CreateByVendorAdvancePayment(BillPaymentAddModel model)
+        public static Transaction CreateByVendorAdvancePayment(BillPaymentAddModel model, int? accId, decimal creditAmt, decimal debitAmt)
         {
             var transaction = new Transaction
             {
@@ -130,11 +131,12 @@ namespace AccountErp.Factories
                 TransactionNumber = null,
                 ContactType = Constants.ContactType.Vendor,
                 ContactId = model.VendorId,
-                BankAccountId = model.BankAccountId,
-                DebitAmount = 0,
-                CreditAmount = model.Amount,
+                BankAccountId = accId,
+                DebitAmount = debitAmt,
+                CreditAmount = creditAmt,
                 CreationDate = model.PaymentDate,
-                ModifyDate = model.PaymentDate
+                ModifyDate = model.PaymentDate,
+                Status= Constants.TransactionStatus.Paid
             };
 
             return transaction;
