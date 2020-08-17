@@ -655,7 +655,8 @@ namespace AccountErp.DataLayer.Repositories
                                           DebitAmount = z.DebitAmount,
                                           CreditAmount = z.CreditAmount,
                                           TransactionDate = z.TransactionDate,
-                                          Status = z.Status
+                                          Status = z.Status,
+                                          ModifyDate = z.ModifyDate ?? DateTime.Now
                                       })
 
                                   })
