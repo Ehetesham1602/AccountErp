@@ -538,6 +538,34 @@ namespace AccountErp.Managers
             cashFlowDetailsReportDtoForTotal.Amount = salesAmount - purchaseAmount + salesTaxAmount;
             accountDetailDto.OperatingActivities.Add(cashFlowDetailsReportDtoForTotal);
 
+            var dataForAssets = data.Where(x => x.Id == 1);
+            decimal debitAmountForStartingBal = 0;
+            decimal creditAmountForStartingBal = 0;
+            decimal debitAmountForEndingBal = 0;
+            decimal creditAmountForEndingBal = 0;
+            //For Starting Balance
+            foreach (var accMaster in dataForAssets)
+            {
+                foreach (var accType in accMaster.AccountTypes)
+                {
+                    foreach (var acc in accType.BankAccount)
+                    {
+
+                        CashFlowSummaryReportDto cashFlowDetailsReportDtoForAssets = new CashFlowSummaryReportDto();
+                        cashFlowDetailsReportDtoForAssets.AccountName = acc.AccountName;
+                        debitAmountForStartingBal += acc.Transactions.Where(y => y.TransactionDate <= model.StartDate).Sum(x => x.DebitAmount);
+                        creditAmountForStartingBal = acc.Transactions.Where(y => y.TransactionDate <= model.StartDate).Sum(x => x.CreditAmount);
+                    }
+                }
+
+            }
+
+            CashFlowSummaryReportDto cashFlowDetailsReportDtoForTotalStarting = new CashFlowSummaryReportDto();
+            cashFlowDetailsReportDtoForTotalStarting.AccountName = "Total Starting Balance";
+            cashFlowDetailsReportDtoForTotalStarting.Amount = debitAmountForStartingBal - creditAmountForStartingBal;
+            accountDetailDto.Overview.Add(cashFlowDetailsReportDtoForTotalStarting);
+
+        
             CashFlowSummaryReportDto cashFlowDetailsReportDtoForInflow = new CashFlowSummaryReportDto();
             cashFlowDetailsReportDtoForInflow.AccountName = "Gross Cash Inflow";
             cashFlowDetailsReportDtoForInflow.Amount = inflowAmount;
@@ -552,6 +580,28 @@ namespace AccountErp.Managers
             cashFlowDetailsReportDtoForNetCash.AccountName = "Net Cash Change";
             cashFlowDetailsReportDtoForNetCash.Amount = inflowAmount - outflowAmount;
             accountDetailDto.Overview.Add(cashFlowDetailsReportDtoForNetCash);
+
+            //For Ending Balance
+            foreach (var accMaster in dataForAssets)
+            {
+                foreach (var accType in accMaster.AccountTypes)
+                {
+                    foreach (var acc in accType.BankAccount)
+                    {
+
+                        CashFlowSummaryReportDto cashFlowDetailsReportDtoForAssets = new CashFlowSummaryReportDto();
+                        cashFlowDetailsReportDtoForAssets.AccountName = acc.AccountName;
+                        debitAmountForEndingBal = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Pending && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.DebitAmount);
+                        creditAmountForEndingBal = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Pending && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.CreditAmount);
+                    }
+                }
+
+            }
+
+            CashFlowSummaryReportDto cashFlowDetailsReportDtoForTotalEnding = new CashFlowSummaryReportDto();
+            cashFlowDetailsReportDtoForTotalEnding.AccountName = "Total Ending Balance";
+            cashFlowDetailsReportDtoForTotalEnding.Amount = debitAmountForEndingBal - creditAmountForEndingBal;
+            accountDetailDto.Overview.Add(cashFlowDetailsReportDtoForTotalEnding);
 
 
             return accountDetailDto;
@@ -726,6 +776,11 @@ namespace AccountErp.Managers
 
             }
 
+            CashFlowSummaryReportDto cashFlowDetailsReportDtoForTotalStarting = new CashFlowSummaryReportDto();
+            cashFlowDetailsReportDtoForTotalStarting.AccountName = "Total Starting Balance";
+            cashFlowDetailsReportDtoForTotalStarting.Amount = accountDetailDto.Overview.StartingBalance.Sum(x => x.Amount);
+            accountDetailDto.Overview.StartingBalance.Add(cashFlowDetailsReportDtoForTotalStarting);
+
             //For Ending Balance
             foreach (var accMaster in dataForAssets)
             {
@@ -744,6 +799,11 @@ namespace AccountErp.Managers
                 }
 
             }
+
+            CashFlowSummaryReportDto cashFlowDetailsReportDtoForTotalEnding = new CashFlowSummaryReportDto();
+            cashFlowDetailsReportDtoForTotalEnding.AccountName = "Total Ending Balance";
+            cashFlowDetailsReportDtoForTotalEnding.Amount = accountDetailDto.Overview.EndingBalance.Sum(x => x.Amount);
+            accountDetailDto.Overview.EndingBalance.Add(cashFlowDetailsReportDtoForTotalEnding);
 
             return accountDetailDto;
         }
