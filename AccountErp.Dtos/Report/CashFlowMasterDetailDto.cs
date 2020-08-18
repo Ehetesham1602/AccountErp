@@ -7,6 +7,6 @@ namespace AccountErp.Dtos.Report
     public class CashFlowMasterDetailDto
     {
         public List<CashFlowDetailsReportDto> OperatingActivities { get; set; }
-        public List<CashFlowSummaryReportDto> Overview { get; set; }
+        public CashFlowDetailOverviewDto Overview { get; set; }
     }
 }
