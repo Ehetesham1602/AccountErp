@@ -38,6 +38,7 @@ export class InvoiceAddComponent implements OnInit {
     newInvNumber;
     qtnNumber;
     salesTaxItems;
+    isForSale=true;
   
     itemId: Array<ItemListItemModel> = new Array<ItemListItemModel>();
     selectedTax=[];
@@ -328,7 +329,7 @@ export class InvoiceAddComponent implements OnInit {
                 if(item.salesTaxId!=null){
                     this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId,"lineAmount":item.lineAmount});
                 }else{
-                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0,"lineAmount":item.lineAmount});
+                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":null,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0,"lineAmount":item.lineAmount});
                 }
             });
         }else{

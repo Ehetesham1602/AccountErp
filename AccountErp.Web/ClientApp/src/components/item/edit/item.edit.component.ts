@@ -155,6 +155,9 @@ loadExpenseAccounts(){
     submit() {
         debugger;
         this.blockUI.start();
+        if(this.model.rate==undefined || this.model.rate==Number("")){
+            this.model.rate=0;
+        }
         this.itemService.edit(this.model).subscribe(
             () => {
                 this.blockUI.stop();

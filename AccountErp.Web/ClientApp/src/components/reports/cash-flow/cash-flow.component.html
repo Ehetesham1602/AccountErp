@@ -1,10 +1,10 @@
-<form name="form" (ngSubmit)="onSubmit(f)" #f="ngForm">
+<form name="form" (ngSubmit)="onSubmit(f)" #f="ngForm" >
 
 
-<div class="kt-holder kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+<div class="kt-holder kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="pdf">
     <div class="kt-subheader   kt-grid__item" id="kt_subheader">
         <div class="kt-subheader__main">
-            <div class="kt-subheader__breadcrumbs">
+            <div class="kt-subheader__breadcrumbs" >
                 <a [routerLink]="['/']" class="kt-subheader__breadcrumbs-home">
                     <em class="flaticon2-shelter"></em>
                 </a>
@@ -15,12 +15,12 @@
                 <span>Cash Flow</span>
             </div>
         </div>
-        <div class="kt-subheader__toolbar">
+        <div class="kt-subheader__toolbar" id="htmlData" #htmlData>
             <div class="kt-subheader__wrapper">
             </div>
         </div>
     </div>
-    <div class="kt-content kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="kt-content kt-grid__item kt-grid__item--fluid" id="kt_content" id="blank">
       <div class="row">
           <div class="col-md-12" *blockUI="'container-blockui'">
               <div class="kt-portlet">
@@ -70,21 +70,8 @@
                           <div class="row">
                               <div class="col-md-12">
                                   <div class="row">
-                                      <div class="form-group col-md-2 row" >
-                                          <label class="col-md-9">Date Range :</label>
-                                                <div class="col-md-12">
-                                                    <ngx-select-dropdown  name="dateRange" #dateRange="ngModel" (change)="getVendorDetail()" 
-                                                    [multiple]="false" [(ngModel)]="selectedDate"
-                                                     [config]="config" [options]="Date"></ngx-select-dropdown>
-                                                     <!-- <select class="form-control" name="role" [(ngModel)]="filterModel.vendorId">
-                                                        <option value="">[Select Vendor]</option>
-                                                        <option *ngFor="let item of vendors" [value]="item.keyInt">
-                                                            {{item.value}}</option>
-                                                    </select> -->
-                                                </div>
-                                          </div>
-                                
-                                   <div class="form-group col-md-2 row">
+                                   
+                                   <div class="form-group col-md-4 row">
                                       <label class="col-md-3">from:</label>
                                       <div class="col-md-12">
                                           <div class="input-group">
@@ -101,7 +88,7 @@
                                       </div>
                                   </div>
                           
-                                  <div class="form-group col-md-2 row">
+                                  <div class="form-group col-md-4 row">
                                       <label class="col-md-3">to:</label>
                                       <div class="col-md-12">
                                           <div class="input-group">
@@ -122,7 +109,7 @@
                                      <div  class="form-group row col-md-3">
                                       <label class="col-md-10"></label>
                                       <div class="col-md-12"><div class="input-group">
-                                          <button class="btn btn-success " type="submit" (click)="showProfitLoss()"> Update Report</button>
+                                          <button class="btn btn-success " type="submit" (click)="showCashFlow()"> Update Report</button>
                                            </div>
                                        </div>
                                       </div>
@@ -146,35 +133,41 @@
                       </div> -->
               </div>
 
-              <div class="row">
-                <div class="card" style="width: 18rem;">
-             
-                  </div>
-                <div class="card" style="width: 20rem;">
-                   
+              <div class="row" id="htmlData" #htmlData>
+               
+                <div class="" >
                     <div class="card-body">
                       <h5 class="card-title">GROSS CASH INFLOW</h5>
-                      <h5 class="card-text">₹ 234 -{{allGrossCashInflow| currency}}</h5>
+                      <h5 class="card-text">{{cashflowSummary.overview[1].amount | currency}}</h5>
                     </div>
                   </div>
-                  <div class="card" style="width: 20rem;">
+
+                  <div class="" >
+                    <div class="card-body">
+                      <h5 class="card-title">-</h5>
+                    </div>
+                  </div>
+                 
+                  <div class="" >
                     <div class="card-body">
                       <h5 class="card-title">GROSS CASH OUTFLOW</h5>
-                      <h5 class="card-text">{{allGrossCashOutflow| currency}}₹ 54 -</h5>
+                      <h5 class="card-text">{{cashflowSummary.overview[2].amount| currency}}</h5>
                     </div>
                   </div>
-                  <div class="card" style="width: 20rem;">
+
+                  <div class="" >
+                    <div class="card-body">
+                      <h5 class="card-title">=</h5>
+                    </div>
+                  </div>
+                 
+                  <div class="" >
                     <div class="card-body">
                       <h5 class="card-title">NET CASH CHANGE</h5>
-                      <h5 class="card-text">{{allNetCashChange| currency}}= ₹ 3445</h5>
+                      <h5 class="card-text">{{cashflowSummary.overview[3].amount| currency}}</h5>
                     </div>
                   </div>
-                  <div class="card" style="width: 20rem;">
-                    <div class="card-body">
-                        <h5 class="card-title"></h5>
-                        <h5 class="card-text"></h5>
-                      </div>
-                </div>
+                
             </div>
               <div class="row"></div><br>
                <div class="container">
@@ -194,18 +187,7 @@
                 </div>
              </div>
                <br><br><br>
-               <!-- <div class="kt-portlet">
-                  <div class="container">
-                      <div class="row justify-content-center">   -->
-                        <!-- <div class="row-12"></div> <br>
-                        <div class="col-12"><br>
-                        <div class="row">
-                          <h5 class="col-md-6">Accounts</h5>
-                          <h5 class="col-md-6 pull-right c"style="font-size:15px">{{fromDate | date}} to {{toDate | date}}</h5>
-                        </div>
-                      </div> -->
-                      
-
+            
 
                       <div class="kt-content kt-grid__item kt-grid__item--fluid" id="kt_content">
                         <div class="row">
@@ -215,562 +197,164 @@
                                             <div class="container">
                                                 <div class="row justify-content-center">  
                                                   <div class="row-12"></div> <br>
-                                                      <div class="col-12"> 
-                                                            <table class="table table-striped" id="my-table">
-                                                                <thead>
-                                                                    <tr >
-                                                                        <th>CASH INFLOW AND OUTFLOW</th>
-                                                                        <th style="width:15%" ></th>
-                                                                        <th></th>
-                                                                        <th></th>
-                                                                        <th colspan="2" style="text-align:right"  style="font-size:15px">{{fromDate | date}} to {{toDate | date}}</th>
-                                                                        <!-- <th style="width:15%">{{fromDate | date}} to {{toDate | date}}</th> -->
-                                                                    </tr>
-                                                                </thead>
+                                                      <div class="col-12" *ngIf="showSummary"> 
 
+                                                        <table class="table" id="my-table">
+                                                          <thead>
+                                                            <th>CASH INFLOW AND OUTFLOW</th>
+                                                            <th colspan="2" style="text-align:right" class="c" style="font-size:15px">
+                                                              {{fromDate | date}} to {{toDate | date}}</th>
+                                                            <!-- <th style="width:15%">{{fromDate | date}} to {{toDate | date}}</th> -->
+                                                          </thead>
+                              
+                              
+                                                          <!-- SHOW SUMMARY STARTS -->
+                              
+                                                          <tbody>
+                                                            <tr>
+                                                              <td colspan="2" style="background-color:rgb(187, 220, 241)" class="Bold">Operating Activities
+                                                              </td>
+                                                            </tr>
+                              
+                                                            <tr *ngFor="let item of cashflowSummary.operatingActivities">
+                                                              <td>{{item.accountName}}</td>
+                                                              <td scope="row" class="c"> {{item.amount | currency}} </td>
+                                                            </tr>
+                              
+                              
+                                                          </tbody>
+                              
+                              
+                              
+                                                          <!-- SHOW SUMMARY ENDS -->
+                              
+                              
+                                                          <!-- SHOW DETAIL ENDS -->
+                                                        </table>
 
-                                                                <!-- SHOW SUMMARY STARTS -->
-                                                                <tbody *ngIf="showSummary">
-                                                                                  <tr *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                            <td class="Bold" style="background-color:rgb(187, 220, 241)">Operating Activities      </td>
-                                                                                            <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                            <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                            <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                            <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                            <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                </tr>
-
-                                                                                    <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                            <td>Sales</td>
-                                                                                            <td class="Bold"></td>
-                                                                                            <td scope="row">  </td>
-                                                                                            <td scope="row" class="Bold" > </td>
-                                                                                            <td scope="row" ></td>  
-                                                                                            <td scope="row"> {{allSales | currency}}
-                                                                                              <!-- {{item.totalCostOfGoodsSold | currency}} -->
-                                                                                            </td>
-                                                                                  </tr>
-                                                                                  
-                                                                                  <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                          <td>Purchaes</td>
-                                                                                          <td class="Bold"></td>
-                                                                                          <td scope="row">  </td>
-                                                                                          <td scope="row" class="Bold" > </td>
-                                                                                          <td scope="row" ></td>  
-                                                                                          <td scope="row"> {{allPurchases | currency}}
-                                                                                            <!-- {{item.totalCostOfGoodsSold | currency}} -->
-                                                                                          </td>
-                                                                                    </tr>
-
-                                                                                    <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                          <td>Sales Taxes   </td>
-                                                                                          <td class="Bold"></td>
-                                                                                          <td scope="row">  </td>
-                                                                                          <td scope="row" class="Bold" > </td>
-                                                                                          <td scope="row" ></td>  
-                                                                                          <td scope="row"> {{allSalesTaxes | currency}}
-                                                                                            <!-- {{item.totalCostOfGoodsSold | currency}} -->
-                                                                                          </td>
-                                                                                     </tr>
-                                                                                     <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                            <td class="Bold">Net Cash from Operating Activities     </td>
-                                                                                            <td class="Bold"></td>
-                                                                                            <td scope="row">  </td>
-                                                                                            <td scope="row" class="Bold" > </td>
-                                                                                            <td scope="row" ></td>  
-                                                                                            <td scope="row"> {{allNetCashOperatingActivites| currency}}
-                                                                                              <!-- {{item.totalCostOfGoodsSold | currency}} -->
-                                                                                            </td>
-                                                                                    </tr>
-                                                                                     <br><br>
-
-                                                                                  <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                            <td class="Bold" style="background-color:rgb(187, 220, 241)">Investing Activities  </td>
-                                                                                            <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                            <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                            <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                            <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                            <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                  </tr>
-                                                                                  <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                            <td >Net Cash from Investing Activities     </td>
-                                                                                            <td class="Bold"></td>
-                                                                                            <td scope="row">  </td>
-                                                                                            <td scope="row" class="Bold" > </td>
-                                                                                            <td scope="row"> </td>
-                                                                                            <td scope="row" class="Bold">
-                                                                                               {{allNetCashInvestingActivites| currency}}
-                                                                                          </td>
-                                                                                </tr>
-
-                                                                                <br><br>
-
-                                                                                  <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                            <td class="Bold" style="background-color:rgb(187, 220, 241)">Financing Activities </td>
-                                                                                            <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                            <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                            <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                            <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                            <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                  </tr>
-                                                                                  <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                            <td>Net Cash from Financing Activities   </td>
-                                                                                            <td class="Bold"></td>
-                                                                                            <td scope="row">  </td>
-                                                                                            <td scope="row" class="Bold" > </td>
-                                                                                            <td scope="row"> </td>
-                                                                                            <td scope="row" class="Bold">
-                                                                                               {{allNetCashFinancingActivites| currency}}
-                                                                                          </td>
-                                                                                </tr>
-
-                                                                                <br><br><br>
-
-                                                                                <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                        <td class="Bold">OVERVIEW</td>
-                                                                                        <td class="Bold"></td>
-                                                                                        <td scope="row">  </td>
-                                                                                        <td scope="row" class="Bold" > </td>
-                                                                                        <td scope="row"> </td>
-                                                                                        <td scope="row" class="Bold"></td>
-                                                                                </tr>
-                                                                                <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                          <td class="Bold" style="background-color:rgb(187, 220, 241)">Starting Balance</td>
-                                                                                          <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                          <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                          <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                          <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                          <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)">
-                                                                                            {{allStartingBalance | currency}}98
-                                                                                            <div  class="lblOverdue">As of {{fromDate | date}}</div>
-                                                                                           </td>
-                                                                                </tr>
-                                                                                <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                          <td >Gross Cash Inflow</td>
-                                                                                          <td class="Bold"></td>
-                                                                                          <td scope="row">  </td>
-                                                                                          <td scope="row" class="Bold" > </td>
-                                                                                          <td scope="row"> </td>
-                                                                                          <td scope="row">
-                                                                                             {{allGrossCashInflow| currency}}
-                                                                                        </td>
-                                                                              </tr>
-                                                                              <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                            <td >Gross Cash Outflow</td>
-                                                                                            <td class="Bold"></td>
-                                                                                            <td scope="row">  </td>
-                                                                                            <td scope="row" class="Bold" > </td>
-                                                                                            <td scope="row"> </td>
-                                                                                            <td scope="row">
-                                                                                              {{allGrossCashOutflow| currency}}
-                                                                                          </td>
-                                                                              </tr>
-
-                                                                              <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                        <td class="Bold">Net Cash Change</td>
-                                                                                        <td class="Bold"></td>
-                                                                                        <td scope="row">  </td>
-                                                                                        <td scope="row" class="Bold" > </td>
-                                                                                        <td scope="row"> </td>
-                                                                                        <td scope="row" class="Bold">
-                                                                                          {{allNetCashChange| currency}}
-                                                                                      </td>
-                                                                               </tr>
-                                                                              <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                          <td class="Bold" style="background-color:rgb(187, 220, 241)">Ending Balance</td>
-                                                                                          <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                          <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                          <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                          <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                            <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)">
-                                                                                              {{allEndingBalance | currency}}98
-                                                                                              <div  class="lblOverdue">As of {{fromDate | date}}</div>
-                                                                                          </td>
-                                                                               </tr>
-                                                                </tbody>
-
-                                                                <!-- SHOW SUMMARY ENDS -->
-
-
-
-
-                                                                <!-- SHOW DETAIL STARTS -->
-                                                                  <tbody *ngIf="showDetail">
-                                                                              <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                    <td style="background-color:rgb(187, 220, 241)" class="Bold">Operating Activities</td>
-                                                                                    <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                    <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                    <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                    <td scope="row"style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                     <td scope="row" class="Bold"style="background-color:rgb(187, 220, 241)" ></td>
-                                                                            </tr>
-                                                                            <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                    <td style="background-color:rgb(187, 220, 241)" class="Bold">&nbsp; &nbsp;  &nbsp;&nbsp;&nbsp; Sales</td>
-                                                                                    <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                    <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                    <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                    <td scope="row"style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                    <td scope="row" class="Bold"style="background-color:rgb(187, 220, 241)" ></td>
-                                                                            </tr>
-                                                                            
-                                                                              <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList; index as $index;">
-                                                                                      <td scope="row">
-                                                                                        {{($index + 1)}}  &nbsp;&nbsp;&nbsp;&nbsp;  dfsdf
-                                                                                         <!-- {{item.saleName}} -->
-                                                                                    </td>
-                                                                                      <td scope="row">
-                                                                                       
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                          {{item.saleName | currency}}5665
-                                                                                      </td>
-                                                                              </tr>
-                                                                              <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList; index as $index;">
-                                                                                      <td scope="row" class="Bold">&nbsp;&nbsp;&nbsp;&nbsp;Total Sales</td>
-                                                                                      <td scope="row">
-                                                                                      
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                      </td>
-                                                                                      <td scope="row" class="Bold">
-                                                                                          {{allSales | currency}}5665
-                                                                                      </td>
-                                                                              </tr>
-
-                                                                              <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                    <td style="background-color:rgb(187, 220, 241)" class="Bold"> &nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;Purchases</td>
-                                                                                    <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                    <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                    <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                    <td scope="row" style="background-color:rgb(187, 220, 241)" ></td>  
-                                                                                    <td scope="row" style="background-color:rgb(187, 220, 241)"></td>
-                                                                               </tr>
-                                                                               <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList; index as $index;">
-                                                                                      <td scope="row">
-                                                                                        {{($index + 1)}}  &nbsp;&nbsp;&nbsp;&nbsp; expense
-                                                                                        <!-- {{item.saleName}} -->
-                                                                                    </td>
-                                                                                      <td scope="row">
-                                                                                      
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                          {{item.purchaseName | currency}}5665
-                                                                                      </td>
-                                                                              </tr>
-                                                                              <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList; index as $index;">
-                                                                                      <td scope="row" class="Bold">
-                                                                                        &nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;Total Purchases
-                                                                                    </td>
-                                                                                      <td scope="row">
-                                                                                      
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                      </td>
-                                                                                      <td scope="row" class="Bold">
-                                                                                          {{allPurchases| currency}}5665
-                                                                                      </td>
-                                                                              </tr>
-                                                                              <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                    <td style="background-color:rgb(187, 220, 241)" class="Bold"> &nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;Inventory</td>
-                                                                                    <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                    <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                    <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                    <td scope="row" style="background-color:rgb(187, 220, 241)" ></td>  
-                                                                                    <td scope="row" style="background-color:rgb(187, 220, 241)"></td>
-                                                                              </tr>
-                                                                              <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                      <td style="background-color:rgb(187, 220, 241)" class="Bold"> &nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;Payroll</td>
-                                                                                      <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                      <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                      <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                      <td scope="row" style="background-color:rgb(187, 220, 241)" ></td>  
-                                                                                      <td scope="row" style="background-color:rgb(187, 220, 241)"></td>
-                                                                               </tr>    
-                                                                                <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                      <td style="background-color:rgb(187, 220, 241)" class="Bold"> &nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;Sales Taxes</td>
-                                                                                      <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                      <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                      <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                      <td scope="row" style="background-color:rgb(187, 220, 241)" ></td>  
-                                                                                      <td scope="row" style="background-color:rgb(187, 220, 241)"></td>
-                                                                            </tr>
-
-
-                                                                            <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList; index as $index;">
-                                                                                      <td scope="row" >
-                                                                                        &nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;liabilites&credit cards
-                                                                                        <!-- {{item.accountName| currency}} -->
-                                                                                    </td>
-                                                                                      <td scope="row">
-                                                                                      
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                      </td>
-                                                                                      <td scope="row">
-                                                                                      </td>
-                                                                                      <td scope="row" class="Bold">
-                                                                                          {{allPurchases| currency}}5665
-                                                                                      </td>
-                                                                              </tr>
-                                                                              <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList; index as $index;">
-                                                                                <td scope="row" class="Bold">
-                                                                                  &nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;Total Sales Taxes
-                                                                                          <!-- {{item.accountName| currency}} -->
-                                                                                      </td>
-                                                                                        <td scope="row">
-                                                                                        
-                                                                                        </td>
-                                                                                        <td scope="row">
-                                                                                        </td>
-                                                                                        <td scope="row">
-                                                                                        </td>
-                                                                                        <td scope="row">
-                                                                                        </td>
-                                                                                        <td scope="row" class="Bold">
-                                                                                            {{allSalesTaxes| currency}}5665
-                                                                                        </td>
-                                                                                </tr>
-                                                                              <br><br>
-                                                                                <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                      <td style="background-color:rgb(187, 220, 241)" class="Bold"> &nbsp; &nbsp;  &nbsp;&nbsp;&nbsp; Other</td>
-                                                                                      <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                      <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                      <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                      <td scope="row" style="background-color:rgb(187, 220, 241)" ></td>  
-                                                                                      <td scope="row" style="background-color:rgb(187, 220, 241)"></td>
-                                                                              </tr>
-                                                                              <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList; index as $index;">
-                                                                                <td scope="row" class="Bold">Net Cash from Operating Activities</td>
-                                                                                        <td scope="row">
-                                                                                        
-                                                                                        </td>
-                                                                                        <td scope="row">
-                                                                                        </td>
-                                                                                        <td scope="row">
-                                                                                        </td>
-                                                                                        <td scope="row">
-                                                                                        </td>
-                                                                                        <td scope="row" class="Bold">
-                                                                                            {{allNetCashOperatingActivites| currency}}5665
-                                                                                        </td>
-                                                                                </tr>
-                                                                              <br><br>
-                                                                            <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                  <td style="background-color:rgb(187, 220, 241)" class="Bold">Investing Activities</td>
-                                                                                  <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                  <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                  <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                  <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                  <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                            </tr>
-
-                                                                            <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                  <td style="background-color:rgb(187, 220, 241)">&nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;Property, Plant, Equipment</td>
-                                                                                  <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                  <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                  <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                  <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                  <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                            </tr>
-
-                                                                            <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                  <td style="background-color:rgb(187, 220, 241)">&nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;Other</td>
-                                                                                  <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                  <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                  <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                  <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                  <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                            </tr>
-                                                                            <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                              <td style="background-color:rgb(187, 220, 241)" class="Bold">Financing Activities</td>
-                                                                              <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                              <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                              <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                              <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                              <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                        </tr>
-
-                                                                        <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                              <td style="background-color:rgb(187, 220, 241)" class="Bold">&nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;Loans and Lines of Credit</td>
-                                                                              <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                              <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                              <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                              <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                              <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                        </tr>
-
-                                                                        <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                              <td style="background-color:rgb(187, 220, 241)" class="Bold">&nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;Owners and Shareholders</td>
-                                                                              <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                              <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                              <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                              <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                              <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                        </tr>
-                                                                        <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                              <td style="background-color:rgb(187, 220, 241)" class="Bold">&nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;Other</td>
-                                                                              <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                              <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                              <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                              <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                              <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                        </tr>
-
-                                                                            <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList; index as $index;">
-                                                                                    <td scope="row" class="Bold">Net Cash from Investing Activities</td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row" class="Bold">
-                                                                                    {{allNetCashInvestingActivites| currency}}
-                                                                                  </td>
-                                                                          </tr>
-
-                                                                          <br><br><br>
-                                                                          <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList; index as $index;">
-                                                                                    <td scope="row" class="Bold">OVERVIEW</td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row" class="Bold"> </td>
-                                                                          </tr>
-
-                                                                          <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                <td style="background-color:rgb(187, 220, 241)" class="Bold">&nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;Starting Balance</td>
-                                                                                <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                          </tr>
-
-                                                                          
-                                                                          <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList; index as $index;">
-                                                                                    <td scope="row" >  {{item.accountName| currency}}
-                                                                                      Assets accName
-                                                                                    </td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row">
-                                                                                    {{item.account| currency}}
-                                                                                  </td>
-                                                                          </tr>
-
-                                                                          <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                    <td class="Bold" style="background-color:rgb(187, 220, 241)">Total Starting Balance</td>
-                                                                                    <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                    <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                    <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                    <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                      <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)">
-                                                                                        {{allStartingBalance | currency}}435
-                                                                                        <div  class="lblOverdue">As of{{fromDate | date}}</div>
-                                                                                    </td>
-                                                                            </tr>
-                                                                          <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList; index as $index;">
-                                                                                    <td scope="row">Gross Cash Inflow </td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row"> </td>
-                                                                                  <td scope="row">
-                                                                                    {{allGrossCashInflow| currency}}
-                                                                                  </td>
-                                                                          </tr>
-                                                                          <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList; index as $index;">
-                                                                                  <td scope="row">Gross Cash Outflow </td>
-                                                                                <td scope="row"> </td>
-                                                                                <td scope="row"> </td>
-                                                                                <td scope="row"> </td>
-                                                                                <td scope="row"> </td>
-                                                                                <td scope="row">
-                                                                                  {{allGrossCashOutflow| currency}}
-                                                                                </td>
-                                                                        </tr>
-
-                                                                        <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList; index as $index;">
-                                                                                  <td scope="row" class="Bold">Net Cash Change</td>
-                                                                                <td scope="row"> </td>
-                                                                                <td scope="row"> </td>
-                                                                                <td scope="row"> </td>
-                                                                                <td scope="row"> </td>
-                                                                                <td scope="row" class="Bold">64566
-                                                                                  {{allNetCashChange| currency}}
-                                                                                </td>
-                                                                        </tr>
-
-
-                                                                        <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                <td style="background-color:rgb(187, 220, 241)" class="Bold">&nbsp; &nbsp;  &nbsp;&nbsp;&nbsp;Ending Balance</td>
-                                                                                <td class="Bold" style="background-color:rgb(187, 220, 241)"></td>
-                                                                                <td scope="row" style="background-color:rgb(187, 220, 241)">  </td>
-                                                                                <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                <td scope="row" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                                <td scope="row" class="Bold" style="background-color:rgb(187, 220, 241)"> </td>
-                                                                          </tr>
-
-                                                                          <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList; index as $index;">
-                                                                                    <td scope="row">
-                                                                                      {{($index + 1)}}&nbsp; &nbsp;  &nbsp;&nbsp;accName assets
-                                                                                  </td>
-                                                                                    <td scope="row">
-                                                                                        {{item.accName}}
-                                                                                    </td>
-                                                                                    <td scope="row">
-                                                                                    </td>
-                                                                                    <td scope="row">
-                                                                                    </td>
-                                                                                    <td scope="row">
-                                                                                    </td>
-                                                                                    <td scope="row">
-                                                                                        {{item.account.Number | currency}}5665
-                                                                                    </td>
-                                                                            </tr>
-                                                                          <tr  *ngFor="let item of cashFlowData.agedPayablesReportDtoList">
-                                                                                <td class="Bold" >Total Ending Balance </td>
-                                                                                  <td class="Bold" ></td>
-                                                                                  <td scope="row">  </td>
-                                                                                  <td scope="row" class="Bold"> </td>
-                                                                                  <td scope="row" > </td>
-                                                                                  <td scope="row" class="Bold">
-                                                                                      <!-- {{item.totalUnrealizedlossOnForeignExchange | currency}} -->
-                                                                                      {{allEndingBalance| currency}}345
-                                                                                     <div  class="lblOverdue">As of {{fromDate | date}}</div>
-                                                          
-                                                                                  </td>
-                                                                        </tr>
-
-                                                                   </tbody>
-
-                                                                <!-- SHOW DETAIL ENDS -->
-                                                             </table>
+                                                        <table class="table" id="my-table">
+                                                          <thead>
+                                                            <th>OVERVIEW</th>
+                                                            <th colspan="2" style="text-align:right" class="c" style="font-size:15px"></th>
+                                                          </thead>
+                                                           
+                                                          <tbody>
+                                                            <tr *ngFor="let item of cashflowSummary.overview; idx as $index;">
+                                                              <td>{{item.accountName}}</td>
+                                                              <td scope="row" class="c"> {{item.amount | currency}} </td>
+                                                            </tr>
+                                                          </tbody>
+                              
+                                                          <!-- SHOW DETAIL ENDS -->
+                                                        </table>
                                                        </div>
+
+                                                       <div class="col-12" *ngIf="showDetail"> 
+
+                                                        <table class="table" id="my-table">
+                                                          <thead>
+                                                            <th>CASH INFLOW AND OUTFLOW</th>
+                                                            <th colspan="2" style="text-align:right" class="c" style="font-size:15px">
+                                                              {{fromDate | date}} to {{toDate | date}}</th>
+                                                            <!-- <th style="width:15%">{{fromDate | date}} to {{toDate | date}}</th> -->
+                                                          </thead>
+                              
+                              
+                                                          <!-- SHOW SUMMARY STARTS -->
+                              
+                                                          <tbody>
+                                                            <tr>
+                                                              <td colspan="2" style="background-color:rgb(187, 220, 241)" class="Bold">Operating Activities
+                                                              </td>
+                                                            </tr>
+                                                            <tr>
+                                                              <td colspan="2" style="background-color:rgb(132, 137, 139)" class="Bold">Sales
+                                                              </td>
+                                                            </tr>
+                                                                                        
+                                                            <tr *ngFor="let item of cashflowDetails.operatingActivities[0].sales">
+                                                              <td>{{item.accountName}}</td>
+                                                              <td scope="row" class="c" > {{item.amount | currency}} </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                              <td colspan="2" style="background-color:rgb(132, 137, 139)" class="Bold">Purchase
+                                                              </td>
+                                                            </tr>
+                                                                                        
+                                                            <tr *ngFor="let item of cashflowDetails.operatingActivities[0].purchase">
+                                                              <td>{{item.accountName}}</td>
+                                                              <td scope="row" class="c" > {{item.amount | currency}} </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                              <td colspan="2" style="background-color:rgb(132, 137, 139)" class="Bold">salesTax
+                                                              </td>
+                                                            </tr>
+                                                                                        
+                                                            <tr *ngFor="let item of cashflowDetails.operatingActivities[0].salesTax">
+                                                              <td>{{item.accountName}}</td>
+                                                              <td scope="row" class="c" > {{item.amount | currency}} </td>
+                                                            </tr>
+                              
+                              
+                                                          </tbody>
+                              
+                              
+                              
+                                                          <!-- SHOW SUMMARY ENDS -->
+                              
+                              
+                                                          <!-- SHOW DETAIL ENDS -->
+                                                        </table>
+
+                                                        <table class="table" id="my-table">
+                                                          <thead>
+                                                            <th>OVERVIEW</th>
+                                                            <th colspan="2" style="text-align:right" class="c" style="font-size:15px"></th>
+                                                          </thead>
+                                                           
+                                                          <tbody>
+                                                            <tr>
+                                                              <td colspan="4" style="background-color:rgb(187, 220, 241)" class="Bold">Starting Balance
+                                                              </td>
+                                                            </tr>
+                              
+                                                            <tr *ngFor="let item of cashflowDetails.overview.startingBalance">
+                                                              <td>{{item.accountName}}</td>
+                                                              <td scope="row" class="c" > {{item.amount | currency}} </td>
+                                                            </tr>
+                                                            <br/>
+
+                                                            <tr class="Bold" *ngFor="let item of cashflowDetails.overview.grossDetail">
+                                                              <td>{{item.accountName}}</td>
+                                                              <td scope="row" class="c" > {{item.amount | currency}} </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                              <td colspan="4" style="background-color:rgb(187, 220, 241)" class="Bold">Ending Balance
+                                                              </td>
+                                                              
+                                                            </tr>
+
+                                                            <tr *ngFor="let item of cashflowDetails.overview.endingBalance">
+                                                              <td>{{item.accountName}}</td>
+                                                              <td scope="row" class="c" > {{item.amount | currency}} </td>
+                                                            </tr>
+                              
+                              
+                                                          </tbody>
+                              
+                              
+                              
+                                                       
+                              
+                              
+                                                          <!-- SHOW DETAIL ENDS -->
+                                                        </table>
+                                                       </div>
+
+                                                       
                                                  </div>
                                                 </div>
                 

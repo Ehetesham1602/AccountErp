@@ -2,7 +2,7 @@
 import { CustomerDetailModel } from './../../../models/customer/customer.detail.model';
 import { IncomeCustomerDetail } from './../../../models/incomeByCustomers/income.customer.model';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-// import * as jsPDF from 'jspdf';
+import * as jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { NgForm } from '@angular/forms';
 import { AppSettings, AppUtils } from 'src/helpers';
@@ -11,7 +11,6 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { VendorService, CustomerService } from 'src/services';
 import { ToastrService } from 'ngx-toastr';
 import { IncomeCustomersService } from 'src/services/income-customers.service';
-declare let jsPDF;
 
 @Component({
   selector: 'app-income-by-customer',
@@ -117,52 +116,133 @@ export class IncomeByCustomerComponent implements OnInit {
   CalculateTotalPurchase(){
 
   }
-    public openPDF(): void {
-      debugger;
-        const doc = new jsPDF('p', 'pt', 'a4');
-        doc.setFontSize(15);
-        doc.text('Income By Customer', 400, 40);
-       
-        autoTable(doc, {
-           html: '#my-table',
-           styles: {
-            // cellPadding: 0.5,
-           // fontSize: 12,
-        },
-        tableLineWidth: 0.5,
-        startY: 400, /* if start position is fixed from top */
-        tableLineColor: [4, 6, 7], // choose RGB
-          });
-          const DATA = this.htmlData.nativeElement;
-        doc.fromHTML(DATA.innerHTML, 30, 15);
-        doc.output('dataurlnewwindow');
-      }
+  public openPDF(): void {
+    const doc = new jsPDF('p', 'pt', 'a4');
+    // let doc = new jsPDF("portrait","px","a4");
+
+    doc.setFontSize(15);
+    doc.text('Income By Customer ', 50, 50);
+   // doc.autoPrint();
+
+    var startDate = new Date(new Date().getFullYear(), 0, 1);
+    this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+    const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+    this.fromDate=jsbillDate.toDateString();
+  
+    var endDate = new Date();
+    this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+    const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+    this.toDate=jsduevDate.toDateString();
+    doc.text(50, 100, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+
+    doc.setProperties({
+      title: 'Income By Customer' + ' ' + this.toDate,
+      subject: 'Info about PDF',
+      author: 'iCLose',
+      keywords: 'generated, javascript, web 2.0, ajax',
+      creator: 'iClose'
+  });
+
+    autoTable(doc, {
+      html: '#my-table',
+
+        styles: {
+      // cellPadding: 0.5,
+     // fontSize: 12,
+      },
+      tableLineWidth: 0.5,
+      startY: 150, /* if start position is fixed from top */
+      tableLineColor: [4, 6, 7], // choose RGB
+    });
+      const DATA = this.htmlData.nativeElement;
+
+
+// For each page, print the page number and the total pages
+const addFooters = doc => {
+  const pageCount = doc.internal.getNumberOfPages();
+
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(8);
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.text(480, 780, 'Income By Customer');
+    doc.text(40, 800, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+    doc.text(450, 800, 'Created on : ' + '' + this.toDate);
+    doc.text( ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' +
+    'Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 200, 780, {
+      align: 'right'
+    });
+  }
+};
+
+addFooters(doc);
+    doc.fromHTML(DATA.innerHTML, 30, 15);
+    window.open(doc.output('bloburl'), '_blank');
+    // doc.output('dataurlnewwindow');
+  }
 
 
     public downloadPDF(): void {
-      debugger;
-        const doc = new jsPDF('p', 'pt', 'a4');
-        doc.setFontSize(15);
-        doc.text('Income By Customer', 400, 40);
-        doc.text('', 400, 70);
-        var  res = doc.autoTableHtmlToJson('#my-table');
-       autoTable(doc, {
+      const doc = new jsPDF('p', 'pt', 'a4');
+      // let doc = new jsPDF("portrait","px","a4");
+  
+      doc.setFontSize(15);
+      doc.text('Income By Customer ', 50, 50);
+      doc.autoPrint();
+  
+      var startDate = new Date(new Date().getFullYear(), 0, 1);
+      this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+      const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+      this.fromDate=jsbillDate.toDateString();
+    
+      var endDate = new Date();
+      this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+      const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+      this.toDate=jsduevDate.toDateString();
+      doc.text(50, 100, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+  
+      doc.setProperties({
+        title: 'Income By Customer' + ' ' + this.toDate,
+        subject: 'Info about PDF',
+        author: 'iCLose',
+        keywords: 'generated, javascript, web 2.0, ajax',
+        creator: 'iClose'
+    });
+  
+      autoTable(doc, {
         html: '#my-table',
-        styles: {
-     },
-     tableLineWidth: 0.5,
-     startY: 550,
-     tableLineColor: [4, 6, 7], // choose RGB
-       });
-        autoTable(doc, {
-      //     html: '#my-table',
-      //     styles: {
-      //  },
-       tableLineWidth: 0.5,
-       startY: 300,
-       tableLineColor: [4, 6, 7], // choose RGB
-         });
+  
+          styles: {
+        // cellPadding: 0.5,
+       // fontSize: 12,
+        },
+        tableLineWidth: 0.5,
+        startY: 150, /* if start position is fixed from top */
+        tableLineColor: [4, 6, 7], // choose RGB
+      });
         const DATA = this.htmlData.nativeElement;
+  
+  
+  // For each page, print the page number and the total pages
+  const addFooters = doc => {
+    const pageCount = doc.internal.getNumberOfPages();
+  
+    doc.setFont('helvetica', 'italic');
+    doc.setFontSize(8);
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.text(480, 780, 'Income By Customer');
+      doc.text(40, 800, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+      doc.text(450, 800, 'Created on : ' + '' + this.toDate);
+      doc.text( ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' +
+      'Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 200, 780, {
+        align: 'right'
+      });
+    }
+  };
+  
+  addFooters(doc);
+      doc.fromHTML(DATA.innerHTML, 30, 15);
         doc.save('Income-by-customer.pdf');
       }
 

@@ -99,6 +99,24 @@ namespace AccountErp.Api.Controllers
             return Ok(await _manager.GetAllAsync(Constants.RecordStatus.Active));
         }
 
+
+
+
+        [HttpGet]
+        [Route("get-all-forSales")]
+        public async Task<IActionResult> GetAllForSales()
+        {
+            return Ok(await _manager.GetAllForSalesAsync(Constants.RecordStatus.Active));
+        }
+
+
+        [HttpGet]
+        [Route("get-all-forExpense")]
+        public async Task<IActionResult> GetAllForExpense()
+        {
+            return Ok(await _manager.GetAllForExpenseAsync(Constants.RecordStatus.Active));
+        }
+
         [HttpGet]
         [Route("get-select-items")]
         public async Task<IActionResult> GetSelectItems()

@@ -68,10 +68,8 @@
                     <label class="col-md-3">Rate :*</label>
                     <div class="col-md-9">
                       <input type="number" name="rate" class="form-control" maxlength="250" autocomplete="off"
-                        [(ngModel)]="model.rate" #rate="ngModel" appDecimalNumbersOnly required />
-                      <div class="validation-error-message" *ngIf="f.submitted && rate.invalid">
-                        Rate is required
-                      </div>
+                        [(ngModel)]="model.rate" #rate="ngModel" appDecimalNumbersOnly  />
+                      
                     </div>
                   </div>
                 </div>
@@ -174,7 +172,7 @@
                         #salesTaxId="ngModel" required>
                         <option value="">[Select]</option>
                         <option *ngFor="let item of salesTaxes" [value]="item.keyInt">
-                          {{item.value}}
+                          {{item.code}}
                         </option>
                       </select>
                       <div class="validation-error-message" *ngIf="f.submitted && !salesTaxId.valid">

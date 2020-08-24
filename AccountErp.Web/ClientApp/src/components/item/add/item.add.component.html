@@ -68,10 +68,8 @@
                     <label class="col-md-3">Rate (per unit) :*</label>
                     <div class="col-md-9">
                       <input type="text" name="rate" class="form-control" maxlength="250" autocomplete="off"
-                        [(ngModel)]="model.rate" #rate="ngModel" appDecimalNumbersOnly required />
-                      <div class="validation-error-message" *ngIf="f.submitted && rate.invalid">
-                        Rate is required
-                      </div>
+                        [(ngModel)]="model.rate" #rate="ngModel" appDecimalNumbersOnly />
+                    
                     </div>
                   </div>
                 </div>

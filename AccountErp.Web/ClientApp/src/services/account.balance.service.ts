@@ -16,10 +16,10 @@ export class AccountBalanceService {
     }
   
   
-    getAccountBalance(agedPayableDetail){
+    getAccountBalance(model: any){
       debugger;
   
-      return this.http.post(this.appSettings.ApiBaseUrl + 'Report/aged_payables_report_details', agedPayableDetail);
+      return this.http.post(this.appSettings.ApiBaseUrl + 'Report/account_balances_report', model);
     }
   
     toggleStatus(id: number) {

@@ -22,8 +22,7 @@ export class AccountTransactionsService {
   
     getAccountTransaction(accountTransactionDetail){
       debugger;
-  
-      return this.http.post(this.appSettings.ApiBaseUrl + 'Report/sales_tax_report_details', accountTransactionDetail);
+      return this.http.post(this.appSettings.ApiBaseUrl + 'Report/Account_Transaction', accountTransactionDetail);
     }
   
     toggleStatus(id: number) {

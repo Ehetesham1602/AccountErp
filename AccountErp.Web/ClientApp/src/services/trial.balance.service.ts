@@ -39,8 +39,8 @@ export class TrialBalanceService {
     //   return this.http.post(this.appSettings.ApiBaseUrl + 'Customer/edit', model);
     // }
   
-    getDetail(id: number) {
-      return this.http.get(this.appSettings.ApiBaseUrl + 'Report/get-detail/' + id);
+    getDetail(model: any) {
+      return this.http.post(this.appSettings.ApiBaseUrl + 'Report/Trial_Balance_Report',model);
     }
   
     getSelectItems() {

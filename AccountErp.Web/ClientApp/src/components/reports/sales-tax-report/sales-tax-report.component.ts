@@ -16,7 +16,7 @@ import { NgBlockUI, BlockUI } from 'ng-block-ui';
   styleUrls: ['./sales-tax-report.component.css']
 })
 export class SalesTaxReportComponent implements OnInit {
-  [x: string]: any;
+  // [x: string]: any;
   @BlockUI('container-blockui-main') blockUI: NgBlockUI;
   @ViewChild('htmlData', {static: false}) htmlData: ElementRef;
   @ViewChild ('terms', {static: false}) terms: ElementRef ;
@@ -33,7 +33,8 @@ export class SalesTaxReportComponent implements OnInit {
   model: SalesTAxReportDetail = new SalesTAxReportDetail();
 
   reportType = 'accural';
-  salesPurchaseData={totalTaxAmountOnSales:0,totalTaxAmountOnPurchase:0,totalNetTaxOwing:0,salesTaxReportDtosList:[{}]}; 
+  salesPurchaseData={totalTaxAmountOnSales:0,totalTaxAmountOnPurchase:0,totalNetTaxOwing:0,totalStartingBalance:0,totalEndingBalance:0,
+                      totalLessPaymentsToGovernment:0, salesTaxReportDtosList:[{}]}; 
   paymentBalanceData;
   allPurchase;
   allTaxAmountOnSales;
@@ -52,6 +53,7 @@ export class SalesTaxReportComponent implements OnInit {
   fromDate;
   toDate;
   salesTaxItems;
+  selectedstType = 0;
   constructor(private appSettings: AppSettings,
     private salesTaxReportService: SalesTaxReportService,
     private toastr: ToastrService,
@@ -69,46 +71,138 @@ export class SalesTaxReportComponent implements OnInit {
 
   public openPDF(): void {
     const doc = new jsPDF('p', 'pt', 'a4');
+    // var doc = new jsPDF('p', 'pt', 'letter');
+
     doc.setFontSize(15);
-    doc.text('Sales Tax Report', 400, 40);
+    doc.text('Sales Tax Report', 50, 50);
+
+    var startDate = new Date(new Date().getFullYear(), 0, 1);
+    this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+    const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+    this.fromDate=jsbillDate.toDateString();
+  
+    var endDate = new Date();
+    this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+    const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+    this.toDate=jsduevDate.toDateString();
+    doc.text(50, 100, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+
+    doc.setProperties({
+      title: 'Sales - Tax' + ' ' + this.toDate,
+      subject: 'Info about PDF',
+      author: 'iClose',
+      keywords: 'generated, javascript, web 2.0, ajax',
+      creator: 'iClose'
+  });
     autoTable(doc, {
-       html: '#my-table',
+       html: '#my-table1',
        styles: {
         // cellPadding: 0.5,
        // fontSize: 12,
     },
     tableLineWidth: 0.5,
-    startY: 400, /* if start position is fixed from top */
+    startY: 500, /* if start position is fixed from top */
     tableLineColor: [4, 6, 7], // choose RGB
       });
+
+      autoTable(doc, {
+        html: '#my-table',
+        styles: {
+     },
+     tableLineWidth: 0.5,
+     startY: 200,
+     tableLineColor: [4, 6, 7], // choose RGB
+       });
       const DATA = this.htmlData.nativeElement;
+      const addFooters = doc => {
+        const pageCount = doc.internal.getNumberOfPages();
+      
+        doc.setFont('helvetica', 'italic');
+        doc.setFontSize(8);
+        for (let i = 1; i <= pageCount; i++) {
+          doc.setPage(i);
+          doc.text(510, 780, 'Sales - Tax ');
+          doc.text(40, 800, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+          doc.text(450, 800, 'Created on : ' + '' + this.toDate);
+          doc.text( ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' +
+          'Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 200, 780, {
+            align: 'right'
+          });
+        }
+      };
+      
+      addFooters(doc);
+      
     doc.fromHTML(DATA.innerHTML, 30, 15);
-    doc.output('dataurlnewwindow');
+    // doc.output('dataurlnewwindowsales');
+    window.open(doc.output('bloburl'), '_blank');
   }
 
 
 public downloadPDF(): void {
-    const doc = new jsPDF('p', 'pt', 'a4');
-    doc.setFontSize(15);
-    doc.text('Sales Tax Report', 400, 40);
-    doc.text('', 400, 70);
-   autoTable(doc, {
-    html: '#my-table',
-    styles: {
- },
- tableLineWidth: 0.5,
- startY: 550,
- tableLineColor: [4, 6, 7], // choose RGB
-   });
+  const doc = new jsPDF('p', 'pt', 'a4');
+  doc.setFontSize(15);
+  doc.text('Sales Tax Report', 50, 50);
+
+  var startDate = new Date(new Date().getFullYear(), 0, 1);
+  this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+  const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+  this.fromDate=jsbillDate.toDateString();
+
+  var endDate = new Date();
+  this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+  const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+  this.toDate=jsduevDate.toDateString();
+  doc.text(50, 100, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+
+  doc.setProperties({
+    title: 'Sales - Tax' + ' ' + this.toDate,
+    subject: 'Info about PDF',
+    author: 'iClose',
+    keywords: 'generated, javascript, web 2.0, ajax',
+    creator: 'iClose'
+});
+  autoTable(doc, {
+     html: '#my-table1',
+     styles: {
+      // cellPadding: 0.5,
+     // fontSize: 12,
+  },
+  tableLineWidth: 0.5,
+  startY: 500, /* if start position is fixed from top */
+  tableLineColor: [4, 6, 7], // choose RGB
+    });
+
     autoTable(doc, {
-      html: '#my-table1',
+      html: '#my-table',
       styles: {
    },
    tableLineWidth: 0.5,
-   startY: 300,
+   startY: 200,
    tableLineColor: [4, 6, 7], // choose RGB
      });
     const DATA = this.htmlData.nativeElement;
+    const addFooters = doc => {
+      const pageCount = doc.internal.getNumberOfPages();
+    
+      doc.setFont('helvetica', 'italic');
+      doc.setFontSize(8);
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.text(510, 780, 'Sales - Tax ');
+        doc.text(40, 800, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+        doc.text(450, 800, 'Created on : ' + '' + this.toDate);
+        doc.text( ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' +
+        'Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 200, 780, {
+          align: 'right'
+        });
+      }
+    };
+    
+    addFooters(doc);
+    doc.autoPrint();
+  doc.fromHTML(DATA.innerHTML, 30, 15);
+  // doc.output('dataurlnewwindowsales');
     doc.save('Sales-Tax.pdf');
   }
 
@@ -133,7 +227,7 @@ public downloadPDF(): void {
         "startDate":  this.fromDate,
         "endDate":  this.toDate,
 
-        "reportType": 0
+        "reportType": this.selectedstType
     };
   // }
     }else{
@@ -142,11 +236,11 @@ public downloadPDF(): void {
               "startDate":  this.fromDate,
               "endDate":  this.toDate,
       
-              "reportType": 0
+              "reportType":this.selectedstType
           }; 
         }
 
-    this.salesTaxReportService.getSalesTaxStatement(body)
+    this.salesTaxReportService.getDetail(body)
     .subscribe(
         (data) => {
           debugger
@@ -156,7 +250,9 @@ public downloadPDF(): void {
              this.allTaxAmountOnSales=this.salesPurchaseData.totalTaxAmountOnSales;
              this.alltaxAmountonPurchase=this.salesPurchaseData.totalTaxAmountOnPurchase;
              this.allNetTaxOwing=this.salesPurchaseData.totalNetTaxOwing;
-
+             this.allStartingBalance=this.salesPurchaseData.totalStartingBalance;
+             this.allEndingBalance =this.salesPurchaseData.totalEndingBalance;
+             this.allLessPaymenttoGovt = this.salesPurchaseData.totalLessPaymentsToGovernment;
              this.temp.salesTaxReportDtosList.map((item) => {
               debugger;
                item.totalPaidAmount=item.totalTaxAmountOnSales;

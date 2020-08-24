@@ -15,8 +15,8 @@ export class ProfitLossDetail {
     public paidPurchases: number;
     public remark: string;
     public createdOn: string;
-    public startDate: string; ///
-    public endDate: string; ///
+    public fromDate: string; ///
+    public toDate: string; ///
     public description: string; //
     public status: number; //
     public invoiceDate: string;

@@ -15,7 +15,7 @@
                 <span>Sales Tax Report</span>
             </div>
         </div>
-        <div class="kt-subheader__toolbar">
+        <div class="kt-subheader__toolbar" id="htmlData" #htmlData>
             <div class="kt-subheader__wrapper">
             </div>
         </div>
@@ -25,7 +25,7 @@
             <div class="col-md-12" *blockUI="'container-blockui'">
                 <div class="kt-portlet">
                     <div class="kt-portlet__head">
-                        <div class="kt-portlet__head-label" id="htmlData" #htmlData>
+                        <div class="kt-portlet__head-label" >
                             <h3 class="kt-portlet__head-title">
                                 Sales Tax Report
                             </h3>
@@ -184,33 +184,33 @@
                                                         <th></th>
                                                         <th style="width:15%"  style="font-size:15px">SALES AND PURCHASES</th>
                                                         <th></th>
-                                                        <!-- <th></th>
+                                                        <!-- <th></th> -->
                                                         <th></th>
-                                                        <th></th> -->
-                                                        <th colspan="2" style="text-align:right"  style="font-size:15px">{{fromDate | date}} to {{toDate | date}}</th>                                                    </tr>
+                                                        <th></th>
+                                                        <th colspan="2" style="text-align:right"  style="font-size:15px" class="c">{{fromDate | date}} to {{toDate | date}}</th>                                                    </tr>
                                                 </thead>
                                                 <tbody>
                                                     <!-- <tr *ngFor="let item of salesTaxData.invoiceList; index as $index;"> -->
                                                     <tr>
-                                                         <td  >
+                                                         <td  class="Bold">
                                                              S.NO.
                                                         </td>
-                                                        <td >
+                                                        <td class="Bold">
                                                             Tax
                                                         </td >
-                                                        <td scope="row" >
+                                                        <td scope="row" class="Bold">
                                                             Sales Subject to Tax
                                                         </td>
-                                                        <td scope="row" >
+                                                        <td scope="row" class="Bold">
                                                             Tax Amount on Sales
                                                         </td>
-                                                        <td style="background-color:rgb(187, 220, 241)" >
+                                                        <td style="background-color:rgb(187, 220, 241)" class="Bold" >
                                                             Purchases Subject to Tax
                                                         </td>
-                                                        <td style="background-color:rgb(187, 220, 241)" >
+                                                        <td style="background-color:rgb(187, 220, 241)"class="Bold" >
                                                             Tax Amount on Purchases
                                                         </td>
-                                                        <td >
+                                                        <td class="Bold">
                                                             Net Tax Owing
                                                         </td>
                                                     </tr>
@@ -219,22 +219,23 @@
                                                         <td scope="row">
                                                             {{($index + 1)}} 
                                                         </td>
-                                                        <td scope="row">
-                                                            {{(item.tax)}} 
+                                                        <td scope="row" *ngIf="item.id!=0">
+                                                            <!-- {{(item.tax)}}  -->
+                                                            <a [routerLink]="['/reports/account-transactions/',item.id]" class="external-link">{{item.tax }}</a>
                                                         </td>
-                                                        <td scope="row">
+                                                        <td scope="row" *ngIf="item.id!=0">
                                                             {{item.salesSubjectToTax | currency}}
                                                         </td>
-                                                        <td scope="row">
+                                                        <td scope="row" *ngIf="item.id!=0">
                                                             {{item.taxAmountOnSales | currency}}
                                                         </td>
-                                                        <td scope="row" style="background-color:rgb(187, 220, 241)">
+                                                        <td scope="row" style="background-color:rgb(187, 220, 241)" *ngIf="item.id!=0">
                                                             {{item.purchaseSubjectToTax | currency}}
                                                         </td>
-                                                        <td scope="row" style="background-color:rgb(187, 220, 241)">
+                                                        <td scope="row" style="background-color:rgb(187, 220, 241)" *ngIf="item.id!=0">
                                                             {{item.taxAmountOnPurchases | currency}}
                                                         </td>
-                                                        <td scope="row">
+                                                        <td scope="row" *ngIf="item.id!=0">
                                                             {{item.netTaxOwing | currency}}
                                                         </td>
                                                         
@@ -298,22 +299,22 @@
                                                 </thead>
                                                 <tbody>
                                                         <tr>
-                                                            <td >
+                                                            <td class="Bold">
                                                                 S.NO.
                                                             </td>
-                                                            <td >
+                                                            <td class="Bold">
                                                                 Tax
                                                             </td>
-                                                            <td >
+                                                            <td class="Bold">
                                                                 Starting Balance
                                                             </td>
-                                                            <td scope="row" >
+                                                            <td scope="row" class="Bold">
                                                                 Net Tax Owing
                                                             </td>
-                                                            <td scope="row">
+                                                            <td scope="row" class="Bold">
                                                                 Less Payments to Government
                                                             </td>
-                                                            <td >
+                                                            <td class="Bold">
                                                                 Ending Balance
                                                             </td>
                                                         
@@ -325,7 +326,8 @@
                                                             {{($index + 1)}}
                                                         </td>
                                                         <td scope="row">
-                                                            {{item.tax }}
+                                                            <!-- liabilities and credit cards -->
+                                                             <a [routerLink]="['/reports/account-transactions/']" class="external-link">{{item.tax }}</a>
                                                         </td>
                                                         <td scope="row">
                                                             {{item.startingBalance | currency}}
@@ -334,8 +336,7 @@
                                                             {{item.netTaxOwing | currency}}
                                                         </td>
                                                         <td scope="row">
-                                                            <!-- {{item.lessPaymentToGovt | currency}} -->
-                                                            $0.00
+                                                            {{item.lessPaymentsToGovernment | currency}}
                                                         </td>
                                                         <td scope="row">
                                                             {{item.endingBalance | currency}}
@@ -354,8 +355,7 @@
                                                             {{allNetTaxOwing | currency}}
                                                         </td>
                                                         <td scope="row" class="Bold">
-                                                            <!-- {{allLessPaymenttoGovt | currency}} -->
-                                                            $0.00
+                                                            {{allLessPaymenttoGovt | currency}}
                                                         </td>
                                                         <td scope="row" class="Bold">
                                                             {{allEndingBalance | currency}}

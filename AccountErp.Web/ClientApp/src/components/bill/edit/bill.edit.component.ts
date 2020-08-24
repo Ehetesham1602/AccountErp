@@ -36,7 +36,8 @@ export class BillEditComponent implements OnInit {
     salesTaxItems;
     billDate;
     dueDate;
-
+    customerDiscount;
+    isForSale=false;
     constructor(private router: Router,
         private route: ActivatedRoute,
         private modalService: NgbModal,
@@ -79,7 +80,7 @@ export class BillEditComponent implements OnInit {
                     this.getVendorDetail();
                     this.loadVenderTaxes();
                     this.updateSelectedItems();
-                    this.model.dueDate = this.appUtils.getDateForNgDatePicker(this.model.dueDate);
+                   
                     if (!this.model.attachments || this.model.attachments.length === 0) {
                         const attachmentFile = new AttachmentEditModel();
                         this.model.attachments.push(attachmentFile);
@@ -128,6 +129,9 @@ export class BillEditComponent implements OnInit {
                  item.rate=itemId.rate;
                  item.price=itemId.price;
                  item.description=itemId.description;
+                 item.lineAmount=itemId.lineAmount;
+                 item.bankAccountId=itemId.bankAccountId;
+                 item.taxBankAccountId=itemId.taxBankAccountId;
                  
                  tempArray.push(item);
       
@@ -247,6 +251,7 @@ export class BillEditComponent implements OnInit {
                         "value": this.vendor.name
                       }
                       this.selectedVendor=custTemp;
+                      this.customerDiscount=this.vendor.discount;
                 },
                 error => {
                     this.blockUI.stop();
@@ -424,7 +429,7 @@ export class BillEditComponent implements OnInit {
                     debugger;
                     this.model.items.push({"itemId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId,"lineAmount":item.lineAmount});
                 }else{
-                    this.model.items.push({"itemId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0,"lineAmount":item.lineAmount});
+                    this.model.items.push({"itemId":item.id,"rate":item.rate,"price":item.price,"taxId":null,"taxPercentage":0,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0,"lineAmount":item.lineAmount});
                 }
             });
         }else{

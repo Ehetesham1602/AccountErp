@@ -4,7 +4,7 @@
     <div class="kt-holder kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
         <div class="kt-subheader   kt-grid__item" id="kt_subheader">
             <div class="kt-subheader__main">
-                <div class="kt-subheader__breadcrumbs">
+                <div class="kt-subheader__breadcrumbs" >
                     <a [routerLink]="['/']" class="kt-subheader__breadcrumbs-home">
                         <em class="flaticon2-shelter"></em>
                     </a>
@@ -15,7 +15,7 @@
                     <span>Account Transactions</span>
                 </div>
             </div>
-            <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__toolbar" id="htmlData" #htmlData>
                 <div class="kt-subheader__wrapper">
                 </div>
             </div>
@@ -75,7 +75,10 @@
                                                     <div class="form-group row">
                                                         <label class="col-md-12">Acconts:</label>
                                                         <div class="col-md-12">
-                                                            <select name="account"  [(ngModel)]="model.accountId" #account="ngModel" (change)="selectAccount($event)" class="form-control" >
+                                                            <select name="account"  [(ngModel)]="accountId" #account="ngModel" (change)="selectAccount($event)" class="form-control" >
+                                                                <optgroup label="">
+                                                                    <option value=0>All</option>
+                                                                </optgroup>
                                                                 <optgroup *ngFor="let acchead of allAccounts" label="{{acchead.accountMasterName}}">
                                                                  <option *ngFor="let acc of acchead.bankAccount" value="{{acc.id}}">{{acc.accountName}}</option>
                                                             </optgroup>
@@ -131,8 +134,8 @@
                                                         <select class="form-control" id="statementType" [(ngModel)]="selectedstType" 
                                                  name="statementType" #statementType="ngModel">
                                                      <!-- <option [ngValue]="statementType" *ngFor="let statementType of statementTypes">{{statementType.name}}</option> -->
-                                                     <option value="accural">Accural (Paid & Unpaid)</option>
-                                                     <option value="cash">Cash Basis (Paid)</option>
+                                                     <option value=1>Accural (Paid & Unpaid)</option>
+                                                     <option value=0>Cash Basis (Paid)</option>
                                                    </select>
                                                     </div>
                                                 </div>
@@ -142,11 +145,20 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-12">Contact:</label>
                                                     <div class="col-md-12">
-                                                        <select class="form-control" id="statementType" [(ngModel)]="selectedstContact" 
-                                                 name="statementType" #statementType="ngModel">
+                                                        <select class="form-control" id="statementType" [(ngModel)]="contactTypenID" (change)="selectContact($event)"
+                                                 name="contanct" #contanct="ngModel">
                                                      <!-- <option [ngValue]="statementType" *ngFor="let statementType of statementTypes">{{statementType.name}}</option> -->
-                                                     <option value="accural">Customer</option>
-                                                     <option value="cash">Vendor</option>
+                                                     <optgroup>
+                                                        <option value=0>All</option>
+                                                     </optgroup>
+                                                    
+                                                     <optgroup  label="Customer">
+                                                        <option *ngFor="let item of customers"  value="{{item.keyInt+'/'+1}}">{{item.value}}</option>
+                                                     </optgroup>
+                                                     <optgroup label="Vendor">
+                                                        <option *ngFor="let item of vendors"  value="{{item.keyInt+'/'+2}}">{{item.value}}</option>
+                                                     </optgroup>
+                                                    
                                                    </select>
                                                     </div>
                                                 </div>
@@ -156,7 +168,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-12">&nbsp;</label>
                                                     <div class="col-md-12">
-                                                        <button type="submit" class="btn btn-success" (click)="showTrialBalance()">
+                                                        <button type="submit" class="btn btn-success" (click)="showAccountTransaction()">
                                                             <i class="la la-save"></i> Update Report</button>
                                                     </div>
                                                 </div>
@@ -184,751 +196,48 @@
                                     <div class="row justify-content-center">  
                                       <div class="row-12"></div> <br>
                                           <div class="col-12"> 
-                                                <table class="table table-striped" id="my-table">
+                                                <table class="table" id="my-table">
                                                     <thead>
-                                                        <tr >
-                                                            <th style="width:15%" >DATE</th>
-                                                            <th ></th>
-                                                            <!-- <th></th> -->
-                                                            <th >DESCRIPTION</th>
-                                                            <th></th>
-                                                            <th  style="width:15%">Debit</th>
+                                                            <th>DATE</th>
+                                                            <th>DESCRIPTION</th>
+                                                            <th>Debit</th>
                                                             <th>Credit</th>
                                                             <th class="c">Balance</th>
                                                             <!-- <th colspan="2" style="text-align:right"  style="font-size:15px">{{fromDate | date}} to {{toDate | date}}</th>                                                    </tr> -->
                                                     </thead>
-                                                    <tbody>
-                                                        
-                                                           <tr  *ngFor="let item of accountTransactionData.agedPayablesReportDtoList">
-                                                            <td class="Bold" style="background-color:rgba(215, 217, 219, 0.925)" >Cash on Hand
-                                                                  <div  class="lblOverdue" >Under: Asset > Cash and Bank</div>
-                                                            </td>
-                                                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                            <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                                            <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                            <td scope="row" class="Bold c" style="background-color:rgba(215, 217, 219, 0.925)">
-                                                                 809
-                                                                <div  class="lblOverdue"> %</div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                             <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold" width="10"> S.NO. </td>
-                                                            <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Starting Balance </td >
-                                                            <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                                            <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                                            <td style="background-color:rgba(227, 231, 233, 0.925)" ></td>
-                                                            <td style="background-color:rgba(227, 231, 233, 0.925)" > </td>
-                                                            <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">23</td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td > </td>
-                                                            <td>24 July 2020</td >
-                                                            <td scope="row" >Invoice Payment</td>
-                                                            <td scope="row" > </td>
-                                                            <td >34</td>
-                                                            <td>34 </td>
-                                                            <td class="c">23rs transaction page</td>
-                                                       </tr>
-
-                                                       <tr>
-                                                            <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> </td>
-                                                            <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Totals and Ending Balance </td >
-                                                            <td style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                                            <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                                            <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">₹188,736.32 </td>
-                                                            <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> ₹188,736.32  </td>
-                                                            <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">₹188,736.32 </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                                <td  style="background-color:rgba(215, 217, 219, 0.925)" class="Bold"> </td>
-                                                                <td style="background-color:rgba(215, 217, 219, 0.925)" class="Bold">Balance Change
-                                                                <div  class="lblOverdue" >Difference between starting and ending balances</div></td >
-                                                                <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                                                <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                                <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                                                <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                                                <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)" class="c Bold">234 </td>
-                                                       </tr>
-
-                                                       <br><br><br>
-
-
-                                                       <tr  *ngFor="let item of accountTransactionData.agedPayablesReportDtoList">
-                                                        <td class="Bold" style="background-color:rgba(215, 217, 219, 0.925)" >Accounts Receivable
-                                                              <div  class="lblOverdue" >Under: Asset</div>
-                                                        </td>
-                                                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                        <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                                        <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                        <td scope="row" class="Bold c" style="background-color:rgba(215, 217, 219, 0.925)">
-                                                             809
-                                                            <div  class="lblOverdue"> %</div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                         <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold" width="10"> S.NO. </td>
-                                                        <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Starting Balance </td >
-                                                        <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                                        <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                                        <td style="background-color:rgba(227, 231, 233, 0.925)" ></td>
-                                                        <td style="background-color:rgba(227, 231, 233, 0.925)" > </td>
-                                                        <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">23</td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td > </td>
-                                                        <td>Mar 01, 2020</td >
-                                                        <td scope="row" >Customer Name - 5</td>
-                                                        <td scope="row" > </td>
-                                                        <td >34 invoice detail</td>
-                                                        <td> </td>
-                                                        <td class="c">23rs transaction page</td>
-                                                   </tr>
-
-                                                   <tr>
-                                                        <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> </td>
-                                                        <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Totals and Ending Balance </td >
-                                                        <td style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                                        <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                                        <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">₹188,736.32 </td>
-                                                        <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> ₹188,736.32  </td>
-                                                        <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">₹188,736.32 </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                            <td  style="background-color:rgba(215, 217, 219, 0.925)" class="Bold"> </td>
-                                                            <td style="background-color:rgba(215, 217, 219, 0.925)" class="Bold">Balance Change
-                                                            <div  class="lblOverdue" >Difference between starting and ending balances</div></td >
-                                                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                            <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                                            <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)" class="c Bold">234 </td>
-                                                   </tr>
-
-
-
-                                                   <br><br><br>
-
-                                                   <tr  *ngFor="let item of accountTransactionData.agedPayablesReportDtoList">
-                                                    <td class="Bold" style="background-color:rgba(215, 217, 219, 0.925)" >Taxes Recoverable/Refundable
-                                                          <div  class="lblOverdue" >Under: Asset > Other Short-Term Asset</div>
-                                                    </td>
-                                                    <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                                    <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                    <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                                    <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                                    <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                    <td scope="row" class="Bold c" style="background-color:rgba(215, 217, 219, 0.925)">
-                                                         809
-                                                        <div  class="lblOverdue"> %</div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                     <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold" width="10"> S.NO. </td>
-                                                    <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Starting Balance </td >
-                                                    <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                                    <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                                    <td style="background-color:rgba(227, 231, 233, 0.925)" ></td>
-                                                    <td style="background-color:rgba(227, 231, 233, 0.925)" > </td>
-                                                    <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">23</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td > </td>
-                                                    <td>Mar 01, 2020</td >
-                                                    <td scope="row" >Bill Payment</td>
-                                                    <td scope="row" > </td>
-                                                    <td >34 invoice detail</td>
-                                                    <td> </td>
-                                                    <td class="c">23rs transaction page</td>
-                                               </tr>
-
-                                               <tr>
-                                                    <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> </td>
-                                                    <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Totals and Ending Balance </td >
-                                                    <td style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                                    <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                                    <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">₹188,736.32 </td>
-                                                    <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> ₹188,736.32  </td>
-                                                    <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">₹188,736.32 </td>
-                                                </tr>
-
-                                                <tr>
-                                                        <td  style="background-color:rgba(215, 217, 219, 0.925)" class="Bold"> </td>
-                                                        <td style="background-color:rgba(215, 217, 219, 0.925)" class="Bold">Balance Change
-                                                        <div  class="lblOverdue" >Difference between starting and ending balances</div></td >
-                                                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                        <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                                        <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)" class="c Bold">234 </td>
-                                               </tr>
-
-                                                <br><br><br>
-                                                
-                                                <tr  *ngFor="let item of accountTransactionData.agedPayablesReportDtoList">
-                                                    <td class="Bold" style="background-color:rgba(215, 217, 219, 0.925)" >Accounts Payable
-                                                          <div  class="lblOverdue" >Under: Liability</div>
-                                                    </td>
-                                                    <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                                    <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                    <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                                    <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                                    <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                    <td scope="row" class="Bold c" style="background-color:rgba(215, 217, 219, 0.925)">
-                                                         
-                                                        <div  class="lblOverdue"></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                     <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold" width="10"> S.NO. </td>
-                                                    <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Starting Balance </td >
-                                                    <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                                    <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                                    <td style="background-color:rgba(227, 231, 233, 0.925)" ></td>
-                                                    <td style="background-color:rgba(227, 231, 233, 0.925)" > </td>
-                                                    <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">23</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td > </td>
-                                                    <td>Mar 01, 2020</td >
-                                                    <td scope="row" >Bill Payment</td>
-                                                    <td scope="row" > </td>
-                                                    <td >34 invoice detail</td>
-                                                    <td> </td>
-                                                    <td class="c">23rs transaction page</td>
-                                               </tr>
-
-                                               <tr>
-                                                    <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> </td>
-                                                    <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Totals and Ending Balance </td >
-                                                    <td style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                                    <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                                    <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">₹188,736.32 </td>
-                                                    <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> ₹188,736.32  </td>
-                                                    <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">₹188,736.32 </td>
-                                                </tr>
-
-                                                <tr>
-                                                        <td  style="background-color:rgba(215, 217, 219, 0.925)" class="Bold"> </td>
-                                                        <td style="background-color:rgba(215, 217, 219, 0.925)" class="Bold">Balance Change
-                                                        <div  class="lblOverdue" >Difference between starting and ending balances</div></td >
-                                                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                        <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                                        <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)" class="c Bold">234 </td>
-                                               </tr>
-
-                                               <br><br><br>
-                                               <tr  *ngFor="let item of accountTransactionData.agedPayablesReportDtoList">
-                                                <td class="Bold" style="background-color:rgba(215, 217, 219, 0.925)" >indiaTax
-                                                      <div  class="lblOverdue" >Under: Liability > Sales Tax on Sales and Purchases</div>
-                                                </td>
-                                                <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                                <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                                <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                                <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                <td scope="row" class="Bold c" style="background-color:rgba(215, 217, 219, 0.925)">
-                                                     
-                                                    <div  class="lblOverdue"></div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                 <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold" width="10"> S.NO. </td>
-                                                <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Starting Balance </td >
-                                                <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                                <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                                <td style="background-color:rgba(227, 231, 233, 0.925)" ></td>
-                                                <td style="background-color:rgba(227, 231, 233, 0.925)" > </td>
-                                                <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">23</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td > </td>
-                                                <td>Mar 01, 2020</td >
-                                                <td scope="row" >Customer Name - 6 - Microbenz3.5%</td>
-                                                <td scope="row" > </td>
-                                                <td >34 customer vendor</td>
-                                                <td> </td>
-                                                <td class="c">23rs transaction page</td>
-                                           </tr>
-
-                                           <tr>
-                                                <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> </td>
-                                                <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Totals and Ending Balance </td >
-                                                <td style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                                <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                                <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">₹188,736.32 edit bill</td>
-                                                <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> ₹188,736.32  </td>
-                                                <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">₹188,736.32 </td>
-                                            </tr>
-
-                                            <tr>
-                                                    <td  style="background-color:rgba(215, 217, 219, 0.925)" class="Bold"> </td>
-                                                    <td style="background-color:rgba(215, 217, 219, 0.925)" class="Bold">Balance Change
-                                                    <div  class="lblOverdue" >Difference between starting and ending balances</div></td >
-                                                    <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                                    <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                    <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                                    <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                                    <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)" class="c Bold">234 </td>
-                                           </tr>
-
-                                           <br><br><br>
-
-                                           <tr  *ngFor="let item of accountTransactionData.agedPayablesReportDtoList">
-                                            <td class="Bold" style="background-color:rgba(215, 217, 219, 0.925)" >Shareholder Loan
-                                                  <div  class="lblOverdue" >Under: Liability > Due to You and Other Business Owners</div>
-                                            </td>
-                                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                            <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                            <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                            <td scope="row" class="Bold c" style="background-color:rgba(215, 217, 219, 0.925)">
-                                                 
-                                                <div  class="lblOverdue"></div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                             <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold" width="10"> S.NO. </td>
-                                            <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Starting Balance </td >
-                                            <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                            <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                            <td style="background-color:rgba(227, 231, 233, 0.925)" ></td>
-                                            <td style="background-color:rgba(227, 231, 233, 0.925)" > </td>
-                                            <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">23</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td > </td>
-                                            <td>Mar 01, 2020</td >
-                                            <td scope="row" >Invoice/bill payment</td>
-                                            <td scope="row" > </td>
-                                            <td >Accounts trasaction23</td>
-                                            <td> </td>
-                                            <td class="c">23rs transaction page</td>
-                                       </tr>
-
-                                       <tr>
-                                            <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> </td>
-                                            <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Totals and Ending Balance </td >
-                                            <td style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                            <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                            <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">₹188,736.32 edit bill</td>
-                                            <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> ₹188,736.32  </td>
-                                            <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">₹188,736.32 </td>
-                                        </tr>
-
-                                        <tr>
-                                                <td  style="background-color:rgba(215, 217, 219, 0.925)" class="Bold"> </td>
-                                                <td style="background-color:rgba(215, 217, 219, 0.925)" class="Bold">Balance Change
-                                                <div  class="lblOverdue" >Difference between starting and ending balances</div></td >
-                                                <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                                <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                                <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                                <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                                <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)" class="c Bold">234 </td>
-                                       </tr>
-
-                                       <br><br><br>
-
-                                       <tr  *ngFor="let item of accountTransactionData.agedPayablesReportDtoList">
-                                        <td class="Bold" style="background-color:rgba(215, 217, 219, 0.925)" >Sales
-                                              <div  class="lblOverdue" >Under: Income > Income</div>
-                                        </td>
-                                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                        <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                        <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                        <td scope="row" class="Bold c" style="background-color:rgba(215, 217, 219, 0.925)">
-                                             
-                                            <div  class="lblOverdue"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                         <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold" width="10"> S.NO. </td>
-                                        <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Starting Balance </td >
-                                        <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                        <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                        <td style="background-color:rgba(227, 231, 233, 0.925)" ></td>
-                                        <td style="background-color:rgba(227, 231, 233, 0.925)" > </td>
-                                        <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">23</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td > </td>
-                                        <td>Mar 01, 2020</td >
-                                        <td scope="row" >Invoicedetail</td>
-                                        <td scope="row" > </td>
-                                        <td >23</td>
-                                        <td> </td>
-                                        <td class="c">23rs transaction pag</td>
-                                   </tr>
-
-                                   <tr>
-                                        <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> </td>
-                                        <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Totals and Ending Balance </td >
-                                        <td style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                        <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                        <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">₹188,736.32 edit bill</td>
-                                        <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> ₹188,736.32  </td>
-                                        <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">₹188,736.32 </td>
-                                    </tr>
-
-                                    <tr>
-                                            <td  style="background-color:rgba(215, 217, 219, 0.925)" class="Bold"> </td>
-                                            <td style="background-color:rgba(215, 217, 219, 0.925)" class="Bold">Balance Change
-                                            <div  class="lblOverdue" >Difference between starting and ending balances</div></td >
-                                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                            <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                            <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)" class="c Bold">234 </td>
-                                   </tr>
-
-                                   <br><br><br>
-
-                                   <tr  *ngFor="let item of accountTransactionData.agedPayablesReportDtoList">
-                                    <td class="Bold" style="background-color:rgba(215, 217, 219, 0.925)" >Computer – Hardware Expense Category
-                                          <div  class="lblOverdue" >Under: Expense > Operating Expense</div>
-                                    </td>
-                                    <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                    <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                    <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                    <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                    <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                    <td scope="row" class="Bold c" style="background-color:rgba(215, 217, 219, 0.925)">
-                                         
-                                        <div  class="lblOverdue"></div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                     <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold" width="10"> S.NO. </td>
-                                    <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Starting Balance </td >
-                                    <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                    <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                    <td style="background-color:rgba(227, 231, 233, 0.925)" ></td>
-                                    <td style="background-color:rgba(227, 231, 233, 0.925)" > </td>
-                                    <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">23</td>
-                                </tr>
-
-                                <tr>
-                                    <td > </td>
-                                    <td>Mar 01, 2020</td >
-                                    <td scope="row" >Invoicedetail</td>
-                                    <td scope="row" > </td>
-                                    <td >23</td>
-                                    <td> </td>
-                                    <td class="c">23rs transaction pag</td>
-                               </tr>
-
-                               <tr>
-                                    <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> </td>
-                                    <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Totals and Ending Balance </td >
-                                    <td style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                    <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                    <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">₹188,736.32 edit bill</td>
-                                    <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> ₹188,736.32  </td>
-                                    <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">₹188,736.32 </td>
-                                </tr>
-
-                                <tr>
-                                        <td  style="background-color:rgba(215, 217, 219, 0.925)" class="Bold"> </td>
-                                        <td style="background-color:rgba(215, 217, 219, 0.925)" class="Bold">Balance Change
-                                        <div  class="lblOverdue" >Difference between starting and ending balances</div></td >
-                                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                        <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                        <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)" class="c Bold">234 </td>
-                               </tr>
-                                                    
-                               <br><br><br>
-
-                               <tr  *ngFor="let item of accountTransactionData.agedPayablesReportDtoList">
-                                <td class="Bold" style="background-color:rgba(215, 217, 219, 0.925)" >Depreciation Expense
-                                      <div  class="lblOverdue" >Under: Expense > Operating Expense</div>
-                                </td>
-                                <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                <td scope="row" class="Bold c" style="background-color:rgba(215, 217, 219, 0.925)">
-                                     
-                                    <div  class="lblOverdue"></div>
-                                </td>
-                            </tr>
-                            <tr>
-                                 <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold" width="10"> S.NO. </td>
-                                <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Starting Balance </td >
-                                <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                <td style="background-color:rgba(227, 231, 233, 0.925)" ></td>
-                                <td style="background-color:rgba(227, 231, 233, 0.925)" > </td>
-                                <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">23</td>
-                            </tr>
-
-                            <tr>
-                                <td > </td>
-                                <td>Mar 01, 2020</td >
-                                <td scope="row" >TRANSACTIONS</td>
-                                <td scope="row" > </td>
-                                <td >23</td>
-                                <td> </td>
-                                <td class="c">23rs transaction pag</td>
-                           </tr>
-
-                           <tr>
-                                <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> </td>
-                                <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Totals and Ending Balance </td >
-                                <td style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                                <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                                <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">₹188,736.32 edit bill</td>
-                                <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> ₹188,736.32  </td>
-                                <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">₹188,736.32 </td>
-                            </tr>
-
-                            <tr>
-                                    <td  style="background-color:rgba(215, 217, 219, 0.925)" class="Bold"> </td>
-                                    <td style="background-color:rgba(215, 217, 219, 0.925)" class="Bold">Balance Change
-                                    <div  class="lblOverdue" >Difference between starting and ending balances</div></td >
-                                    <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                    <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                    <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                    <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                    <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)" class="c Bold">234 </td>
-                           </tr>
-
-                           <br><br><br>
-
-                           <tr  *ngFor="let item of accountTransactionData.agedPayablesReportDtoList">
-                            <td class="Bold" style="background-color:rgba(215, 217, 219, 0.925)" >
-                                Equipment Lease or Rental
-                                  <div  class="lblOverdue" >Under: Expense > Operating Expense</div>
-                            </td>
-                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                            <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                            <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                            <td scope="row" class="Bold c" style="background-color:rgba(215, 217, 219, 0.925)">
-                                 
-                                <div  class="lblOverdue"></div>
-                            </td>
-                        </tr>
-                        <tr>
-                             <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold" width="10"> S.NO. </td>
-                            <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Starting Balance </td >
-                            <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                            <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                            <td style="background-color:rgba(227, 231, 233, 0.925)" ></td>
-                            <td style="background-color:rgba(227, 231, 233, 0.925)" > </td>
-                            <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">23</td>
-                        </tr>
-
-                        <tr>
-                            <td > </td>
-                            <td>Mar 01, 2020</td >
-                            <td scope="row" >Bill edit</td>
-                            <td scope="row" > </td>
-                            <td >23</td>
-                            <td> </td>
-                            <td class="c">223vendor</td>
-                       </tr>
-
-                       <tr>
-                            <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> </td>
-                            <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Totals and Ending Balance </td >
-                            <td style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                            <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                            <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">₹188,736.32 edit bill</td>
-                            <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> ₹188,736.32  </td>
-                            <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">₹188,736.32 </td>
-                        </tr>
-
-                        <tr>
-                                <td  style="background-color:rgba(215, 217, 219, 0.925)" class="Bold"> </td>
-                                <td style="background-color:rgba(215, 217, 219, 0.925)" class="Bold">Balance Change
-                                <div  class="lblOverdue" >Difference between starting and ending balances</div></td >
-                                <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                                <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                                <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                                <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                                <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)" class="c Bold">234 </td>
-                       </tr>
-
-                       <br><br><br>
-                       <tr  *ngFor="let item of accountTransactionData.agedPayablesReportDtoList">
-                        <td class="Bold" style="background-color:rgba(215, 217, 219, 0.925)" >
-                            Insurance – Vehicles
-                              <div  class="lblOverdue" >Under: Expense > Operating Expense</div>
-                        </td>
-                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                        <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                        <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                        <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                        <td scope="row" class="Bold c" style="background-color:rgba(215, 217, 219, 0.925)">
-                             
-                            <div  class="lblOverdue"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                         <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold" width="10"> S.NO. </td>
-                        <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Starting Balance </td >
-                        <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                        <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                        <td style="background-color:rgba(227, 231, 233, 0.925)" ></td>
-                        <td style="background-color:rgba(227, 231, 233, 0.925)" > </td>
-                        <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">23</td>
-                    </tr>
-
-                    <tr>
-                        <td > </td>
-                        <td>Mar 01, 2020</td >
-                        <td scope="row" >Bill edit</td>
-                        <td scope="row" > </td>
-                        <td >23</td>
-                        <td> </td>
-                        <td class="c">223vendor</td>
-                   </tr>
-
-                   <tr>
-                        <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> </td>
-                        <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">  Totals and Ending Balance </td >
-                        <td style="background-color:rgba(227, 231, 233, 0.925)"></td>
-                        <td scope="row" style="background-color:rgba(227, 231, 233, 0.925)"> </td>
-                        <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold">₹188,736.32 edit bill</td>
-                        <td style="background-color:rgba(227, 231, 233, 0.925)" class="Bold"> ₹188,736.32  </td>
-                        <td  style="background-color:rgba(227, 231, 233, 0.925)" class="Bold c">₹188,Expense Category </td>
-                    </tr>
-
-                    <tr>
-                            <td  style="background-color:rgba(215, 217, 219, 0.925)" class="Bold"> </td>
-                            <td style="background-color:rgba(215, 217, 219, 0.925)" class="Bold">Balance Change
-                            <div  class="lblOverdue" >Difference between starting and ending balances</div></td >
-                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"></td>
-                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)"> </td>
-                            <td style="background-color:rgba(215, 217, 219, 0.925)" ></td>
-                            <td style="background-color:rgba(215, 217, 219, 0.925)" > </td>
-                            <td scope="row" style="background-color:rgba(215, 217, 219, 0.925)" class="c Bold">234 </td>
-                   </tr>
-
-                  
+                                                    <tbody *ngFor="let head of accountTransactionData.bankList">
+                                                           <tr class="accHeading">
+                                                               <td colspan="10" >{{head.accountName}}</td>
+                                                           </tr>
+                                                           <tr class="accSubHeading">
+                                                               <td colspan="4">Starting Balance</td>
+                                                               <td class="pull-right">{{head.startingBalance}}</td>
+                                                            </tr>
+                                                            <tr *ngFor="let item of head.transactions">
+                                                                <td >{{item.transactionDate | date}}</td>
+                                                                <td >{{getTransactionDesc(item.transactionType)}}</td>
+                                                                <td >{{item.debitAmount}}</td>
+                                                                <td >{{item.creditAmount}}</td>
+                                                                <td class="pull-right">{{item.balance}}</td>
+                                                             </tr>
+                                                            <tr class="accSubHeading">
+                                                                <td colspan="2">Totals and Ending Balance</td>
+                                                                <td>{{head.totalAndEndingBalanceDebitAmount}}</td>
+                                                                <td>{{head.totalAndEndingBalanceCreditAmount}}</td>
+                                                                <td class="pull-right">{{head.totalAndEndingBalance}}</td>
+                                                            </tr>
+                                                            <tr colspan="10"  class="accHeading">
+                                                                <td>Balance Change<br/>
+                                                                   <span style="font-size:0.7em">Difference between starting and ending balances</span>
+                                                                </td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td colspan="5" class="pull-right">{{head.totalAndEndingBalance}}</td>
+                                                            </tr>
+                                                            <br/><br/>
                                                     </tbody>
-                                                 </table>
-                                           </div>
-                                     </div>
-                                    </div>
-    
-    
-                            </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-        <div class="kt-content kt-grid__item kt-grid__item--fluid" id="kt_content">
-            <div class="row">
-                <div class="col-md-12" *blockUI="'container-blockui'">
-                    <div class="kt-portlet">
-                            <div class="kt-portlet__body">
-                                <div class="container">
-                                    <div class="row justify-content-center">  
-                                      <div class="row-12"></div> <br>
-                                          <div class="col-12"> 
-                                                <table class="table table-striped" id="my-table">
-                                                    <thead>
-                                                        <tr >
-                                                            <th></th>
-                                                            <th style="width:25%" style="font-size:15px">PAYMENTS AND BALANCES OWING</th>
-                                                            <th style="width:15%" style="text-align:right" style="font-size:15px">As of {{fromDate | date}}</th>
-                                                            <th scope="col" >      </th>
-                                                            <th scope="col"></th>
-                                                            <th scope="col" style="width:20%" style="text-align:right" style="font-size:15px"> As of {{toDate | date}}</th>
-                                                           
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                            <tr>
-                                                                <td >
-                                                                    S.NO.
-                                                                </td>
-                                                                <td >
-                                                                    Tax
-                                                                </td>
-                                                                <td >
-                                                                    Starting Balance
-                                                                </td>
-                                                                <td scope="row" >
-                                                                    Net Tax Owing
-                                                                </td>
-                                                                <td scope="row">
-                                                                    Less Payments to Government
-                                                                </td>
-                                                                <td >
-                                                                    Ending Balance
-                                                                </td>
-                                                            
-                                                        </tr>
-                                                        <tr *ngFor="let item of accountTransactionData.salesTaxReportDtosList; index as $index;">
-                                                            <!-- accountTransactionData -->
-                                                        <!-- <tr> -->
-                                                            <td scope="row">
-                                                                {{($index + 1)}}
-                                                            </td>
-                                                            <td scope="row">
-                                                                {{item.tax }}
-                                                            </td>
-                                                            <td scope="row">
-                                                                {{item.startingBalance | currency}}
-                                                            </td>
-                                                            <td scope="row">
-                                                                {{item.netTaxOwing | currency}}
-                                                            </td>
-                                                            <td scope="row">
-                                                                <!-- {{item.lessPaymentToGovt | currency}} -->
-                                                                $0.00
-                                                            </td>
-                                                            <td scope="row">
-                                                                {{item.endingBalance | currency}}
-                                                            </td>
-                                                            
-                                                        </tr>
-                                                        <tr>
-                                                           <td></td>
-                                                            <td class="Bold">
-                                                                Total 
-                                                            </td>
-                                                            <td scope="row" class="Bold">
-                                                                {{allStartingBalance | currency}}
-                                                            </td>
-                                                            <td scope="row" class="Bold">
-                                                                {{allNetTaxOwing | currency}}
-                                                            </td>
-                                                            <td scope="row" class="Bold">
-                                                                <!-- {{allLessPaymenttoGovt | currency}} -->
-                                                                $0.00
-                                                            </td>
-                                                            <td scope="row" class="Bold">
-                                                                {{allEndingBalance | currency}}
-                                                            </td>
-                                                            
-                                                        </tr>
-                                                    </tbody>
+                                                   
                                                  </table>
                                            </div>
                                      </div>
@@ -943,9 +252,9 @@
     </div>
 
     <!-- report sample  -->
-    <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+    <!-- <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid"> -->
 		<!--begin::Portlet-->
-<div class="kt-portlet">
+<!-- <div class="kt-portlet">
     <div class="kt-invoice-2">
         <div class="kt-invoice__head">
             <div class="kt-invoice__container">
@@ -1047,7 +356,7 @@
             </div>
         </div>
     </div>
-</div>
-    </div>
+</div> -->
+    <!-- </div> -->
     </form>
   

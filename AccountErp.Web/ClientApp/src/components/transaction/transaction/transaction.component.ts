@@ -64,7 +64,7 @@ export class TransactionComponent implements OnInit {
               debugger;
               self.http
 
-                  .post<DataTableResponseModel>(this.appSettings.ApiBaseUrl + 'Customer/paged-result', dataTablesParameters, {})
+                  .post<DataTableResponseModel>(this.appSettings.ApiBaseUrl + 'Transaction/paged-result', dataTablesParameters, {})
                   .subscribe(resp => {
                       callback({
                           recordsTotal: resp.recordsTotal,
@@ -75,133 +75,169 @@ export class TransactionComponent implements OnInit {
           },
           columns: [
               {
-                  data: 'firstName',
-                  title: `<input type='checkbox'>Select ALL`,
+                  data: 'id',
+                  title: "ID",
                   width: '20%',
-                  render: function (data, type, row) {
-                      if (row.middleName == null) {
-                          row.middleName = "";
-                      }
-                      if (row.lastName == null) {
-                          row.lastName = "";
-                      }
-                      return `<input type='checkbox'>`;
-                  }
+                 
               },
               {
-                  data: 'email',
-                  title: '',
+                  data: 'transactionId',
+                  title: 'TR_ID',
+                  width: '20%',
+                 
+              },
+              {
+                data: 'bankAccountName',
+                title: 'AccName',
+                width: '20%',
+               
+            },
+
+              
+              {
+                data: 'transactionType',
+                title: 'Transaction',
+                width: '20%',
+                render: function (data) {
+                  return data === 0
+                      ?  "Customer Payment"
+                      : data === 1
+                      ? "Invoice"
+                      : data === 2 
+                      ? "VendorPayment"
+                      : data === 3
+                      ? "Bill"
+                      : data === 4
+                      ? "Income"
+
+                      : "Expense";
+              }
+            },
+              {
+                  data: 'description',
+                  title: 'Description',
                   width: '20%'
               },
               {
-                  data: 'phone',
-                  title: '',
+                  data: 'contactName',
+                  title: 'Contact',
                   width: '20%',
-                  render: function (data, type, row) {
-                      return self.appUtils.applyPhoneMask(data);
-                  }
+                 
               },
               {
-                  data: 'discount',
-                  title: '',
-                  width: '20%',
-                  render: function (data, type, row) {
-                      return self.appUtils.getWithPercentageSign(data);
-                  }
-              },
+                data: 'transactionDate',
+                title: 'Transaction Date',
+                width: '20%',
+                render: function (data) {
+                    return self.appUtils.getFormattedDate(data, null);
+                }
+               
+            },
+            {
+                data: 'debitAmount',
+                title: 'Debit Amount',
+                width: '20%',
+               
+            },
+            {
+                data: 'creditAmount',
+                title: 'Credit Amount',
+                width: '20%',
+               
+            },
               {
                   data: 'status',
                   title: '',
                   width: '10%',
                   render: function (data) {
                       return data === 1
-                          ? '<span class="kt-badge kt-badge--success kt-badge--inline">Active</span>'
-                          : '<span class="kt-badge kt-badge--danger kt-badge--inline">Inactive</span>';
+                          ? '<span class="kt-badge kt-badge--success kt-badge--inline">Paid</span>'
+                          : '<span class="kt-badge kt-badge--danger kt-badge--inline">Pending</span>';
                   }
               },
-              {
-                  data: null,
-                  title: '',
-                  width: '10%',
-                  orderable: false,
-                  className: 'text-center',
-             /*      render: function (data, type, row) {
-                      const statusHtml =
-                          row.status === 1
-                              ? `<i class='fa fa-ban cursor-pointer m-r-5' title='Deactivate' action-type='toggle-status'></i>`
-                              : row.status === 2
-                                  ? `<i class='fa fa-check cursor-pointer m-r-5' title='Activate' action-type='toggle-status'></i>`
-                                  : '';
+            //   {
+            //       data: null,
+            //       title: '',
+            //       width: '10%',
+            //       orderable: false,
+            //       className: 'text-center',
+            //  /*      render: function (data, type, row) {
+            //           const statusHtml =
+            //               row.status === 1
+            //                   ? `<i class='fa fa-ban cursor-pointer m-r-5' title='Deactivate' action-type='toggle-status'></i>`
+            //                   : row.status === 2
+            //                       ? `<i class='fa fa-check cursor-pointer m-r-5' title='Activate' action-type='toggle-status'></i>`
+            //                       : '';
 
-                      const htmlString = statusHtml
-                          + `<i class='fa fa-edit cursor-pointer m-r-3' title='Edit' action-type='edit'></i>`
-                          + `<i class='fa fa-trash cursor-pointer' title='Delete' action-type='delete'></i>`;
+            //           const htmlString = statusHtml
+            //               + `<i class='fa fa-edit cursor-pointer m-r-3' title='Edit' action-type='edit'></i>`
+            //               + `<i class='fa fa-trash cursor-pointer' title='Delete' action-type='delete'></i>`;
 
-                      return htmlString;
-                  } */
-                  render: function (data, type, row) {
-                      const htmlString = 
-                      ` <button type="button" class="btn btn-outline-success btn-sm dropdown-toggle"
-                      data-toggle="dropdown">
-                      Action
-                  </button>
-                  <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
-                      <ul class="kt-nav">`
-                          const htmlStatus=
-                          row.status === 1
-                          ?`<li class="kt-nav__item">
-                          <a class="kt-nav__link">
-                              <em class="kt-nav__link-icon la la-ban"></em>
-                              <span class="kt-nav__link-text" action-type = 'toggle-status'>Deactivate</span>
-                          </a>
-                      </li>`
-                      :`<li class="kt-nav__item">
-                              <a  class="kt-nav__link">
-                                  <em class="kt-nav__link-icon la la-check"></em>
-                                  <span class="kt-nav__link-text" action-type = 'toggle-status'>Activate</span>
-                              </a>
-                          </li>`
+            //           return htmlString;
+            //       } */
+            //       render: function (data, type, row) {
+            //           const htmlString = 
+            //           ` <button type="button" class="btn btn-outline-success btn-sm dropdown-toggle"
+            //           data-toggle="dropdown">
+            //           Action
+            //       </button>
+            //       <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
+            //           <ul class="kt-nav">`
+            //               const htmlStatus=
+            //               row.status === 1
+            //               ?`<li class="kt-nav__item">
+            //               <a class="kt-nav__link">
+            //                   <em class="kt-nav__link-icon la la-ban"></em>
+            //                   <span class="kt-nav__link-text" action-type = 'toggle-status'>Deactivate</span>
+            //               </a>
+            //           </li>`
+            //           :`<li class="kt-nav__item">
+            //                   <a  class="kt-nav__link">
+            //                       <em class="kt-nav__link-icon la la-check"></em>
+            //                       <span class="kt-nav__link-text" action-type = 'toggle-status'>Activate</span>
+            //                   </a>
+            //               </li>`
 
-                          const htmlString2=htmlString +htmlStatus
+            //               const htmlString2=htmlString +htmlStatus
                           
-                          +`<li class="kt-nav__item">
-                              <a class="kt-nav__link">
-                                  <em class="kt-nav__link-icon la la-edit"></em>
-                                  <span class="kt-nav__link-text" action-type='edit'> Edit</span>
-                              </a>
-                          </li>
-                          <li class="kt-nav__item">
-                              <a class="kt-nav__link">
-                                  <em class="kt-nav__link-icon la la-file"></em>
-                                  <span class="kt-nav__link-text" action-type='view-detail'>
-                                      View Detail
-                                  </span>
-                              </a>
-                          </li>
-                          <li class="kt-nav__item">
-                          <a class="kt-nav__link">
-                              <em class="kt-nav__link-icon la la-trash"></em>
-                              <span class="kt-nav__link-text" action-type='delete'>
-                                  Delete
-                              </span>
-                          </a>
-                      </li>
-                      </ul>
-                  </div>`
-                      // const statusHtml =
-                      //     row.status === 1
-                      //         ? `<em class='fa fa-ban cursor-pointer m-r-5' title='Deactivate' action-type='toggle-status'></em>`
-                      //         : row.status === 2
-                      //             ? `<em class='fa fa-check cursor-pointer m-r-5' title='Activate' action-type='toggle-status'></em>`
-                      //             : '';
+            //               +`<li class="kt-nav__item">
+            //                   <a class="kt-nav__link">
+            //                       <em class="kt-nav__link-icon la la-edit"></em>
+            //                       <span class="kt-nav__link-text" action-type='edit'> Edit</span>
+            //                   </a>
+            //               </li>
+            //               <li class="kt-nav__item">
+            //                   <a class="kt-nav__link">
+            //                       <em class="kt-nav__link-icon la la-file"></em>
+            //                       <span class="kt-nav__link-text" action-type='view-detail'>
+            //                           View Detail
+            //                       </span>
+            //                   </a>
+            //               </li>
+            //               <li class="kt-nav__item">
+            //               <a class="kt-nav__link">
+            //                   <em class="kt-nav__link-icon la la-trash"></em>
+            //                   <span class="kt-nav__link-text" action-type='delete'>
+            //                       Delete
+            //                   </span>
+            //               </a>
+            //           </li>
+            //           </ul>
+            //       </div>`
+            //           // const statusHtml =
+            //           //     row.status === 1
+            //           //         ? `<em class='fa fa-ban cursor-pointer m-r-5' title='Deactivate' action-type='toggle-status'></em>`
+            //           //         : row.status === 2
+            //           //             ? `<em class='fa fa-check cursor-pointer m-r-5' title='Activate' action-type='toggle-status'></em>`
+            //           //             : '';
 
-                      // const htmlString = statusHtml
-                      //     + `<em class='fa fa-edit cursor-pointer m-r-3' title='Edit' action-type='edit'></em>`
-                      //     + `<em class='fa fa-trash cursor-pointer' title='Delete' action-type='delete'></em>`;
+            //           // const htmlString = statusHtml
+            //           //     + `<em class='fa fa-edit cursor-pointer m-r-3' title='Edit' action-type='edit'></em>`
+            //           //     + `<em class='fa fa-trash cursor-pointer' title='Delete' action-type='delete'></em>`;
 
-                      return htmlString2;
-                  }
-              }
+            //           return htmlString2;
+            //       }
+            //   }
           ],
           rowCallback: function (row, data: any) {
               const toggleStatusElem = $(row).find('[action-type = "toggle-status"]');

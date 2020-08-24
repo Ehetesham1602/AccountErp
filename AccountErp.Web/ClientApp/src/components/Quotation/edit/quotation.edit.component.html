@@ -165,8 +165,8 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-12" [ngClass]="{'disableDiv': customerDiscount==undefined}">
-                    <app-item-selected [selectedItems]="selectedItems" [customerDiscount]="customerDiscount" [itemId]="itemId" [selectedTax]="selectedTax" (updateTotalAmount)="updateTotalAmount()" [readOnly]="false" (deleteItem)="deleteItem($event)">
+                  <div class="col-12">
+                    <app-item-selected [selectedItems]="selectedItems" [isForSale]="isForSale" [customerDiscount]="customerDiscount" [itemId]="itemId" [selectedTax]="selectedTax" (updateTotalAmount)="updateTotalAmount()" [readOnly]="false" (deleteItem)="deleteItem($event)">
                     </app-item-selected>
                   </div>
                 </div>

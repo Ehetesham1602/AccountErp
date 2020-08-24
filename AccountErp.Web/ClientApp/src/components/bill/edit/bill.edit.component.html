@@ -39,7 +39,10 @@
                 <div class="col-md-8">
                   <input type="text" name="billNumber"  #billNumber="ngModel" class="form-control" autocomplete="off"
                   [(ngModel)]="model.billNumber" maxlength="100" placeholder=""
-                  appAlphaNumericsLevelTwo readonly />
+                  appAlphaNumericsLevelTwo required />
+                  <div class="validation-error-message" *ngIf="f.submitted && !billNumber.valid">
+                    Bill No. is required
+                  </div>
                 </div>
                 </div>
 
@@ -172,8 +175,8 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-12" [ngClass]="{'disableDiv': customerDiscount==undefined}">
-                  <app-item-selected [selectedItems]="selectedItems" [itemId]="itemId" [selectedTax]="selectedTax" [readOnly]="false" (deleteItem)="deleteItem($event)" (updateTotalAmount)="updateTotalAmount()">
+                <div class="col-12">
+                  <app-item-selected [customerDiscount]="customerDiscount" [isForSale]="isForSale"  [selectedItems]="selectedItems" [itemId]="itemId" [selectedTax]="selectedTax" [readOnly]="false" (deleteItem)="deleteItem($event)" (updateTotalAmount)="updateTotalAmount()">
                   </app-item-selected>
                   <div class="row">
                     <div class="col-12">

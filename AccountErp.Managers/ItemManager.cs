@@ -79,5 +79,18 @@ namespace AccountErp.Managers
             await _repository.DeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<ItemDetailDto>> GetAllForSalesAsync(Constants.RecordStatus? status = null)
+        {
+            return await _repository.GetAllForSalesAsync(status);
+        }
+
+        public async Task<IEnumerable<ItemDetailDto>> GetAllForExpenseAsync(Constants.RecordStatus? status = null)
+        {
+            return await _repository.GetAllForExpenseAsync(status);
+        }
+
+
+        
     }
 }

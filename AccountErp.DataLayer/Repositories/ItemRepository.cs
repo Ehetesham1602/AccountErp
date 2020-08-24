@@ -184,5 +184,69 @@ namespace AccountErp.DataLayer.Repositories
             item.Status = Constants.RecordStatus.Deleted;
             _dataContext.Items.Update(item);
         }
+
+        public async Task<IEnumerable<ItemDetailDto>> GetAllForSalesAsync(Constants.RecordStatus? status = null)
+        {
+            return await(from s in _dataContext.Items
+                         join c in _dataContext.SalesTaxes
+                         on s.SalesTaxId equals c.Id
+                        into groupjoin_Sales
+                         from c in groupjoin_Sales.DefaultIfEmpty()
+                         where status == null
+                           ? s.Status != Constants.RecordStatus.Deleted
+                           : s.Status == status.Value  && s.isForSell==true
+                         orderby s.Name
+                         select new ItemDetailDto
+                         {
+                             Id = s.Id,
+                             Name = s.Name,
+                             Rate = s.Rate,
+                             Description = s.Description,
+                             IsTaxable = s.IsTaxable,
+                             TaxCode = s.SalesTax.Code,
+                             TaxPercentage = s.SalesTax.TaxPercentage,
+                             Status = s.Status,
+                             SalesTaxId = s.SalesTaxId,
+                             isForSell = s.isForSell,
+                             BankAccountId = s.BankAccountId,
+                             TaxBankAccountId = c.BankAccountId
+                         })
+                        .AsNoTracking()
+                          .ToListAsync();
+        }
+
+
+
+        public async Task<IEnumerable<ItemDetailDto>> GetAllForExpenseAsync(Constants.RecordStatus? status = null)
+        {
+            return await (from s in _dataContext.Items
+                          join c in _dataContext.SalesTaxes
+                          on s.SalesTaxId equals c.Id
+                         into groupjoin_Sales
+                          from c in groupjoin_Sales.DefaultIfEmpty()
+                          where status == null
+                            ? s.Status != Constants.RecordStatus.Deleted
+                            : s.Status == status.Value && s.isForSell == false
+                          orderby s.Name
+                          select new ItemDetailDto
+                          {
+                              Id = s.Id,
+                              Name = s.Name,
+                              Rate = s.Rate,
+                              Description = s.Description,
+                              IsTaxable = s.IsTaxable,
+                              TaxCode = s.SalesTax.Code,
+                              TaxPercentage = s.SalesTax.TaxPercentage,
+                              Status = s.Status,
+                              SalesTaxId = s.SalesTaxId,
+                              isForSell = s.isForSell,
+                              BankAccountId = s.BankAccountId,
+                              TaxBankAccountId = c.BankAccountId
+                          })
+                        .AsNoTracking()
+                          .ToListAsync();
+        }
+
+        
     }
 }

@@ -19,10 +19,7 @@ export class AccountBalancesComponent implements OnInit {
   @ViewChild('htmlData', {static: false}) htmlData: ElementRef;
   @BlockUI('container-blockui') blockUI: NgBlockUI;
 
-  accountBalanceData={totalAmount:0,totalUnpaidAmount:0,totalNotYetOverDue:0,totalCountNotYetOverDue:0,
-    totalLessThan30:0,totalCountLessThan30 :0,totalCountThirtyFirstToSixty:0,
-    totalThirtyFirstToSixty:0,totalSixtyOneToNinety:0,totalCountSixtyOneToNinety:0,
-    totalMoreThanNinety:0,totalCountMoreThanNinety:0,agedPayablesReportDtoList:[{}]};
+  accountBalanceData={totalDebitAmount:0,totalCreditAmount:0,accountBalanceReportDtoList:[{}]};
   model: AccountBalanceDetail = new AccountBalanceDetail();
   selectedstType = 'accural';
   startDate;
@@ -37,29 +34,15 @@ export class AccountBalancesComponent implements OnInit {
   allNetMovementBalance;
   allEndingBalance;
 
-  allStartingBalanceLiabilites;
-  allDebitLiabilites;
-  allCreditLiabilites;
-  allNetMovementLiabilites;
-  allEndingLiabilites;
-
-  allStartingBalanceEquity;
-  allDebitEquity;
-  allCreditEquity;
-  allNetMovementEquity;
-  allEndingEquity;
-
-  allDebitIncome;
-  allCreditIncome;
-  allNetMovementIncome;
-
+  allTotalDebitAmount;
+  allTotalCreditAmount;
    allDebitExpense;
    allCreditExpense;
    allNetMovementExpense;
 
    allDebitExpTotal;
    allCreditExpTotal;
-
+   statement;
   temp;
 
   constructor(private appSettings: AppSettings,
@@ -68,117 +51,169 @@ export class AccountBalancesComponent implements OnInit {
         private appUtils: AppUtils) { }
 
   ngOnInit() {
+    this.showAccountBalance();
+   this.setDefaultDate();
+  
   }
 
   showAccountBalance() {
     // this.purchaseVendortData = {vendorReportsList={}};
     console.log("from",this.fromDate);
-    console.log("from",this.toDate);
+    console.log("from",this.endDate);
     // if (this.selectedVendor !== undefined) {
      debugger;
      var body={ 
-      "vendorId": 0,
-      //  "vendorId": this.selectedVendor.keyInt,
-     "vendorName": "string",
-    //  "startDate":  this.fromDate,
-    //  "endDate": this.toDate,
-    //  "totalPaidAmount": 0,
-    //  "totalAmount": 0,
-    //  "status": "string"
-    //  "vendorId": 0,
-     "asOfDate": "2020-07-21T06:21:14.033Z"};
-     
- 
+      "startDate": this.fromDate,
+      "endDate": this.toDate};
+      // "startDate": "2020-01-01T16:39:31.081Z",
+      //  "endDate": "2020-08-09T16:39:31.081Z"};
+
      this.accountBalanceService.getAccountBalance(body)
      .subscribe(
          (data) => {
            debugger
-           console.log("statement",data);
-          // Object.assign(this.temp, data);
-              Object.assign(this.accountBalanceData, data);
-              this.allStartingBalance=this.accountBalanceData.totalAmount;
-              this.allCreditBalance=this.accountBalanceData.totalUnpaidAmount;
-              this.allDebitBalance=this.accountBalanceData.totalNotYetOverDue;
-              this.allNetMovementBalance=this.accountBalanceData.totalCountNotYetOverDue;
-              this.allEndingBalance=this.accountBalanceData.totalLessThan30;
+           this.statement=[];
+           Object.assign(this.statement,data);
+           console.log("accbal",this.statement);
+           this.allTotalDebitAmount = this.accountBalanceData.totalDebitAmount;
+           this.allTotalCreditAmount = this.accountBalanceData.totalCreditAmount;
+           this.temp.accountBalanceReportDtoList.map((item) => {
+            debugger;
+             item.totalUnpaidAmount=item.totalAmount;
+         });
 
-              this.allStartingBalanceLiabilites=this.accountBalanceData.totalCountLessThan30;
-              this.allDebitLiabilites=this.accountBalanceData.totalThirtyFirstToSixty;
-              this.allCreditLiabilites=this.accountBalanceData.totalCountThirtyFirstToSixty;
-              this.allNetMovementLiabilites=this.accountBalanceData.totalSixtyOneToNinety;
-              this.allEndingLiabilites=this.accountBalanceData.totalCountSixtyOneToNinety;
-
-              this.allStartingBalanceEquity=this.accountBalanceData.totalMoreThanNinety;
-              this.allDebitEquity=this.accountBalanceData.totalCountMoreThanNinety;
-              this.allCreditEquity=this.accountBalanceData.totalUnpaidAmount;
-              this.allNetMovementEquity=this.accountBalanceData.totalAmount;
-              this.allEndingEquity=this.accountBalanceData.totalCountSixtyOneToNinety;
-
-
-
-              this.allDebitIncome=this.accountBalanceData.totalMoreThanNinety;
-              this.allCreditIncome=this.accountBalanceData.totalCountMoreThanNinety;
-              this.allNetMovementIncome=this.accountBalanceData.totalUnpaidAmount;
-
-
-              this.allDebitExpense=this.accountBalanceData.totalMoreThanNinety;
-              this.allCreditExpense=this.accountBalanceData.totalCountMoreThanNinety;
-              this.allNetMovementExpense=this.accountBalanceData.totalUnpaidAmount;
-
-              this.allDebitExpTotal=this.accountBalanceData.totalCountMoreThanNinety;
-              this.allCreditExpTotal=this.accountBalanceData.totalUnpaidAmount;
-              
-              this.temp.agedPayablesReportDtoList.map((item) => {
-               debugger;
-                item.totalUnpaidAmount=item.totalAmount;
-            });
-          //  this.CalculateTotalPurchase();
          });
       //  }
    }
-  public openPDF(): void {
+
+
+   public openPDF(): void {
     const doc = new jsPDF('p', 'pt', 'a4');
+    // let doc = new jsPDF("portrait","px","a4");
+
     doc.setFontSize(15);
-    doc.text('Statement of Account', 400, 40);
+    doc.text('Account Balances', 50, 50);
+   // doc.autoPrint();
+
+    var startDate = new Date(new Date().getFullYear(), 0, 1);
+    this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+    const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+    this.fromDate=jsbillDate.toDateString();
+  
+    var endDate = new Date();
+    this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+    const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+    this.toDate=jsduevDate.toDateString();
+    doc.text(50, 100, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+
+    doc.setProperties({
+      title: 'Account Balances' + ' ' + this.toDate,
+      subject: 'Info about PDF',
+      author: 'iCLose',
+      keywords: 'generated, javascript, web 2.0, ajax',
+      creator: 'iClose'
+  });
+
     autoTable(doc, {
-       html: '#my-table',
-       styles: {
-        // cellPadding: 0.5,
-       // fontSize: 12,
-    },
-    tableLineWidth: 0.5,
-    startY: 400, /* if start position is fixed from top */
-    tableLineColor: [4, 6, 7], // choose RGB
-      });
-      const DATA = this.htmlData.nativeElement;
-    doc.fromHTML(DATA.innerHTML, 30, 15);
-    doc.output('dataurlnewwindow');
+      html: '#my-table',
+
+        styles: {
+      // cellPadding: 0.5,
+     // fontSize: 12,
+      },
+      tableLineWidth: 0.5,
+      startY: 150, /* if start position is fixed from top */
+      tableLineColor: [4, 6, 7], // choose RGB
+    });
+     // const DATA = this.htmlData.nativeElement;
+
+
+// For each page, print the page number and the total pages
+const addFooters = doc => {
+  const pageCount = doc.internal.getNumberOfPages();
+
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(8);
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.text(485, 780, 'Account Balances');
+    doc.text(40, 800, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+    doc.text(450, 800, 'Created on : ' + '' + this.toDate);
+    doc.text( ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' +
+    'Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 200, 780, {
+      align: 'right'
+    });
+  }
+};
+
+addFooters(doc);
+   // doc.fromHTML(DATA.innerHTML, 30, 15);
+    window.open(doc.output('bloburl'), '_blank');
+    // doc.output('dataurlnewwindow');
   }
 
 
 public downloadPDF(): void {
-    const doc = new jsPDF('p', 'pt', 'a4');
-    doc.setFontSize(15);
-    doc.text('Statement of Account', 400, 40);
-    doc.text('Outstanding Invoices', 400, 70);
-   autoTable(doc, {
+  const doc = new jsPDF('p', 'pt', 'a4');
+  // let doc = new jsPDF("portrait","px","a4");
+
+  doc.setFontSize(15);
+  doc.text('Account Balances', 50, 50);
+  var startDate = new Date(new Date().getFullYear(), 0, 1);
+  this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+  const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+  this.fromDate=jsbillDate.toDateString();
+
+  var endDate = new Date();
+  this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+  const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+  this.toDate=jsduevDate.toDateString();
+  doc.text(50, 100, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+
+  doc.setProperties({
+    title: 'Account Balances' + ' ' + this.toDate,
+    subject: 'Info about PDF',
+    author: 'iCLose',
+    keywords: 'generated, javascript, web 2.0, ajax',
+    creator: 'iClose'
+});
+
+  autoTable(doc, {
     html: '#my-table',
-    styles: {
- },
- tableLineWidth: 0.5,
- startY: 550,
- tableLineColor: [4, 6, 7], // choose RGB
-   });
-    autoTable(doc, {
-      html: '#my-table1',
+
       styles: {
-   },
-   tableLineWidth: 0.5,
-   startY: 300,
-   tableLineColor: [4, 6, 7], // choose RGB
-     });
-    const DATA = this.htmlData.nativeElement;
-    doc.save('Customer-statement.pdf');
+    // cellPadding: 0.5,
+   // fontSize: 12,
+    },
+    tableLineWidth: 0.5,
+    startY: 150, /* if start position is fixed from top */
+    tableLineColor: [4, 6, 7], // choose RGB
+  });
+    // const DATA = this.htmlData.nativeElement;
+
+
+// For each page, print the page number and the total pages
+const addFooters = doc => {
+const pageCount = doc.internal.getNumberOfPages();
+
+doc.setFont('helvetica', 'italic');
+doc.setFontSize(8);
+for (let i = 1; i <= pageCount; i++) {
+  doc.setPage(i);
+  doc.text(485, 780, 'Account Balances');
+  doc.text(40, 800, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+  doc.text(450, 800, 'Created on : ' + '' + this.toDate);
+  doc.text( ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' +
+  'Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 200, 780, {
+    align: 'right'
+  });
+}
+};
+
+addFooters(doc);
+  // doc.fromHTML(DATA.innerHTML, 30, 15);
+  doc.autoPrint();
+    doc.save('Account-Balance.pdf');
   }
 
 
@@ -199,5 +234,19 @@ public downloadPDF(): void {
     const jsDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
     this.toDate = jsDate.toISOString();
    }
-
+   
+   
+   setDefaultDate(){
+    debugger;
+          
+    var startDate = new Date(new Date().getFullYear(), 0, 1);
+    this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+    const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+    this.fromDate=jsbillDate.toISOString();
+  
+    var endDate = new Date();
+    this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+    const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+    this.toDate=jsduevDate.toISOString();
+  }
 }

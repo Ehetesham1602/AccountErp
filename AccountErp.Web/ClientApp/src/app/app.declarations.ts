@@ -82,6 +82,7 @@ import { AddNewAccountComponent } from 'src/components/chart-of-account/add-new-
 import { TransactionComponent } from 'src/components/transaction/transaction/transaction.component';
 import { AddCustomerPaymentComponent } from 'src/components/customer/add-customer-payment/add-customer-payment.component';
 import { AddVendorPaymentComponent } from 'src/components/vendor/add-vendor-payment/add-vendor-payment.component';
+import { ReportMenuComponent } from 'src/components/reports/report-menu/report-menu.component';
 
 export const appDeclarations = [
     DefaultIfEmpty,
@@ -211,6 +212,7 @@ export const appDeclarations = [
     AddNewAccountComponent,
     TransactionComponent,
     AddCustomerPaymentComponent,
-    AddVendorPaymentComponent
+    AddVendorPaymentComponent,
+    ReportMenuComponent
 
 ];

@@ -38,11 +38,7 @@ export class SalesTaxReportService {
     // edit(model: CustomerStatementDetail) {
     //   return this.http.post(this.appSettings.ApiBaseUrl + 'Customer/edit', model);
     // }
-  
-    getDetail(id: number) {
-      return this.http.get(this.appSettings.ApiBaseUrl + 'Report/get-detail/' + id);
-    }
-  
+   
     getSelectItems() {
       return this.http.get(this.appSettings.ApiBaseUrl + 'Report/get-select-items');
     }
@@ -54,4 +50,9 @@ export class SalesTaxReportService {
     getReferenceNumber(salesId: any) {
       return this.http.get(this.appSettings.ApiBaseUrl + 'Report/get-reference-number/' + salesId);
     }
+
+    getDetail(model: any) {
+      return this.http.post(this.appSettings.ApiBaseUrl + 'Report/sales_tax_report_details', model);
+    }
+
 }

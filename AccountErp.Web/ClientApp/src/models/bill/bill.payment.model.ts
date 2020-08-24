@@ -11,6 +11,7 @@ export class BillPaymentModel {
     public vendorId:string;
     public paymentType:number;
     public amount: number;
+    public debitBankAccountId: string;
 
     constructor() {
         this.paymentMode = '';

@@ -45,9 +45,11 @@ export class AccountBalanceDetail {
     public status: number; //
     public invoiceDate: string;
     public dueDate: string; //
+    public  fromDate: string;
 
-
-    public vendorId: string;
+    
+    public startDate: string;
+    public  endDate: string;
     public customer: CustomerDetailModel;
     public vendor: VendorPersonalInfoModel;
     public items: Array<InvoiceItemModel>;

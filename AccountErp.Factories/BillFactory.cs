@@ -15,7 +15,8 @@ namespace AccountErp.Factories
             var bill = new Bill
             {
                 VendorId = model.VendorId,
-                BillNumber = "B.NO" + "-" + model.BillDate.ToString("yy") + "-" + (count + 1).ToString("000"),
+                //BillNumber = "B.NO" + "-" + model.BillDate.ToString("yy") + "-" + (count + 1).ToString("000"),
+                BillNumber = model.BillNumber,
                 Tax = model.Tax,
                 Discount = model.Discount,
                 DueDate = model.DueDate,
@@ -73,6 +74,7 @@ namespace AccountErp.Factories
         public static void Edit(Bill bill, BillEditModel model, string userId)
         {
             bill.VendorId = model.VendorId;
+            bill.BillNumber = model.BillNumber;
             bill.Tax = model.Tax;
             bill.Discount = model.Discount;
             bill.TotalAmount = model.TotalAmount;

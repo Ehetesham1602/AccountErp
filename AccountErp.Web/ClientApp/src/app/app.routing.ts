@@ -61,6 +61,7 @@ import { AgedReceivablesComponent } from 'src/components/reports/aged-receivable
 import { CashFlowComponent } from 'src/components/reports/cash-flow/cash-flow.component';
 import { BalanceSheetComponent } from 'src/components/reports/balance-sheet/balance-sheet.component';
 import { AddVendorPaymentComponent } from 'src/components/vendor/add-vendor-payment/add-vendor-payment.component';
+import { ReportMenuComponent } from 'src/components/reports/report-menu/report-menu.component';
 
 
 const appRoutes: Routes = [
@@ -146,6 +147,8 @@ const appRoutes: Routes = [
     { path: 'reports/aged-receivables', component: AgedReceivablesComponent },
     { path: 'reports/cash-flow', component: CashFlowComponent },
     { path: 'reports/balance-sheet', component: BalanceSheetComponent },
+    { path: 'reports/report-menu', component: ReportMenuComponent },
+
    
    
     // otherwise redirect to home
