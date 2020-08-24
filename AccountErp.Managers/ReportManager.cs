@@ -287,7 +287,6 @@ namespace AccountErp.Managers
                 if(profitAndLossMasterDto.AccountMasterName == "Income")
                 {
                     profitAndLossMasterDto.GrossProfit += profitAndLossMasterDto.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount);
-                    profitAndLossMasterDto.NetProfit += profitAndLossMasterDto.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount - x.OperatingExpensesCreditAmount);
                 }
                 profitAndLossMasterDto.BankAccount.Add(TotalAccountBalance);
                 profitAndLossList.Add(profitAndLossMasterDto);
@@ -300,14 +299,14 @@ namespace AccountErp.Managers
             {
                 if (model.TabId == 1)
                 {
-                    //mainProfitAndLossDtoObj.GrossProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount);
+                    mainProfitAndLossDtoObj.GrossProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount);
                     mainProfitAndLossDtoObj.NetProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount - x.OperatingExpensesCreditAmount);
                 }
                 else
                 {
                     mainProfitAndLossDtoObj.Income += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount);
                     mainProfitAndLossDtoObj.OperatingExpenses += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.OperatingExpensesCreditAmount);
-                    //mainProfitAndLossDtoObj.GrossProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount);
+                    mainProfitAndLossDtoObj.GrossProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount);
                     mainProfitAndLossDtoObj.NetProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount - x.OperatingExpensesCreditAmount);
                 }
 
