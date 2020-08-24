@@ -7,11 +7,11 @@
                 </a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a [routerLink]="['/invoice/manage']" class="kt-subheader__breadcrumbs-link">
-                    Customer payments </a>
+                    Add Income </a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
              
                 <span class="kt-subheader__breadcrumbs-separator"></span>
-                <span>Aadd Payment</span>
+                <span>Add Income</span>
             </div>
         </div>
         <div class="kt-subheader__toolbar">
@@ -26,7 +26,7 @@
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label">
                             <h3 class="kt-portlet__head-title">
-                                Add Payment
+                                Add Income
                             </h3>
                         </div>
                     </div>
@@ -34,6 +34,45 @@
                         novalidate>
                         <div class="kt-portlet__body">
                             <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group row"
+                                        [ngClass]="{ 'validation-error' : f.submitted && paymentMode.invalid}">
+                                        <label class="col-md-3">Payment Mode:*</label>
+                                        <div class="col-md-9">
+                                            <select name="paymentMode" class="form-control"
+                                                (change)="chengePaymentMode()" [(ngModel)]="model.paymentMode"
+                                                #paymentMode="ngModel" required>
+                                                <option value="">[Select]</option>
+                                                <option *ngFor="let item of invoicePaymentModes" [value]="item.keyInt">
+                                                    {{item.value}}</option>
+                                            </select>
+                                            <div class="validation-error-message"
+                                                *ngIf="f.submitted && !paymentMode.valid">
+                                                Please select payment mode
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="form-group row"
+                                        [ngClass]="{ 'validation-error' : f.submitted && bankAccountId.invalid}">
+                                        <label class="col-md-3">Deposit To:*</label>
+                                        <div class="col-md-9">
+                                            <select name="bankAccountId" class="form-control"
+                                                [(ngModel)]="model.bankAccountId" #bankAccountId="ngModel" required>
+                                                <option value="">[Select]</option>
+                                                <option *ngFor="let item of bankAccounts" [value]="item.keyInt">
+                                                    {{item.value}}</option>
+                                            </select>
+                                            <div class="validation-error-message"
+                                                *ngIf="f.submitted && !bankAccountId.valid">
+                                                Please select deposit from
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="col-6">
                                     <div class="form-group row">
                                         <label class="col-md-3 kt-portlet__label">Payment type:</label>
@@ -44,6 +83,7 @@
                                                 <option value="">[Select]</option>
                                                 <option value='0'>Advance payment</option>
                                                 <option value='1'>Invoice payment</option>
+                                                <option value='4'>Account payment</option>
                                                
                                             </select>
                                             <div class="validation-error-message"
@@ -103,9 +143,7 @@
                                         </div>
                                     </div>
                                 </div>
-                              
-                            </div>
-                          <div class="row">
+
                                 <div class="col-6" *ngIf="model.paymentType==1">
                                     <div class="form-group row">
                                         <label class="col-md-3 kt-portlet__label">Invoice#:</label>
@@ -123,113 +161,59 @@
                                         </div>
                                     </div>
                                 </div>
-                          </div>
-                         
-                            <div class="row d-none">
-                                <div class="col-6">
+
+                                <div class="col-6" *ngIf="model.paymentType!=1">
                                     <div class="form-group row">
-                                        <label class="col-md-3 kt-portlet__label">Tax:</label>
+                                        <label class="col-md-3 kt-portlet__label">DrAccont:</label>
                                         <div class="col-md-9">
-                                            <p class="kt-portlet__data">{{invoiceSummaryModel.tax | currency }}</p>
+                                            <select name="craccount"  [(ngModel)]="model.creditBankAccountId" #craccount="ngModel" (change)="selectCrAccount($event)" class="form-control" >
+                                                <optgroup *ngFor="let acchead of allAccounts" label="{{acchead.accountMasterName}}">
+                                                 <option *ngFor="let acc of acchead.bankAccount" value="{{acc.id}}">{{acc.accountName}}</option>
+                                            </optgroup>
+                                              </select>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-6">
+
+                                <div class="col-6" *ngIf="model.paymentType==0 || model.paymentType!=1">
                                     <div class="form-group row">
-                                        <label class="col-md-3 kt-portlet__label">Discount:</label>
+                                        <label class="col-md-3 kt-portlet__label">Amount:</label>
                                         <div class="col-md-9">
-                                            <p class="kt-portlet__data">{{invoiceSummaryModel.discount | currency}}</p>
+                                          <input type="text"  name="amount" #amount="ngModel" [(ngModel)]="model.amount" class="form-control">
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                           
-                            <div class="row">
-                                <div class="col-6">
+                          
+                                <div class="col-6" *ngIf="model.paymentType==1">
+                                    <div class="form-group row">
+                                        <label class="col-md-3 kt-portlet__label">Amount:</label>
+                                        <div class="col-md-9">
+                                            <p class="kt-portlet__data">{{model.amount | currency}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-6" *ngIf='model.paymentMode>0'>
                                     <div class="form-group row"
-                                        [ngClass]="{ 'validation-error' : f.submitted && paymentMode.invalid}">
-                                        <label class="col-md-3">Payment Mode:*</label>
+                                        [ngClass]="{ 'validation-error' : f.submitted && depositFrom.invalid}">
+                                        <label class="col-md-3">Deposit From:*</label>
                                         <div class="col-md-9">
-                                            <select name="paymentMode" class="form-control"
-                                                (change)="chengePaymentMode()" [(ngModel)]="model.paymentMode"
-                                                #paymentMode="ngModel" required>
+                                            <select name="depositFrom" class="form-control"
+                                                [(ngModel)]="model.depositFrom" #depositFrom="ngModel" required>
                                                 <option value="">[Select]</option>
-                                                <option *ngFor="let item of invoicePaymentModes" [value]="item.keyInt">
+                                                <option *ngFor="let item of depositFromAccounts"
+                                                    [value]="item.keyString">
                                                     {{item.value}}</option>
                                             </select>
                                             <div class="validation-error-message"
-                                                *ngIf="f.submitted && !paymentMode.valid">
-                                                Please select payment mode
+                                                *ngIf="f.submitted && !depositFrom.valid">
+                                                Please select deposit from
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                    <div class="col-6" *ngIf="model.paymentType==0">
-                                        <div class="form-group row">
-                                            <label class="col-md-3 kt-portlet__label">Amount:</label>
-                                            <div class="col-md-9">
-                                              <input type="text"  name="amount" #amount="ngModel" [(ngModel)]="model.amount" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                
-                              
-                                    <div class="col-6" *ngIf="model.paymentType==1">
-                                        <div class="form-group row">
-                                            <label class="col-md-3 kt-portlet__label">Amount:</label>
-                                            <div class="col-md-9">
-                                                <p class="kt-portlet__data">{{model.amount | currency}}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                               
-                             
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-6" *ngIf='model.paymentMode>0'>
-                                        <div class="form-group row"
-                                            [ngClass]="{ 'validation-error' : f.submitted && depositFrom.invalid}">
-                                            <label class="col-md-3">Deposit From:*</label>
-                                            <div class="col-md-9">
-                                                <select name="depositFrom" class="form-control"
-                                                    [(ngModel)]="model.depositFrom" #depositFrom="ngModel" required>
-                                                    <option value="">[Select]</option>
-                                                    <option *ngFor="let item of depositFromAccounts"
-                                                        [value]="item.keyString">
-                                                        {{item.value}}</option>
-                                                </select>
-                                                <div class="validation-error-message"
-                                                    *ngIf="f.submitted && !depositFrom.valid">
-                                                    Please select deposit from
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-group row"
-                                            [ngClass]="{ 'validation-error' : f.submitted && bankAccountId.invalid}">
-                                            <label class="col-md-3">Deposit To:*</label>
-                                            <div class="col-md-9">
-                                                <select name="bankAccountId" class="form-control"
-                                                    [(ngModel)]="model.bankAccountId" #bankAccountId="ngModel" required>
-                                                    <option value="">[Select]</option>
-                                                    <option *ngFor="let item of bankAccounts" [value]="item.keyInt">
-                                                        {{item.value}}</option>
-                                                </select>
-                                                <div class="validation-error-message"
-                                                    *ngIf="f.submitted && !bankAccountId.valid">
-                                                    Please select deposit from
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
+
                                 <div class="col-6" *ngIf='model.paymentMode == 2'>
                                     <div class="form-group row"
                                         [ngClass]="{ 'validation-error' : f.submitted && chequeNumber.invalid}">
@@ -260,7 +244,29 @@
                                         </div>
                                     </div>
                                 </div>
+                              
                             </div>
+                         
+                         
+                            <div class="row d-none">
+                                <div class="col-6">
+                                    <div class="form-group row">
+                                        <label class="col-md-3 kt-portlet__label">Tax:</label>
+                                        <div class="col-md-9">
+                                            <p class="kt-portlet__data">{{invoiceSummaryModel.tax | currency }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group row">
+                                        <label class="col-md-3 kt-portlet__label">Discount:</label>
+                                        <div class="col-md-9">
+                                            <p class="kt-portlet__data">{{invoiceSummaryModel.discount | currency}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                         </div>
                         <div class="kt-portlet__foot">
                             <div class="kt-form__actions text-right">

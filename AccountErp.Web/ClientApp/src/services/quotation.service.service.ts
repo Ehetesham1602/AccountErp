@@ -25,6 +25,17 @@ export class QuotationService {
   getAllItemsActive() {
     return this.http.get(this.appSettings.ApiBaseUrl + 'item/get-all-active-only');
   }
+  getAllItemsActiveForSale() {
+    return this.http.get(this.appSettings.ApiBaseUrl + 'item/get-all-forSales');
+  }
+
+  loadItemsForExpense() {
+    return this.http.get(this.appSettings.ApiBaseUrl + 'item/get-all-forExpense');
+  }
+
+  
+
+  
 
   getAllTaxes(){
     return this.http.get(this.appSettings.ApiBaseUrl + 'SalesTax/get-select-list-items');

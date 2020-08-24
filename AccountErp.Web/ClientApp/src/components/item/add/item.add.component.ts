@@ -138,6 +138,9 @@ export class ItemAddComponent implements OnInit {
     submit() {
         debugger;
         this.blockUI.start();
+        if(this.model.rate==undefined || this.model.rate==Number("")){
+            this.model.rate=0;
+        }
         this.itemService.add(this.model).subscribe(
             () => {
                 this.blockUI.stop();

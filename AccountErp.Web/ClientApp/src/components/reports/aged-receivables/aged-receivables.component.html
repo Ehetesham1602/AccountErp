@@ -3,7 +3,7 @@
 
     <div class="kt-holder kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
         <div class="kt-subheader   kt-grid__item" id="kt_subheader">
-            <div class="kt-subheader__main">
+            <div class="kt-subheader__main" >
                 <div class="kt-subheader__breadcrumbs">
                     <a [routerLink]="['/']" class="kt-subheader__breadcrumbs-home">
                         <em class="flaticon2-shelter"></em>
@@ -15,7 +15,7 @@
                     <span>Aged Receivales</span>
                 </div>
             </div>
-            <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__toolbar" id="htmlData" #htmlData>
                 <div class="kt-subheader__wrapper">
                 </div>
             </div>
@@ -91,7 +91,7 @@
                                                 <div class="form-group col-md-2 row">
                                                     <label class="col-md-3"></label>
                                                     <div class="col-md-12">
-                                                        <div class="input-group">
+                                                        <div class="input-group" id="htmlData" #htmlData>
                                                             <input class="form-control" name="agedReceivablesOfDate" id="agedReceivablesOfDate"
                                                                 #agedReceivablesOfDate="ngModel" (dateSelect)="changeAsOfdate()"
                                                                 [(ngModel)]="asOfDate" ngbDatepicker

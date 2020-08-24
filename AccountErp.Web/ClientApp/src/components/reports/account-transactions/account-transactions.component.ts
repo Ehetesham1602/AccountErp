@@ -8,6 +8,7 @@ import { AccountTransactionsService } from 'src/services/account-transactions.se
 import { ToastrService } from 'ngx-toastr';
 import { AccountTransactionDetail } from 'src/models/accountTransaction/accountTransaction.model';
 import { ActivatedRoute } from '@angular/router';
+import { VendorService, CustomerService } from 'src/services';
 
 @Component({
   selector: 'app-account-transactions',
@@ -29,26 +30,29 @@ export class AccountTransactionsComponent implements OnInit {
   temp;
   dates;
   selectedDate;
-  selectedstType = 'accrual';
-  selectedstContact;
+  selectedstType = 0;
+  selectedstContact=0;
+  vendors;
+  customers;
+  accountId=0;
+  contactTypenID=0;
+  contactType=0;
   config = {displayKey:"value",search:true,limitTo:10,height: 'auto',placeholder:'Select Customer',customComparator: ()=>{},moreText: 'more',noResultsFound: 'No results found!',searchPlaceholder:'Search',searchOnKey: 'value',clearOnSelection: false,inputDirection: 'ltr',}
   
-  accountTransactionData = {totalAmount:0,totalUnpaidAmount:0,totalNotYetOverDue:0,totalCountNotYetOverDue:0,
-    totalLessThan30:0,totalCountLessThan30 :0,totalCountThirtyFirstToSixty:0,
-    totalThirtyFirstToSixty:0,totalSixtyOneToNinety:0,totalCountSixtyOneToNinety:0,
-    totalMoreThanNinety:0,totalCountMoreThanNinety:0,agedPayablesReportDtoList:[{}]};
-
+  accountTransactionData;
     
   constructor(private appSettings: AppSettings,
     private route: ActivatedRoute,
     private accountTransactionService: AccountTransactionsService,
     private toastr: ToastrService,
+    private vendorService:VendorService,
+    private customerService:CustomerService,
         private appUtils: AppUtils,) {
 debugger;
           this.route.params.subscribe((params) => {
             if (params['id']) {
               alert(params['id'])
-              this.model.accountId= params['id'];
+              this.accountId= params['id'];
               
             }
         });
@@ -56,6 +60,11 @@ debugger;
 
   ngOnInit( ) {
     this.loadAccounts();
+    this.loadCustomers();
+    this.loadVendors();
+    this.setDefaultDate();
+
+    this.showAccountTransaction();
   }
   onSubmit(form: NgForm) {
     // console.log(this.terms);
@@ -83,6 +92,69 @@ loadAccounts(){
           });
   
 }
+
+setDefaultDate(){
+  debugger;
+        
+  var startDate = new Date(new Date().getFullYear(), 0, 1);
+  this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+  const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+  this.fromDate=jsbillDate.toISOString();
+
+  var endDate = new Date();
+  this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+  const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+  this.toDate=jsduevDate.toISOString();
+}
+
+loadVendors() {
+  this.blockUI.start();
+  this.vendorService.getSelectItems()
+      .subscribe((data) => {
+          this.blockUI.stop();
+          this.vendors=[];
+          Object.assign(this.vendors, data);
+          console.log("vendr",this.vendors);
+      },
+          error => {
+              this.blockUI.stop();
+              this.appUtils.ProcessErrorResponse(this.toastr, error);
+          });
+}
+
+selectContact(event){
+  console.log("contact",this.contactTypenID)
+  var contactString=this.contactTypenID.toString().split('/');
+  this.selectedstContact=Number(contactString[0]);
+  this.contactType=Number(contactString[1]);
+}
+setContType(val){
+  alert(val);
+}
+loadCustomers() {
+  this.blockUI.start();
+  this.customerService.getSelectItems()
+      .subscribe((data) => {
+          debugger;
+          this.blockUI.stop();
+          this.customers=[];
+          console.log("customers",this.customers)
+         
+          
+          Object.assign(this.customers, data);
+          // if(this.customers.length>0){
+          //     this.customrlist=[];
+          //     this.customers.forEach(element => {
+          //         this.customrlist.push({"id":element.id,"value":element.value})
+          //     });
+          // }
+         
+      },
+          error => {
+              this.blockUI.stop();
+              this.appUtils.ProcessErrorResponse(this.toastr, error);
+          });
+}
 changeStartDate(){
   debugger;
   console.log('quotatindate', this.startDate);
@@ -97,53 +169,178 @@ changeStartDate(){
   this.toDate = jsDate.toISOString();
   }
   selectAccount(event){
-    alert(this.model.accountId);
-  }
-  public openPDF(): void {
-    const doc = new jsPDF('p', 'pt', 'a4');
-    doc.setFontSize(15);
-    doc.text('Statement of Account', 400, 40);
-    autoTable(doc, {
-       html: '#my-table',
-       styles: {
-        // cellPadding: 0.5,
-       // fontSize: 12,
-    },
-    tableLineWidth: 0.5,
-    startY: 400, /* if start position is fixed from top */
-    tableLineColor: [4, 6, 7], // choose RGB
-      });
-      const DATA = this.htmlData.nativeElement;
-    doc.fromHTML(DATA.innerHTML, 30, 15);
-    doc.output('dataurlnewwindow');
+    
   }
 
+
+  public openPDF(): void {
+    const doc = new jsPDF('p', 'pt', 'a4');
+    // let doc = new jsPDF("portrait","px","a4");
+
+    doc.setFontSize(15);
+    doc.text('Account transactions', 50, 50);
+   // doc.autoPrint();
+
+    var startDate = new Date(new Date().getFullYear(), 0, 1);
+    this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+    const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+    this.fromDate=jsbillDate.toDateString();
+  
+    var endDate = new Date();
+    this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+    const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+    this.toDate=jsduevDate.toDateString();
+    doc.text(50, 100, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+
+    doc.setProperties({
+      title: 'Account transactions' + ' ' + this.toDate,
+      subject: 'Info about PDF',
+      author: 'iCLose',
+      keywords: 'generated, javascript, web 2.0, ajax',
+      creator: 'iClose'
+  });
+
+    autoTable(doc, {
+      html: '#my-table',
+    
+        styles: {
+          // cellPadding: 0.5,
+          // fontSize: 12,
+          // font: 'arial',
+          // overflow: 'linebreak',
+      },
+      tableLineWidth: 0.5,
+      // pageBreak: 'auto',
+     //tableWidth: 'auto',
+      
+      startY: 50, /* if start position is fixed from top */
+      tableLineColor: [4, 6, 7], // choose RGB
+    });
+      const DATA = this.htmlData.nativeElement;
+
+      autoTable(doc, {
+        html: '#my-table1',
+        styles: {
+         // cellPadding: 0.5,
+        // fontSize: 12,
+     },
+     tableLineWidth: 0.5,
+     pageBreak: 'always',
+     startY: 500, /* if start position is fixed from top */
+     tableLineColor: [4, 6, 7], // choose RGB
+       });
+// For each page, print the page number and the total pages
+const addFooters = doc => {
+  const pageCount = doc.internal.getNumberOfPages();
+
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(8);
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.text(485, 780, 'Account transactions');
+    doc.text(40, 800, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+    doc.text(450, 800, 'Created on : ' + '' + this.toDate);
+    doc.text( ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' +
+    'Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 200, 780, {
+      align: 'right'
+    });
+  }
+};
+
+addFooters(doc);
+    doc.fromHTML(DATA.innerHTML, 30, 15);
+    window.open(doc.output('bloburl'), '_blank');
+    // doc.output('dataurlnewwindow');
+  }
 
 public downloadPDF(): void {
     const doc = new jsPDF('p', 'pt', 'a4');
+    // let doc = new jsPDF("portrait","px","a4");
+
     doc.setFontSize(15);
-    doc.text('Statement of Account', 400, 40);
-    doc.text('Outstanding Invoices', 400, 70);
-   autoTable(doc, {
-    html: '#my-table',
-    styles: {
- },
- tableLineWidth: 0.5,
- startY: 550,
- tableLineColor: [4, 6, 7], // choose RGB
-   });
+    doc.text('Account transactions', 50, 50);
+    var startDate = new Date(new Date().getFullYear(), 0, 1);
+    this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+    const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+    this.fromDate=jsbillDate.toDateString();
+  
+    var endDate = new Date();
+    this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+    const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+    this.toDate=jsduevDate.toDateString();
+    doc.text(50, 100, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+
+    doc.setProperties({
+      title: 'Account transactions' + ' ' + this.toDate,
+      subject: 'Info about PDF',
+      author: 'iCLose',
+      keywords: 'generated, javascript, web 2.0, ajax',
+      creator: 'iClose'
+  });
+
     autoTable(doc, {
-      html: '#my-table1',
-      styles: {
-   },
-   tableLineWidth: 0.5,
-   startY: 300,
-   tableLineColor: [4, 6, 7], // choose RGB
-     });
-    const DATA = this.htmlData.nativeElement;
-    doc.save('Customer-statement.pdf');
+      html: '#my-table',
+
+        styles: {
+      // cellPadding: 0.5,
+     // fontSize: 12,
+      },
+      pageBreak: 'always',
+      tableLineWidth: 0.5,
+      startY: 150, /* if start position is fixed from top */
+      tableLineColor: [4, 6, 7], // choose RGB
+    });
+      const DATA = this.htmlData.nativeElement;
+
+
+// For each page, print the page number and the total pages
+const addFooters = doc => {
+  const pageCount = doc.internal.getNumberOfPages();
+
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(8);
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.text(490, 780, 'Account transactions');
+    doc.text(40, 800, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+    doc.text(450, 800, 'Created on : ' + '' + this.toDate);
+    doc.text( ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' +
+    'Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 200, 780, {
+      align: 'right'
+    });
+  }
+};
+
+addFooters(doc);
+    doc.fromHTML(DATA.innerHTML, 30, 15);
+    doc.autoPrint();
+    doc.save('Account transactions.pdf');
+  }
+  getTransactionDesc(transType){
+    var statement;
+    switch (transType) {
+      case 0:
+         statement="Customer Payment";
+          break;
+      case 1:
+        statement="Invoice Payment";
+          break;
+      case 2:
+            statement="Vendor Payment";
+            break;
+            case 3:
+              statement="Bill Payment";
+              break;
+              case 4:
+                statement="Account Payment refund(tax refund)";
+                break;
+                case 5:
+                  statement="Sales tax to Govt.(Account Payment)";
+                  break;
   }
 
+  return statement;
+  }
   showAccountTransaction(){
     // this.purchaseVendortData = {vendorReportsList={}};
     console.log("from",this.fromDate);
@@ -152,38 +349,22 @@ public downloadPDF(): void {
      debugger;
     //  if (this.selectedCustomer !== undefined) {
  
-     var body={ 
-      //  "customerId": this.selectedCustomer.keyInt,
-      "customerId":0,
-     "asOfDate": "2020-07-21T06:21:14.033Z"
-   };
+    var body=  {
+        "fromDate": this.fromDate,
+        "toDate": this.toDate,
+        "contactId": this.selectedstContact,
+        "accountId": this.accountId,
+        "reportType": this.selectedstType,
+        "contactType": this.contactType
+      }
      this.accountTransactionService.getAccountTransaction(body)
      .subscribe(
       (data) => {
         debugger
-        console.log("statement",data);
+           this.accountTransactionData=[];
            Object.assign(this.accountTransactionData, data);
-           // this.allPurchase=this.accountTransactionData.totalAmount;
-          //  this.paidPurchase=this.accountTransactionData.totalUnpaidAmount;
-
-          //  // this.allNotYetOverdue=this.accountTransactionData.totalNotYetOverDue;
-          //  this.allNotYetOverdue=this.accountTransactionData.totalCountNotYetOverDue;
-          //  // this.all30OrLess=this.accountTransactionData.totalLessThan30;
-          //  this.all30OrLess=this.accountTransactionData.totalCountLessThan30;
-          //  // this.all31To60=this.accountTransactionData.totalThirtyFirstToSixty;
-          //  this.all31To60=this.accountTransactionData.totalCountThirtyFirstToSixty;
-          //  // this.all61To90=this.accountTransactionData.totalSixtyOneToNinety;
-          //  this.all61To90=this.accountTransactionData.totalCountSixtyOneToNinety;
-          //  // this.all91OrMore=this.accountTransactionData.totalMoreThanNinety;
-          //  this.all91OrMore=this.accountTransactionData.totalCountMoreThanNinety;
-          //  this.allTotalUnpaid=this.accountTransactionData.totalUnpaidAmount;
-          //  this.allTotalAmount=this.accountTransactionData.totalAmount;
-
-           this.temp.agedPayablesReportDtoList.map((item) => {
-            debugger;
-             item.totalUnpaidAmount=item.totalAmount;
-             
-         });
+           console.log("statement",this.accountTransactionData);
+          
        //  this.CalculateTotalPurchase();
       });
 

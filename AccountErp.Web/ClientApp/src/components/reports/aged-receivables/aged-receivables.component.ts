@@ -133,49 +133,135 @@ export class AgedReceivablesComponent implements OnInit {
    CalculateTotalPurchase(){
  
    }
-  public openPDF(): void {
+   public openPDF(): void {
     const doc = new jsPDF('p', 'pt', 'a4');
+    // let doc = new jsPDF("portrait","px","a4");
+
     doc.setFontSize(15);
-    doc.text('Statement of Account', 400, 40);
+    doc.text('Aged Receivables ', 50, 50);
+   // doc.autoPrint();
+
+    var startDate = new Date(new Date().getFullYear(), 0, 1);
+    this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+    const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+    this.fromDate=jsbillDate.toDateString();
+  
+    var endDate = new Date();
+    this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+    const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+    this.toDate=jsduevDate.toDateString();
+    doc.text(50, 100, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+
+    doc.setProperties({
+      title: 'Aged Receivables' + ' ' + this.toDate,
+      subject: 'Info about PDF',
+      author: 'iCLose',
+      keywords: 'generated, javascript, web 2.0, ajax',
+      creator: 'iClose'
+  });
+
     autoTable(doc, {
-       html: '#my-table',
-       styles: {
-        // cellPadding: 0.5,
-       // fontSize: 12,
-    },
-    tableLineWidth: 0.5,
-    startY: 400, /* if start position is fixed from top */
-    tableLineColor: [4, 6, 7], // choose RGB
-      });
+      html: '#my-table',
+
+        styles: {
+      // cellPadding: 0.5,
+     // fontSize: 12,
+      },
+      tableLineWidth: 0.5,
+      startY: 150, /* if start position is fixed from top */
+      tableLineColor: [4, 6, 7], // choose RGB
+    });
       const DATA = this.htmlData.nativeElement;
+
+
+// For each page, print the page number and the total pages
+const addFooters = doc => {
+  const pageCount = doc.internal.getNumberOfPages();
+
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(8);
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.text(480, 780, 'Aged Receivables');
+    doc.text(40, 800, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+    doc.text(450, 800, 'Created on : ' + '' + this.toDate);
+    doc.text( ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' +
+    'Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 200, 780, {
+      align: 'right'
+    });
+  }
+};
+
+addFooters(doc);
     doc.fromHTML(DATA.innerHTML, 30, 15);
-    doc.output('dataurlnewwindow');
+    window.open(doc.output('bloburl'), '_blank');
+    // doc.output('dataurlnewwindow');
   }
 
 
 public downloadPDF(): void {
-    const doc = new jsPDF('p', 'pt', 'a4');
-    doc.setFontSize(15);
-    doc.text('Statement of Account', 400, 40);
-    doc.text('Outstanding Invoices', 400, 70);
-   autoTable(doc, {
+  const doc = new jsPDF('p', 'pt', 'a4');
+  // let doc = new jsPDF("portrait","px","a4");
+
+  doc.setFontSize(15);
+  doc.text('Aged Receivables ', 50, 50);
+ 
+
+  var startDate = new Date(new Date().getFullYear(), 0, 1);
+  this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+  const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+  this.fromDate=jsbillDate.toDateString();
+
+  var endDate = new Date();
+  this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+  const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+  this.toDate=jsduevDate.toDateString();
+  doc.text(50, 100, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+
+  doc.setProperties({
+    title: 'Aged Receivables' + ' ' + this.toDate,
+    subject: 'Info about PDF',
+    author: 'iCLose',
+    keywords: 'generated, javascript, web 2.0, ajax',
+    creator: 'iClose'
+});
+
+  autoTable(doc, {
     html: '#my-table',
-    styles: {
- },
- tableLineWidth: 0.5,
- startY: 550,
- tableLineColor: [4, 6, 7], // choose RGB
-   });
-    autoTable(doc, {
-      html: '#my-table1',
+
       styles: {
-   },
-   tableLineWidth: 0.5,
-   startY: 300,
-   tableLineColor: [4, 6, 7], // choose RGB
-     });
+    // cellPadding: 0.5,
+   // fontSize: 12,
+    },
+    tableLineWidth: 0.5,
+    startY: 150, /* if start position is fixed from top */
+    tableLineColor: [4, 6, 7], // choose RGB
+  });
     const DATA = this.htmlData.nativeElement;
-    doc.save('Customer-statement.pdf');
+
+
+// For each page, print the page number and the total pages
+const addFooters = doc => {
+const pageCount = doc.internal.getNumberOfPages();
+
+doc.setFont('helvetica', 'italic');
+doc.setFontSize(8);
+for (let i = 1; i <= pageCount; i++) {
+  doc.setPage(i);
+  doc.text(480, 780, 'Aged Receivables');
+  doc.text(40, 800, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+  doc.text(450, 800, 'Created on : ' + '' + this.toDate);
+  doc.text( ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' + ' ' +
+  'Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 200, 780, {
+    align: 'right'
+  });
+}
+};
+
+addFooters(doc);
+  doc.fromHTML(DATA.innerHTML, 30, 15);
+  doc.autoPrint();
+    doc.save('Aged-Receivables.pdf');
   }
 
 

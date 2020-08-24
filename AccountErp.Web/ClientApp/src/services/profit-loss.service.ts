@@ -16,12 +16,17 @@ export class ProfitLossService {
     }
   
   
-    getProfitLoss(profitLossDetail){
+    getProfitLoss(profitLossSummary){
       debugger;
   
-      return this.http.post(this.appSettings.ApiBaseUrl + 'Report/profit_and_loss_report', profitLossDetail);
+      return this.http.post(this.appSettings.ApiBaseUrl + 'Report/profit_and_loss_details_report', profitLossSummary);
     }
   
+    getProfitDetail(profitLossDetail){
+      debugger;
+  
+      return this.http.post(this.appSettings.ApiBaseUrl + 'Report/profit_and_loss_details_report', profitLossDetail);
+    }
     toggleStatus(id: number) {
       return this.http.post(this.appSettings.ApiBaseUrl + 'Report/toggle-status/' + id, null);
     }

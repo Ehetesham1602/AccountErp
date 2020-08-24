@@ -42,6 +42,7 @@ export class QuotationEditComponent implements OnInit {
   expireDate;
   newQuotNumber;
   customerDiscount;
+  isForSale=true;
 
   constructor(private router: Router,
       private route: ActivatedRoute,
@@ -186,6 +187,9 @@ initiateGrid(){
              item.rate=invoiceItem.rate;
              item.price=invoiceItem.price;
              item.description=invoiceItem.description;
+             item.lineAmount=invoiceItem.lineAmount;
+             item.bankAccountId=invoiceItem.bankAccountId;
+             item.taxBankAccountId=invoiceItem.taxBankAccountId;
              
              tempArray.push(item);
 
@@ -393,6 +397,7 @@ initiateGrid(){
             // this.model.tax += (item.rate * item.taxPercentage) / 100;
         }
         this.model.totalAmount += item.price;
+        this.model.subTotal+=item.price;
         //this.model.totalAmount += item.rate;
     });
 
@@ -489,7 +494,7 @@ submit() {
             if(item.salesTaxId!=null){
                 this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId,"lineAmount":item.lineAmount});
             }else{
-                this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0,"lineAmount":item.lineAmount});
+                this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":null,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0,"lineAmount":item.lineAmount});
             }
         });
     }else{

@@ -34,6 +34,8 @@ export class InvoiceEditComponent implements OnInit {
     invDate;
     dueDate;
     salesTaxItems;
+    customerDiscount;
+    isForSale=true;
   
   itemId: Array<ItemListItemModel> = new Array<ItemListItemModel>();
   selectedTax;
@@ -186,6 +188,9 @@ export class InvoiceEditComponent implements OnInit {
                  item.rate=invoiceItem.rate;
                  item.price=invoiceItem.price;
                  item.description=invoiceItem.description;
+                 item.lineAmount=invoiceItem.lineAmount;
+                 item.bankAccountId=invoiceItem.bankAccountId;
+                 item.taxBankAccountId=invoiceItem.taxBankAccountId;
                  
                  tempArray.push(item);
     
@@ -322,6 +327,8 @@ export class InvoiceEditComponent implements OnInit {
   
                     if (!this.customer.discount) {
                         this.customer.discount = 0;
+                    }else{
+                        this.customerDiscount=this.customer.discount;
                     }
                    // this.updateTotalAmount();
   
@@ -359,8 +366,10 @@ export class InvoiceEditComponent implements OnInit {
                   this.model.email = this.customer.email;
   
                   if (!this.customer.discount) {
-                      this.customer.discount = 0;
-                  }
+                    this.customer.discount = 0;
+                }else{
+                    this.customerDiscount=this.customer.discount;
+                }
   
               });
             }
@@ -433,7 +442,7 @@ export class InvoiceEditComponent implements OnInit {
                     debugger;
                     this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId,"lineAmount":item.lineAmount});
                 }else{
-                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0,"lineAmount":item.lineAmount});
+                    this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":null,"taxPercentage":0,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0,"lineAmount":item.lineAmount});
                 }
                
             });

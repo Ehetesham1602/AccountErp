@@ -31,3 +31,34 @@ mark {
 .c {
     text-align: right;
   } 
+
+  .myDiv {  
+    text-align: center;
+  }
+
+  .acchead{
+    font-weight: bold;
+    background-color:#d2d2d4;
+}
+.accline{
+    
+    background-color:white;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: white;
+}
+
+.totaoblock{
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+}
+
+.hidden {
+    display: none;
+}
+
+.disabled-field {
+    pointer-events: none;
+    display: none;
+}

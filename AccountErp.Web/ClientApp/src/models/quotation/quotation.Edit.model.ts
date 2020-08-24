@@ -14,6 +14,7 @@ export class quotationEditModel {
     public quotationDate:string;
     public expiryDate:string;
     public posoNumber:string;
+    public subTotal:number;
     public lineAmountSubTotal: number;
   
 

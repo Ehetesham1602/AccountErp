@@ -4,7 +4,7 @@
     <div class="kt-holder kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
         <div class="kt-subheader   kt-grid__item" id="kt_subheader">
             <div class="kt-subheader__main">
-                <div class="kt-subheader__breadcrumbs">
+                <div class="kt-subheader__breadcrumbs"  >
                     <a [routerLink]="['/']" class="kt-subheader__breadcrumbs-home">
                         <em class="flaticon2-shelter"></em>
                     </a>
@@ -15,7 +15,7 @@
                     <span>Account Balances</span>
                 </div>
             </div>
-            <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__toolbar" id="htmlData" #htmlData>
                 <div class="kt-subheader__wrapper">
                 </div>
             </div>
@@ -50,10 +50,10 @@
                                       </a>
                                   </li>
                                     <li class="kt-nav__item">
-                                      <a href="javascript:;" class="kt-nav__link" (click)="openPDF()">
-                                          <em class="kt-nav__link-icon la la-print"></em>
-                                          <span class="kt-nav__link-text"> Preview as customer</span>
-                                      </a>
+                                        <a href="javascript:;" class="kt-nav__link" (click)="openPDF()">
+                                            <em class="kt-nav__link-icon la la-print"></em>
+                                            <span class="kt-nav__link-text"> Preview as customer</span>
+                                        </a>
                                   </li>
                                   <li class="kt-nav__item">
                                     <a href="javascript:;" class="kt-nav__link" (click)="downloadPDF()">
@@ -72,20 +72,17 @@
                                     <div class="col-md-12">
                                         <div class="row">
                                             <div class="form-group col-md-2 row" >
-                                                <label class="col-md-9">Date Range :</label>
+                                                <!-- <label class="col-md-9">Date Range :</label>
                                                       <div class="col-md-12" >
-                                                        <!-- <select name="itemTypeId" class="form-control" [(ngModel)]="model.itemTypeId"
-                                                        #itemTypeId="ngModel" required>
-                                                        <option value="">[Select]</option>
-                                                        <option *ngFor="let item of itemType" [value]="item.keyInt">
-                                                          {{item.value}}
-                                                        </option>
-                                                      </select> -->
                                                       <ngx-select-dropdown (change)="changeTax($event);updateTotalAmount.emit()" [multiple]="false" [(ngModel)]="selectedTax"
                                                        [config]="config2" [options]="taxList" name="salesTaxId" #salesTaxId="ngModel"></ngx-select-dropdown>
-                                                      <!-- <ngx-select-dropdown  name="vendorId" #vendorId="ngModel" (change)="getVendorDetail()" 
-                                                      [multiple]="false" [(ngModel)]="selectedVendor"
-                                                       [config]="config" [options]="vendors"></ngx-select-dropdown> -->
+                                                
+                                                      </div> -->
+                                                      <label class="col-md-5"> </label>
+                                                      <label class="col-md-3"> </label>
+                                                      <label class="col-md-5"> </label>
+                                                      <div class="col-md-10">
+                                                          <label class="col-md-9">Date range :</label>
                                                       </div>
                                                 </div>
                                          <div class="form-group col-md-2 row">
@@ -153,425 +150,99 @@
                                     <div class="row justify-content-center">  
                                       <div class="row-12"></div> <br>
                                           <div class="col-12"> 
-                                                <table class="table table-striped" id="my-table">
+                                            <table class="table table-striped" id="my-table">
                                                     <thead>
                                                         <tr >
-                                                            <th></th>
-                                                            <th>ACCOUNT</th>
-                                                            <th >STARTING BALANCE </th>
-                                                            <th>DEBIT</th>
-                                                            <th  > CREDIT</th>
-                                                            <th >NET MOVEMENT</th>
-                                                            <th > ENDING BALANCE</th>
-                                                           
 
-                                                            <!-- <th style="width:15%">{{fromDate | date}} to {{toDate | date}}</th> -->
+                                                            <td colspan="4">
+                                                                ACCOUNT
+                                                            </td>
+                                                            <td colspan="2" >
+                                                                STARTING BALANCE
+                                                            </td>
+                                                            <td colspan="2" >
+                                                                DEBIT
+                                                            </td>
+                                                            <td colspan="2" > 
+                                                                CREDIT
+                                                            </td>
+                                                            <td colspan="2" class="c">
+                                                                NET MOVEMENT
+                                                            </td>
+                                                            <td colspan="2" class="c">
+                                                                ENDING BALANCE
+                                                            </td>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
+                                                    <tbody *ngFor="let head of statement.accountBalanceReportDtoList">
                                                         <!-- <tr *ngFor="let item of salesTaxData.invoiceList; index as $index;"> -->
                                                         <tr>
-                                                             <td  >
-                                                                 S.NO.
-                                                            </td>
-                                                            <td >
-                                                                Assets
+                                                            <!-- <td colspan="4" class="acchead"></td> -->
+                                                            <td  colspan="14" style="background-color:rgb(187, 220, 241)" >
+                                                                {{head.accountMasterName}}
                                                             </td >
-                                                            <td scope="row" > </td>
-                                                            <td scope="row" > </td>
-                                                            <td > </td>
-                                                            <td > </td>
-                                                            <td ></td>
+                                                            
                                                         </tr>
-                                                        <tr *ngFor="let item of accountBalanceData.invoiceList; index as $index;">
-                                                        <!-- <tr> -->
-                                                            <td scope="row">
-                                                                {{($index + 1)}} 
+                                                        <tr *ngFor="let item of head.bankAccount ; index as $index"  class="accline">
+                                                            <td colspan="4" *ngIf="item.id!=0">
+                                                                <a [routerLink]="['/reports/account-transactions/',item.id]" class="external-link">{{item.accountName}}</a>
                                                             </td>
-                                                            <td scope="row">
-                                                                {{item.assetName}}
+                                                            <td colspan="2" *ngIf="item.id!=0">
+                                                                {{item.startingBalance | currency}}
                                                             </td>
-                                                            <td scope="row">
-                                                                {{(item.startingBalance)}} 
+                                                            <td colspan="2" *ngIf="item.id!=0">
+                                                                {{item.debitAmount | currency}}
                                                             </td>
-                                                            <td scope="row">
-                                                                {{item.debit | currency}}
+                                                            <td colspan="2" *ngIf="item.id!=0" > 
+                                                                {{item.creditAmount | currency}}
                                                             </td>
-                                                            <td scope="row">
-                                                                {{item.credit | currency}}
-                                                            </td>
-                                                            <td scope="row">
+                                                            <td colspan="2" *ngIf="item.id!=0" class="c">
                                                                 {{item.netMovement | currency}}
                                                             </td>
-                                                            <td scope="row">
+                                                            <td colspan="2" *ngIf="item.id!=0" class="c">
                                                                 {{item.endingBalance | currency}}
                                                             </td>
-                                                            
-                                                            
-                                                        </tr>
-                                                        <tr>
-                                                           <td></td>
-                                                            <td class="Bold">
-                                                                Total Assets
+
+
+                                                            <!-- total -->
+
+                                                            <td colspan="4" class="Bold" *ngIf="item.id==0">
+                                                                <a>{{item.accountName}}</a>
                                                             </td>
-                                                            <td scope="row" class="Bold">
-                                                                {{allStartingBalance | currency}}
+                                                            <td colspan="2" class="Bold" *ngIf="item.id==0">
+                                                                {{item.startingBalance | currency}}
                                                             </td>
-                                                            <td scope="row" class="Bold" > 
-                                                                {{allCreditBalance | currency}}
+                                                            <td colspan="2" class="Bold" *ngIf="item.id==0">
+                                                                {{item.debitAmount | currency}}
                                                             </td>
-                                                            <td scope="row" class="Bold">
-                                                                {{allDebitBalance | currency}}
+                                                            <td colspan="2"class="Bold" *ngIf="item.id==0" > 
+                                                                {{item.creditAmount | currency}}
                                                             </td>
-    
-                                                            <td scope="row" class="Bold">
-                                                                {{allNetMovementBalance | currency}}
+                                                            <td colspan="2" class="Bold c" *ngIf="item.id==0" >
+                                                                {{item.netMovement | currency}}
                                                             </td>
-                                                            <td scope="row" class="Bold">
-                                                                {{allEndingBalance | currency}}
+                                                            <td colspan="2" class="Bold c" *ngIf="item.id==0" >
+                                                                {{item.endingBalance | currency}}
                                                             </td>
                                                         </tr>
                                                     </tbody>
-<br>
-                                                    <!-- liability starts  -->
-                                                    <tbody>
-                                                        <tr>
-                                                            <td >
-                                                                S.NO.
-                                                            </td>
-                                                            <td >
-                                                                Liabilities
-                                                            </td>
-                                                            <td >
-                                                                
-                                                            </td>
-                                                            <td scope="row" >
-                                                                
-                                                            </td>
-                                                            <td scope="row">
-                                                               
-                                                            </td>
-                                                            <td >
-                                                               
-                                                            </td>
-                                                            <td></td>
-                                                        
-                                                    </tr>
-                                                    <tr *ngFor="let item of accountBalanceData.invoiceList; index as $index;">
-                                                       
-                                                        <td scope="row">
-                                                            {{($index + 1)}} 
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.liablitlityName }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.startingBalanceLiability }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.liabilityDebit }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.liabilityCredit }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.liabilityNetMovement }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.liabilityEndingBalance}}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td >
-                                                        </td>
-                                                        <td >
-                                                            Unrealized Loss on Foreign Exchange
-                                                        </td>
-                                                        <td >
-                                                            {{item.unrealizedLiabilityStartingBalance }}
-                                                        </td>
-                                                        <td scope="row" >
-                                                            {{item.unrealizedLiabilityDebit }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.unrealizedLiabilityCredit }}
-                                                        </td>
-                                                        <td >
-                                                            {{item.unrealizedLiabilityNetMovement }}
-                                                        </td>
-                                                        <td>{{item.unrealizedLiabilityEndingBalance }}</td>
-                                                    
-                                                </tr>
-                                                    <tr>
-                                                       <td></td>
-                                                        <td class="Bold">
-                                                            Total Liabilites
-                                                        </td>
-                                                        <td scope="row" class="Bold">
-                                                            {{allStartingBalanceLiabilites | currency}}
-                                                        </td>
-                                                        <td scope="row" class="Bold">
-                                                            {{allDebitLiabilites | currency}}
-                                                        </td>
-                                                        <td scope="row" class="Bold">
-                                                            {{allCreditLiabilites | currency}}
-                                                        </td>
-                                                        <td scope="row" class="Bold">
-                                                            {{allNetMovementLiabilites | currency}}
-                                                        </td>
-                                                        <td class="Bold">
-                                                            {{allEndingLiabilites | currency}}
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
+                                                        <tbody>
+                                                        <tr >
 
-                                                <!-- liability ends -->
-<br>
-
-                                                <!-- Equity starts -->
-                                                <tbody>
-                                                    <tr>
-                                                        <td >
-                                                            S.NO.
-                                                        </td>
-                                                        <td >
-                                                            Equity
-                                                        </td>
-                                                        <td >
-                                                            
-                                                        </td>
-                                                        <td scope="row" >
-                                                            
-                                                        </td>
-                                                        <td scope="row">
-                                                           
-                                                        </td>
-                                                        <td >
-                                                           
-                                                        </td>
-                                                        <td></td>
-                                                    
-                                                </tr>
-                                                
-                                                         <tr *ngFor="let item of accountBalanceData.invoiceList; index as $index;">
-                                                       
-                                                        <td scope="row">
-                                                            {{($index + 1)}} 
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.EquityName }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.startingBalanceEquity }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.equityDebit }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.equityCredit }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.equityNetMovement }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.equityEndingBalance}}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                         <td class="Bold">
-                                                             Total Equity
-                                                         </td>
-                                                         <td scope="row" class="Bold">
-                                                             {{allStartingBalanceEquity | currency}}
-                                                         </td>
-                                                         <td scope="row" class="Bold">
-                                                             {{allDebitEquity | currency}}
-                                                         </td>
-                                                         <td scope="row" class="Bold">
-                                                             {{allCreditEquity | currency}}
-                                                         </td>
-                                                         <td scope="row" class="Bold">
-                                                             {{allNetMovementEquity | currency}}
-                                                         </td>
-                                                         <td class="Bold">
-                                                             {{allEndingEquity | currency}}
-                                                         </td>
-                                                     </tr>
-                                            </tbody>
-
-                                                    <!-- equity ends -->
-
-<br>
-                                                    <!-- income starts -->
-
-
-                                                    <tbody>
-                                                        <tr>
-                                                            <td >
-                                                                S.NO.
+                                                            <td colspan="4" class="Bold">
+                                                                Total for all accounts
                                                             </td>
-                                                            <td >
-                                                                Income
-                                                            </td>
-                                                            <td > </td>
-                                                            <td scope="row" > </td>
-                                                            <td scope="row"> </td>
-                                                            <td > </td>
-                                                            <td></td>
-                                                        
-                                                    </tr>
-                                                    <tr *ngFor="let item of accountBalanceData.invoiceList; index as $index;">
-                                                       
-                                                        <td scope="row">
-                                                            {{($index + 1)}} 
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.IncomeName }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            <!-- {{item.startingBalanceIncome }} -->
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.incomeDebit }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.incomeCredit }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.incomeNetMovement }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            <!-- {{item.incomeEndingBalance}} -->
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                         <td class="Bold">
-                                                             Total Income
-                                                         </td>
-                                                         <td scope="row" class="Bold">
-                                                             <!-- {{allStartingBalanceIncome | currency}} -->
-                                                         </td>
-                                                         <td scope="row" class="Bold">
-                                                             {{allDebitIncome | currency}}
-                                                         </td>
-                                                         <td scope="row" class="Bold">
-                                                             {{allCreditIncome | currency}}
-                                                         </td>
-                                                         <td scope="row" class="Bold">
-                                                             {{allNetMovementIncome | currency}}
-                                                         </td>
-                                                         <td class="Bold">
-                                                             <!-- {{allEndingIncome | currency}} -->
-                                                         </td>
-                                                     </tr>
-                                                </tbody>
-<br>
-                                                    <!-- income ends -->
+                                                            <td colspan="2" > </td>
+                                                             <td colspan="2" class=" Bold" > {{statement.totalDebitAmount | currency}} </td>
+                                                            <td colspan="2"  class=" Bold" >{{statement.totalCreditAmount | currency}} </td>
+                                                            <td colspan="2" class="c"></td>
+                                                            <td colspan="2" class="c"></td>
+                                                        </tr>
 
+                                                        <!-- yeh mujhe last mein add karna hai -->
+                                                    </tbody>
+                                           </table>
 
-                                                    <!-- expenes starts -->
-
-                                                    <tbody>
-                                                        <tr>
-                                                            <td >
-                                                                S.NO.
-                                                            </td>
-                                                            <td >
-                                                                Expenses
-                                                            </td>
-                                                            <td > </td>
-                                                            <td scope="row" > </td>
-                                                            <td scope="row"> </td>
-                                                            <td > </td>
-                                                            <td></td>
-                                                        
-                                                    </tr>
-                                                    <tr *ngFor="let item of accountBalanceData.invoiceList; index as $index;">
-                                                       
-                                                        <td scope="row">
-                                                            {{($index + 1)}} 
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.expenseName }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            <!-- {{item.startingBalanceExpense }} -->
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.expenseDebit }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.expenseCredit }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.expenseNetMovement }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            <!-- {{item.expenseEndingBalance}} -->
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td></td>
-                                                         <td class="Bold">
-                                                            Unrealized Loss on Foreign Exchange
-                                                         </td>
-                                                         <td scope="row">
-                                                            <!-- {{item.unrealizedStartingBalanceExpense }} -->
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.unrealizedExpenseDebit }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.unrealizedExpenseCredit }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            {{item.unrealizedExpenseNetMovement }}
-                                                        </td>
-                                                        <td scope="row">
-                                                            <!-- {{item.unrealizedExpenseEndingBalance}} -->
-                                                        </td>
-                                                     </tr>
-                                                    <tr>
-                                                       <td></td>
-                                                        <td class="Bold">
-                                                            Total Expenses
-                                                        </td>
-                                                        <td scope="row" class="Bold">startingBalance
-                                                        </td>
-                                                        <td scope="row" class="Bold">
-                                                            {{allDebitExpense | currency}}
-                                                        </td>
-                                                        <td scope="row" class="Bold">
-                                                            {{allCreditExpense | currency}}
-                                                        </td>
-                                                        <td scope="row" class="Bold">
-                                                            {{allNetMovementExpense | currency}}
-                                                        </td>
-                                                        <td>end</td>
-                                                    </tr>
-                                                    <tr></tr>
-                                                    <tr>
-                                                        <td></td>
-                                                         <td class="Bold">
-                                                            Total for all accounts
-                                                         </td>
-                                                         <td scope="row" class="Bold">
-                                                         </td>
-                                                         <td scope="row" class="Bold">
-                                                            {{allDebitExpTotal | currency}}
-                                                        </td>
-                                                        <td scope="row" class="Bold">
-                                                            {{allCreditExpTotal | currency}}
-                                                        </td>
-                                                         <td scope="row" class="Bold"> </td>
-                                                         <td></td>
-                                                     </tr>
-                                                </tbody>
-                                                    <!-- expenses ends -->
-                                                 </table>
                                            </div>
                                      </div>
                                     </div>

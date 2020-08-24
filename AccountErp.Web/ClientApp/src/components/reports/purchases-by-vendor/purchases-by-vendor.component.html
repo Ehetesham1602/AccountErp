@@ -5,7 +5,7 @@ novalidate> -->
 <div class="kt-holder kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
     <div class="kt-subheader   kt-grid__item" id="kt_subheader">
         <div class="kt-subheader__main">
-            <div class="kt-subheader__breadcrumbs">
+            <div class="kt-subheader__breadcrumbs" >
                 <a [routerLink]="['/']" class="kt-subheader__breadcrumbs-home">
                     <em class="flaticon2-shelter"></em>
                 </a>
@@ -16,7 +16,7 @@ novalidate> -->
                 <span>Purchases by vendors</span>
             </div>
         </div>
-        <div class="kt-subheader__toolbar">
+        <div class="kt-subheader__toolbar" id="htmlData" #htmlData>
             <div class="kt-subheader__wrapper">
             </div>
         </div>
@@ -85,7 +85,7 @@ novalidate> -->
                                                 [multiple]="false" [(ngModel)]="selectedVendor"
                                                  [config]="config" [options]="vendors"></ngx-select-dropdown> </div>
                                       </div>
-                                      <div class="form-group col-md-2 row">
+                                      <div class="form-group col-md-2 row" id="htmlData" #htmlData>
                                         <label class="col-md-5"> </label>
                                         <label class="col-md-3"> </label>
                                         <label class="col-md-5"> </label>
@@ -93,7 +93,7 @@ novalidate> -->
                                             <label class="col-md-9">Date range :</label>
                                         </div>
                                     </div>
-                                     <div class="form-group col-md-2">
+                                     <div class="form-group col-md-2"id="htmlData" #htmlData>
                                         <label class="col-md-3">from:</label>
                                         <div class="col-md-12">
                                             <div class="input-group">
@@ -110,7 +110,7 @@ novalidate> -->
                                         </div>
                                     </div>
                             
-                                    <div class="form-group col-md-2">
+                                    <div class="form-group col-md-2" id="htmlData" #htmlData>
                                         <label class="col-md-3">to:</label>
                                         <div class="col-md-12">
                                             <div class="input-group">

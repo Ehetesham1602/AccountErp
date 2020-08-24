@@ -21,6 +21,14 @@ namespace AccountErp.Infrastructure.Managers
 
         Task<IEnumerable<ItemDetailDto>> GetAllAsync(Constants.RecordStatus? status = null);
 
+        Task<IEnumerable<ItemDetailDto>> GetAllForSalesAsync(Constants.RecordStatus? status = null);
+
+
+        Task<IEnumerable<ItemDetailDto>> GetAllForExpenseAsync(Constants.RecordStatus? status = null);
+
+        
+
+
         Task<IEnumerable<SelectListItemDto>> GetSelectItemsAsync();
 
         Task ToggleStatusAsync(int id);

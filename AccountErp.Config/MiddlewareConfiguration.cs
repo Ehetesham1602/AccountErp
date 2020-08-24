@@ -47,6 +47,7 @@ namespace AccountErp.Config
             services.AddScoped<IRecurringJobManager, RecurringJobManager>();
             services.AddScoped<IReportManager, ReportManager>();
             services.AddScoped<IChartofAccountManager, ChartofAccountManager>();
+            services.AddScoped<ITransactionManager, TransactionManager>();
 
         }
         public static void ConfigureRepository(IServiceCollection services)

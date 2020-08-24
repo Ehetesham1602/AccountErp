@@ -22,6 +22,13 @@ namespace AccountErp.Infrastructure.Repositories
 
         Task<IEnumerable<ItemDetailDto>> GetAllAsync(Constants.RecordStatus? status = null);
 
+        Task<IEnumerable<ItemDetailDto>> GetAllForSalesAsync(Constants.RecordStatus? status = null);
+        Task<IEnumerable<ItemDetailDto>> GetAllForExpenseAsync(Constants.RecordStatus? status = null);
+
+
+
+        
+
         Task<ItemDetailForEditDto> GetForEditAsync(int id);
 
         Task<JqDataTableResponse<ItemListItemDto>> GetPagedResultAsync(ItemJqDataTableRequestModel model);

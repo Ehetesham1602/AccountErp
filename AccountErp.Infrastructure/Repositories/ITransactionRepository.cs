@@ -1,4 +1,7 @@
-﻿using AccountErp.Entities;
+﻿using AccountErp.Dtos.Transaction;
+using AccountErp.Entities;
+using AccountErp.Models.Transaction;
+using AccountErp.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,5 +15,7 @@ namespace AccountErp.Infrastructure.Repositories
         Task SetTransactionAccountIdForInvoice(int invoiceId, int? AccId, DateTime date);
         Task SetTransactionAccountIdForBill(int billId, int? AccId, DateTime date);
         Task DeleteTransaction(int id);
+
+        Task<JqDataTableResponse<TransactionListItemDto>> GetPagedResultAsync(TransactionJqDataTableRequestModel model);
     }
 }

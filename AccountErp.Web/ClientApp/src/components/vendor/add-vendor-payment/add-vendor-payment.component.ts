@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AppUtils } from 'src/helpers';
 import { BankAccountService,BillService, VendorService, BillPaymentService, CreditCardService } from 'src/services';
 import { ChartOfAccountsService } from 'src/services/chart-of-accounts.service';
+import { AccountTransactionsService } from 'src/services/account-transactions.service';
 
 @Component({
   selector: 'app-add-vendor-payment',
@@ -24,6 +25,7 @@ export class AddVendorPaymentComponent implements OnInit {
   vendors=[];
   bills=[];
   selectedVendor;
+  allAccounts;
   vendor:any={};
   config = {displayKey:"value",search:true,limitTo:10,height: 'auto',placeholder:'Select Vendor',customComparator: ()=>{},moreText: 'more',noResultsFound: 'No results found!',searchPlaceholder:'Search',searchOnKey: 'value',clearOnSelection: false,inputDirection: 'ltr',}
 
@@ -36,13 +38,16 @@ export class AddVendorPaymentComponent implements OnInit {
       private vendorService: VendorService,
       private billPaymentService: BillPaymentService,
       private chartofaccService:ChartOfAccountsService,
+      private accountTransactionService:AccountTransactionsService,
       private creditCardService: CreditCardService) {
       this.route.params.subscribe((params) => {
         
           debugger;
           this.model.billId = params['id'];
-          this.model.paymentType=4
+          this.model.paymentType=2
           this.loadExpenseSummary();
+          this.loadAccounts();
+
       });
   }
 
@@ -107,6 +112,28 @@ export class AddVendorPaymentComponent implements OnInit {
                });
        }
       
+  }
+
+  loadAccounts(){
+    this.blockUI.start();
+    this.accountTransactionService.getAllaccounts()
+        .subscribe((data) => {
+            debugger;
+            this.blockUI.stop();
+           
+           
+            this.allAccounts=[];
+            var master=[];
+  
+            Object.assign(this.allAccounts, data);
+            console.log("all accounts",this.allAccounts)
+           
+        },
+            error => {
+                this.blockUI.stop();
+                this.appUtils.ProcessErrorResponse(this.toastr, error);
+            });
+    
   }
 
   getVendorDetail(){

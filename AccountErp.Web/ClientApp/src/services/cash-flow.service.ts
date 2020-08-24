@@ -16,10 +16,17 @@ export class CashFlowService {
     }
   
   
-    getCashFlow(cashFlowDetail){
+    getCashFlowSummary(cashFlowDetail){
       debugger;
   
-      return this.http.post(this.appSettings.ApiBaseUrl + 'Report/profit_and_loss_report', cashFlowDetail);
+      return this.http.post(this.appSettings.ApiBaseUrl + 'Report/cash_fLow_report_Summary', cashFlowDetail);
+    }
+
+
+    getCashFlowDetails(cashFlowDetail){
+      debugger;
+  
+      return this.http.post(this.appSettings.ApiBaseUrl + 'Report/cash_fLow_report_Detail', cashFlowDetail);
     }
   
     toggleStatus(id: number) {

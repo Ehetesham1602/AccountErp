@@ -8,6 +8,8 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
 using AccountErp.Utilities;
+using AccountErp.Dtos.Transaction;
+using AccountErp.Models.Transaction;
 
 namespace AccountErp.DataLayer.Repositories
 {
@@ -74,5 +76,82 @@ namespace AccountErp.DataLayer.Repositories
                 _dataContext.Transaction.Remove(item);
             }
         }
+
+        public async Task<JqDataTableResponse<TransactionListItemDto>> GetPagedResultAsync(TransactionJqDataTableRequestModel model)
+        {
+            if (model.Length == 0)
+            {
+                model.Length = Constants.DefaultPageSize;
+            }
+
+            var linqstmt = (from i in _dataContext.Transaction
+                            join b in _dataContext.BankAccounts
+                            on i.BankAccountId equals b.Id
+                            join c in _dataContext.Customers
+                            on i.ContactId equals c.Id into cust
+                            from c in cust.DefaultIfEmpty()
+                            join v in _dataContext.Vendors
+                           on i.ContactId equals v.Id into vend
+                            from v in vend.DefaultIfEmpty()
+                          
+                            select new TransactionListItemDto
+                            {
+                                Id = i.Id,
+                                TransactionId=i.TransactionId,
+                                BankAccountName=b.AccountName,
+                                Description=i.Description,
+                                TransactionDate=i.TransactionDate,
+                                DebitAmount=i.DebitAmount,
+                                CreditAmount=i.CreditAmount,
+                                Status=i.Status,
+                                TransactionType=i.TransactionTypeId,
+                                ContactName = (Constants.ContactType)i.ContactType == 0 ? (c.FirstName ?? "") + " " + (c.MiddleName ?? "") + " " + (c.LastName ?? "") : (v.Name ?? ""),
+                                //ContactType = (Constants.ContactType)i.ContactType,
+                                //ContactId= (int)i.ContactId,
+
+                                
+
+
+
+
+
+
+
+                            })
+                            .AsNoTracking();
+            var itemsList = (linqstmt.GroupBy(l => l.TransactionType, l => new { l.TransactionId, l.TransactionType, l.CreditAmount, l.DebitAmount })
+            .Select(g => new { GroupId = g.Key, Values = g.ToList() })).ToList();
+
+            foreach (var item in itemsList)
+            {
+                var id = item.GroupId;
+                //var amount = item.Values.Sum(x => x.LineAmount);
+
+                //var itemsData = TransactionFactory.CreateByInvoiceItemsAndTax(invoice, id, amount);
+                //await _transactionRepository.AddAsync(itemsData);
+                //await _unitOfWork.SaveChangesAsync();
+            }
+
+            var sortExpresstion = model.GetSortExpression();
+
+            var pagedResult = new JqDataTableResponse<TransactionListItemDto>
+            {
+                //RecordsTotal = await _dataContext.Invoices.CountAsync(x => model.CustomerId == null || x.CustomerId == model.CustomerId.Value),
+                RecordsFiltered = await linqstmt.CountAsync(),
+                Data = await linqstmt.OrderBy(sortExpresstion).Skip(model.Start).Take(model.Length).ToListAsync()
+            };
+
+            foreach (var transactionListItemDto in pagedResult.Data)
+            {
+                transactionListItemDto.TransactionDate = Utility.GetDateTime(transactionListItemDto.TransactionDate, null);
+                transactionListItemDto.ModifyDate = Utility.GetDateTime(transactionListItemDto.ModifyDate, null);
+            }
+           
+
+            return pagedResult;
+        }
+
     }
+
+
 }

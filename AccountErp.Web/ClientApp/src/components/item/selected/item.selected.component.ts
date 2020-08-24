@@ -30,6 +30,7 @@ export class ItemSelectedComponent implements OnInit{
 
     @Input() selectedTax: any=[];
     @Input() disabled : boolean = true;
+    @Input() isForSale:boolean;
     
  
     @Output() deleteItem = new EventEmitter();
@@ -43,7 +44,12 @@ export class ItemSelectedComponent implements OnInit{
     ngOnInit(): void {
         this.initiateGrid();
         debugger;
-        this.loadItems();
+        if(this.isForSale){
+            this.loadItemsForSale();
+        }else{
+            this.loadItemsForExpense();
+        }
+       // this.loadItems();
         this.loadTaxes();
 
     }
@@ -90,12 +96,45 @@ export class ItemSelectedComponent implements OnInit{
                 this.itemsandservices=[];
                 Object.assign(this.itemsandservices, data);
                 console.log("customers",this.itemsandservices)
-                // if(this.customers.length>0){
-                //     this.customrlist=[];
-                //     this.customers.forEach(element => {
-                //         this.customrlist.push({"id":element.id,"value":element.value})
-                //     });
-                // }
+               
+            },
+                error => {
+                    this.blockUI.stop();
+                    this.appUtils.ProcessErrorResponse(this.toastr, error);
+                });
+    }
+
+    loadItemsForSale() {
+        debugger;
+        this.blockUI.start();
+        this.QuotationService.getAllItemsActiveForSale()
+            .subscribe((data) => {
+                debugger;
+                this.blockUI.stop();
+                
+               
+                this.itemsandservices=[];
+                Object.assign(this.itemsandservices, data);
+                console.log("customers",this.itemsandservices)
+               
+            },
+                error => {
+                    this.blockUI.stop();
+                    this.appUtils.ProcessErrorResponse(this.toastr, error);
+                });
+    }
+    loadItemsForExpense() {
+        debugger;
+        this.blockUI.start();
+        this.QuotationService.loadItemsForExpense()
+            .subscribe((data) => {
+                debugger;
+                this.blockUI.stop();
+                
+               
+                this.itemsandservices=[];
+                Object.assign(this.itemsandservices, data);
+                console.log("customers",this.itemsandservices)
                
             },
                 error => {

@@ -24,12 +24,13 @@ export class TrialBalanceComponent implements OnInit {
     totalThirtyFirstToSixty:0,totalSixtyOneToNinety:0,totalCountSixtyOneToNinety:0,
     totalMoreThanNinety:0,totalCountMoreThanNinety:0,agedPayablesReportDtoList:[{}]};
   model: TrialBalanceDetail = new TrialBalanceDetail();
-  selectedstType = 'accrual';
+  selectedstType = 0;
   startDate;
   endDate;
   fromDate;
   toDate;
   asOfDate;
+  statement;
   today = new Date();
   allStartingBalance;
   allCreditBalance;
@@ -72,6 +73,7 @@ export class TrialBalanceComponent implements OnInit {
   ngOnInit() {
 
     this.setDefaultDate();
+    this.showTrialBalance();
 
     this.assetAccDetails=[{"id":1,"accName":"Account Receivable","debit":100,"credit":50},{"id":2,"accName":"Cash on Hand","debit":10,"credit":20}]
     this.liabilitiesAccDetails=[{"id":1,"accName":"GST","debit":0.00,"credit":50}];
@@ -84,52 +86,20 @@ export class TrialBalanceComponent implements OnInit {
     // if (this.selectedVendor !== undefined) {
      debugger;
      var body={ 
-      "vendorId": 0,
-     "vendorName": "string",
-     "asOfDate": "2020-07-21T06:21:14.033Z"};
+     
+    
+     "asOfDate": this.model.asOfDate,
+      "reportType": this.selectedstType};
      
  
-     this.trialBalanceService.getAccountBalance(body)
+     this.trialBalanceService.getDetail(body)
      .subscribe(
          (data) => {
            debugger
-           console.log("statement",data);
-          // Object.assign(this.temp, data);
-              Object.assign(this.trialBalanceData, data);
-              this.allStartingBalance=this.trialBalanceData.totalAmount;
-              this.allCreditBalance=this.trialBalanceData.totalUnpaidAmount;
-              this.allDebitBalance=this.trialBalanceData.totalNotYetOverDue;
-              this.allNetMovementBalance=this.trialBalanceData.totalCountNotYetOverDue;
-              this.allEndingBalance=this.trialBalanceData.totalLessThan30;
-
-              this.allStartingBalanceLiabilites=this.trialBalanceData.totalCountLessThan30;
-              this.allDebitLiabilites=this.trialBalanceData.totalThirtyFirstToSixty;
-              this.allCreditLiabilites=this.trialBalanceData.totalCountThirtyFirstToSixty;
-              this.allNetMovementLiabilites=this.trialBalanceData.totalSixtyOneToNinety;
-              this.allEndingLiabilites=this.trialBalanceData.totalCountSixtyOneToNinety;
-
-              this.allStartingBalanceEquity=this.trialBalanceData.totalMoreThanNinety;
-              this.allDebitEquity=this.trialBalanceData.totalCountMoreThanNinety;
-              this.allCreditEquity=this.trialBalanceData.totalUnpaidAmount;
-              this.allNetMovementEquity=this.trialBalanceData.totalAmount;
-              this.allEndingEquity=this.trialBalanceData.totalCountSixtyOneToNinety;
-
-              this.allDebitIncome=this.trialBalanceData.totalMoreThanNinety;
-              this.allCreditIncome=this.trialBalanceData.totalCountMoreThanNinety;
-              this.allNetMovementIncome=this.trialBalanceData.totalUnpaidAmount;
-
-
-              this.allDebitExpense=this.trialBalanceData.totalMoreThanNinety;
-              this.allCreditExpense=this.trialBalanceData.totalCountMoreThanNinety;
-              this.allNetMovementExpense=this.trialBalanceData.totalUnpaidAmount;
-
-              this.allDebitExpTotal=this.trialBalanceData.totalCountMoreThanNinety;
-              this.allCreditExpTotal=this.trialBalanceData.totalUnpaidAmount;
-
-              this.temp.agedPayablesReportDtoList.map((item) => {
-               debugger;
-                item.totalUnpaidAmount=item.totalAmount;
-            });
+           this.statement=[];
+           Object.assign(this.statement,data);
+           console.log(this.statement);
+    
           //  this.CalculateTotalPurchase();
          });
       //  }
@@ -155,6 +125,7 @@ export class TrialBalanceComponent implements OnInit {
 
 
 public downloadPDF(): void {
+  debugger;
     const doc = new jsPDF('p', 'pt', 'a4');
     doc.setFontSize(15);
     doc.text('Statement of Account', 400, 40);
@@ -168,7 +139,7 @@ public downloadPDF(): void {
  tableLineColor: [4, 6, 7], // choose RGB
    });
     autoTable(doc, {
-      html: '#my-table1',
+      html: '#my-table',
       styles: {
    },
    tableLineWidth: 0.5,

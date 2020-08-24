@@ -113,9 +113,9 @@
                         <li class="kt-nav__item"
                             [ngClass]="{ 'kt-menu__item--active' : currentUrl.indexOf('/invoice/payments') !== -1 }"
                             aria-haspopup="true">
-                            <a [routerLink]="['/invoice/payments']" class="kt-nav__link ">
+                            <a [routerLink]="['/customer/add-customer-payment']" class="kt-nav__link ">
                                 <i class="kt-nav__link-icon la la-credit-card text-color-white"></i>
-                                <span class="kt-menu__link-text text-color-white">Customer Payments</span>
+                                <span class="kt-menu__link-text text-color-white">Add Incomes</span>
                             </a>
                         </li>
 
@@ -171,9 +171,9 @@
                         <li class="kt-nav__item"
                             [ngClass]="{ 'kt-menu__item--active' : currentUrl.indexOf('/bill/payments') !== -1 }"
                             aria-haspopup="true">
-                            <a [routerLink]="['/bill/payments']" class="kt-nav__link ">
+                            <a [routerLink]="['/vendor/add-vendor-payment']" class="kt-nav__link ">
                                 <i class="kt-nav__link-icon la la-credit-card text-color-white"></i>
-                                <span class="kt-menu__link-text text-color-white">Vendor Payments</span>
+                                <span class="kt-menu__link-text text-color-white">Add Expenses</span>
                             </a>
                         </li>
 
@@ -234,7 +234,14 @@
                 </li>
 
                 <!-- Reposts start -->
-                <li class="kt-nav__item kt-nav__item--sub">
+                <li class="kt-nav__item" [ngClass]="{ 'kt-menu__item--active' : currentUrl.indexOf('/setting') !== -1 }"
+                aria-haspopup="true">
+                <a [routerLink]="['/reports/report-menu']" class="kt-nav__link ">
+                    <i class="kt-nav__link-icon flaticon2-graph text-color-white"></i>
+                    <span class="kt-menu__link-text text-color-white">Reports</span>
+                </a>
+            </li>
+                <!-- <li class="kt-nav__item kt-nav__item--sub">
                     <a class="kt-nav__link collapsed" role="tab" id="m_nav_link_4" data-toggle="collapse"
                         href="#m_nav_sub_4" aria-expanded="  false">
                         <i class="kt-nav__link-icon flaticon2-graph text-color-white"></i>
@@ -347,7 +354,7 @@
 
 
                     </ul>
-                </li>
+                </li> -->
                 <!-- Reports ends -->
 
                 <li class="kt-nav__item" [ngClass]="{ 'kt-menu__item--active' : currentUrl.indexOf('/setting') !== -1 }"

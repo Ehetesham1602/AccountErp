@@ -16,10 +16,9 @@ export class BalanceSheetService {
     }
   
   
-    getProfitLoss(balanceSheetDetail){
+    getBalanceSheet(balanceSheetDetail){
       debugger;
-  
-      return this.http.post(this.appSettings.ApiBaseUrl + 'Report/profit_and_loss_report', balanceSheetDetail);
+      return this.http.post(this.appSettings.ApiBaseUrl + 'Report/Balance_Sheet_Report', balanceSheetDetail);
     }
   
     toggleStatus(id: number) {

@@ -10,6 +10,7 @@ export class InvoicePaymentModel {
     public customerId:string;
     public paymentType:number;
     public amount:number;
+    public creditBankAccountId: string;
 
     constructor() {
         this.paymentMode = '';

@@ -9,9 +9,7 @@
             <th>
                 Item/Service
             </th>
-            <th>
-                Item Type
-            </th>
+           
             <th style="width: 15%;">
                 Rate
             </th>
@@ -51,9 +49,7 @@
                
                 
             </td>
-            <td>
-                {{(item.itemTypeName)}}
-            </td>
+           
            
             <td>
                 <input class="form-control" type="text" (input)="changeRate($event,$index);updateTotalAmount.emit()"  value="{{item.rate}}"/>

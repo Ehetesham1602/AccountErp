@@ -24,11 +24,18 @@ export class CashFlowComponent implements OnInit {
   toDate;
   showSummary = true;
   showDetail = false;
+  cashflowSummary=[];
+  cashflowDetails=[];
+
 
   allSales;
   allPurchases;
   allSalesTaxes;
+  allOther;
   allNetCashOperatingActivites;
+  allPropertyPlantEquip;
+  allOtherInvesting;
+
   allNetCashInvestingActivites;
   allNetCashFinancingActivites;
   allStartingBalance;
@@ -55,7 +62,10 @@ export class CashFlowComponent implements OnInit {
     this.showDetail=true;
     this.showSummary=false;
   }
-
+  showCashFlow(){
+    this.getCashFlowSummary();
+    this.getCashFlowDetails();
+  }
  
 
   // model: ProfitLossDetail = new ;
@@ -65,69 +75,163 @@ export class CashFlowComponent implements OnInit {
         private appUtils: AppUtils,) { }
 
   ngOnInit() {
+
+    this.setDefaultDate();
+    this.getCashFlowSummary();
+    this.getCashFlowDetails();
   }
 
 
-  // showCashFlow() {
-  //   // this.purchaseVendortData = {vendorReportsList={}};
-  //   console.log("from",this.fromDate);
-  //   console.log("from",this.toDate);
-  //   // if (this.selectedVendor !== undefined) {
-  //    debugger;
-  //    var body={ 
-  //     "vendorId": 0,
-  //    "vendorName": "string",
-  //    "asOfDate": "2020-07-21T06:21:14.033Z"};
+  getCashFlowSummary() {
+    // this.purchaseVendortData = {vendorReportsList={}};
+    console.log("from",this.fromDate);
+    console.log("from",this.toDate);
+    // if (this.selectedVendor !== undefined) {
+     debugger;
+     var body={
+      "startDate": this.fromDate,
+      "endDate": this.toDate,
+      "tabId": 0
+    };
      
  
-  //    this.profitLossService.getCashFlow(body)
-  //    .subscribe(
-  //        (data) => {
-  //          debugger
-  //          console.log("statement",data);
-  //         // Object.assign(this.temp, data);
-  //             Object.assign(this.cashFlowData, data);
-  //             this.allTotalIncome=this.cashFlowData.totalIncome;
-  //             this.allTotalCostOfGoodSold=this.cashFlowData.totalCostofGoodsSold;
-  //             this.allgrossProfit=this.cashFlowData.totalGrossProfit;
-  //             this.allGrossProfitPercentage=this.cashFlowData.totalGrossProfitPercentage;
-  //             this.allTotalOperatingExpenses=this.cashFlowData.totalOperatingExpense;
-  //             this.allNetProfit=this.cashFlowData.totalNetProfit;
-  //             this.allNetProfitPercentage=this.cashFlowData.totalNetProfitPercenatge;
-  //             this.temp.agedPayablesReportDtoList.map((item) => {
-  //              debugger;
-  //               item.totalUnpaidAmount=item.totalAmount;
-  //           });
-  //         //  this.CalculateTotalPurchase();
-  //        });
-  //     //  }
-  //  }
+     this.cashFlowService.getCashFlowSummary(body)
+     .subscribe(
+         (data) => {
+           debugger
+              Object.assign(this.cashflowSummary, data);
+              console.log("summary",this.cashflowSummary);
+              
+             
+         });
+     
+   }
+
+   getCashFlowDetails(){
+     debugger;
+    console.log("from",this.fromDate);
+    console.log("from",this.toDate);
+    // if (this.selectedVendor !== undefined) {
+     debugger;
+     var body={
+      "startDate": this.fromDate,
+      "endDate": this.toDate,
+      "tabId": 0
+    };
+     
+ 
+     this.cashFlowService.getCashFlowDetails(body)
+     .subscribe(
+         (data) => {
+           debugger
+              Object.assign(this.cashflowDetails, data);
+              console.log("statement",this.cashflowDetails);
+         });
+     
+   }
+
+ 
 
   public openPDF(): void {
     const doc = new jsPDF('p', 'pt', 'a4');
+    // let doc = new jsPDF("portrait","px","a4");
+
     doc.setFontSize(15);
-    doc.text('Statement of Account', 400, 40);
+    doc.text('Cash-Flow', 50, 50);
+   // doc.autoPrint();
+
+    var startDate = new Date(new Date().getFullYear(), 0, 1);
+    this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+    const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+    this.fromDate=jsbillDate.toDateString();
+  
+    var endDate = new Date();
+    this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+    const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+    this.toDate=jsduevDate.toDateString();
+    doc.text(50, 100, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+
+    doc.setProperties({
+      title: 'Cash - Flow' + ' ' + this.toDate,
+      subject: 'Info about PDF',
+      author: 'PDFAuthor',
+      keywords: 'generated, javascript, web 2.0, ajax',
+      creator: 'My Company'
+  });
+
     autoTable(doc, {
-       html: '#my-table',
-       styles: {
-        // cellPadding: 0.5,
-       // fontSize: 12,
+      html: '#my-table',
+      // didParseCell: function (data) {
+      //   var rows = data.table.body;
+      //   if (data.row.index === rows.length - 1) {
+      //       data.cell.styles.fillColor = [239, 154, 154];
+      //   }
+      // },
+
+      willDrawCell: function (data) {
+        var rows = data.table.body;
+        if (data.row.index === rows.length - 1) {
+            doc.setFillColor(208,208,208);
+        }
+        if (data.row.index === rows.length - 5) {
+          doc.setFillColor(208,208,208);
+        }
+        if (data.row.index === rows.length - 8) {
+          doc.setFillColor(208,208,208);
+         }
+          if (data.row.index === rows.length - 10) {
+            doc.setFillColor(208,208,208);
+       }
+      if (data.row.index === rows.length - 14) {
+           doc.setFillColor(208,208,208);
+         }
     },
-    tableLineWidth: 0.5,
-    startY: 400, /* if start position is fixed from top */
-    tableLineColor: [4, 6, 7], // choose RGB
-      });
+
+      bodyStyles: { minCellHeight: 20 },
+      theme: 'striped',
+      styles: { valign: 'bottom', overflow: 'linebreak', halign: 'left', minCellHeight: 31 },
+      tableLineWidth: 0.5,
+      startY: 200,
+      tableLineColor: [4, 6, 7], // choose RGB
+      pageBreak: 'avoid',
+      columnStyles: {
+        2: { cellWidth: 32, minCellHeight: 32 },
+      },
+      headStyles: {  fontStyle: 'bold', lineWidth: 0.5, lineColor: '#ccc', textColor: 0, },
+    });
       const DATA = this.htmlData.nativeElement;
+
+
+// For each page, print the page number and the total pages
+const addFooters = doc => {
+  const pageCount = doc.internal.getNumberOfPages();
+
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(8);
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.text(510, 780, 'Cash Flow ');
+    doc.text(40, 800, 'Date Range : ' + '' + this.fromDate + ' ' + 'to' + ' ' + this.toDate);
+    doc.text(450, 800, 'Created on : ' + '' + this.toDate);
+    doc.text( ' ' +' ' +' ' +' ' +' ' +' ' +' ' +' ' +' ' +' ' +' ' +' ' +' ' +' ' +' ' +' ' +
+    'Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 200, 780, {
+      align: 'right'
+    });
+  }
+};
+
+addFooters(doc);
     doc.fromHTML(DATA.innerHTML, 30, 15);
-    doc.output('dataurlnewwindow');
+    window.open(doc.output('bloburl'), '_blank');
+    // doc.output('dataurlnewwindow');
   }
 
 
 public downloadPDF(): void {
     const doc = new jsPDF('p', 'pt', 'a4');
     doc.setFontSize(15);
-    doc.text('Statement of Account', 400, 40);
-    doc.text('Outstanding Invoices', 400, 70);
+    doc.text('Cash-FLow', 400, 40);
+    // doc.text('Outstanding Invoices', 400, 70);
    autoTable(doc, {
     html: '#my-table',
     styles: {
@@ -136,16 +240,8 @@ public downloadPDF(): void {
  startY: 550,
  tableLineColor: [4, 6, 7], // choose RGB
    });
-    autoTable(doc, {
-      html: '#my-table1',
-      styles: {
-   },
-   tableLineWidth: 0.5,
-   startY: 300,
-   tableLineColor: [4, 6, 7], // choose RGB
-     });
     const DATA = this.htmlData.nativeElement;
-    doc.save('Customer-statement.pdf');
+    doc.save('Cash-flow.pdf');
   }
 
 
@@ -166,4 +262,18 @@ public downloadPDF(): void {
     const jsDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
     this.toDate = jsDate.toISOString();
    }
+
+   setDefaultDate(){
+    debugger;
+          
+    var startDate = new Date(new Date().getFullYear(), 0, 1);
+    this.startDate={ day: startDate.getDate(), month: startDate.getMonth()+1, year: startDate.getFullYear()};
+    const jsbillDate = new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day);
+    this.fromDate=jsbillDate.toISOString();
+  
+    var endDate = new Date();
+    this.endDate={ day: endDate.getDate(), month: endDate.getMonth()+1, year: endDate.getFullYear()};
+    const jsduevDate = new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day);
+    this.toDate=jsduevDate.toISOString();
+  }
 }

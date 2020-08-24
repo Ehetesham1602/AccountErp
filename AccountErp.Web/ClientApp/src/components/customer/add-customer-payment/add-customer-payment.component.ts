@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AppUtils } from 'src/helpers';
 import { InvoiceService, BankAccountService, CustomerService, InvoicePaymentService } from 'src/services';
 import { ChartOfAccountsService } from 'src/services/chart-of-accounts.service';
+import { AccountTransactionsService } from 'src/services/account-transactions.service';
 
 @Component({
   selector: 'app-add-customer-payment',
@@ -26,6 +27,7 @@ export class AddCustomerPaymentComponent implements OnInit {
     selectedCustomer;
     customer:any={};
     invoices:any=[];
+    allAccounts;
 
     constructor(private router: Router,
         private route: ActivatedRoute,
@@ -35,12 +37,14 @@ export class AddCustomerPaymentComponent implements OnInit {
         private bankAccountService: BankAccountService,
         private customerService: CustomerService,
         private invoicePaymentService: InvoicePaymentService,
+        private accountTransactionService:AccountTransactionsService,
         private chartofaccService:ChartOfAccountsService) {
         this.route.params.subscribe((params) => {
             debugger;
             this.model.invoiceId = params['id'];
             this.model.paymentType=1
-            this. loadInvoiceSummary();
+            this.loadInvoiceSummary();
+            this.loadAccounts();
         });
     }
 
@@ -76,6 +80,28 @@ export class AddCustomerPaymentComponent implements OnInit {
                 this.appUtils.ProcessErrorResponse(this.toastr, error);
             });
     }
+
+    loadAccounts(){
+        this.blockUI.start();
+        this.accountTransactionService.getAllaccounts()
+            .subscribe((data) => {
+                debugger;
+                this.blockUI.stop();
+               
+               
+                this.allAccounts=[];
+                var master=[];
+      
+                Object.assign(this.allAccounts, data);
+                console.log("all accounts",this.allAccounts)
+               
+            },
+                error => {
+                    this.blockUI.stop();
+                    this.appUtils.ProcessErrorResponse(this.toastr, error);
+                });
+        
+      }
 
     loadInvoiceSummary() {
         this.blockUI.start();

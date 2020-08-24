@@ -36,7 +36,9 @@ export class QuotationAddComponent implements OnInit {
     newQuotNumber;
     qtnNumber;
     customerDiscount;
-    ConfirmationMessage = "You want to save quotation?"
+    ConfirmationMessage = "You want to save quotation?";
+    isForSale=true;
+
     constructor(private router: Router,
         private route: ActivatedRoute,
         private modalService: NgbModal,
@@ -352,7 +354,7 @@ export class QuotationAddComponent implements OnInit {
                     if(item.salesTaxId!=null){
                         this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":item.salesTaxId,"taxPercentage":item.taxPercentage,"taxPrice":this.model.tax,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":item.taxBankAccountId,"lineAmount":item.lineAmount});
                     }else{
-                        this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":0,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0,"lineAmount":item.lineAmount});
+                        this.model.items.push({"serviceId":item.id,"rate":item.rate,"price":item.price,"taxId":null,"taxPercentage":item.taxPercentage,"taxPrice": 0,"quantity":item.qty,"bankAccountId":item.bankAccountId,"taxBankAccountId":0,"lineAmount":item.lineAmount});
                     }
 
 
