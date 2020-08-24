@@ -113,37 +113,6 @@ namespace AccountErp.Managers
             return agedReceivablesDetailsReportDtoObj;
         }
 
-        public async Task<ProfitAndLossSummaryReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model)
-        {
-            ProfitAndLossSummaryReportDto profitAndLossSummaryReportDtosList = new ProfitAndLossSummaryReportDto();
-            ProfitAndLossSummaryDetailsReportDto profitAndLossSummaryList;
-            profitAndLossSummaryList = await _reportRepository.GetProfitAndLossReportAsync(model);
-            profitAndLossSummaryReportDtosList.Income = 0;
-            profitAndLossSummaryReportDtosList.OperatingExpenses = 0;
-            profitAndLossSummaryReportDtosList.CostOfGoodSold = 0;
-
-            if (model.ReportType == 1)
-            {
-                profitAndLossSummaryList.billDetailDto = profitAndLossSummaryList.billDetailDto.Where(p => p.Status == Constants.BillStatus.Paid).ToList();
-                profitAndLossSummaryList.InvoiceDetailDto = profitAndLossSummaryList.InvoiceDetailDto.Where(p => p.Status == Constants.InvoiceStatus.Paid).ToList();
-            }
-            profitAndLossSummaryList.billDetailDto = profitAndLossSummaryList.billDetailDto.Where(p => (p.BillDate >= model.StartDate && p.BillDate <= model.EndDate)).ToList();
-            profitAndLossSummaryList.InvoiceDetailDto = profitAndLossSummaryList.InvoiceDetailDto.Where(p => (p.InvoiceDate >= model.StartDate && p.InvoiceDate <= model.EndDate)).ToList();
-
-
-            foreach (var item in profitAndLossSummaryList.InvoiceDetailDto)
-            {
-                profitAndLossSummaryReportDtosList.Income += item.SubTotal;
-            }
-
-            foreach (var bill in profitAndLossSummaryList.billDetailDto)
-            {
-                profitAndLossSummaryReportDtosList.OperatingExpenses += bill.SubTotal;
-            }
-
-            profitAndLossSummaryReportDtosList.NetProfit = profitAndLossSummaryReportDtosList.Income - profitAndLossSummaryReportDtosList.CostOfGoodSold - profitAndLossSummaryReportDtosList.OperatingExpenses;
-            return profitAndLossSummaryReportDtosList;
-        }
         public async Task<List<TrialBalanceReportDto>> GetTrialBalance(TrialBalanaceReportModel model)
         {
             var data = await _reportRepository.GetCOADetailAsyncForTrialReport();
@@ -242,11 +211,85 @@ namespace AccountErp.Managers
         public async Task<ProfitAndLossMainDto> GetProfitAndLossDetailsReportAsync(ProfitAndLossModel model)
         {
             var data = await _reportRepository.GetProfitAndLossDetailsReportAsync();
-
+            var dataForAmount = await _reportRepository.GetProfitAndLossDetailsForAmount();
             List<ProfitAndLossDetailsDto> profitAndLossList = new List<ProfitAndLossDetailsDto>();
             ProfitAndLossMainDto mainProfitAndLossDtoObj = new ProfitAndLossMainDto();
+            ProfitAndLossDetailsDto profitAndLossMasterDto = new ProfitAndLossDetailsDto();
+            profitAndLossMasterDto.BankAccount = new List<ProfitAndLossDetailsReportDto>();
+            foreach (var bank in dataForAmount)
+            {
+               
 
-            foreach (var item in data)
+                ProfitAndLossDetailsReportDto AccountBalance = new ProfitAndLossDetailsReportDto();
+                AccountBalance.Id = bank.Id;
+                AccountBalance.IncomeCreditAmount = bank.CreditAmount;
+                AccountBalance.OperatingExpensesDebitAmount = bank.DebitAmount;
+                profitAndLossMasterDto.BankAccount.Add(AccountBalance);
+
+                if(bank.CreditAmount != 0)
+                {
+                    foreach (var item in data)
+                    {
+                        profitAndLossMasterDto = new ProfitAndLossDetailsDto();
+                        profitAndLossMasterDto.Id = item.Id;
+                        profitAndLossMasterDto.AccountMasterName = item.AccountMasterName;
+                        profitAndLossMasterDto.BankAccount = new List<ProfitAndLossDetailsReportDto>();
+                        foreach (var accType in item.AccountTypes)
+                        {
+
+                            foreach (var acc in accType.BankAccount)
+                            {
+                                if (model.ReportType == 0)
+                                {
+                                    acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.StartDate && p.TransactionDate <= model.EndDate)).ToList();
+                                }
+                                else if (model.ReportType == 1)
+                                {
+                                    acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.StartDate && p.TransactionDate <= model.EndDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
+                                }
+
+                                AccountBalance = new ProfitAndLossDetailsReportDto();
+                                AccountBalance.Id = acc.Id;
+                                AccountBalance.AccountName = acc.AccountName;
+                                profitAndLossMasterDto.BankAccount.Add(AccountBalance);
+                            }
+                        }
+                    }
+                }else if(bank.DebitAmount != 0)
+                {
+                    foreach (var item in data)
+                    {
+                        profitAndLossMasterDto = new ProfitAndLossDetailsDto();
+                        profitAndLossMasterDto.Id = item.Id;
+                        profitAndLossMasterDto.AccountMasterName = item.AccountMasterName;
+                        profitAndLossMasterDto.BankAccount = new List<ProfitAndLossDetailsReportDto>();
+                        foreach (var accType in item.AccountTypes)
+                        {
+
+                            foreach (var acc in accType.BankAccount)
+                            {
+                                if (model.ReportType == 0)
+                                {
+                                    acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.StartDate && p.TransactionDate <= model.EndDate)).ToList();
+                                }
+                                else if (model.ReportType == 1)
+                                {
+                                    acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.StartDate && p.TransactionDate <= model.EndDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
+                                }
+
+                                AccountBalance = new ProfitAndLossDetailsReportDto();
+                                AccountBalance.Id = acc.Id;
+                                AccountBalance.AccountName = acc.AccountName;
+                                profitAndLossMasterDto.BankAccount.Add(AccountBalance);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            profitAndLossList.Add(profitAndLossMasterDto);
+            
+            /*foreach (var item in data)
             {
                 ProfitAndLossDetailsDto profitAndLossMasterDto = new ProfitAndLossDetailsDto();
                 profitAndLossMasterDto.Id = item.Id;
@@ -269,28 +312,32 @@ namespace AccountErp.Managers
                         ProfitAndLossDetailsReportDto AccountBalance = new ProfitAndLossDetailsReportDto();
                         AccountBalance.Id = acc.Id;
                         AccountBalance.AccountName = acc.AccountName;
-                        if (accType.COA_AccountMasterId == 3)
+                        AccountBalance.IncomeCreditAmount = acc.Transactions.Sum(x => x.DebitAmount);
+                        AccountBalance.OperatingExpensesDebitAmount = acc.Transactions.Sum(x => x.CreditAmount);
+
+                        *//*if (accType.COA_AccountMasterId == 3)
                         {
                             AccountBalance.IncomeDebitAmount = acc.Transactions.Sum(x => x.DebitAmount);
                         }
                         else if (accType.COA_AccountMasterId == 4)
                         {
                             AccountBalance.OperatingExpensesCreditAmount = acc.Transactions.Sum(x => x.CreditAmount);
-                        }
+                        }*//*
                         profitAndLossMasterDto.BankAccount.Add(AccountBalance);
                     }
                 }
                 ProfitAndLossDetailsReportDto TotalAccountBalance = new ProfitAndLossDetailsReportDto();
                 TotalAccountBalance.AccountName = "Total " + item.AccountMasterName;
-                TotalAccountBalance.IncomeDebitAmount = profitAndLossMasterDto.BankAccount.Sum(x => x.IncomeDebitAmount);
-                TotalAccountBalance.OperatingExpensesCreditAmount = profitAndLossMasterDto.BankAccount.Sum(x => x.OperatingExpensesCreditAmount);
+                
+                TotalAccountBalance.IncomeCreditAmount = profitAndLossMasterDto.BankAccount.Sum(x => x.IncomeCreditAmount);
+                TotalAccountBalance.OperatingExpensesDebitAmount = profitAndLossMasterDto.BankAccount.Sum(x => x.OperatingExpensesDebitAmount);
                 if(profitAndLossMasterDto.AccountMasterName == "Income")
                 {
-                    profitAndLossMasterDto.GrossProfit += profitAndLossMasterDto.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount);
+                    profitAndLossMasterDto.GrossProfit += profitAndLossMasterDto.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeCreditAmount);
                 }
                 profitAndLossMasterDto.BankAccount.Add(TotalAccountBalance);
                 profitAndLossList.Add(profitAndLossMasterDto);
-            }
+            }*/
 
 
 
@@ -299,15 +346,27 @@ namespace AccountErp.Managers
             {
                 if (model.TabId == 1)
                 {
-                    mainProfitAndLossDtoObj.GrossProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount);
-                    mainProfitAndLossDtoObj.NetProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount - x.OperatingExpensesCreditAmount);
+                    mainProfitAndLossDtoObj.GrossProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeCreditAmount);
+                    mainProfitAndLossDtoObj.NetProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeCreditAmount - x.OperatingExpensesDebitAmount);
                 }
                 else
                 {
-                    mainProfitAndLossDtoObj.Income += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount);
+                    Decimal Amount = 0;
+                    Amount = totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeCreditAmount - x.OperatingExpensesDebitAmount);
+                    if(Amount > 0)
+                    {
+                        mainProfitAndLossDtoObj.Income += Amount;
+                    }
+                    else
+                    {
+                        mainProfitAndLossDtoObj.OperatingExpenses += Amount;
+                    }
+                    mainProfitAndLossDtoObj.NetProfit += mainProfitAndLossDtoObj.Income - mainProfitAndLossDtoObj.OperatingExpenses; 
+
+                   /* mainProfitAndLossDtoObj.Income += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount);
                     mainProfitAndLossDtoObj.OperatingExpenses += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.OperatingExpensesCreditAmount);
                     mainProfitAndLossDtoObj.GrossProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount);
-                    mainProfitAndLossDtoObj.NetProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount - x.OperatingExpensesCreditAmount);
+                    mainProfitAndLossDtoObj.NetProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount - x.OperatingExpensesCreditAmount);*/
                 }
 
             }

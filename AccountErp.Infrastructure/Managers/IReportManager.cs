@@ -14,7 +14,6 @@ namespace AccountErp.Infrastructure.Managers
         Task<SalesTaxDetailsReportDto> GetSalesTaxReportAsync(SalesReportModel model);
         Task<AgedPayablesDetailsReportDto> GetAgedPayablesReportAsync(AgedPayablesModel model);
         Task<AgedPayablesDetailsReportDto> GetAgedReceivablesReportAsync(AgedReceivablesModel model);
-        Task<ProfitAndLossSummaryReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model);
         Task<List<TrialBalanceReportDto>> GetTrialBalance(TrialBalanaceReportModel model);
         Task<AccountTotalBalanceDto> GetAccountBalanceReportAsync(AccountBalanceModel model);
         Task<ProfitAndLossMainDto> GetProfitAndLossDetailsReportAsync(ProfitAndLossModel model);

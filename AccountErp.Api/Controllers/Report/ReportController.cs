@@ -66,14 +66,6 @@ namespace AccountErp.Api.Controllers.Report
         }
 
         [HttpPost]
-        [Route("profit_and_loss_report")]
-        public async Task<ProfitAndLossSummaryReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model)
-        {
-            var pageResult = await _reportManager.GetProfitAndLossReportAsync(model);
-            return pageResult;
-        }
-
-        [HttpPost]
         [Route("Trial_Balance_Report")]
         public async Task<List<TrialBalanceReportDto>> GetTrialBalanceReportAsync(TrialBalanaceReportModel model)
         {

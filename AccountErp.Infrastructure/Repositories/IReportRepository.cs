@@ -3,6 +3,7 @@ using AccountErp.Dtos.Bill;
 using AccountErp.Dtos.ChartofAccount;
 using AccountErp.Dtos.Customer;
 using AccountErp.Dtos.Report;
+using AccountErp.Dtos.Transaction;
 using AccountErp.Models.Report;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,6 @@ namespace AccountErp.Infrastructure.Repositories
 
         Task<List<AgedPayablesReportDto>> GetAgedPayablesReportAsync(AgedPayablesModel model);
         Task<List<AgedReceivablesReportDto>> GetAgedReceivablesReportAsync(AgedReceivablesModel model);
-        Task<ProfitAndLossSummaryDetailsReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model);
         Task<List<COADetailDto>> GetCOADetailAsyncForTrialReport();
         Task<List<COADetailDto>> GetAccountBalanceReportAsync();
         Task<List<COADetailDto>> GetProfitAndLossDetailsReportAsync();
@@ -29,6 +29,7 @@ namespace AccountErp.Infrastructure.Repositories
         Task<List<COADetailDto>> GetCOADetailAsyncForAccountTransactionReport();
         //Task<List<BankAccountDetailDto>> GetCashFlowReportAsync();
         Task<List<COADetailDto>> GetCashFlowReportAsync();
+        Task<List<TransactionDetailDto>> GetProfitAndLossDetailsForAmount();
 
     }
 }

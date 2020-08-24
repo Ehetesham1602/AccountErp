@@ -130,13 +130,15 @@ namespace AccountErp.DataLayer.Repositories
             List<SalesTaxReportDto> salesTaxReportDtosList;
             List<InvoiceDetailDto> invoiceDetailDtoList;
             List<BillDetailDto> billDetailDtoList;
+            List<TransactionDetailDto> bankAccountDetailsList;
             if (model.SalesId == 0)
             {
                 salesTaxReportDtosList = await (from s in _dataContext.SalesTaxes
                                                 select new SalesTaxReportDto
                                                 {
                                                     SalesId = s.Id,
-                                                    Tax = s.TaxPercentage + " " + s.Code
+                                                    Tax = s.TaxPercentage + " " + s.Code,
+                                                    BankAccountId = s.BankAccountId
                                                 }).ToListAsync();
             }
             else
@@ -208,7 +210,35 @@ namespace AccountErp.DataLayer.Repositories
                 salesTax.TaxAmountOnPurchases = billDetailDtoList.Sum(x => x.Bill.TaxPrice);
                 salesTax.NetTaxOwing = salesTax.TaxAmountOnSales - salesTax.TaxAmountOnPurchases;
                 salesTax.StartingBalance = invTaxAmt - billTaxAmt;
-                salesTax.LessPaymentsToGovernment = 2;
+
+                bankAccountDetailsList = await (from t in _dataContext.Transaction where t.BankAccountId == salesTax.BankAccountId
+                                                select new TransactionDetailDto
+                                                    {
+                                                        TransactionId = t.TransactionId,
+                                                        BankAccountId = t.BankAccountId,
+                                                        Id = t.Id,
+                                                        CreditAmount = t.CreditAmount,
+                                                        DebitAmount = t.DebitAmount,
+                                                        TransactionDate =t.TransactionDate,
+                                                        Status = t.Status,
+                                                        TransactionType = t.TransactionTypeId
+                                                }).ToListAsync();
+                if (model.ReportType == 1)
+                {
+                    bankAccountDetailsList = bankAccountDetailsList.Where(p => p.Status == Constants.TransactionStatus.Paid ).ToList();
+                }
+                bankAccountDetailsList = bankAccountDetailsList.Where(p => (p.TransactionDate >= model.StartDate && p.TransactionDate <= model.EndDate)).ToList();
+                var income = bankAccountDetailsList.Where(t => t.TransactionType.Equals(Constants.TransactionType.AccountIncome));
+                var expence = bankAccountDetailsList.Where(t => t.TransactionType.Equals(Constants.TransactionType.AccountExpence));
+                if (income.Equals(4))
+                {
+                    salesTax.LessPaymentsToGovernment = bankAccountDetailsList.Sum(x => x.CreditAmount);
+                }
+                else
+                {
+                    salesTax.LessPaymentsToGovernment = bankAccountDetailsList.Sum(x => x.DebitAmount);
+                }
+                //salesTax.LessPaymentsToGovernment = 2;
                 salesTax.EndingBalance = salesTax.StartingBalance + salesTax.NetTaxOwing - salesTax.LessPaymentsToGovernment;
             }
             return salesTaxReportDtosList;
@@ -397,30 +427,6 @@ namespace AccountErp.DataLayer.Repositories
                 agedReceivables.TotalUnpaid = invoiceDetailDtoList.Sum(x => x.TotalAmount);
             }
             return agedReceivablesReportDtosList;
-        }
-
-        public async Task<ProfitAndLossSummaryDetailsReportDto> GetProfitAndLossReportAsync(ProfitAndLossModel model)
-        {
-
-            ProfitAndLossSummaryDetailsReportDto profitAndLossDetailsDto = new ProfitAndLossSummaryDetailsReportDto();
-            profitAndLossDetailsDto.billDetailDto = await (from b in _dataContext.Bills
-                                                           where b.Status != Constants.BillStatus.Deleted
-                                                           select new BillDetailDto
-                                                           {
-                                                               BillDate = b.BillDate,
-                                                               Status = b.Status,
-                                                               SubTotal = b.SubTotal
-                                                           }).ToListAsync();
-            profitAndLossDetailsDto.InvoiceDetailDto = await (from i in _dataContext.Invoices
-                                                              where i.Status != Constants.InvoiceStatus.Deleted
-                                                              select new InvoiceDetailDto
-                                                              {
-                                                                  InvoiceDate = i.InvoiceDate,
-                                                                  Status = i.Status,
-                                                                  SubTotal = i.SubTotal
-                                                              }).ToListAsync();
-
-            return profitAndLossDetailsDto;
         }
 
         public async Task<List<COADetailDto>> GetCOADetailAsyncForTrialReport()
@@ -662,6 +668,23 @@ namespace AccountErp.DataLayer.Repositories
                                   })
                               }),
 
+                          })
+                           .AsNoTracking()
+                           .ToListAsync();
+        }
+        public async Task<List<TransactionDetailDto>> GetProfitAndLossDetailsForAmount()
+        {
+            return await (from t in _dataContext.Transaction
+                          select new TransactionDetailDto
+                          {
+                              TransactionId = t.TransactionId,
+                              BankAccountId = t.BankAccountId,
+                              Id = t.Id,
+                              DebitAmount = t.DebitAmount,
+                              CreditAmount = t.CreditAmount,
+                              TransactionDate = t.TransactionDate,
+                              Status = t.Status,
+                              ModifyDate = t.ModifyDate ?? DateTime.Now
                           })
                            .AsNoTracking()
                            .ToListAsync();
