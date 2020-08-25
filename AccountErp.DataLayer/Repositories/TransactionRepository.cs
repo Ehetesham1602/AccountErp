@@ -93,6 +93,7 @@ namespace AccountErp.DataLayer.Repositories
                             join v in _dataContext.Vendors
                            on i.ContactId equals v.Id into vend
                             from v in vend.DefaultIfEmpty()
+                            where i.isForTransEntry == true
                           
                             select new TransactionListItemDto
                             {
