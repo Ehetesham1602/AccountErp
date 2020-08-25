@@ -26,6 +26,7 @@ namespace AccountErp.Dtos.Transaction
         public string ContactName { get; set; }
 
         public string TransactionName { get; set; }
+        public bool? isForTransEntry { get; set; }
 
         
 

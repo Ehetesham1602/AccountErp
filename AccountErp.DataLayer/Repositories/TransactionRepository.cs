@@ -106,6 +106,7 @@ namespace AccountErp.DataLayer.Repositories
                                 Status=i.Status,
                                 TransactionType=i.TransactionTypeId,
                                 ContactName = (Constants.ContactType)i.ContactType == 0 ? (c.FirstName ?? "") + " " + (c.MiddleName ?? "") + " " + (c.LastName ?? "") : (v.Name ?? ""),
+                                isForTransEntry = i.isForTransEntry
                                 //ContactType = (Constants.ContactType)i.ContactType,
                                 //ContactId= (int)i.ContactId,
 
