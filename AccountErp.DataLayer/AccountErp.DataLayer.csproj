@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200825064727_TransactionTableChange25082020.cs" />
+    <Compile Remove="Migrations\20200825064727_TransactionTableChange25082020.Designer.cs" />
+    <Compile Remove="Migrations\20200825081813_TransactionTableChange25082020.cs" />
+    <Compile Remove="Migrations\20200825081813_TransactionTableChange25082020.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />

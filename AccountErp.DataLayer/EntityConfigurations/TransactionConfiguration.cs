@@ -32,6 +32,7 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.CreationDate).IsRequired();
             builder.Property(x => x.ModifyDate).IsRequired(false);
             builder.Property(x => x.ContactType).IsRequired(false);
+            builder.Property(x => x.isForTransEntry).IsRequired(false);
         }
     }
 }

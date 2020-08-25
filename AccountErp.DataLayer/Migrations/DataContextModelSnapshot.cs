@@ -1182,6 +1182,8 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int>("TransactionTypeId");
 
+                    b.Property<bool?>("isForTransEntry");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BankAccountId");

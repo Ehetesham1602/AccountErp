@@ -59,17 +59,17 @@ namespace AccountErp.Managers
             }
             else if(model.PaymentType == Constants.TransactionType.VendorAdvancePayment)
             {
-                var transaction = TransactionFactory.CreateByVendorAdvancePayment( model, model.BankAccountId, model.Amount, 0);
+                var transaction = TransactionFactory.CreateByVendorAdvancePayment( model, model.BankAccountId, model.Amount, 0, true);
                 await _transactionRepository.AddAsync(transaction);
-                var transactionForDebit = TransactionFactory.CreateByVendorAdvancePayment(model, model.DebitBankAccountId, 0, model.Amount);
+                var transactionForDebit = TransactionFactory.CreateByVendorAdvancePayment(model, model.DebitBankAccountId, 0, model.Amount, false);
                 await _transactionRepository.AddAsync(transactionForDebit);
                 await _unitOfWork.SaveChangesAsync();
             }
             else if(model.PaymentType == Constants.TransactionType.AccountExpence)
             {
-                var transactionforCredit = TransactionFactory.CreateByTaxPaymentByVendor(model,model.BankAccountId,model.Amount,0);
+                var transactionforCredit = TransactionFactory.CreateByTaxPaymentByVendor(model,model.BankAccountId,model.Amount,0, true);
                 await _transactionRepository.AddAsync(transactionforCredit);
-                var transactionforDebit = TransactionFactory.CreateByTaxPaymentByVendor(model, model.DebitBankAccountId, 0, model.Amount);
+                var transactionforDebit = TransactionFactory.CreateByTaxPaymentByVendor(model, model.DebitBankAccountId, 0, model.Amount, false);
                 await _transactionRepository.AddAsync(transactionforDebit);
                 await _unitOfWork.SaveChangesAsync();
             }
