@@ -27,7 +27,8 @@ namespace AccountErp.Factories
                 CreditAmount = 0,
                 CreationDate = Utility.GetDateTime(),
                 ModifyDate = null,
-                Status = Constants.TransactionStatus.Pending
+                Status = Constants.TransactionStatus.Pending,
+                isForTransEntry = true
             };
 
             return transaction;
@@ -46,10 +47,11 @@ namespace AccountErp.Factories
                 ContactId = entity.CustomerId,
                 BankAccountId = AccId,
                 DebitAmount = 0,
-                CreditAmount =  amount ?? 0,
+                CreditAmount = amount ?? 0,
                 CreationDate = Utility.GetDateTime(),
                 ModifyDate = null,
-                Status = Constants.TransactionStatus.Pending
+                Status = Constants.TransactionStatus.Pending,
+                isForTransEntry = false
             };
 
             return transaction;
@@ -71,7 +73,8 @@ namespace AccountErp.Factories
                 CreditAmount = entity.TotalAmount,
                 CreationDate = Utility.GetDateTime(),
                 ModifyDate = null,
-                Status = Constants.TransactionStatus.Pending
+                Status = Constants.TransactionStatus.Pending,
+                isForTransEntry = true
             };
 
             return transaction;
@@ -93,13 +96,14 @@ namespace AccountErp.Factories
                 CreditAmount = 0,
                 CreationDate = Utility.GetDateTime(),
                 ModifyDate = null,
-                Status = Constants.TransactionStatus.Pending
+                Status = Constants.TransactionStatus.Pending,
+                isForTransEntry = false
             };
 
             return transaction;
         }
 
-        public static Transaction CreateByCustomerAdvancePayment(InvoicePaymentAddModel model, int? accId, decimal creditAmt, decimal debitAmt)
+        public static Transaction CreateByCustomerAdvancePayment(InvoicePaymentAddModel model, int? accId, decimal creditAmt, decimal debitAmt, bool isForTransEntry)
         {
             var transaction = new Transaction
             {
@@ -115,12 +119,13 @@ namespace AccountErp.Factories
                 CreditAmount = creditAmt,
                 CreationDate = model.PaymentDate,
                 ModifyDate = model.PaymentDate,
-                Status = Constants.TransactionStatus.Paid
+                Status = Constants.TransactionStatus.Paid,
+                isForTransEntry = isForTransEntry
             };
 
             return transaction;
         }
-        public static Transaction CreateByVendorAdvancePayment(BillPaymentAddModel model, int? accId, decimal creditAmt, decimal debitAmt)
+        public static Transaction CreateByVendorAdvancePayment(BillPaymentAddModel model, int? accId, decimal creditAmt, decimal debitAmt, bool isForTransEntry)
         {
             var transaction = new Transaction
             {
@@ -136,13 +141,14 @@ namespace AccountErp.Factories
                 CreditAmount = creditAmt,
                 CreationDate = model.PaymentDate,
                 ModifyDate = model.PaymentDate,
-                Status= Constants.TransactionStatus.Paid
+                Status= Constants.TransactionStatus.Paid,
+                isForTransEntry = isForTransEntry
             };
 
             return transaction;
         }
 
-        public static Transaction CreateByTaxPaymentByVendor(BillPaymentAddModel model, int? accId, decimal creditAmt, decimal debitAmt)
+        public static Transaction CreateByTaxPaymentByVendor(BillPaymentAddModel model, int? accId, decimal creditAmt, decimal debitAmt, bool isForTransEntry)
         {
             var transaction = new Transaction
             {
@@ -158,12 +164,13 @@ namespace AccountErp.Factories
                 CreditAmount = creditAmt,
                 CreationDate = model.PaymentDate,
                 ModifyDate = model.PaymentDate,
-                Status = Constants.TransactionStatus.Paid
+                Status = Constants.TransactionStatus.Paid,
+                isForTransEntry = isForTransEntry
             };
 
             return transaction;
         }
-        public static Transaction CreateByTaxPaymentByCustomer(InvoicePaymentAddModel model, int? accId, decimal creditAmt, decimal debitAmt)
+        public static Transaction CreateByTaxPaymentByCustomer(InvoicePaymentAddModel model, int? accId, decimal creditAmt, decimal debitAmt, bool isForTransEntry)
         {
             var transaction = new Transaction
             {
@@ -179,7 +186,8 @@ namespace AccountErp.Factories
                 CreditAmount = creditAmt,
                 CreationDate = model.PaymentDate,
                 ModifyDate = model.PaymentDate,
-                Status = Constants.TransactionStatus.Paid
+                Status = Constants.TransactionStatus.Paid,
+                isForTransEntry = isForTransEntry
             };
 
             return transaction;

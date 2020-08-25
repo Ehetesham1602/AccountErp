@@ -53,17 +53,17 @@ namespace AccountErp.Managers
             }
             else if(model.PaymentType == Constants.TransactionType.CustomerAdvancePayment)
             {
-                var transaction = TransactionFactory.CreateByCustomerAdvancePayment(model,model.BankAccountId,0, model.Amount);
+                var transaction = TransactionFactory.CreateByCustomerAdvancePayment(model,model.BankAccountId,0, model.Amount, true);
                 await _transactionRepository.AddAsync(transaction);
-                var transactionForCredit = TransactionFactory.CreateByCustomerAdvancePayment(model, model.CreditBankAccountId, model.Amount, 0);
+                var transactionForCredit = TransactionFactory.CreateByCustomerAdvancePayment(model, model.CreditBankAccountId, model.Amount, 0, false);
                 await _transactionRepository.AddAsync(transactionForCredit);
                 await _unitOfWork.SaveChangesAsync();
             }
             else if (model.PaymentType == Constants.TransactionType.AccountIncome)
             {
-                var transactionforCredit = TransactionFactory.CreateByTaxPaymentByCustomer(model, model.CreditBankAccountId, model.Amount, 0);
+                var transactionforCredit = TransactionFactory.CreateByTaxPaymentByCustomer(model, model.CreditBankAccountId, model.Amount, 0, false);
                 await _transactionRepository.AddAsync(transactionforCredit);
-                var transactionforDebit = TransactionFactory.CreateByTaxPaymentByCustomer(model, model.BankAccountId, 0, model.Amount);
+                var transactionforDebit = TransactionFactory.CreateByTaxPaymentByCustomer(model, model.BankAccountId, 0, model.Amount, true);
                 await _transactionRepository.AddAsync(transactionforDebit);
                 await _unitOfWork.SaveChangesAsync();
             }
