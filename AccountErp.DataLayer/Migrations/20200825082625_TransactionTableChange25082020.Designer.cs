@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200809104020_TransactionChange09082020")]
-    partial class TransactionChange09082020
+    [Migration("20200825082625_TransactionTableChange25082020")]
+    partial class TransactionTableChange25082020
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1183,6 +1183,8 @@ namespace AccountErp.DataLayer.Migrations
                         .HasMaxLength(50);
 
                     b.Property<int>("TransactionTypeId");
+
+                    b.Property<bool?>("isForTransEntry");
 
                     b.HasKey("Id");
 

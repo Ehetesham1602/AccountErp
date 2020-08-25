@@ -10,6 +10,6 @@ namespace AccountErp.Dtos.Report
         public Decimal NetProfit { get; set; }
         public Decimal Income { get; set; }
         public Decimal OperatingExpenses { get; set; }
-        public List<ProfitAndLossDetailsDto> mainProfitAndLossDetailsList { get; set; }
+        public ProfitAndLossDetailsDto mainProfitAndLossDetailsList { get; set; }
     }
 }

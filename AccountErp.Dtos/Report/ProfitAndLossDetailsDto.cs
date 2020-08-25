@@ -6,11 +6,8 @@ namespace AccountErp.Dtos.Report
 {
     public class ProfitAndLossDetailsDto
     {
-        public int Id { get; set; }
-        public String AccountMasterName { get; set; }
-        public Decimal GrossProfit { get; set; }
-        public Decimal NetProfit { get; set; }
-
-        public List<ProfitAndLossDetailsReportDto> BankAccount { get; set; }
+        public List<ProfitAndLossDetailsReportDto> IncomeAccount { get; set; }
+        public List<ProfitAndLossDetailsReportDto> ExpenseAccount { get; set; }
+        public decimal Netprofit { get; set; }
     }
 }

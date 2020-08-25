@@ -22,5 +22,6 @@ namespace AccountErp.Entities
         public DateTime? ModifyDate { get; set; }
         public Constants.ContactType? ContactType { get; set; }
         public Constants.TransactionStatus Status { get; set; }
+        public bool? isForTransEntry { get; set; }
     }
 }

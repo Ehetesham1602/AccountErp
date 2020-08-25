@@ -106,31 +106,13 @@ namespace AccountErp.DataLayer.Repositories
                                 Status=i.Status,
                                 TransactionType=i.TransactionTypeId,
                                 ContactName = (Constants.ContactType)i.ContactType == 0 ? (c.FirstName ?? "") + " " + (c.MiddleName ?? "") + " " + (c.LastName ?? "") : (v.Name ?? ""),
+                                isForTransEntry = i.isForTransEntry
                                 //ContactType = (Constants.ContactType)i.ContactType,
                                 //ContactId= (int)i.ContactId,
 
-                                
-
-
-
-
-
-
-
                             })
                             .AsNoTracking();
-            var itemsList = (linqstmt.GroupBy(l => l.TransactionType, l => new { l.TransactionId, l.TransactionType, l.CreditAmount, l.DebitAmount })
-            .Select(g => new { GroupId = g.Key, Values = g.ToList() })).ToList();
 
-            foreach (var item in itemsList)
-            {
-                var id = item.GroupId;
-                //var amount = item.Values.Sum(x => x.LineAmount);
-
-                //var itemsData = TransactionFactory.CreateByInvoiceItemsAndTax(invoice, id, amount);
-                //await _transactionRepository.AddAsync(itemsData);
-                //await _unitOfWork.SaveChangesAsync();
-            }
 
             var sortExpresstion = model.GetSortExpression();
 
