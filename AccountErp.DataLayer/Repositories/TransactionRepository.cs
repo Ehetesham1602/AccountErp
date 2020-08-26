@@ -93,6 +93,7 @@ namespace AccountErp.DataLayer.Repositories
                             join v in _dataContext.Vendors
                            on i.ContactId equals v.Id into vend
                             from v in vend.DefaultIfEmpty()
+                            where i.isForTransEntry == true
                           
                             select new TransactionListItemDto
                             {
@@ -106,7 +107,8 @@ namespace AccountErp.DataLayer.Repositories
                                 Status=i.Status,
                                 TransactionType=i.TransactionTypeId,
                                 ContactName = (Constants.ContactType)i.ContactType == 0 ? (c.FirstName ?? "") + " " + (c.MiddleName ?? "") + " " + (c.LastName ?? "") : (v.Name ?? ""),
-                                isForTransEntry = i.isForTransEntry
+                                isForTransEntry = i.isForTransEntry,
+                                amount=(int)i.TransactionTypeId==0 && (int)i.TransactionTypeId == 1 && (int)i.TransactionTypeId == 4 ? i.DebitAmount:i.CreditAmount,
                                 //ContactType = (Constants.ContactType)i.ContactType,
                                 //ContactId= (int)i.ContactId,
 

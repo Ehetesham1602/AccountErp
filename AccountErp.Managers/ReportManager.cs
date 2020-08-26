@@ -218,11 +218,12 @@ namespace AccountErp.Managers
         public async Task<ProfitAndLossMainDto> GetProfitAndLossDetailsReportAsync(ProfitAndLossModel model)
         {
             var data = await _reportRepository.GetProfitAndLossDetailsReportAsync();
-            List<ProfitAndLossDetailsDto> profitAndLossList = new List<ProfitAndLossDetailsDto>();
+           // var dataForAmount = await _reportRepository.GetProfitAndLossDetailsForAmount();
+         //   List<ProfitAndLossDetailsDto> profitAndLossList = new List<ProfitAndLossDetailsDto>();
             ProfitAndLossMainDto mainProfitAndLossDtoObj = new ProfitAndLossMainDto();
-            ProfitAndLossDetailsDto profitAndLossDto = new ProfitAndLossDetailsDto();
-            profitAndLossDto.IncomeAccount = new List<ProfitAndLossDetailsReportDto>();
-            profitAndLossDto.ExpenseAccount = new List<ProfitAndLossDetailsReportDto>();
+           // ProfitAndLossDetailsDto profitAndLossDto = new ProfitAndLossDetailsDto();
+            mainProfitAndLossDtoObj.IncomeAccount = new List<ProfitAndLossDetailsReportDto>();
+            mainProfitAndLossDtoObj.ExpenseAccount = new List<ProfitAndLossDetailsReportDto>();
             decimal totalIncome = 0;
             decimal totalExpense = 0;
             foreach (var item in data)
@@ -250,37 +251,37 @@ namespace AccountErp.Managers
                         if(totalAmount > 0)
                         {
                             totalIncome += totalAmount;
-                            profitAndLossDto.IncomeAccount.Add(AccountBalance);
+                            mainProfitAndLossDtoObj.IncomeAccount.Add(AccountBalance);
                         }
                         else
                         {
                             totalExpense += Math.Abs(totalAmount);
-                            profitAndLossDto.ExpenseAccount.Add(AccountBalance);
+                            mainProfitAndLossDtoObj.ExpenseAccount.Add(AccountBalance);
                         }
                     }
                 }
             }
 
-            profitAndLossDto.Netprofit = profitAndLossDto.IncomeAccount.Sum(x => x.Amount) - profitAndLossDto.ExpenseAccount.Sum(x => x.Amount);
+           // mainProfitAndLossDtoObj.Netprofit = profitAndLossDto.IncomeAccount.Sum(x => x.Amount) - profitAndLossDto.ExpenseAccount.Sum(x => x.Amount);
 
             ProfitAndLossDetailsReportDto dtoForTotalIncome = new ProfitAndLossDetailsReportDto();
             dtoForTotalIncome.Id = 0;
             dtoForTotalIncome.AccountName = "Total Income";
-            dtoForTotalIncome.Amount = profitAndLossDto.IncomeAccount.Sum(x => x.Amount);
-            profitAndLossDto.IncomeAccount.Add(dtoForTotalIncome);
+            dtoForTotalIncome.Amount = mainProfitAndLossDtoObj.IncomeAccount.Sum(x => x.Amount);
+            mainProfitAndLossDtoObj.IncomeAccount.Add(dtoForTotalIncome);
 
             ProfitAndLossDetailsReportDto dtoForTotalExpense = new ProfitAndLossDetailsReportDto();
             dtoForTotalExpense.Id = 0;
             dtoForTotalExpense.AccountName = "Total Expense";
-            dtoForTotalExpense.Amount = profitAndLossDto.ExpenseAccount.Sum(x => x.Amount);
-            profitAndLossDto.ExpenseAccount.Add(dtoForTotalExpense);
+            dtoForTotalExpense.Amount = mainProfitAndLossDtoObj.ExpenseAccount.Sum(x => x.Amount);
+            mainProfitAndLossDtoObj.ExpenseAccount.Add(dtoForTotalExpense);
 
            
 
             mainProfitAndLossDtoObj.Income = totalIncome;
             mainProfitAndLossDtoObj.OperatingExpenses = totalExpense;
             mainProfitAndLossDtoObj.NetProfit = totalIncome - totalExpense;
-            mainProfitAndLossDtoObj.mainProfitAndLossDetailsList = profitAndLossDto;
+           // mainProfitAndLossDtoObj.mainProfitAndLossDetailsList = profitAndLossDto;
             return mainProfitAndLossDtoObj;
         }
 
