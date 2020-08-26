@@ -136,13 +136,16 @@ namespace AccountErp.Managers
                         {
                             acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate <= model.AsOfDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
                         }
-
-                        TrialBalanceAccountDetailDto trialAcc = new TrialBalanceAccountDetailDto();
-                        trialAcc.Id = acc.Id;
-                        trialAcc.AccountName = acc.AccountName;
-                        trialAcc.CreditAmount = acc.Transactions.Sum(x => x.CreditAmount);
-                        trialAcc.DebitAmount = acc.Transactions.Sum(x => x.DebitAmount);
-                        accountMasterDto.BankAccount.Add(trialAcc);
+                        if (acc.Transactions.Count() > 0)
+                        {
+                            TrialBalanceAccountDetailDto trialAcc = new TrialBalanceAccountDetailDto();
+                            trialAcc.Id = acc.Id;
+                            trialAcc.AccountName = acc.AccountName;
+                            trialAcc.CreditAmount = acc.Transactions.Sum(x => x.CreditAmount);
+                            trialAcc.DebitAmount = acc.Transactions.Sum(x => x.DebitAmount);
+                            accountMasterDto.BankAccount.Add(trialAcc);
+                        }
+                           
                     }
                 }
                 TrialBalanceAccountDetailDto trialTotalAcc = new TrialBalanceAccountDetailDto();
@@ -177,15 +180,18 @@ namespace AccountErp.Managers
 
                         acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.StartDate && p.TransactionDate <= model.EndDate)).ToList();
 
-                        AccountBalanceAccountDetailDto AccountBalance = new AccountBalanceAccountDetailDto();
-                        AccountBalance.Id = acc.Id;
-                        AccountBalance.AccountName = acc.AccountName;
-                        AccountBalance.StartingBalance = invAmount;
-                        AccountBalance.CreditAmount = acc.Transactions.Sum(x => x.CreditAmount);
-                        AccountBalance.DebitAmount = acc.Transactions.Sum(x => x.DebitAmount);
-                        AccountBalance.NetMovement = AccountBalance.DebitAmount - AccountBalance.CreditAmount;
-                        AccountBalance.EndingBalance = AccountBalance.StartingBalance + AccountBalance.NetMovement;
-                        accountMasterDto.BankAccount.Add(AccountBalance);
+                        if (acc.Transactions.Count() > 0)
+                        {
+                            AccountBalanceAccountDetailDto AccountBalance = new AccountBalanceAccountDetailDto();
+                            AccountBalance.Id = acc.Id;
+                            AccountBalance.AccountName = acc.AccountName;
+                            AccountBalance.StartingBalance = invAmount;
+                            AccountBalance.CreditAmount = acc.Transactions.Sum(x => x.CreditAmount);
+                            AccountBalance.DebitAmount = acc.Transactions.Sum(x => x.DebitAmount);
+                            AccountBalance.NetMovement = AccountBalance.DebitAmount - AccountBalance.CreditAmount;
+                            AccountBalance.EndingBalance = AccountBalance.StartingBalance + AccountBalance.NetMovement;
+                            accountMasterDto.BankAccount.Add(AccountBalance);
+                        }
                     }
                 }
                 AccountBalanceAccountDetailDto TotalAccountBalance = new AccountBalanceAccountDetailDto();
@@ -212,7 +218,6 @@ namespace AccountErp.Managers
         public async Task<ProfitAndLossMainDto> GetProfitAndLossDetailsReportAsync(ProfitAndLossModel model)
         {
             var data = await _reportRepository.GetProfitAndLossDetailsReportAsync();
-           // var dataForAmount = await _reportRepository.GetProfitAndLossDetailsForAmount();
             List<ProfitAndLossDetailsDto> profitAndLossList = new List<ProfitAndLossDetailsDto>();
             ProfitAndLossMainDto mainProfitAndLossDtoObj = new ProfitAndLossMainDto();
             ProfitAndLossDetailsDto profitAndLossDto = new ProfitAndLossDetailsDto();
@@ -220,8 +225,6 @@ namespace AccountErp.Managers
             profitAndLossDto.ExpenseAccount = new List<ProfitAndLossDetailsReportDto>();
             decimal totalIncome = 0;
             decimal totalExpense = 0;
-            decimal netProfit = 0;
-
             foreach (var item in data)
             {
                 foreach(var acctype in item.AccountTypes)
