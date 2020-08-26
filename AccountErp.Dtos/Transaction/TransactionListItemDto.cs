@@ -28,6 +28,9 @@ namespace AccountErp.Dtos.Transaction
         public string TransactionName { get; set; }
         public bool? isForTransEntry { get; set; }
 
+        public decimal amount { get; set; }
+
+
         
 
     }
