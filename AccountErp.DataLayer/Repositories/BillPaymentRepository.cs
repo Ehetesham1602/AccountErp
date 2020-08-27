@@ -41,7 +41,7 @@ namespace AccountErp.DataLayer.Repositories
                                   && (model.FilterKey == null
                                       || EF.Functions.Like(b.Id.ToString(), "%" + model.FilterKey + "%")
                                       || EF.Functions.Like(v.Name, "%" + model.FilterKey + "%")
-                                      || EF.Functions.Like(v.RegistrationNumber, "%" + model.FilterKey + "%"))
+                                      || EF.Functions.Like(v.HSTNumber, "%" + model.FilterKey + "%"))
                             select new BillPaymentListItemDto
                             {
                                 Id = bp.Id,

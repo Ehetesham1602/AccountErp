@@ -14,7 +14,7 @@ namespace AccountErp.DataLayer.EntityConfigurations
 
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.Property(x => x.RegistrationNumber).IsRequired(false);
+            builder.Property(x => x.HSTNumber).IsRequired(false);
             builder.Property(x => x.Name).IsRequired().HasMaxLength(250);
             builder.Property(x => x.Phone).IsRequired(false).HasMaxLength(50);
             builder.Property(x => x.Fax).HasMaxLength(50);

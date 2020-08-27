@@ -9,7 +9,7 @@ namespace AccountErp.Models.Vendor
     public class VendorEditModel
     {
         public int Id { get; set; }
-        public string RegistrationNumber { get; set; }
+        public string HSTNumber { get; set; }
         [Required]
         public string Name { get; set; }
         public string Phone { get; set; }

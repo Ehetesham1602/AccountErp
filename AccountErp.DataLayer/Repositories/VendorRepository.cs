@@ -51,7 +51,7 @@ namespace AccountErp.DataLayer.Repositories
                           select new VendorDetailDto
                           {
                               Id = v.Id,
-                              RegistrationNumber = v.RegistrationNumber,
+                              HSTNumber = v.HSTNumber,
                               Name = v.Name,
                               Phone = v.Phone,
                               Email = v.Email,
@@ -111,7 +111,7 @@ namespace AccountErp.DataLayer.Repositories
                           select new VendorDetailDto
                           {
                               Id = v.Id,
-                              RegistrationNumber = v.RegistrationNumber,
+                              HSTNumber = v.HSTNumber,
                               Name = v.Name,
                               Phone = v.Phone,
                               Email = v.Email,
@@ -178,7 +178,7 @@ namespace AccountErp.DataLayer.Repositories
                           select new VendorPersonallnfoDto
                           {
                               Id = v.Id,
-                              RegistrationNumber = v.RegistrationNumber,
+                              HSTNumber = v.HSTNumber,
                               Name = v.Name,
                               Email = v.Email,
                               Phone = v.Phone,
@@ -221,7 +221,7 @@ namespace AccountErp.DataLayer.Repositories
                             select new VendorListItemDto
                             {
                                 Id = v.Id,
-                                RegistrationNumber = v.RegistrationNumber,
+                                HSTNumber = v.HSTNumber,
                                 Name = v.Name,
                                 Email = v.Email,
                                 Phone = v.Phone,

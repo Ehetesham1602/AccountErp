@@ -75,7 +75,7 @@ namespace AccountErp.DataLayer.Repositories
                                 Notes = b.Notes,
                                 BillNumber = b.BillNumber,
                                 SubTotal = b.SubTotal,
-                                HSTNumber = b.HSTNumber
+                                RefrenceNumber = b.RefrenceNumber
 
                             })
                             .AsNoTracking();
@@ -115,7 +115,7 @@ namespace AccountErp.DataLayer.Repositories
                                 BillNumber = e.BillNumber,
                                 PoSoNumber = e.PoSoNumber,
                                 SubTotal = e.SubTotal,
-                                HSTNumber = e.HSTNumber
+                                RefrenceNumber = e.RefrenceNumber
                             })
                             .AsNoTracking();
 
@@ -148,11 +148,11 @@ namespace AccountErp.DataLayer.Repositories
                               BillNumber = b.BillNumber,
                               PoSoNumber = b.PoSoNumber,
                               SubTotal = b.SubTotal,
-                              HSTNumber = b.HSTNumber,
+                              RefrenceNumber = b.RefrenceNumber,
                               Vendor = new VendorPersonallnfoDto
                               {
                                   Name = v.Name,
-                                  RegistrationNumber = v.RegistrationNumber,
+                                  HSTNumber = v.HSTNumber,
                                   Email = v.Email,
                                   Phone = v.Phone,
                                   Discount = v.Discount
@@ -212,7 +212,7 @@ namespace AccountErp.DataLayer.Repositories
                               BillNumber = e.BillNumber,
                               PoSoNumber = e.PoSoNumber,
                               SubTotal = e.SubTotal,
-                              HSTNumber = e.HSTNumber,
+                              RefrenceNumber = e.RefrenceNumber,
                               Items = e.Items.Select(x => new BillServiceDto
                               {
                                   Id = x.ItemId,
@@ -265,7 +265,7 @@ namespace AccountErp.DataLayer.Repositories
                               Notes = e.Notes,
                               BillNumber = e.BillNumber,
                               SubTotal = e.SubTotal,
-                              HSTNumber = e.HSTNumber
+                              RefrenceNumber = e.RefrenceNumber
 
                           })
                 .AsNoTracking()
@@ -277,11 +277,11 @@ namespace AccountErp.DataLayer.Repositories
             return await _dataContext.Bills
                 .AsNoTracking()
                 .Where(x => x.Status != Constants.BillStatus.Deleted)
-                .OrderBy(x => x.HSTNumber)
+                .OrderBy(x => x.RefrenceNumber)
                 .Select(x => new SelectListItemDto
                 {
                     KeyInt = x.Id,
-                    Value = x.HSTNumber
+                    Value = x.RefrenceNumber
                 }).ToListAsync();
         }
 
@@ -326,8 +326,8 @@ namespace AccountErp.DataLayer.Repositories
                                 BillNumber = e.BillNumber,
                                 PoSoNumber = e.PoSoNumber,
                                 SubTotal = e.SubTotal,
-                                HSTNumber = e.HSTNumber
-                            })
+                                RefrenceNumber = e.RefrenceNumber
+                                   })
                             .AsNoTracking()
                             .ToListAsync();
 

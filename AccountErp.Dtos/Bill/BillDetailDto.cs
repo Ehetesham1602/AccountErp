@@ -17,7 +17,7 @@ namespace AccountErp.Dtos.Bill
         public string Remark { get; set; }
         public Constants.BillStatus Status { get; set; }
         public DateTime CreatedOn { get; set; }
-        public string HSTNumber { get; set; }
+        public string RefrenceNumber { get; set; }
         public DateTime BillDate { get; set; }
         public DateTime? DueDate { get; set; }
         public decimal? PoSoNumber { get; set; }
