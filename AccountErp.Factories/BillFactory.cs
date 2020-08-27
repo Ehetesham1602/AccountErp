@@ -22,6 +22,7 @@ namespace AccountErp.Factories
                 DueDate = model.DueDate,
                 TotalAmount = model.TotalAmount,
                 Remark = model.Remark,
+                HSTNumber = model.HSTNumber,
                 Status = Constants.BillStatus.Pending,
                 CreatedBy = userId ?? "0",
                 CreatedOn = Utility.GetDateTime(),
@@ -89,6 +90,7 @@ namespace AccountErp.Factories
             bill.Notes = model.Notes;
             bill.SubTotal = model.SubTotal;
             bill.LineAmountSubTotal = model.LineAmountSubTotal;
+            bill.HSTNumber = model.HSTNumber;
 
            
             ArrayList tempArr = new ArrayList();

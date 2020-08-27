@@ -16,6 +16,7 @@ namespace AccountErp.Models.Bill
         [Required]
         public decimal TotalAmount { get; set; }
         public string Remark { get; set; }
+        public string HSTNumber { get; set; }
         public string Notes { get; set; }
         public DateTime BillDate { get; set; }
         public string BillNumber { get; set; }

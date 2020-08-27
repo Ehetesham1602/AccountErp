@@ -21,7 +21,7 @@ namespace AccountErp.Dtos.Bill
         public string BillNumber { get; set; }
         public string Notes { get; set; }
         public decimal? SubTotal { get; set; }
-
+        public string HSTNumber { get; set; }
         public Constants.BillStatus status { get; set; }
 
     }
