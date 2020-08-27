@@ -145,15 +145,17 @@ namespace AccountErp.Managers
                             trialAcc.DebitAmount = acc.Transactions.Sum(x => x.DebitAmount);
                             accountMasterDto.BankAccount.Add(trialAcc);
                         }
-                           
                     }
                 }
-                TrialBalanceAccountDetailDto trialTotalAcc = new TrialBalanceAccountDetailDto();
-                trialTotalAcc.AccountName = "Total " + item.AccountMasterName;
-                trialTotalAcc.CreditAmount = accountMasterDto.BankAccount.Sum(x => x.CreditAmount);
-                trialTotalAcc.DebitAmount = accountMasterDto.BankAccount.Sum(x => x.DebitAmount);
-                accountMasterDto.BankAccount.Add(trialTotalAcc);
-                accountDetailDto.Add(accountMasterDto);
+                if (accountMasterDto.BankAccount.Count() > 0)
+                {
+                    TrialBalanceAccountDetailDto trialTotalAcc = new TrialBalanceAccountDetailDto();
+                    trialTotalAcc.AccountName = "Total " + item.AccountMasterName;
+                    trialTotalAcc.CreditAmount = accountMasterDto.BankAccount.Sum(x => x.CreditAmount);
+                    trialTotalAcc.DebitAmount = accountMasterDto.BankAccount.Sum(x => x.DebitAmount);
+                    accountMasterDto.BankAccount.Add(trialTotalAcc);
+                    accountDetailDto.Add(accountMasterDto);
+                }
             }
             return accountDetailDto;
         }
@@ -194,15 +196,19 @@ namespace AccountErp.Managers
                         }
                     }
                 }
-                AccountBalanceAccountDetailDto TotalAccountBalance = new AccountBalanceAccountDetailDto();
-                TotalAccountBalance.AccountName = "Total " + item.AccountMasterName;
-                TotalAccountBalance.StartingBalance = accountMasterDto.BankAccount.Sum(x => x.StartingBalance);
-                TotalAccountBalance.CreditAmount = accountMasterDto.BankAccount.Sum(x => x.CreditAmount);
-                TotalAccountBalance.DebitAmount = accountMasterDto.BankAccount.Sum(x => x.DebitAmount);
-                TotalAccountBalance.NetMovement = accountMasterDto.BankAccount.Sum(x => x.NetMovement);
-                TotalAccountBalance.EndingBalance = accountMasterDto.BankAccount.Sum(x => x.EndingBalance);
-                accountMasterDto.BankAccount.Add(TotalAccountBalance);
-                accountBalanceList.Add(accountMasterDto);
+                if (accountMasterDto.BankAccount.Count() > 0)
+                {
+                    AccountBalanceAccountDetailDto TotalAccountBalance = new AccountBalanceAccountDetailDto();
+                    TotalAccountBalance.AccountName = "Total " + item.AccountMasterName;
+                    TotalAccountBalance.StartingBalance = accountMasterDto.BankAccount.Sum(x => x.StartingBalance);
+                    TotalAccountBalance.CreditAmount = accountMasterDto.BankAccount.Sum(x => x.CreditAmount);
+                    TotalAccountBalance.DebitAmount = accountMasterDto.BankAccount.Sum(x => x.DebitAmount);
+                    TotalAccountBalance.NetMovement = accountMasterDto.BankAccount.Sum(x => x.NetMovement);
+                    TotalAccountBalance.EndingBalance = accountMasterDto.BankAccount.Sum(x => x.EndingBalance);
+                    accountMasterDto.BankAccount.Add(TotalAccountBalance);
+                    accountBalanceList.Add(accountMasterDto);
+                }
+
             }
 
             accountTotalBalanceDtoObj.accountBalanceReportDtoList = accountBalanceList;
@@ -218,17 +224,14 @@ namespace AccountErp.Managers
         public async Task<ProfitAndLossMainDto> GetProfitAndLossDetailsReportAsync(ProfitAndLossModel model)
         {
             var data = await _reportRepository.GetProfitAndLossDetailsReportAsync();
-           // var dataForAmount = await _reportRepository.GetProfitAndLossDetailsForAmount();
-         //   List<ProfitAndLossDetailsDto> profitAndLossList = new List<ProfitAndLossDetailsDto>();
             ProfitAndLossMainDto mainProfitAndLossDtoObj = new ProfitAndLossMainDto();
-           // ProfitAndLossDetailsDto profitAndLossDto = new ProfitAndLossDetailsDto();
             mainProfitAndLossDtoObj.IncomeAccount = new List<ProfitAndLossDetailsReportDto>();
             mainProfitAndLossDtoObj.ExpenseAccount = new List<ProfitAndLossDetailsReportDto>();
             decimal totalIncome = 0;
             decimal totalExpense = 0;
             foreach (var item in data)
             {
-                foreach(var acctype in item.AccountTypes)
+                foreach (var acctype in item.AccountTypes)
                 {
                     foreach (var acc in acctype.BankAccount)
                     {
@@ -240,216 +243,51 @@ namespace AccountErp.Managers
                         {
                             acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.StartDate && p.TransactionDate <= model.EndDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
                         }
-
-                        ProfitAndLossDetailsReportDto AccountBalance = new ProfitAndLossDetailsReportDto();
-                        AccountBalance.Id = acc.Id;
-                        AccountBalance.AccountName = acc.AccountName;
-                        decimal totalAmount = 0;
-                        totalAmount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
-                        AccountBalance.Amount = Math.Abs(totalAmount);
-
-                        if(totalAmount > 0)
+                        if (acc.Transactions.Count() > 0)
                         {
-                            totalIncome += totalAmount;
-                            mainProfitAndLossDtoObj.IncomeAccount.Add(AccountBalance);
-                        }
-                        else
-                        {
-                            totalExpense += Math.Abs(totalAmount);
-                            mainProfitAndLossDtoObj.ExpenseAccount.Add(AccountBalance);
+                            ProfitAndLossDetailsReportDto AccountBalance = new ProfitAndLossDetailsReportDto();
+                            AccountBalance.Id = acc.Id;
+                            AccountBalance.AccountName = acc.AccountName;
+                            decimal totalAmount = 0;
+                            totalAmount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
+                            AccountBalance.Amount = Math.Abs(totalAmount);
+
+                            if (totalAmount > 0)
+                            {
+                                totalIncome += totalAmount;
+                                mainProfitAndLossDtoObj.IncomeAccount.Add(AccountBalance);
+                            }
+                            else
+                            {
+                                totalExpense += Math.Abs(totalAmount);
+                                mainProfitAndLossDtoObj.ExpenseAccount.Add(AccountBalance);
+                            }
                         }
                     }
                 }
             }
-
-           // mainProfitAndLossDtoObj.Netprofit = profitAndLossDto.IncomeAccount.Sum(x => x.Amount) - profitAndLossDto.ExpenseAccount.Sum(x => x.Amount);
-
-            ProfitAndLossDetailsReportDto dtoForTotalIncome = new ProfitAndLossDetailsReportDto();
-            dtoForTotalIncome.Id = 0;
-            dtoForTotalIncome.AccountName = "Total Income";
-            dtoForTotalIncome.Amount = mainProfitAndLossDtoObj.IncomeAccount.Sum(x => x.Amount);
-            mainProfitAndLossDtoObj.IncomeAccount.Add(dtoForTotalIncome);
-
-            ProfitAndLossDetailsReportDto dtoForTotalExpense = new ProfitAndLossDetailsReportDto();
-            dtoForTotalExpense.Id = 0;
-            dtoForTotalExpense.AccountName = "Total Expense";
-            dtoForTotalExpense.Amount = mainProfitAndLossDtoObj.ExpenseAccount.Sum(x => x.Amount);
-            mainProfitAndLossDtoObj.ExpenseAccount.Add(dtoForTotalExpense);
-
-           
-
+            if (mainProfitAndLossDtoObj.IncomeAccount.Count() > 0)
+            {
+                ProfitAndLossDetailsReportDto dtoForTotalIncome = new ProfitAndLossDetailsReportDto();
+                dtoForTotalIncome.Id = 0;
+                dtoForTotalIncome.AccountName = "Total Income";
+                dtoForTotalIncome.Amount = mainProfitAndLossDtoObj.IncomeAccount.Sum(x => x.Amount);
+                mainProfitAndLossDtoObj.IncomeAccount.Add(dtoForTotalIncome);
+            }
+            if (mainProfitAndLossDtoObj.ExpenseAccount.Count() > 0)
+            {
+                ProfitAndLossDetailsReportDto dtoForTotalExpense = new ProfitAndLossDetailsReportDto();
+                dtoForTotalExpense.Id = 0;
+                dtoForTotalExpense.AccountName = "Total Expense";
+                dtoForTotalExpense.Amount = mainProfitAndLossDtoObj.ExpenseAccount.Sum(x => x.Amount);
+                mainProfitAndLossDtoObj.ExpenseAccount.Add(dtoForTotalExpense);
+            }
             mainProfitAndLossDtoObj.Income = totalIncome;
             mainProfitAndLossDtoObj.OperatingExpenses = totalExpense;
             mainProfitAndLossDtoObj.NetProfit = totalIncome - totalExpense;
-           // mainProfitAndLossDtoObj.mainProfitAndLossDetailsList = profitAndLossDto;
             return mainProfitAndLossDtoObj;
         }
 
-        //public async Task<ProfitAndLossMainDto> GetProfitAndLossDetailsReportAsync(ProfitAndLossModel model)
-        //{
-        //    var data = await _reportRepository.GetProfitAndLossDetailsReportAsync();
-        //    var dataForAmount = await _reportRepository.GetProfitAndLossDetailsForAmount();
-        //    List<ProfitAndLossDetailsDto> profitAndLossList = new List<ProfitAndLossDetailsDto>();
-        //    ProfitAndLossMainDto mainProfitAndLossDtoObj = new ProfitAndLossMainDto();
-        //    ProfitAndLossDetailsDto profitAndLossMasterDto = new ProfitAndLossDetailsDto();
-        //    profitAndLossMasterDto.BankAccount = new List<ProfitAndLossDetailsReportDto>();
-        //    foreach (var bank in dataForAmount)
-        //    {
-
-
-        //        ProfitAndLossDetailsReportDto AccountBalance = new ProfitAndLossDetailsReportDto();
-        //        AccountBalance.Id = bank.Id;
-        //        AccountBalance.IncomeCreditAmount = bank.CreditAmount;
-        //        AccountBalance.OperatingExpensesDebitAmount = bank.DebitAmount;
-        //        profitAndLossMasterDto.BankAccount.Add(AccountBalance);
-
-        //        if(bank.CreditAmount != 0)
-        //        {
-        //            foreach (var item in data)
-        //            {
-        //                profitAndLossMasterDto = new ProfitAndLossDetailsDto();
-        //                profitAndLossMasterDto.Id = item.Id;
-        //                profitAndLossMasterDto.AccountMasterName = item.AccountMasterName;
-        //                profitAndLossMasterDto.BankAccount = new List<ProfitAndLossDetailsReportDto>();
-        //                foreach (var accType in item.AccountTypes)
-        //                {
-
-        //                    foreach (var acc in accType.BankAccount)
-        //                    {
-        //                        if (model.ReportType == 0)
-        //                        {
-        //                            acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.StartDate && p.TransactionDate <= model.EndDate)).ToList();
-        //                        }
-        //                        else if (model.ReportType == 1)
-        //                        {
-        //                            acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.StartDate && p.TransactionDate <= model.EndDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
-        //                        }
-
-        //                        AccountBalance = new ProfitAndLossDetailsReportDto();
-        //                        AccountBalance.Id = acc.Id;
-        //                        AccountBalance.AccountName = acc.AccountName;
-        //                        profitAndLossMasterDto.BankAccount.Add(AccountBalance);
-        //                    }
-        //                }
-        //            }
-        //        }else if(bank.DebitAmount != 0)
-        //        {
-        //            foreach (var item in data)
-        //            {
-        //                profitAndLossMasterDto = new ProfitAndLossDetailsDto();
-        //                profitAndLossMasterDto.Id = item.Id;
-        //                profitAndLossMasterDto.AccountMasterName = item.AccountMasterName;
-        //                profitAndLossMasterDto.BankAccount = new List<ProfitAndLossDetailsReportDto>();
-        //                foreach (var accType in item.AccountTypes)
-        //                {
-
-        //                    foreach (var acc in accType.BankAccount)
-        //                    {
-        //                        if (model.ReportType == 0)
-        //                        {
-        //                            acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.StartDate && p.TransactionDate <= model.EndDate)).ToList();
-        //                        }
-        //                        else if (model.ReportType == 1)
-        //                        {
-        //                            acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.StartDate && p.TransactionDate <= model.EndDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
-        //                        }
-
-        //                        AccountBalance = new ProfitAndLossDetailsReportDto();
-        //                        AccountBalance.Id = acc.Id;
-        //                        AccountBalance.AccountName = acc.AccountName;
-        //                        profitAndLossMasterDto.BankAccount.Add(AccountBalance);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    profitAndLossList.Add(profitAndLossMasterDto);
-
-        //    /*foreach (var item in data)
-        //    {
-        //        ProfitAndLossDetailsDto profitAndLossMasterDto = new ProfitAndLossDetailsDto();
-        //        profitAndLossMasterDto.Id = item.Id;
-        //        profitAndLossMasterDto.AccountMasterName = item.AccountMasterName;
-        //        profitAndLossMasterDto.BankAccount = new List<ProfitAndLossDetailsReportDto>();
-        //        foreach (var accType in item.AccountTypes)
-        //        {
-
-        //            foreach (var acc in accType.BankAccount)
-        //            {
-        //                if (model.ReportType == 0)
-        //                {
-        //                    acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.StartDate && p.TransactionDate <= model.EndDate)).ToList();
-        //                }
-        //                else if (model.ReportType == 1)
-        //                {
-        //                    acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.StartDate && p.TransactionDate <= model.EndDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
-        //                }
-
-        //                ProfitAndLossDetailsReportDto AccountBalance = new ProfitAndLossDetailsReportDto();
-        //                AccountBalance.Id = acc.Id;
-        //                AccountBalance.AccountName = acc.AccountName;
-        //                AccountBalance.IncomeCreditAmount = acc.Transactions.Sum(x => x.DebitAmount);
-        //                AccountBalance.OperatingExpensesDebitAmount = acc.Transactions.Sum(x => x.CreditAmount);
-
-        //                *//*if (accType.COA_AccountMasterId == 3)
-        //                {
-        //                    AccountBalance.IncomeDebitAmount = acc.Transactions.Sum(x => x.DebitAmount);
-        //                }
-        //                else if (accType.COA_AccountMasterId == 4)
-        //                {
-        //                    AccountBalance.OperatingExpensesCreditAmount = acc.Transactions.Sum(x => x.CreditAmount);
-        //                }*//*
-        //                profitAndLossMasterDto.BankAccount.Add(AccountBalance);
-        //            }
-        //        }
-        //        ProfitAndLossDetailsReportDto TotalAccountBalance = new ProfitAndLossDetailsReportDto();
-        //        TotalAccountBalance.AccountName = "Total " + item.AccountMasterName;
-
-        //        TotalAccountBalance.IncomeCreditAmount = profitAndLossMasterDto.BankAccount.Sum(x => x.IncomeCreditAmount);
-        //        TotalAccountBalance.OperatingExpensesDebitAmount = profitAndLossMasterDto.BankAccount.Sum(x => x.OperatingExpensesDebitAmount);
-        //        if(profitAndLossMasterDto.AccountMasterName == "Income")
-        //        {
-        //            profitAndLossMasterDto.GrossProfit += profitAndLossMasterDto.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeCreditAmount);
-        //        }
-        //        profitAndLossMasterDto.BankAccount.Add(TotalAccountBalance);
-        //        profitAndLossList.Add(profitAndLossMasterDto);
-        //    }*/
-
-
-
-        //    mainProfitAndLossDtoObj.mainProfitAndLossDetailsList = profitAndLossList;
-        //    foreach (var totalAcc in profitAndLossList)
-        //    {
-        //        if (model.TabId == 1)
-        //        {
-        //            mainProfitAndLossDtoObj.GrossProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeCreditAmount);
-        //            mainProfitAndLossDtoObj.NetProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeCreditAmount - x.OperatingExpensesDebitAmount);
-        //        }
-        //        else
-        //        {
-        //            Decimal Amount = 0;
-        //            Amount = totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeCreditAmount - x.OperatingExpensesDebitAmount);
-        //            if(Amount > 0)
-        //            {
-        //                mainProfitAndLossDtoObj.Income += Amount;
-        //            }
-        //            else
-        //            {
-        //                mainProfitAndLossDtoObj.OperatingExpenses += Amount;
-        //            }
-        //            mainProfitAndLossDtoObj.NetProfit += mainProfitAndLossDtoObj.Income - mainProfitAndLossDtoObj.OperatingExpenses; 
-
-        //           /* mainProfitAndLossDtoObj.Income += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount);
-        //            mainProfitAndLossDtoObj.OperatingExpenses += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.OperatingExpensesCreditAmount);
-        //            mainProfitAndLossDtoObj.GrossProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount);
-        //            mainProfitAndLossDtoObj.NetProfit += totalAcc.BankAccount.Where(x => x.Id != 0).Sum(x => x.IncomeDebitAmount - x.OperatingExpensesCreditAmount);*/
-        //        }
-
-        //    }
-
-        //    return mainProfitAndLossDtoObj;
-        //}
         public async Task<List<BalanceSheetReportDto>> GetBalanceSheetReportAsync(BalanceSheetModel model)
         {
             var data = await _reportRepository.GetBalanceSheetReportAsync();
@@ -473,34 +311,40 @@ namespace AccountErp.Managers
                         {
                             acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate <= model.AsOfDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
                         }
-                        if (model.Tab == 0)
+                        if (acc.Transactions.Count() > 0)
                         {
-                            BalanceSheetDetailsReportDto BalanceSheetAcc = new BalanceSheetDetailsReportDto();
-                            BalanceSheetAcc.Id = acc.Id;
-                            BalanceSheetAcc.AccountName = "Total " + acc.AccountName;
-                            BalanceSheetAcc.Amount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
-                            accountMasterDto.BankAccount.Add(BalanceSheetAcc);
-                        }
-                        else
-                        {
-                            BalanceSheetDetailsReportDto BalanceSheetAcc = new BalanceSheetDetailsReportDto();
-                            BalanceSheetAcc.Id = acc.Id;
-                            BalanceSheetAcc.AccountName = acc.AccountName;
-                            BalanceSheetAcc.Amount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
-                            accountMasterDto.BankAccount.Add(BalanceSheetAcc);
+                            if (model.Tab == 0)
+                            {
+                                BalanceSheetDetailsReportDto BalanceSheetAcc = new BalanceSheetDetailsReportDto();
+                                BalanceSheetAcc.Id = acc.Id;
+                                BalanceSheetAcc.AccountName = "Total " + acc.AccountName;
+                                BalanceSheetAcc.Amount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
+                                accountMasterDto.BankAccount.Add(BalanceSheetAcc);
+                            }
+                            else
+                            {
+                                BalanceSheetDetailsReportDto BalanceSheetAcc = new BalanceSheetDetailsReportDto();
+                                BalanceSheetAcc.Id = acc.Id;
+                                BalanceSheetAcc.AccountName = acc.AccountName;
+                                BalanceSheetAcc.Amount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
+                                accountMasterDto.BankAccount.Add(BalanceSheetAcc);
 
-                            BalanceSheetAcc = new BalanceSheetDetailsReportDto();
-                            BalanceSheetAcc.AccountName = "Total " + acc.AccountName;
-                            BalanceSheetAcc.Amount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
-                            accountMasterDto.BankAccount.Add(BalanceSheetAcc);
+                                BalanceSheetAcc = new BalanceSheetDetailsReportDto();
+                                BalanceSheetAcc.AccountName = "Total " + acc.AccountName;
+                                BalanceSheetAcc.Amount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
+                                accountMasterDto.BankAccount.Add(BalanceSheetAcc);
+                            }
                         }
                     }
                 }
-                BalanceSheetDetailsReportDto balanceSheetTotalAcc = new BalanceSheetDetailsReportDto();
-                balanceSheetTotalAcc.AccountName = "Total " + item.AccountMasterName;
-                balanceSheetTotalAcc.Amount = accountMasterDto.BankAccount.Where(x => x.Id != 0).Sum(x => x.Amount);
-                accountMasterDto.BankAccount.Add(balanceSheetTotalAcc);
-                accountDetailDto.Add(accountMasterDto);
+                if (accountMasterDto.BankAccount.Count() > 0)
+                {
+                    BalanceSheetDetailsReportDto balanceSheetTotalAcc = new BalanceSheetDetailsReportDto();
+                    balanceSheetTotalAcc.AccountName = "Total " + item.AccountMasterName;
+                    balanceSheetTotalAcc.Amount = accountMasterDto.BankAccount.Where(x => x.Id != 0).Sum(x => x.Amount);
+                    accountMasterDto.BankAccount.Add(balanceSheetTotalAcc);
+                    accountDetailDto.Add(accountMasterDto);
+                }
             }
             return accountDetailDto;
         }
@@ -513,73 +357,63 @@ namespace AccountErp.Managers
             accountDetailDtoMasterList.BankList = new List<AccountTransactionReportDto>();
             foreach (var item in data)
             {
-             //  List<AccountTransactionReportDto> accountDetailDtoList = new List<AccountTransactionReportDto>();
-              
-                //accountMasterDto.Id = item.Id;
-                //accountMasterDto.AccountMasterName = item.AccountMasterName;
-                //accountMasterDto.BankAccount = new List<TrialBalanceAccountDetailDto>();
                 foreach (var accType in item.AccountTypes)
                 {
                     foreach (var acc in accType.BankAccount)
                     {
                         AccountTransactionReportDto accountDetailDto = new AccountTransactionReportDto();
                         accountDetailDto.Transactions = new List<AccountTransactionReportDetailDto>();
-                        accountDetailDto.AccountMasterName = item.AccountMasterName;
-                        accountDetailDto.AccountTypeName = accType.AccountTypeName;
-                        accountDetailDto.AccountName = acc.AccountName;
-                        var transListForStartingbalance = acc.Transactions.Where(p => (p.TransactionDate <= model.FromDate)).ToList();
-                        var creditAmount = transListForStartingbalance.Sum(x => x.CreditAmount);
-                        var debitAmount = transListForStartingbalance.Sum(x => x.DebitAmount);
-                        accountDetailDto.StartingBalance = debitAmount - creditAmount;
-                        if (model.AccountId > 0)
+                        if (acc.Transactions.Count() > 0)
                         {
-                            acc.Transactions = acc.Transactions.Where(x => x.BankAccountId == model.AccountId).ToList();
-                        }
-                        if (model.ContactId > 0)
-                        {
-                            acc.Transactions = acc.Transactions.Where(x => x.ContactId == model.ContactId && x.ContactType == model.ContactType).ToList();
-                        }
+                            accountDetailDto.AccountMasterName = item.AccountMasterName;
+                            accountDetailDto.AccountTypeName = accType.AccountTypeName;
+                            accountDetailDto.AccountName = acc.AccountName;
+                            var transListForStartingbalance = acc.Transactions.Where(p => (p.TransactionDate <= model.FromDate)).ToList();
+                            var creditAmount = transListForStartingbalance.Sum(x => x.CreditAmount);
+                            var debitAmount = transListForStartingbalance.Sum(x => x.DebitAmount);
+                            accountDetailDto.StartingBalance = debitAmount - creditAmount;
+                            if (model.AccountId > 0)
+                            {
+                                acc.Transactions = acc.Transactions.Where(x => x.BankAccountId == model.AccountId).ToList();
+                            }
+                            if (model.ContactId > 0)
+                            {
+                                acc.Transactions = acc.Transactions.Where(x => x.ContactId == model.ContactId && x.ContactType == model.ContactType).ToList();
+                            }
 
-                        if (model.ReportType == 0)
-                        {
-                            acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.FromDate && p.TransactionDate <= model.ToDate)).ToList();
-                        }
-                        else if (model.ReportType == 1)
-                        {
-                            acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.FromDate && p.TransactionDate <= model.ToDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
-                        }
+                            if (model.ReportType == 0)
+                            {
+                                acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.FromDate && p.TransactionDate <= model.ToDate)).ToList();
+                            }
+                            else if (model.ReportType == 1)
+                            {
+                                acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.FromDate && p.TransactionDate <= model.ToDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
+                            }
 
-                        foreach (var trans in acc.Transactions)
-                        {
-                            AccountTransactionReportDetailDto accountMasterDto = new AccountTransactionReportDetailDto();
-                            accountMasterDto.Id = trans.TransactionId ?? 0;
-                            accountMasterDto.CreditAmount = trans.CreditAmount;
-                            accountMasterDto.TransactionDate = trans.TransactionDate;
-                            accountMasterDto.TransactionType = trans.TransactionType;
-                            accountMasterDto.DebitAmount = trans.DebitAmount;
-                            accountDetailDto.Transactions.Add(accountMasterDto);
+                            foreach (var trans in acc.Transactions)
+                            {
+                                AccountTransactionReportDetailDto accountMasterDto = new AccountTransactionReportDetailDto();
+                                accountMasterDto.Id = trans.TransactionId ?? 0;
+                                accountMasterDto.CreditAmount = trans.CreditAmount;
+                                accountMasterDto.TransactionDate = trans.TransactionDate;
+                                accountMasterDto.TransactionType = trans.TransactionType;
+                                accountMasterDto.DebitAmount = trans.DebitAmount;
+                                accountDetailDto.Transactions.Add(accountMasterDto);
+                            }
+                            decimal openingBal = accountDetailDto.StartingBalance;
+                            foreach (var setBal in accountDetailDto.Transactions)
+                            {
+                                setBal.Balance = openingBal + setBal.DebitAmount - setBal.CreditAmount;
+                                openingBal = setBal.Balance;
+                            }
+                            accountDetailDto.BalanceChange = openingBal;
+                            accountDetailDto.TotalAndEndingBalance = openingBal;
+                            accountDetailDto.TotalAndEndingBalanceCreditAmount = accountDetailDto.Transactions.Sum(x => x.CreditAmount);
+                            accountDetailDto.TotalAndEndingBalanceDebitAmount = accountDetailDto.Transactions.Sum(x => x.DebitAmount);
+                            accountDetailDtoMasterList.BankList.Add(accountDetailDto);
                         }
-                        decimal openingBal = accountDetailDto.StartingBalance;
-                        foreach(var setBal in accountDetailDto.Transactions)
-                        {
-                            setBal.Balance = openingBal + setBal.DebitAmount - setBal.CreditAmount;
-                            openingBal = setBal.Balance;
-                        }
-                        accountDetailDto.BalanceChange = openingBal;
-                        accountDetailDto.TotalAndEndingBalance = openingBal;
-                        accountDetailDto.TotalAndEndingBalanceCreditAmount = accountDetailDto.Transactions.Sum(x => x.CreditAmount);
-                        accountDetailDto.TotalAndEndingBalanceDebitAmount = accountDetailDto.Transactions.Sum(x => x.DebitAmount);
-                        accountDetailDtoMasterList.BankList.Add(accountDetailDto);
-                        //AccountTransactionReportDetailDto totalEndingBalDto = new AccountTransactionReportDetailDto();
-                        //totalEndingBalDto.Id =  0;
-                        //accountMasterDto.CreditAmount = trans.CreditAmount;
-                        //accountMasterDto.TransactionDate = trans.TransactionDate;
-                        //accountMasterDto.TransactionType = trans.TransactionType;
-                        //accountMasterDto.DebitAmount = trans.DebitAmount;
-                        //accountDetailDto.Transactions.Add(accountMasterDto);
                     }
                 }
-               // accountDetailDtoMasterList.BankList.Add(accountDetailDtoList);
             }
             return accountDetailDtoMasterList;
         }
@@ -587,7 +421,7 @@ namespace AccountErp.Managers
         public async Task<CashFlowReportDto> GetCashFlowReportForSummaryAsync(CashFlowModel model)
         {
             var data = await _reportRepository.GetCashFlowReportAsync();
-            
+
             CashFlowReportDto accountDetailDto = new CashFlowReportDto();
             accountDetailDto.OperatingActivities = new List<CashFlowSummaryReportDto>();
             accountDetailDto.Overview = new List<CashFlowSummaryReportDto>();
@@ -607,7 +441,7 @@ namespace AccountErp.Managers
                 decimal creditAmount = 0;
                 foreach (var accType in accMaster.AccountTypes)
                 {
-                   
+
                     foreach (var acc in accType.BankAccount)
                     {
                         debitAmount += acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.DebitAmount);
@@ -656,16 +490,16 @@ namespace AccountErp.Managers
                 cashFlowDetailsReportDto.AccountName = "SalesTax";
                 foreach (var accType in accMaster.AccountTypes)
                 {
-                    if(accType.Id == 9)
+                    if (accType.Id == 9)
                     {
                         decimal debitAmount = 0;
                         decimal creditAmount = 0;
                         foreach (var acc in accType.BankAccount)
                         {
-                             debitAmount += acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.DebitAmount);
-                             creditAmount += acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.CreditAmount);
+                            debitAmount += acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.DebitAmount);
+                            creditAmount += acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.CreditAmount);
 
-                           
+
                         }
                         inflowAmount += debitAmount;
                         outflowAmount += creditAmount;
@@ -708,7 +542,7 @@ namespace AccountErp.Managers
             cashFlowDetailsReportDtoForTotalStarting.Amount = debitAmountForStartingBal - creditAmountForStartingBal;
             accountDetailDto.Overview.Add(cashFlowDetailsReportDtoForTotalStarting);
 
-        
+
             CashFlowSummaryReportDto cashFlowDetailsReportDtoForInflow = new CashFlowSummaryReportDto();
             cashFlowDetailsReportDtoForInflow.AccountName = "Gross Cash Inflow";
             cashFlowDetailsReportDtoForInflow.Amount = inflowAmount;
@@ -773,33 +607,34 @@ namespace AccountErp.Managers
             foreach (var accMaster in dataForIncome)
             {
                 cashFlowDetailsReportDto.Sales = new List<CashFlowSummaryReportDto>();
-         
+
                 decimal debitAmount = 0;
                 decimal creditAmount = 0;
                 foreach (var accType in accMaster.AccountTypes)
                 {
                     foreach (var acc in accType.BankAccount)
                     {
-                        CashFlowSummaryReportDto cashFlowSumarryReportDto = new CashFlowSummaryReportDto();
-                        cashFlowSumarryReportDto.AccountName = acc.AccountName;
-                        debitAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.DebitAmount);
-                        creditAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.CreditAmount);
-                        if (debitAmount > 0)
+                        if(acc.Transactions.Count() > 0)
                         {
-                            cashFlowSumarryReportDto.Amount = debitAmount - creditAmount;
+                            CashFlowSummaryReportDto cashFlowSumarryReportDto = new CashFlowSummaryReportDto();
+                            cashFlowSumarryReportDto.AccountName = acc.AccountName;
+                            debitAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.DebitAmount);
+                            creditAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.CreditAmount);
+                            if (debitAmount > 0)
+                            {
+                                cashFlowSumarryReportDto.Amount = debitAmount - creditAmount;
+                            }
+                            else
+                            {
+                                cashFlowSumarryReportDto.Amount = creditAmount;
+                            }
+                            inflowAmount += cashFlowSumarryReportDto.Amount;
+                            cashFlowDetailsReportDto.Sales.Add(cashFlowSumarryReportDto);
                         }
-                        else
-                        {
-                            cashFlowSumarryReportDto.Amount = creditAmount;
-                        }
-                        inflowAmount += cashFlowSumarryReportDto.Amount;
-                        cashFlowDetailsReportDto.Sales.Add(cashFlowSumarryReportDto);
-                      
                     }
 
                 }
             }
-
             CashFlowSummaryReportDto cashFlowSumarryReportTotalSalesDto = new CashFlowSummaryReportDto();
             cashFlowSumarryReportTotalSalesDto.AccountName = "Total Sales";
             cashFlowSumarryReportTotalSalesDto.Amount = cashFlowDetailsReportDto.Sales.Sum(x => x.Amount);
@@ -809,41 +644,44 @@ namespace AccountErp.Managers
             var dataForPurchase = data.Where(x => x.Id == 4);
             foreach (var accMaster in dataForPurchase)
             {
-           
+
                 cashFlowDetailsReportDto.Purchase = new List<CashFlowSummaryReportDto>();
-              
+
                 foreach (var accType in accMaster.AccountTypes)
                 {
                     foreach (var acc in accType.BankAccount)
                     {
-                       
-                        CashFlowSummaryReportDto cashFlowSumarryReportDto = new CashFlowSummaryReportDto();
-                        cashFlowSumarryReportDto.AccountName = acc.AccountName;
-                        var debitAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.DebitAmount);
-                        var creditAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.CreditAmount);
+                        if (acc.Transactions.Count() > 0)
+                        {
+                            CashFlowSummaryReportDto cashFlowSumarryReportDto = new CashFlowSummaryReportDto();
+                            cashFlowSumarryReportDto.AccountName = acc.AccountName;
+                            var debitAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.DebitAmount);
+                            var creditAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.CreditAmount);
 
-                        cashFlowSumarryReportDto.Amount += debitAmount - creditAmount;
-                        outflowAmount += cashFlowSumarryReportDto.Amount;
-                        cashFlowDetailsReportDto.Purchase.Add(cashFlowSumarryReportDto);
+                            cashFlowSumarryReportDto.Amount += debitAmount - creditAmount;
+                            outflowAmount += cashFlowSumarryReportDto.Amount;
+                            cashFlowDetailsReportDto.Purchase.Add(cashFlowSumarryReportDto);
+                        }
                     }
                 }
-             
+
             }
-
-            CashFlowSummaryReportDto cashFlowSumarryReportTotalPurchaseDto = new CashFlowSummaryReportDto();
-            cashFlowSumarryReportTotalPurchaseDto.AccountName = "Total Purchase";
-            cashFlowSumarryReportTotalPurchaseDto.Amount = cashFlowDetailsReportDto.Purchase.Sum(x => x.Amount);
-
-            cashFlowDetailsReportDto.Purchase.Add(cashFlowSumarryReportTotalPurchaseDto);
+            if(cashFlowDetailsReportDto.Purchase.Count() > 0)
+            {
+                CashFlowSummaryReportDto cashFlowSumarryReportTotalPurchaseDto = new CashFlowSummaryReportDto();
+                cashFlowSumarryReportTotalPurchaseDto.AccountName = "Total Purchase";
+                cashFlowSumarryReportTotalPurchaseDto.Amount = cashFlowDetailsReportDto.Purchase.Sum(x => x.Amount);
+                cashFlowDetailsReportDto.Purchase.Add(cashFlowSumarryReportTotalPurchaseDto);
+            }
 
 
             //For Sales Tax
-            var dataForTax = data.Where(x => x.Id == 2); 
+            var dataForTax = data.Where(x => x.Id == 2);
             decimal debitAmountForTax = 0;
             decimal creditAmountForTax = 0;
             foreach (var accMaster in dataForTax)
             {
-               
+
                 cashFlowDetailsReportDto.SalesTax = new List<CashFlowSummaryReportDto>();
                 foreach (var accType in accMaster.AccountTypes)
                 {
@@ -851,35 +689,45 @@ namespace AccountErp.Managers
                     {
                         foreach (var acc in accType.BankAccount)
                         {
-                          
-                            CashFlowSummaryReportDto cashFlowSumarryReportDtoForProceed = new CashFlowSummaryReportDto();
-                            cashFlowSumarryReportDtoForProceed.AccountName ="Proceed " + acc.AccountName;
-                            var debitAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.DebitAmount);
+                            if(acc.Transactions.Count() > 0)
+                            {
+                                CashFlowSummaryReportDto cashFlowSumarryReportDtoForProceed = new CashFlowSummaryReportDto();
+                                cashFlowSumarryReportDtoForProceed.AccountName = "Proceed " + acc.AccountName;
+                                var debitAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.DebitAmount);
 
-                            cashFlowSumarryReportDtoForProceed.Amount = debitAmount;
-                            debitAmountForTax += debitAmount;
-                            inflowAmount += debitAmount;
-                            cashFlowDetailsReportDto.SalesTax.Add(cashFlowSumarryReportDtoForProceed);
+                                if(debitAmount != 0)
+                                {
+                                    cashFlowSumarryReportDtoForProceed.Amount = debitAmount;
+                                    debitAmountForTax += debitAmount;
+                                    inflowAmount += debitAmount;
+                                    cashFlowDetailsReportDto.SalesTax.Add(cashFlowSumarryReportDtoForProceed);
 
-                            CashFlowSummaryReportDto cashFlowSumarryReportDtoForPayment = new CashFlowSummaryReportDto();
-                            cashFlowSumarryReportDtoForPayment.AccountName = "Payment " + acc.AccountName;
-                          
-                            var creditAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.CreditAmount);
+                                }
 
-                            cashFlowSumarryReportDtoForPayment.Amount =  creditAmount;
-                            creditAmountForTax += creditAmount;
-                            outflowAmount += creditAmount;
-                            cashFlowDetailsReportDto.SalesTax.Add(cashFlowSumarryReportDtoForPayment);
+                                CashFlowSummaryReportDto cashFlowSumarryReportDtoForPayment = new CashFlowSummaryReportDto();
+                                cashFlowSumarryReportDtoForPayment.AccountName = "Payment " + acc.AccountName;
+
+                                var creditAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Paid && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.CreditAmount);
+
+                                if(creditAmount != 0)
+                                {
+                                    cashFlowSumarryReportDtoForPayment.Amount = creditAmount;
+                                    creditAmountForTax += creditAmount;
+                                    outflowAmount += creditAmount;
+                                    cashFlowDetailsReportDto.SalesTax.Add(cashFlowSumarryReportDtoForPayment);
+                                }
+                            }
                         }
                     }
                 }
-              
             }
-
-            CashFlowSummaryReportDto cashFlowSumarryReportTotalSalesTaxDto = new CashFlowSummaryReportDto();
-            cashFlowSumarryReportTotalSalesTaxDto.AccountName = "Total Sales Tax";
-            cashFlowSumarryReportTotalSalesTaxDto.Amount = debitAmountForTax - creditAmountForTax;
-            cashFlowDetailsReportDto.SalesTax.Add(cashFlowSumarryReportTotalSalesTaxDto);
+            if(cashFlowDetailsReportDto.SalesTax.Count() > 0)
+            {
+                CashFlowSummaryReportDto cashFlowSumarryReportTotalSalesTaxDto = new CashFlowSummaryReportDto();
+                cashFlowSumarryReportTotalSalesTaxDto.AccountName = "Total Sales Tax";
+                cashFlowSumarryReportTotalSalesTaxDto.Amount = debitAmountForTax - creditAmountForTax;
+                cashFlowDetailsReportDto.SalesTax.Add(cashFlowSumarryReportTotalSalesTaxDto);
+            }
             accountDetailDto.OperatingActivities.Add(cashFlowDetailsReportDto);
 
             CashFlowSummaryReportDto cashFlowDetailsReportDtoForInflow = new CashFlowSummaryReportDto();
@@ -907,13 +755,15 @@ namespace AccountErp.Managers
                 {
                     foreach (var acc in accType.BankAccount)
                     {
-
-                        CashFlowSummaryReportDto cashFlowDetailsReportDtoForAssets = new CashFlowSummaryReportDto();
-                        cashFlowDetailsReportDtoForAssets.AccountName = acc.AccountName;
-                        var debitAmount = acc.Transactions.Where(y =>  y.TransactionDate <= model.StartDate).Sum(x => x.DebitAmount);
-                        var creditAmount = acc.Transactions.Where(y => y.TransactionDate <= model.StartDate).Sum(x => x.CreditAmount);
-                        cashFlowDetailsReportDtoForAssets.Amount = debitAmount - creditAmount;
-                        accountDetailDto.Overview.StartingBalance.Add(cashFlowDetailsReportDtoForAssets);
+                        if(acc.Transactions.Count() > 0)
+                        {
+                            CashFlowSummaryReportDto cashFlowDetailsReportDtoForAssets = new CashFlowSummaryReportDto();
+                            cashFlowDetailsReportDtoForAssets.AccountName = acc.AccountName;
+                            var debitAmount = acc.Transactions.Where(y => y.TransactionDate <= model.StartDate).Sum(x => x.DebitAmount);
+                            var creditAmount = acc.Transactions.Where(y => y.TransactionDate <= model.StartDate).Sum(x => x.CreditAmount);
+                            cashFlowDetailsReportDtoForAssets.Amount = debitAmount - creditAmount;
+                            accountDetailDto.Overview.StartingBalance.Add(cashFlowDetailsReportDtoForAssets);
+                        }
                     }
                 }
 
@@ -931,13 +781,15 @@ namespace AccountErp.Managers
                 {
                     foreach (var acc in accType.BankAccount)
                     {
-
-                        CashFlowSummaryReportDto cashFlowDetailsReportDtoForAssets = new CashFlowSummaryReportDto();
-                        cashFlowDetailsReportDtoForAssets.AccountName = acc.AccountName;
-                        var debitAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Pending && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.DebitAmount);
-                        var creditAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Pending && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.CreditAmount);
-                        cashFlowDetailsReportDtoForAssets.Amount = debitAmount - creditAmount;
-                        accountDetailDto.Overview.EndingBalance.Add(cashFlowDetailsReportDtoForAssets);
+                        if (acc.Transactions.Count() > 0)
+                        {
+                            CashFlowSummaryReportDto cashFlowDetailsReportDtoForAssets = new CashFlowSummaryReportDto();
+                            cashFlowDetailsReportDtoForAssets.AccountName = acc.AccountName;
+                            var debitAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Pending && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.DebitAmount);
+                            var creditAmount = acc.Transactions.Where(y => y.Status == Constants.TransactionStatus.Pending && y.ModifyDate >= model.StartDate && y.ModifyDate <= model.EndDate).Sum(x => x.CreditAmount);
+                            cashFlowDetailsReportDtoForAssets.Amount = debitAmount - creditAmount;
+                            accountDetailDto.Overview.EndingBalance.Add(cashFlowDetailsReportDtoForAssets);
+                        }
                     }
                 }
 
