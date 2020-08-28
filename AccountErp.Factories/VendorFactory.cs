@@ -12,7 +12,7 @@ namespace AccountErp.Factories
         {
             var vendor = new Vendor
             {
-                RegistrationNumber = model.RegistrationNumber,
+                HSTNumber = model.HSTNumber,
                 Name = model.Name,
                 Email = model.Email,
                 Fax = model.Fax,
@@ -28,7 +28,7 @@ namespace AccountErp.Factories
 
         public static void Create(VendorEditModel model, Vendor entity, string userId)
         {
-            entity.RegistrationNumber = model.RegistrationNumber;
+            entity.HSTNumber = model.HSTNumber;
             entity.Name = model.Name;
             entity.Phone = model.Phone;
             entity.Fax = model.Fax;

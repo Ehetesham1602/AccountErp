@@ -15,7 +15,7 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
             builder.Property(x => x.VendorId).IsRequired();
-            builder.Property(x => x.HSTNumber).IsRequired(false).HasMaxLength(50);
+            builder.Property(x => x.RefrenceNumber).IsRequired(false).HasMaxLength(50);
             builder.Property(x => x.Tax).IsRequired(false).HasColumnType("NUMERIC(12,2)");
             builder.Property(x => x.Discount).IsRequired(false).HasColumnType("NUMERIC(12,2)");
             builder.Property(x => x.TotalAmount).IsRequired().HasColumnType("NUMERIC(12,2)");

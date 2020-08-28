@@ -4,7 +4,7 @@ namespace AccountErp.Models.Vendor
 {
     public class VendorAddModel
     {
-        public string RegistrationNumber;
+        public string HSTNumber;
 
         [Required]
         public string Name { get; set; }

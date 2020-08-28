@@ -12,7 +12,7 @@ namespace AccountErp.Dtos.Bill
         public decimal? Tax { get; set; }
         public decimal TotalAmount { get; set; }
         public string Remark { get; set; }
-        public string HSTNumber { get; set; }
+        public string RefrenceNumber { get; set; }
         public decimal? Discount { get; set; }
         public DateTime BillDate { get; set; }
         public DateTime DueDate { get; set; }
