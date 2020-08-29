@@ -11,6 +11,7 @@ import { CustomerStatementService } from 'src/services/customer-statement.servic
 import { recurringOptions } from 'src/helpers/recurringOptions';
 import { chartOfAccountsList } from 'src/components/chart-of-account/chartOfAccountsList';
 import { AgedReceivablesService } from 'src/services/aged.receivables.service';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 export const appProviders = [
     AppSettings,
@@ -39,6 +40,11 @@ export const appProviders = [
         provide: HTTP_INTERCEPTORS,
         useClass: JwtInterceptor,
         multi: true
+    },
+    {
+        provide: LocationStrategy,
+        useClass: HashLocationStrategy
+       
     }
    
 ];

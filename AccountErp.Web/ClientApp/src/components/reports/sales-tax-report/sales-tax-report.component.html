@@ -79,14 +79,7 @@
                                                   </div>
                                             </div>
                                             
-                                            <div class="form-group col-md-2 row">
-                                                <label class="col-md-5"> </label>
-                                                <label class="col-md-3"> </label>
-                                                <label class="col-md-5"> </label>
-                                                <div class="col-md-10">
-                                                    <label class="col-md-9">Date range :</label>
-                                                </div>
-                                            </div>
+                                   
                                      <div class="form-group col-md-2 row">
                                         <label class="col-md-3">from:</label>
                                         <div class="col-md-12">
@@ -126,12 +119,12 @@
                                     <div class="form-group col-md-3 row">
                                         <label class="col-md-9">Report Type:</label>
                                              <div class="col-md-12" >
-                                                 <select class="form-control" id="statementType" [(ngModel)]="selectedReportType" 
-                                                 name="reportType" #reportType="ngModel">
-                                                     <!-- <option [ngValue]="statementType" *ngFor="let statementType of statementTypes">{{statementType.name}}</option> -->
-                                                     <option value="accural">Accural (Paid & Unpaid)</option>
-                                                     <option value="cash">Cash Basis (Paid)</option>
-                                                   </select>
+                                                <select class="form-control" id="statementType" [(ngModel)]="selectedstType" 
+                                                name="statementType" #statementType="ngModel">
+                                               <!-- <option [ngValue]="statementType" *ngFor="let statementType of statementTypes">{{statementType.name}}</option> -->
+                                               <option value="0">Accural (Paid & Unpaid)</option>
+                                               <option value="1">Cash Basis (Paid)</option>
+                                             </select>
                                              </div>
                                       </div>
 

@@ -3,7 +3,7 @@
     <div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
         <div class="kt-aside__brand-logo">
             <a [routerLink]="['/']">
-                <h1 class="text-white logo-big">iClose</h1>
+                <h1 class="text-white logo-big">iClose ERP</h1>
                 <h1 class="text-white logo-sm">i</h1>
             </a>
         </div>
@@ -210,13 +210,22 @@
                         </li>
 
                         <li class="kt-nav__item"
-                            [ngClass]="{ 'kt-menu__item--active' : currentUrl.indexOf('/bank-account') !== -1 }"
+                            [ngClass]="{ 'kt-menu__item--active' : currentUrl.indexOf('/transaction') !== -1 }"
                             aria-haspopup="true">
-                            <a [routerLink]="['/chart-of-account/chart-of-account']" class="kt-nav__link ">
+                            <a [routerLink]="['/transaction/transaction']" class="kt-nav__link ">
                                 <i class="kt-nav__link-icon la la-bank text-color-white"></i>
-                                <span class="kt-menu__link-text text-color-white">Chart of Accounts</span>
+                                <span class="kt-menu__link-text text-color-white">Transaction</span>
                             </a>
                         </li>
+
+                        <li class="kt-nav__item"
+                        [ngClass]="{ 'kt-menu__item--active' : currentUrl.indexOf('/bank-account') !== -1 }"
+                        aria-haspopup="true">
+                        <a [routerLink]="['/chart-of-account/chart-of-account']" class="kt-nav__link ">
+                            <i class="kt-nav__link-icon la la-bank text-color-white"></i>
+                            <span class="kt-menu__link-text text-color-white">Chart of Accounts</span>
+                        </a>
+                    </li>
 
 
 

@@ -30,7 +30,8 @@ export class ProfitAndLossComponent implements OnInit {
   selectedDateRange;
   statement = [];
   tab = 0;
-  profitAndLossData = {income: 0 , netProfit: 0 , grossProfit: 0 , operatingExpenses: 0 , mainProfitAndLossDetailsList: [{}]};
+  profitAndLossData=[];
+  //profitAndLossData = [{income: 0 , netProfit: 0 , grossProfit: 0 , operatingExpenses: 0 , mainProfitAndLossDetailsList: [{}]}];
   allTotalIncome;
   allTotalCostOfGoodSold;
   allgrossProfit;
@@ -38,6 +39,7 @@ export class ProfitAndLossComponent implements OnInit {
   allTotalOperatingExpenses;
   allNetProfit;
   allNetProfitPercentage;
+  reportDetails:[{}];
 
   // profitAndLossData={income:0,totalUnpaidAmount:0,costOfGoodSold:0,grossProfit:0,
   //   totalGrossProfitPercentage:0,operatingExpenses :0,netProfit:0,
@@ -117,13 +119,19 @@ export class ProfitAndLossComponent implements OnInit {
              // this.profitAndLossData = [];
               Object.assign(this.profitAndLossData, data);
               console.log('PROFITANDLOSS', this.profitAndLossData);
-              this.allTotalIncome = this.profitAndLossData.income;
-              this.allNetProfit = this.profitAndLossData.netProfit;
-              this.allgrossProfit = this.profitAndLossData.grossProfit;
-              this.allTotalOperatingExpenses = this.profitAndLossData.operatingExpenses;
-                this.temp.mainProfitAndLossDetailsList.map((item) => {
-                    item.totalUnpaidAmount = item.totalAmount;
-                });
+            //   this.profitAndLossData.forEach(element => {
+            //     debugger
+            //     this.reportDetails.push(element.mainProfitAndLossDetailsList) 
+            // });
+            console.log('PROFITANDLOSS', this.profitAndLossData);
+
+              // this.allTotalIncome = this.profitAndLossData.income;
+              // this.allNetProfit = this.profitAndLossData.netProfit;
+              // this.allgrossProfit = this.profitAndLossData.grossProfit;
+              // this.allTotalOperatingExpenses = this.profitAndLossData.operatingExpenses;
+                // this.temp.mainProfitAndLossDetailsList.map((item) => {
+                //     item.totalUnpaidAmount = item.totalAmount;
+                // });
              });
        }
 

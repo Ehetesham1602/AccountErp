@@ -125,6 +125,12 @@ export class TransactionComponent implements OnInit {
                  
               },
               {
+                data: 'amount',
+                title: 'Amount',
+                width: '20%',
+               
+            },
+              {
                 data: 'transactionDate',
                 title: 'Transaction Date',
                 width: '20%',

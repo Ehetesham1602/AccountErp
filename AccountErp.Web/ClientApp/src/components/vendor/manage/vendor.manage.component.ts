@@ -74,8 +74,8 @@ export class VendorManageComponent implements OnInit, AfterViewInit {
                     }
                 },
                 {
-                    data: 'registrationNumber',
-                    title: 'Registration#',
+                    data: 'hstNumber',
+                    title: 'HST#',
                     width: '15%'
                 },
                 {
