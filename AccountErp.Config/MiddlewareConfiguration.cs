@@ -48,6 +48,7 @@ namespace AccountErp.Config
             services.AddScoped<IReportManager, ReportManager>();
             services.AddScoped<IChartofAccountManager, ChartofAccountManager>();
             services.AddScoped<ITransactionManager, TransactionManager>();
+            services.AddScoped<IDashboardManager, DashboardManager>();
 
         }
         public static void ConfigureRepository(IServiceCollection services)
@@ -72,6 +73,7 @@ namespace AccountErp.Config
             services.AddScoped<IReportRepository, ReportRepository>();
             services.AddScoped<IChartOfAccountRepository, ChartOfAccountRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
+            services.AddScoped<IDashboardRepository, DashboardRepository>();
 
         }
         public static void ConfigureServices(IServiceCollection services)
