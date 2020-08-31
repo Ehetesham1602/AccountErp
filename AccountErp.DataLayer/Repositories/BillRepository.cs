@@ -92,6 +92,61 @@ namespace AccountErp.DataLayer.Repositories
 
             return pagedResult;
         }
+        
+ public async Task<JqDataTableResponse<BillListItemDto>> getTopFiveBillsAsync(BillJqDataTableRequestModel model)
+        {
+            if (model.Length == 0)
+            {
+                model.Length = Constants.DefaultPageSize;
+            }
+            var filterKey = model.Search.Value;
+            model.Order[0].Dir = "desc";
+            model.Order[0].Column = 4;
+
+            var linqstmt = (from b in _dataContext.Bills
+                            join v in _dataContext.Vendors
+                            on b.VendorId equals v.Id
+                            where b.Status != Constants.BillStatus.Deleted
+                            && (model.VendorId == null || b.VendorId == model.VendorId.Value)
+                            && (filterKey == null
+                                || EF.Functions.Like(b.Id.ToString(), "%" + model.FilterKey + "%"))
+                                || EF.Functions.Like(v.Name, "%" + model.FilterKey + "%")
+                            select new BillListItemDto
+                            {
+                                Id = b.Id,
+                                VendorId = b.VendorId,
+                                VendorName = v.Name,
+                                Description = b.Remark,
+                                Amount = b.Items.Sum(x => x.Rate),
+                                Discount = b.Discount,
+                                Tax = b.Tax,
+                                TotalAmount = b.TotalAmount,
+                                Status = b.Status,
+                                CreatedOn = b.CreatedOn,
+                                BillDate = b.BillDate,
+                                DueDate = b.DueDate.Value,
+                                StrBillDate = b.StrBillDate,
+                                StrDueDate = b.StrDueDate,
+                                Notes = b.Notes,
+                                BillNumber = b.BillNumber,
+                                SubTotal = b.SubTotal,
+                                RefrenceNumber = b.RefrenceNumber
+
+                            })
+                            .AsNoTracking().Take(5);
+
+            var sortExpression = model.GetSortExpression();
+
+            var pagedResult = new JqDataTableResponse<BillListItemDto>
+            {
+                RecordsTotal = await _dataContext.Bills.CountAsync(x => (model.VendorId == null || x.VendorId == model.VendorId.Value)
+                    && x.Status != Constants.BillStatus.Deleted),
+                RecordsFiltered = await linqstmt.CountAsync(),
+                Data = await linqstmt.OrderBy(sortExpression).Skip(model.Start).Take(model.Length).ToListAsync()
+            };
+
+            return pagedResult;
+        }
 
         public async Task<List<BillListItemDto>> GetRecentAsync()
         {

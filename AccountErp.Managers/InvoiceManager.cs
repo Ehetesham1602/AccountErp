@@ -182,6 +182,13 @@ namespace AccountErp.Managers
             return await _invoiceRepository.GetPagedResultAsync(model);
         }
 
+        public async Task<JqDataTableResponse<InvoiceListItemDto>> GetTopFiveInvoicesAsync(InvoiceJqDataTableRequestModel model)
+        {
+            return await _invoiceRepository.GetTopFiveInvoicesAsync(model);
+        }
+
+        
+
         public async Task<List<InvoiceListItemDto>> GetRecentAsync()
         {
             return await _invoiceRepository.GetRecentAsync();

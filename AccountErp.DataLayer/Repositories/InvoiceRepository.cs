@@ -215,6 +215,57 @@ namespace AccountErp.DataLayer.Repositories
             return pagedResult;
         }
 
+        public async Task<JqDataTableResponse<InvoiceListItemDto>> GetTopFiveInvoicesAsync(InvoiceJqDataTableRequestModel model)
+        {
+            if (model.Length == 0)
+            {
+                model.Length = Constants.DefaultPageSize;
+            }
+            model.Order[0].Dir = "desc";
+            model.Order[0].Column = 4;
+            var linqstmt = (from i in _dataContext.Invoices
+                            join c in _dataContext.Customers
+                            on i.CustomerId equals c.Id
+                            where (model.CustomerId == null
+                                    || i.CustomerId == model.CustomerId.Value)
+                                && (model.FilterKey == null
+                                    || EF.Functions.Like(c.FirstName, "%" + model.FilterKey + "%")
+                                    || EF.Functions.Like(c.LastName, "%" + model.FilterKey + "%"))
+                            && i.Status != Constants.InvoiceStatus.Deleted
+                            select new InvoiceListItemDto
+                            {
+                                Id = i.Id,
+                                CustomerId = i.CustomerId,
+                                CustomerName = (c.FirstName ?? "") + " " + (c.MiddleName ?? "") + " " + (c.LastName ?? ""),
+                                Description = i.Remark,
+                                Amount = i.Services.Sum(x => x.Rate),
+                                Discount = i.Discount,
+                                Tax = i.Tax,
+                                TotalAmount = i.TotalAmount,
+                                CreatedOn = i.CreatedOn,
+                                Status = i.Status,
+                                InvoiceNumber = i.InvoiceNumber,
+                                SubTotal = i.SubTotal
+                            })
+                            .AsNoTracking().Take(5);
+
+            var sortExpresstion = model.GetSortExpression();
+
+            var pagedResult = new JqDataTableResponse<InvoiceListItemDto>
+            {
+                RecordsTotal = await _dataContext.Invoices.CountAsync(x => model.CustomerId == null || x.CustomerId == model.CustomerId.Value),
+                RecordsFiltered = await linqstmt.CountAsync(),
+                Data = await linqstmt.OrderBy(sortExpresstion).Skip(model.Start).Take(model.Length).ToListAsync()
+            };
+
+            foreach (var invoiceListItemDto in pagedResult.Data)
+            {
+                invoiceListItemDto.CreatedOn = Utility.GetDateTime(invoiceListItemDto.CreatedOn, null);
+            }
+
+            return pagedResult;
+        }
+        
         public async Task<List<InvoiceListItemDto>> GetRecentAsync()
         {
             var linqstmt = (from i in _dataContext.Invoices

@@ -15,6 +15,10 @@ namespace AccountErp.Infrastructure.Managers
 
         Task<JqDataTableResponse<BillListItemDto>> GetPagedResultAsync(BillJqDataTableRequestModel model);
 
+
+        Task<JqDataTableResponse<BillListItemDto>> getTopFiveBillsAsync(BillJqDataTableRequestModel model);
+        
+
         Task<List<BillListItemDto>> GetRecentAsync();
 
         Task<BillDetailDto> GetDetailAsync(int id);

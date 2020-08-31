@@ -164,6 +164,14 @@ namespace AccountErp.Managers
         {
             return await _repository.GetPagedResultAsync(model);
         }
+        public async Task<JqDataTableResponse<BillListItemDto>> getTopFiveBillsAsync(BillJqDataTableRequestModel model)
+        {
+            return await _repository.getTopFiveBillsAsync(model);
+        }
+
+
+
+        
 
         public async Task<List<BillListItemDto>> GetRecentAsync()
         {

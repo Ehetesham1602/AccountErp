@@ -95,6 +95,13 @@ namespace AccountErp.Api.Controllers
             return Ok(await _manager.GetPagedResultAsync(model));
         }
 
+        [HttpPost]
+        [Route("getTopFiveBills")]
+        public async Task<IActionResult> getTopFiveBills(BillJqDataTableRequestModel model)
+        {
+            return Ok(await _manager.getTopFiveBillsAsync(model));
+        }
+
         [HttpGet]
         [Route("get-recent")]
         public async Task<IActionResult> GetRecent()

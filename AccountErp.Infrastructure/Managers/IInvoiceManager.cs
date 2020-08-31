@@ -18,6 +18,10 @@ namespace AccountErp.Infrastructure.Managers
 
         Task<JqDataTableResponse<InvoiceListItemDto>> GetPagedResultAsync(InvoiceJqDataTableRequestModel model);
 
+
+        Task<JqDataTableResponse<InvoiceListItemDto>> GetTopFiveInvoicesAsync(InvoiceJqDataTableRequestModel model);
+        
+
         Task<List<InvoiceListItemDto>> GetRecentAsync();
 
         Task<InvoiceSummaryDto> GetSummaryAsunc(int id);
