@@ -37,23 +37,30 @@ namespace AccountErp.Managers
             salesexpenseDataDto.SalesData = new decimal[12];
             salesexpenseDataDto.ExpenseData = new decimal[12];
 
-            var salesList = (dataForSales.GroupBy(l => l.TransactionDate.Month, l => new { l.CreditAmount,l.DebitAmount })
+            int year = DateTime.Now.Year;
+            DateTime firstDay = new DateTime(year, 1, 1);
+            DateTime lastDay = DateTime.Now;
+
+            dataForSales = dataForSales.Where(p => (p.TransactionDate >= firstDay && p.TransactionDate <= lastDay)).ToList();
+            dataForExpense = dataForExpense.Where(p => (p.TransactionDate >= firstDay && p.TransactionDate <= lastDay)).ToList();
+
+            var salesList = (dataForSales.GroupBy(l => l.TransactionDate.Month, l => new { l.CreditAmount, l.DebitAmount })
       .Select(g => new { GroupId = g.Key, Values = g.ToList() })).ToList();
 
             var expenseList = (dataForExpense.GroupBy(l => l.TransactionDate.Month, l => new { l.CreditAmount, l.DebitAmount })
       .Select(g => new { GroupId = g.Key, Values = g.ToList() })).ToList();
 
-            for(int i=0;i<12;i++)
+            for (int i = 0; i < 12; i++)
             {
-                foreach(var item in salesList)
+                foreach (var item in salesList)
                 {
-                    if(item.GroupId == i)
+                    if (item.GroupId == i)
                     {
                         salesexpenseDataDto.SalesData[i] = item.Values.Sum(x => x.DebitAmount);
                     }
                 }
 
-                if (salesexpenseDataDto.SalesData[i] == 0 )
+                if (salesexpenseDataDto.SalesData[i] == 0)
                 {
                     salesexpenseDataDto.SalesData[i] = 0;
                 }

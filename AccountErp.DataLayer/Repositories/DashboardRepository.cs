@@ -23,9 +23,9 @@ namespace AccountErp.DataLayer.Repositories
         public async Task<List<TransactionDetailDto>> GetSalesAmountForDashboard()
         {
             return await (from t in _dataContext.Transaction
-                          where t.TransactionTypeId == Constants.TransactionType.InvoicePayment ||
+                          where (t.TransactionTypeId == Constants.TransactionType.InvoicePayment ||
                           t.TransactionTypeId == Constants.TransactionType.CustomerAdvancePayment ||
-                          t.TransactionTypeId == Constants.TransactionType.AccountIncome
+                          t.TransactionTypeId == Constants.TransactionType.AccountIncome) && t.isForTransEntry == true
                           select new TransactionDetailDto
                           {
                               TransactionId = t.TransactionId,
@@ -44,9 +44,9 @@ namespace AccountErp.DataLayer.Repositories
         public async Task<List<TransactionDetailDto>> GetExpenseAmountForDashboard()
         {
             return await (from t in _dataContext.Transaction
-                          where t.TransactionTypeId == Constants.TransactionType.BillPayment ||
+                          where (t.TransactionTypeId == Constants.TransactionType.BillPayment ||
                           t.TransactionTypeId == Constants.TransactionType.VendorAdvancePayment ||
-                          t.TransactionTypeId == Constants.TransactionType.AccountExpence
+                          t.TransactionTypeId == Constants.TransactionType.AccountExpence) && t.isForTransEntry == true
                           select new TransactionDetailDto
                           {
                               TransactionId = t.TransactionId,
