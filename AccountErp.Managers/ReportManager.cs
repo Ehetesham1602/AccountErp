@@ -254,13 +254,13 @@ namespace AccountErp.Managers
 
                             if (totalAmount > 0)
                             {
-                                totalIncome += totalAmount;
-                                mainProfitAndLossDtoObj.IncomeAccount.Add(AccountBalance);
+                                totalExpense += totalAmount;
+                                mainProfitAndLossDtoObj.ExpenseAccount.Add(AccountBalance);
                             }
                             else
                             {
-                                totalExpense += Math.Abs(totalAmount);
-                                mainProfitAndLossDtoObj.ExpenseAccount.Add(AccountBalance);
+                                totalIncome += Math.Abs(totalAmount);
+                                mainProfitAndLossDtoObj.IncomeAccount.Add(AccountBalance);
                             }
                         }
                     }
