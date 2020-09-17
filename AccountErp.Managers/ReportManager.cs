@@ -361,10 +361,28 @@ namespace AccountErp.Managers
                 {
                     foreach (var acc in accType.BankAccount)
                     {
+                        if (model.AccountId > 0)
+                        {
+                            acc.Transactions = acc.Transactions.Where(x => x.BankAccountId == model.AccountId).ToList();
+                        }
+                        if (model.ContactId > 0)
+                        {
+                            acc.Transactions = acc.Transactions.Where(x => x.ContactId == model.ContactId && x.ContactType == model.ContactType).ToList();
+                        }
+
+                        if (model.ReportType == 0)
+                        {
+                            acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.FromDate && p.TransactionDate <= model.ToDate)).ToList();
+                        }
+                        else if (model.ReportType == 1)
+                        {
+                            acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.FromDate && p.TransactionDate <= model.ToDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
+                        }
                         AccountTransactionReportDto accountDetailDto = new AccountTransactionReportDto();
                         accountDetailDto.Transactions = new List<AccountTransactionReportDetailDto>();
                         if (acc.Transactions.Count() > 0)
                         {
+                            
                             accountDetailDto.AccountMasterName = item.AccountMasterName;
                             accountDetailDto.AccountTypeName = accType.AccountTypeName;
                             accountDetailDto.AccountName = acc.AccountName;
@@ -372,23 +390,7 @@ namespace AccountErp.Managers
                             var creditAmount = transListForStartingbalance.Sum(x => x.CreditAmount);
                             var debitAmount = transListForStartingbalance.Sum(x => x.DebitAmount);
                             accountDetailDto.StartingBalance = debitAmount - creditAmount;
-                            if (model.AccountId > 0)
-                            {
-                                acc.Transactions = acc.Transactions.Where(x => x.BankAccountId == model.AccountId).ToList();
-                            }
-                            if (model.ContactId > 0)
-                            {
-                                acc.Transactions = acc.Transactions.Where(x => x.ContactId == model.ContactId && x.ContactType == model.ContactType).ToList();
-                            }
-
-                            if (model.ReportType == 0)
-                            {
-                                acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.FromDate && p.TransactionDate <= model.ToDate)).ToList();
-                            }
-                            else if (model.ReportType == 1)
-                            {
-                                acc.Transactions = acc.Transactions.Where(p => (p.TransactionDate >= model.FromDate && p.TransactionDate <= model.ToDate && p.Status == Constants.TransactionStatus.Paid)).ToList();
-                            }
+                            
 
                             foreach (var trans in acc.Transactions)
                             {
