@@ -52,6 +52,7 @@ namespace AccountErp.Factories
                 entity.Address.City = model.Address.City;
                 entity.Address.State = model.Address.State;
                 entity.Address.CountryId = model.Address.CountryId;
+                entity.Address.Phone = model.Address.Phone;
             }
 
             if (entity.Address == null && model.Address != null)
@@ -63,7 +64,8 @@ namespace AccountErp.Factories
                     PostalCode = model.Address.PostalCode,
                     City = model.Address.City,
                     State = model.Address.State,
-                    CountryId = model.Address.CountryId
+                    CountryId = model.Address.CountryId,
+                    Phone = model.Address.Phone
                 };
             }
 
@@ -82,6 +84,7 @@ namespace AccountErp.Factories
                 entity.ShippingAddress.CountryId = model.ShippingAddress.CountryId;
                 entity.ShippingAddress.ShipTo = model.ShippingAddress.ShipTo;
                 entity.ShippingAddress.DeliveryInstruction = model.ShippingAddress.DeliveryInstruction;
+                entity.ShippingAddress.Phone = model.ShippingAddress.Phone;
             }
 
             if (entity.ShippingAddress == null && model.ShippingAddress != null)
@@ -95,7 +98,8 @@ namespace AccountErp.Factories
                     State = model.ShippingAddress.State,
                     CountryId = model.ShippingAddress.CountryId,
                     ShipTo = model.ShippingAddress.ShipTo,
-                    DeliveryInstruction = model.ShippingAddress.DeliveryInstruction
+                    DeliveryInstruction = model.ShippingAddress.DeliveryInstruction,
+                    Phone = model.ShippingAddress.Phone
                 };
             }
 

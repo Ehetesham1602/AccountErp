@@ -15,5 +15,7 @@ namespace AccountErp.Models.ShippingAddress
         public string State { get; set; }
         public string PostalCode { get; set; }
         public string DeliveryInstruction { get; set; }
+        public string Phone { get; set; }
+
     }
 }

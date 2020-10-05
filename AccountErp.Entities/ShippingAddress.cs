@@ -16,5 +16,6 @@ namespace AccountErp.Entities
         public string PostalCode { get; set; }
         public string DeliveryInstruction { get; set; }
         public Country Country { get; set; }
+        public string Phone { get; set; }
     }
 }

@@ -21,6 +21,8 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.Property(x => x.PostalCode).IsRequired(false).HasMaxLength(50);
 
             builder.HasOne(x => x.Country).WithMany().HasForeignKey(x => x.CountryId);
+            builder.Property(x => x.Phone).IsRequired(false).HasMaxLength(50);
+
         }
     }
 }
