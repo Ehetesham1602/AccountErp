@@ -60,7 +60,8 @@ namespace AccountErp.DataLayer.Repositories
                                   PostalCode = c.Address.PostalCode,
                                   City = c.Address.City,
                                   State = c.Address.State,
-                                  CountryName = c.Address.Country.Name
+                                  CountryName = c.Address.Country.Name,
+                                  Phone = c.Address.Phone
                               },
                               ShippingAddress = new ShippingAddressDto
                               {
@@ -72,7 +73,8 @@ namespace AccountErp.DataLayer.Repositories
                                   State = c.ShippingAddress.State,
                                   CountryId = c.ShippingAddress.CountryId,
                                   ShipTo = c.ShippingAddress.ShipTo,
-                                  DeliveryInstruction = c.ShippingAddress.DeliveryInstruction
+                                  DeliveryInstruction = c.ShippingAddress.DeliveryInstruction,
+                                  Phone = c.ShippingAddress.Phone
                               },
                               AccountNumber = c.AccountNumber,
                               BankName = c.BankName,
@@ -105,7 +107,8 @@ namespace AccountErp.DataLayer.Repositories
                                           PostalCode = c.Address.PostalCode,
                                           City = c.Address.City,
                                           State = c.Address.State,
-                                          CountryId = c.Address.CountryId
+                                          CountryId = c.Address.CountryId,
+                                          Phone = c.Address.Phone
                                       },
                                       ShippingAddress = new ShippingAddressDto
                                       {
@@ -117,7 +120,8 @@ namespace AccountErp.DataLayer.Repositories
                                           State = c.ShippingAddress.State,
                                           CountryId = c.ShippingAddress.CountryId,
                                           ShipTo = c.ShippingAddress.ShipTo,
-                                          DeliveryInstruction = c.ShippingAddress.DeliveryInstruction
+                                          DeliveryInstruction = c.ShippingAddress.DeliveryInstruction,
+                                          Phone = c.ShippingAddress.Phone
                                       },
                                       AccountNumber = c.AccountNumber,
                                       BankName = c.BankName,
@@ -259,7 +263,8 @@ namespace AccountErp.DataLayer.Repositories
                                                        City = c.Address.City,
                                                        State = c.Address.State,
                                                        CountryName = c.Address.Country.Name,
-                                                       PostalCode = c.Address.PostalCode
+                                                       PostalCode = c.Address.PostalCode,
+                                                       Phone = c.Address.Phone
                                                    }
                                                },
                                                InvoiceList = c.Invoices.Select(x => new InvoiceListItemDto
