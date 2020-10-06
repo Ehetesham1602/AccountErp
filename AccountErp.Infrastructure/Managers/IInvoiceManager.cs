@@ -30,5 +30,6 @@ namespace AccountErp.Infrastructure.Managers
 
         Task<int> GetInvoiceNumber();
         Task<List<InvoiceListItemDto>> GetAllUnpaidInvoiceAsync();
+        Task<List<InvoiceListTopTenDto>> GetTopTenInvoicesAsync();
     }
 }

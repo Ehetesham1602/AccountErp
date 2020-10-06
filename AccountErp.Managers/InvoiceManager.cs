@@ -215,5 +215,9 @@ namespace AccountErp.Managers
             var count = await _invoiceRepository.getCount();
             return (count + 1);
         }
+        public async Task<List<InvoiceListTopTenDto>> GetTopTenInvoicesAsync()
+        {
+            return await _invoiceRepository.GetTopTenInvoicesAsync();
+        }
     }
 }

@@ -301,5 +301,26 @@ namespace AccountErp.DataLayer.Repositories
             int count = await _dataContext.RecurringInvoice.CountAsync();
             return count;
         }
+        public async Task<List<RecListTopTenDto>> GetTopTenRecurringInvoicesAsync()
+        {
+            var linqstmt = await (from i in _dataContext.RecurringInvoice
+                                  join c in _dataContext.Customers
+                                  on i.CustomerId equals c.Id
+                                  where i.Status != Constants.InvoiceStatus.Deleted
+                                  select new RecListTopTenDto
+                                  {
+                                      Id = i.Id,
+                                      CustomerId = c.Id,
+                                      CustomerName = (c.FirstName ?? "") + " " + (c.MiddleName ?? "") + " " + (c.LastName ?? ""),
+                                      InvoiceNumber = i.RecInvoiceNumber,
+                                      Amount = i.Services.Sum(x => x.Rate),
+                                      TotalAmount = i.TotalAmount,
+                                      RecInvoiceDate = i.RecInvoiceDate
+
+                                  })
+                            .AsNoTracking().Take(10).OrderBy("RecInvoiceDate ASC").ToListAsync();
+
+            return linqstmt;
+        }
     }
 }
