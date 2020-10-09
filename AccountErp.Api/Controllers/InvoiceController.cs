@@ -221,5 +221,14 @@ namespace AccountErp.Api.Controllers
             var pagedResult = await _invoiceManager.GetAllUnpaidInvoiceAsync();
             return Ok(pagedResult);
         }
+
+        [HttpPost]
+        [Route("getTopTenInvoice")]
+        public async Task<IActionResult> GetTopTenInvoices()
+        {
+            var pagedResult = await _invoiceManager.GetTopTenInvoicesAsync();
+
+            return Ok(pagedResult);
+        }
     }
 }

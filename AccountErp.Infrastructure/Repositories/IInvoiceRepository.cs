@@ -35,5 +35,6 @@ namespace AccountErp.Infrastructure.Repositories
 
         Task<int> getCount();
         Task<List<InvoiceListItemDto>> GetAllUnpaidInvoiceAsync();
+        Task<List<InvoiceListTopTenDto>> GetTopTenInvoicesAsync();
     }
 }
