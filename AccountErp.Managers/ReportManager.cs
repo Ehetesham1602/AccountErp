@@ -13,6 +13,7 @@ using AccountErp.Models.Customer;
 using AccountErp.Models.Report;
 using AccountErp.Utilities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -288,11 +289,15 @@ namespace AccountErp.Managers
             return mainProfitAndLossDtoObj;
         }
 
-        public async Task<List<BalanceSheetReportDto>> GetBalanceSheetReportAsync(BalanceSheetModel model)
+        public async Task<BalanceSheetMainReportDto> GetBalanceSheetReportAsync(BalanceSheetModel model)
         {
             var data = await _reportRepository.GetBalanceSheetReportAsync();
-
+            BalanceSheetMainReportDto balanceSheetMain = new BalanceSheetMainReportDto();
             List<BalanceSheetReportDto> accountDetailDto = new List<BalanceSheetReportDto>();
+            BalanceSheetDetailsReportDto balanceSheetTotalAcc;
+            decimal cashOnHand = 0;
+            decimal toBeReceived = 0;
+            decimal toBePaidOut = 0;
             foreach (var item in data)
             {
                 BalanceSheetReportDto accountMasterDto = new BalanceSheetReportDto();
@@ -318,7 +323,19 @@ namespace AccountErp.Managers
                                 BalanceSheetDetailsReportDto BalanceSheetAcc = new BalanceSheetDetailsReportDto();
                                 BalanceSheetAcc.Id = acc.Id;
                                 BalanceSheetAcc.AccountName = "Total " + acc.AccountName;
-                                BalanceSheetAcc.Amount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
+                                decimal totalAmount = 0;
+                                totalAmount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
+                                BalanceSheetAcc.Amount = Math.Abs(totalAmount);
+                                if (accType.AccountTypeName == "Cash and Bank")
+                                {
+                                    cashOnHand = BalanceSheetAcc.Amount;
+                                }else if(accType.AccountTypeName == "Other Current Assets")
+                                {
+                                    toBeReceived = BalanceSheetAcc.Amount;
+                                }else if(accType.AccountTypeName == "Liabilities")
+                                {
+                                    toBePaidOut = BalanceSheetAcc.Amount;
+                                }
                                 accountMasterDto.BankAccount.Add(BalanceSheetAcc);
                             }
                             else
@@ -332,6 +349,18 @@ namespace AccountErp.Managers
                                 BalanceSheetAcc = new BalanceSheetDetailsReportDto();
                                 BalanceSheetAcc.AccountName = "Total " + acc.AccountName;
                                 BalanceSheetAcc.Amount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
+                                if (BalanceSheetAcc.AccountName == "Total Cash and Bank")
+                                {
+                                    cashOnHand = BalanceSheetAcc.Amount;
+                                }
+                                else if (BalanceSheetAcc.AccountName == "Total Other Current Assets")
+                                {
+                                    toBeReceived = BalanceSheetAcc.Amount;
+                                }
+                                else if (BalanceSheetAcc.AccountName == "Liabilities & Credit Cards")
+                                {
+                                    toBePaidOut = BalanceSheetAcc.Amount;
+                                }
                                 accountMasterDto.BankAccount.Add(BalanceSheetAcc);
                             }
                         }
@@ -339,14 +368,22 @@ namespace AccountErp.Managers
                 }
                 if (accountMasterDto.BankAccount.Count() > 0)
                 {
-                    BalanceSheetDetailsReportDto balanceSheetTotalAcc = new BalanceSheetDetailsReportDto();
+                    balanceSheetTotalAcc = new BalanceSheetDetailsReportDto();
                     balanceSheetTotalAcc.AccountName = "Total " + item.AccountMasterName;
                     balanceSheetTotalAcc.Amount = accountMasterDto.BankAccount.Where(x => x.Id != 0).Sum(x => x.Amount);
                     accountMasterDto.BankAccount.Add(balanceSheetTotalAcc);
                     accountDetailDto.Add(accountMasterDto);
                 }
             }
-            return accountDetailDto;
+            balanceSheetMain.BalanceSheetReportDtos = accountDetailDto;
+            foreach (var blanceSheet in accountDetailDto)
+            {
+                balanceSheetMain.CashAndBank = cashOnHand;
+                balanceSheetMain.ToBeReceived = toBeReceived;
+                balanceSheetMain.ToBePaidOut = toBePaidOut;
+                balanceSheetMain.TotalAmount = balanceSheetMain.CashAndBank + balanceSheetMain.ToBeReceived - balanceSheetMain.ToBePaidOut;
+            }
+            return balanceSheetMain;
         }
 
         public async Task<AccountTransactionReportMasterDto> GetAccountTransaction(AccountTransactionReportModel model)
