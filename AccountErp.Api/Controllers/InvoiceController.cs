@@ -130,7 +130,7 @@ namespace AccountErp.Api.Controllers
             return Ok(pagedResult);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("getTopFiveInvoice")]
         public async Task<IActionResult> GetTopFiveInvoices(InvoiceJqDataTableRequestModel model)
         {
@@ -222,7 +222,7 @@ namespace AccountErp.Api.Controllers
             return Ok(pagedResult);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("getTopTenInvoice")]
         public async Task<IActionResult> GetTopTenInvoices()
         {
