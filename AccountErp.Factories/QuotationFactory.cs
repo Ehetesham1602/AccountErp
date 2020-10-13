@@ -53,20 +53,14 @@ namespace AccountErp.Factories
                 return quotation;
             }
 
-            foreach (var attachment in model.Attachments)
+            quotation.Attachments = model.Attachments.Select(x => new QuotationAttachment
             {
-                quotation.Attachments = new List<QuotationAttachment>
-                {
-                    new QuotationAttachment
-                    {
-                        Title = attachment.Title,
-                        FileName = attachment.FileName,
-                        OriginalFileName = attachment.OriginalFileName,
-                        CreatedBy =userId ?? "0",
-                        CreatedOn =Utility.GetDateTime()
-                    }
-                };
-            }
+                Title = x.Title,
+                FileName = x.FileName,
+                OriginalFileName = x.OriginalFileName,
+                CreatedBy = userId ?? "0",
+                CreatedOn = Utility.GetDateTime()
+            }).ToList();
 
             return quotation;
         }

@@ -52,22 +52,16 @@ namespace AccountErp.Factories
                 return bill;
             }
 
-            bill.Attachments = new List<BillAttachment>();
+            //bill.Attachments = new List<BillAttachment>();
 
-            foreach (var attachment in model.Attachments)
+            bill.Attachments = model.Attachments.Select(x => new BillAttachment
             {
-                bill.Attachments = new List<BillAttachment>
-                {
-                    new BillAttachment
-                    {
-                        Title = attachment.Title,
-                        FileName = attachment.FileName,
-                        OriginalFileName = attachment.OriginalFileName,
-                        CreatedBy =userId ?? "0",
-                        CreatedOn =Utility.GetDateTime()
-                    }
-                };
-            }
+                Title = x.Title,
+                FileName = x.FileName,
+                OriginalFileName = x.OriginalFileName,
+                CreatedBy = userId ?? "0",
+                CreatedOn = Utility.GetDateTime()
+            }).ToList();
 
             return bill;
         }
