@@ -26,5 +26,6 @@ namespace AccountErp.Infrastructure.Managers
         Task ToggleStatusAsync(int id);
 
         Task DeleteAsync(int id);
+        Task<IEnumerable<SalesTaxDetailDto>> GetActiveOnlyAsync();
     }
 }

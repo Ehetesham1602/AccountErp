@@ -113,5 +113,11 @@ namespace AccountErp.Api.Controllers
 
             return Ok();
         }
+        [HttpGet]
+        [Route("get-active-only")]
+        public async Task<IActionResult> GetActiveOnly()
+        {
+            return Ok(await _manager.GetActiveOnlyAsync());
+        }
     }
 }

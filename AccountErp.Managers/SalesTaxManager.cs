@@ -37,8 +37,8 @@ namespace AccountErp.Managers
             var bankAcc = SalesTaxFactory.AccountCreate(model, _userId, result.KeyInt);
             await _bankAccountRepository.AddAsync(bankAcc);
             await _unitOfWork.SaveChangesAsync();
-            await _repository.AddAsync(SalesTaxFactory.Create(model,_userId,bankAcc.Id));
-          
+            await _repository.AddAsync(SalesTaxFactory.Create(model, _userId, bankAcc.Id));
+
             await _unitOfWork.SaveChangesAsync();
         }
 
@@ -70,7 +70,7 @@ namespace AccountErp.Managers
         {
             return await _repository.IsCodeExistsAsync(code);
         }
-        public async Task<bool> IsCodeExistsAsync(string code,int id)
+        public async Task<bool> IsCodeExistsAsync(string code, int id)
         {
             return await _repository.IsCodeExistsAsync(code, id);
         }
@@ -85,6 +85,11 @@ namespace AccountErp.Managers
         {
             await _repository.DeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<SalesTaxDetailDto>> GetActiveOnlyAsync()
+        {
+            return await _repository.GetActiveOnlyAsync();
         }
     }
 
