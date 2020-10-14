@@ -332,7 +332,7 @@ namespace AccountErp.Managers
                                 }else if(accType.AccountTypeName == "Other Current Assets")
                                 {
                                     toBeReceived = BalanceSheetAcc.Amount;
-                                }else if(accType.AccountTypeName == "Liabilities")
+                                }else if(accType.AccountTypeName == " Current Liabilities") //Liabilities & Credit Cards
                                 {
                                     toBePaidOut = BalanceSheetAcc.Amount;
                                 }
@@ -348,16 +348,19 @@ namespace AccountErp.Managers
 
                                 BalanceSheetAcc = new BalanceSheetDetailsReportDto();
                                 BalanceSheetAcc.AccountName = "Total " + acc.AccountName;
-                                BalanceSheetAcc.Amount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
-                                if (BalanceSheetAcc.AccountName == "Total Cash and Bank")
+                                //BalanceSheetAcc.Amount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
+                                decimal totalAmount = 0;
+                                totalAmount = acc.Transactions.Sum(x => x.DebitAmount - x.CreditAmount);
+                                BalanceSheetAcc.Amount = Math.Abs(totalAmount);
+                                if (accType.AccountTypeName == "Cash and Bank")
                                 {
                                     cashOnHand = BalanceSheetAcc.Amount;
                                 }
-                                else if (BalanceSheetAcc.AccountName == "Total Other Current Assets")
+                                else if (accType.AccountTypeName == "Other Current Assets")
                                 {
                                     toBeReceived = BalanceSheetAcc.Amount;
                                 }
-                                else if (BalanceSheetAcc.AccountName == "Liabilities & Credit Cards")
+                                else if (accType.AccountTypeName == " Current Liabilities") //Liabilities & Credit Cards
                                 {
                                     toBePaidOut = BalanceSheetAcc.Amount;
                                 }
