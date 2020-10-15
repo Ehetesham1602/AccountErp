@@ -222,7 +222,7 @@ namespace AccountErp.Api.Controllers
             return Ok(pagedResult);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("getTopTenInvoice")]
         public async Task<IActionResult> GetTopTenInvoices()
         {

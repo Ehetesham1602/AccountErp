@@ -50,20 +50,14 @@ namespace AccountErp.Factories
                 return invoice;
             }
 
-            foreach (var attachment in model.Attachments)
+            invoice.Attachments = model.Attachments.Select(x => new InvoiceAttachment
             {
-                invoice.Attachments = new List<InvoiceAttachment>
-                {
-                    new InvoiceAttachment
-                    {
-                        Title = attachment.Title,
-                        FileName = attachment.FileName,
-                        OriginalFileName = attachment.OriginalFileName,
-                        CreatedBy =userId ?? "0",
-                        CreatedOn =Utility.GetDateTime()
-                    }
-                };
-            }
+                Title = x.Title,
+                FileName = x.FileName,
+                OriginalFileName = x.OriginalFileName,
+                CreatedBy = userId ?? "0",
+                CreatedOn = Utility.GetDateTime()
+            }).ToList();
 
             return invoice;
         }
@@ -266,7 +260,7 @@ namespace AccountErp.Factories
 
             foreach (var deletedAttachemntFile in deletedAttachemntFiles)
             {
-                var attachemnt = entity.Attachments.Single(x => x.FileName.Equals(deletedAttachemntFile));
+                var attachemnt = entity.Attachments.SingleOrDefault(x => x.FileName.Equals(deletedAttachemntFile));
                 entity.Attachments.Remove(attachemnt);
             }
 

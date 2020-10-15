@@ -201,7 +201,7 @@ namespace AccountErp.Api.Controllers
         return Ok(await _recInvoiceManager.GetRecInvoiceNumber());
     }
 
-    [HttpPost]
+    [HttpGet]
     [Route("getTopTenRecurringInvoices")]
     public async Task<IActionResult> GetTopTenRecurringInvoices()
     {

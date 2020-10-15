@@ -134,5 +134,22 @@ namespace AccountErp.DataLayer.Repositories
         {
             return await _dataContext.SalesTaxes.FindAsync(id);
         }
+
+        public async Task<IEnumerable<SalesTaxDetailDto>> GetActiveOnlyAsync()
+        {
+            return await _dataContext.SalesTaxes
+                .AsNoTracking()
+                .Where(x => x.Status == Constants.RecordStatus.Active)
+                .OrderBy(x => x.Code)
+                .Select(x => new SalesTaxDetailDto
+                {
+                    Id = x.Id,
+                    Code = x.Code,
+                    Description = x.Description,
+                    TaxPercentage = x.TaxPercentage,
+                    BankAccountId = x.BankAccountId
+                }).ToListAsync();
+        }
+
     }
 }

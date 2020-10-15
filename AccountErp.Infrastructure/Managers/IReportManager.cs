@@ -17,7 +17,7 @@ namespace AccountErp.Infrastructure.Managers
         Task<List<TrialBalanceReportDto>> GetTrialBalance(TrialBalanaceReportModel model);
         Task<AccountTotalBalanceDto> GetAccountBalanceReportAsync(AccountBalanceModel model);
         Task<ProfitAndLossMainDto> GetProfitAndLossDetailsReportAsync(ProfitAndLossModel model);
-        Task<List<BalanceSheetReportDto>> GetBalanceSheetReportAsync(BalanceSheetModel model);
+        Task<BalanceSheetMainReportDto> GetBalanceSheetReportAsync(BalanceSheetModel model);
         Task<AccountTransactionReportMasterDto> GetAccountTransaction(AccountTransactionReportModel model);
         Task<CashFlowReportDto> GetCashFlowReportForSummaryAsync(CashFlowModel model);
         Task<CashFlowMasterDetailDto> GetCashFlowReportForDetailAsync(CashFlowModel model);
