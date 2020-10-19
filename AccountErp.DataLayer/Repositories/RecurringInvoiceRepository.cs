@@ -306,7 +306,7 @@ namespace AccountErp.DataLayer.Repositories
             var linqstmt = await (from i in _dataContext.RecurringInvoice
                                   join c in _dataContext.Customers
                                   on i.CustomerId equals c.Id
-                                  where i.Status != Constants.InvoiceStatus.Deleted 
+                                  where i.Status != Constants.InvoiceStatus.Deleted
                                   select new RecListTopTenDto
                                   {
                                       Id = i.Id,
@@ -317,8 +317,8 @@ namespace AccountErp.DataLayer.Repositories
                                       TotalAmount = i.TotalAmount,
                                       RecInvoiceDate = i.RecInvoiceDate
 
-                                  })
-                            .AsNoTracking().Take(10).OrderBy("RecInvoiceDate ASC").ToListAsync();
+                                  }).AsNoTracking().OrderBy("RecInvoiceDate ASC").ToListAsync();
+                            //.AsNoTracking().Take(10).OrderBy("RecInvoiceDate ASC").ToListAsync();
 
             return linqstmt;
         }

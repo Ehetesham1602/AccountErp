@@ -215,9 +215,21 @@ namespace AccountErp.Managers
             var count = await _invoiceRepository.getCount();
             return (count + 1);
         }
-        public async Task<List<InvoiceListTopTenDto>> GetTopTenInvoicesAsync()
+        /*public async Task<List<InvoiceListTopTenDto>> GetTopTenInvoicesAsync()
         {
-            return await _invoiceRepository.GetTopTenInvoicesAsync();
+            InvoiceCountDto invoiceCountDto = new InvoiceCountDto();
+            List<InvoiceListTopTenDto> invoiceListTopTens =  await _invoiceRepository.GetTopTenInvoicesAsync();
+            invoiceCountDto.InvoiceListTopTensList = invoiceListTopTens.Take(5).ToList();
+            invoiceCountDto.Count = invoiceListTopTens.Count;
+            return invoiceListTopTens;
+        }*/
+        public async Task<InvoiceCountDto> GetTopTenInvoicesAsync()
+        {
+            InvoiceCountDto invoiceCountDto = new InvoiceCountDto();
+            List<InvoiceListTopTenDto> invoiceListTopTens = await _invoiceRepository.GetTopTenInvoicesAsync();
+            invoiceCountDto.InvoiceListTopTensList = invoiceListTopTens.Take(5).ToList();
+            invoiceCountDto.Count = invoiceListTopTens.Count;
+            return invoiceCountDto;
         }
     }
 }
