@@ -26,6 +26,6 @@ namespace AccountErp.Infrastructure.Managers
 
         Task DeleteAsync(int id);
         Task<int> GetRecInvoiceNumber();
-        Task<List<RecListTopTenDto>> GetTopTenRecurringInvoicesAsync();
+        Task<RecInvoiceCountDto> GetTopTenRecurringInvoicesAsync();
     }
 }

@@ -132,9 +132,13 @@ namespace AccountErp.Managers
             var count = await _recInvoiceRepository.getCount();
             return (count + 1);
         }
-        public async Task<List<RecListTopTenDto>> GetTopTenRecurringInvoicesAsync()
+        public async Task<RecInvoiceCountDto> GetTopTenRecurringInvoicesAsync()
         {
-            return await _recInvoiceRepository.GetTopTenRecurringInvoicesAsync();
+            RecInvoiceCountDto recInvoiceCount = new RecInvoiceCountDto();
+            List<RecListTopTenDto> recListTopTensList = await _recInvoiceRepository.GetTopTenRecurringInvoicesAsync();
+            recInvoiceCount.RecListTopTenDtos = recListTopTensList.Take(5).ToList();
+            recInvoiceCount.Count = recListTopTensList.Count;
+            return recInvoiceCount;
         }
 
     }

@@ -377,21 +377,21 @@ namespace AccountErp.DataLayer.Repositories
         public async Task<List<InvoiceListTopTenDto>> GetTopTenInvoicesAsync()
         {
             var linqstmt = await (from i in _dataContext.Invoices
-                            join c in _dataContext.Customers
-                            on i.CustomerId equals c.Id
-                            where i.Status != Constants.InvoiceStatus.Deleted && i.Status == Constants.InvoiceStatus.Overdue
-                            select new InvoiceListTopTenDto
-                            {
-                                Id = i.Id,
-                                CustomerId = c.Id,
-                                CustomerName = (c.FirstName ?? "") + " " + (c.MiddleName ?? "") + " " + (c.LastName ?? ""),
-                                InvoiceNumber = i.InvoiceNumber,
-                                Amount = i.Services.Sum(x => x.Rate),
-                                TotalAmount = i.TotalAmount,
-                                InvoiceDate = i.InvoiceDate
-                                
-                            })
-                            .AsNoTracking().Take(10).OrderBy("InvoiceDate ASC").ToListAsync();
+                                  join c in _dataContext.Customers
+                                  on i.CustomerId equals c.Id
+                                  where i.Status != Constants.InvoiceStatus.Deleted && i.Status == Constants.InvoiceStatus.Overdue
+                                  select new InvoiceListTopTenDto
+                                  {
+                                      Id = i.Id,
+                                      CustomerId = c.Id,
+                                      CustomerName = (c.FirstName ?? "") + " " + (c.MiddleName ?? "") + " " + (c.LastName ?? ""),
+                                      InvoiceNumber = i.InvoiceNumber,
+                                      Amount = i.Services.Sum(x => x.Rate),
+                                      TotalAmount = i.TotalAmount,
+                                      InvoiceDate = i.InvoiceDate
+
+                                  }).AsNoTracking().OrderBy("InvoiceDate ASC").ToListAsync();
+                            //.AsNoTracking().Take(5).OrderBy("InvoiceDate ASC").ToListAsync();
 
             return linqstmt;
         }
