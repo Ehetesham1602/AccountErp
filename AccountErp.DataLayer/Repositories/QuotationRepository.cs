@@ -184,7 +184,9 @@ namespace AccountErp.DataLayer.Repositories
                                     || i.CustomerId == model.CustomerId.Value)
                                 && (model.FilterKey == null
                                     || EF.Functions.Like(c.FirstName, "%" + model.FilterKey + "%")
-                                    || EF.Functions.Like(c.LastName, "%" + model.FilterKey + "%"))
+                                    || EF.Functions.Like(c.LastName, "%" + model.FilterKey + "%")
+                                    || EF.Functions.Like(c.MiddleName, "%" + model.FilterKey + "%")
+                                    || EF.Functions.Like(i.QuotationNumber, "%" + model.FilterKey + "%"))
                             && i.Status != Constants.InvoiceStatus.Deleted
                             select new QuotationListItemDto
                             {

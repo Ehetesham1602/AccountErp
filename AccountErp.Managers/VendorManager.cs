@@ -70,7 +70,7 @@ namespace AccountErp.Managers
             return await _vendorRepository.GetPaymentInfoAsync(id);
         }
 
-        public async Task<JqDataTableResponse<VendorListItemDto>> GetPagedResultAsync(JqDataTableRequest model)
+        public async Task<JqDataTableResponse<VendorListItemDto>> GetPagedResultAsync(VendorJqDataTableRequestModel model)
         {
             return await _vendorRepository.GetPagedResultAsync(model);
         }

@@ -17,7 +17,7 @@ namespace AccountErp.Infrastructure.Managers
         Task<CreditCardDetailDto> GetDetailAsync(int id);
         Task<CreditCardDetailDto> GetForEditAsync(int id);
 
-        Task<JqDataTableResponse<CreditCardListItemDto>> GetPagedResultAsync(JqDataTableRequest model);
+        Task<JqDataTableResponse<CreditCardListItemDto>> GetPagedResultAsync(CreditCardJqDataTableRequestModel model);
 
         Task<bool> IsCreditCardNumberExistsAsync(string creditCardNumber);
         Task<bool> IsCreditCardNumberExistsForEditAsync(int id, string creditCardNumber);

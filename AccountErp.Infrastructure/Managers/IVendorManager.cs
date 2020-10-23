@@ -21,7 +21,7 @@ namespace AccountErp.Infrastructure.Managers
 
         Task<VendorPaymentInfoDto> GetPaymentInfoAsync(int id);
 
-        Task<JqDataTableResponse<VendorListItemDto>> GetPagedResultAsync(JqDataTableRequest model);
+        Task<JqDataTableResponse<VendorListItemDto>> GetPagedResultAsync(VendorJqDataTableRequestModel model);
 
         Task<bool> IsEmailExistsAsync(string email);
 

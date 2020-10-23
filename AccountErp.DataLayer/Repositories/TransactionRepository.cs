@@ -94,7 +94,13 @@ namespace AccountErp.DataLayer.Repositories
                            on i.ContactId equals v.Id into vend
                             from v in vend.DefaultIfEmpty()
                             where i.isForTransEntry == true
-                          
+                            && (model.FilterKey == null
+                                || EF.Functions.Like(v.Name, "%" + model.FilterKey + "%")
+                                || EF.Functions.Like(c.FirstName, "%" + model.FilterKey + "%")
+                                 || EF.Functions.Like(c.LastName, "%" + model.FilterKey + "%")
+                                  || EF.Functions.Like(c.MiddleName, "%" + model.FilterKey + "%"))
+
+
                             select new TransactionListItemDto
                             {
                                 Id = i.Id,

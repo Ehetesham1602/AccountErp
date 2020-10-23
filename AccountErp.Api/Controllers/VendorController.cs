@@ -103,7 +103,7 @@ namespace AccountErp.Api.Controllers
 
         [HttpPost]
         [Route("paged-result")]
-        public async Task<IActionResult> GetPagedResult(JqDataTableRequest model)
+        public async Task<IActionResult> GetPagedResult(VendorJqDataTableRequestModel model)
         {
             var pagedResult = await _vendorManager.GetPagedResultAsync(model);
             return Ok(pagedResult);

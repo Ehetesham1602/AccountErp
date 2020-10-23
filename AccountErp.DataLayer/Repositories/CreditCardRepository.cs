@@ -2,6 +2,7 @@
 using AccountErp.Dtos.CreditCard;
 using AccountErp.Entities;
 using AccountErp.Infrastructure.Repositories;
+using AccountErp.Models.CreditCard;
 using AccountErp.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -65,7 +66,7 @@ namespace AccountErp.DataLayer.Repositories
                          .SingleOrDefaultAsync();
         }
 
-        public async Task<JqDataTableResponse<CreditCardListItemDto>> GetPagedResultAsync(JqDataTableRequest model)
+        public async Task<JqDataTableResponse<CreditCardListItemDto>> GetPagedResultAsync(CreditCardJqDataTableRequestModel model)
         {
             if (model.Length == 0)
             {
@@ -73,7 +74,8 @@ namespace AccountErp.DataLayer.Repositories
             }
             var filterKey = model.Search.Value;
             var linqstmt = (from cc in _dataContext.CreditCards
-                            where cc.Status != Constants.RecordStatus.Deleted && (filterKey == null || EF.Functions.Like(cc.Number, "%" + filterKey + "%"))
+                            where cc.Status != Constants.RecordStatus.Deleted && (model.FilterKey == null || EF.Functions.Like(cc.Number, "%" + model.FilterKey + "%") || EF.Functions.Like(cc.CardHolderName, "%" + model.FilterKey + "%")
+                            || EF.Functions.Like(cc.BankName, "%" + model.FilterKey + "%"))
                             select new CreditCardListItemDto
                             {
                                 Id = cc.Id,

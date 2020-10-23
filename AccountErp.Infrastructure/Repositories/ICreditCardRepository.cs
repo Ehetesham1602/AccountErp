@@ -1,6 +1,7 @@
 ﻿using AccountErp.Dtos;
 using AccountErp.Dtos.CreditCard;
 using AccountErp.Entities;
+using AccountErp.Models.CreditCard;
 using AccountErp.Utilities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace AccountErp.Infrastructure.Repositories
 
         Task<CreditCardDetailDto> GetForEditAsync(int id);
 
-        Task<JqDataTableResponse<CreditCardListItemDto>> GetPagedResultAsync(JqDataTableRequest model);
+        Task<JqDataTableResponse<CreditCardListItemDto>> GetPagedResultAsync(CreditCardJqDataTableRequestModel model);
 
         Task<bool> IsCreditCardNumberExistsAsync(string creditCardNumber);
 

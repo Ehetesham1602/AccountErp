@@ -17,7 +17,7 @@ namespace AccountErp.Infrastructure.Managers
 
         Task<CustomerDetailDto> GetForEditAsync(int id);
 
-        Task<JqDataTableResponse<CustomerListItemDto>> GetPagedResultAsync(JqDataTableRequest model);
+        Task<JqDataTableResponse<CustomerListItemDto>> GetPagedResultAsync(CustomerJqDataTableRequestModel model);
 
         Task<IEnumerable<SelectListItemDto>> GetSelectItemsAsync();
 

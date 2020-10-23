@@ -94,7 +94,7 @@ namespace AccountErp.Api.Controllers
 
         [HttpPost]
         [Route("paged-result")]
-        public async Task<IActionResult> GetPagedResult(JqDataTableRequest model)
+        public async Task<IActionResult> GetPagedResult(CreditCardJqDataTableRequestModel model)
         {
             var pagedResult = await _creditCardManager.GetPagedResultAsync(model);
             return Ok(pagedResult);

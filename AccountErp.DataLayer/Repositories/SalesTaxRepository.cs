@@ -37,7 +37,7 @@ namespace AccountErp.DataLayer.Repositories
                 }).ToListAsync();
         }
 
-        public async Task<JqDataTableResponse<SalesTaxListItemDto>> GetPagedResultAsync(JqDataTableRequest model)
+        public async Task<JqDataTableResponse<SalesTaxListItemDto>> GetPagedResultAsync(SalexTaxJqDataTableRequestModel model)
         {
             if (model.Length == 0)
             {
@@ -46,9 +46,9 @@ namespace AccountErp.DataLayer.Repositories
             var filterKey = model.Search.Value;
             var linqstmt = (from st in _dataContext.SalesTaxes
                             where st.Status != Constants.RecordStatus.Deleted
-                            && (filterKey == null
-                                || EF.Functions.Like(st.Code, "%" + filterKey + "%")
-                                || EF.Functions.Like(st.Description, "%" + filterKey + "%"))
+                            && (model.FilterKey == null
+                                || EF.Functions.Like(st.Code, "%" + model.FilterKey + "%")
+                                || EF.Functions.Like(st.Description, "%" + model.FilterKey + "%"))
                             select new SalesTaxListItemDto
                             {
                                 Id = st.Id,

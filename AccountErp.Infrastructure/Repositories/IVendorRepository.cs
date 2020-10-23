@@ -1,6 +1,7 @@
 ﻿using AccountErp.Dtos;
 using AccountErp.Dtos.Vendor;
 using AccountErp.Entities;
+using AccountErp.Models.Vendor;
 using AccountErp.Utilities;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace AccountErp.Infrastructure.Repositories
 
         Task<VendorPaymentInfoDto> GetPaymentInfoAsync(int id);
 
-        Task<JqDataTableResponse<VendorListItemDto>> GetPagedResultAsync(JqDataTableRequest model);
+        Task<JqDataTableResponse<VendorListItemDto>> GetPagedResultAsync(VendorJqDataTableRequestModel model);
 
         Task<bool> IsEmailExistsAsync(string email);
 

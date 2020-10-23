@@ -2,6 +2,7 @@
 using AccountErp.Dtos.Customer;
 using AccountErp.Dtos.Invoice;
 using AccountErp.Entities;
+using AccountErp.Models.Customer;
 using AccountErp.Utilities;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace AccountErp.Infrastructure.Repositories
 
         Task<CustomerDetailDto> GetForEditAsync(int id);
 
-        Task<JqDataTableResponse<CustomerListItemDto>> GetPagedResultAsync(JqDataTableRequest model);
+        Task<JqDataTableResponse<CustomerListItemDto>> GetPagedResultAsync(CustomerJqDataTableRequestModel model);
 
         Task<IEnumerable<SelectListItemDto>> GetSelectItemsAsync();
 

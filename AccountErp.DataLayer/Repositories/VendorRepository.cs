@@ -4,6 +4,7 @@ using AccountErp.Dtos.Contact;
 using AccountErp.Dtos.Vendor;
 using AccountErp.Entities;
 using AccountErp.Infrastructure.Repositories;
+using AccountErp.Models.Vendor;
 using AccountErp.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -204,7 +205,7 @@ namespace AccountErp.DataLayer.Repositories
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<JqDataTableResponse<VendorListItemDto>> GetPagedResultAsync(JqDataTableRequest model)
+        public async Task<JqDataTableResponse<VendorListItemDto>> GetPagedResultAsync(VendorJqDataTableRequestModel model)
         {
             if (model.Length == 0)
             {
@@ -215,9 +216,9 @@ namespace AccountErp.DataLayer.Repositories
 
             var linqStmt = (from v in _dataContext.Vendors
                             where v.Status != Constants.RecordStatus.Deleted
-                                  && (filterKey == null
-                                      || EF.Functions.Like(v.Name, "%" + filterKey + "%")
-                                      || EF.Functions.Like(v.Email, "%" + filterKey + "%"))
+                                  && (model.FilterKey == null
+                                      || EF.Functions.Like(v.Name, "%" + model.FilterKey + "%")
+                                      || EF.Functions.Like(v.Email, "%" + model.FilterKey + "%"))
                             select new VendorListItemDto
                             {
                                 Id = v.Id,

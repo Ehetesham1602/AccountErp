@@ -55,7 +55,7 @@ namespace AccountErp.Managers
             return await _customerRepository.GetForEditAsync(id);
         }
 
-        public async Task<JqDataTableResponse<CustomerListItemDto>> GetPagedResultAsync(JqDataTableRequest model)
+        public async Task<JqDataTableResponse<CustomerListItemDto>> GetPagedResultAsync(CustomerJqDataTableRequestModel model)
         {
             return await _customerRepository.GetPagedResultAsync(model);
         }

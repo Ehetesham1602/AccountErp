@@ -61,7 +61,7 @@ namespace AccountErp.Managers
             return await _repository.GetSelectListItemsAsync();
         }
 
-        public async Task<JqDataTableResponse<SalesTaxListItemDto>> GetPagedResultAsync(JqDataTableRequest model)
+        public async Task<JqDataTableResponse<SalesTaxListItemDto>> GetPagedResultAsync(SalexTaxJqDataTableRequestModel model)
         {
             return await _repository.GetPagedResultAsync(model);
         }

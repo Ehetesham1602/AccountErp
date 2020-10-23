@@ -51,11 +51,13 @@ namespace AccountErp.DataLayer.Repositories
             var linqstmt = (from b in _dataContext.Bills
                             join v in _dataContext.Vendors
                             on b.VendorId equals v.Id
-                            where b.Status != Constants.BillStatus.Deleted
-                            && (model.VendorId == null || b.VendorId == model.VendorId.Value)
-                            && (filterKey == null
-                                || EF.Functions.Like(b.Id.ToString(), "%" + model.FilterKey + "%"))
+                            where 
+                             (model.VendorId == null || b.VendorId == model.VendorId.Value)
+                            && (model.FilterKey == null
+                            || EF.Functions.Like(b.Id.ToString(), "%" + model.FilterKey + "%")
                                 || EF.Functions.Like(v.Name, "%" + model.FilterKey + "%")
+                                || EF.Functions.Like(b.BillNumber, "%" + model.FilterKey + "%")) 
+                                && b.Status != Constants.BillStatus.Deleted
                             select new BillListItemDto
                             {
                                 Id = b.Id,
@@ -108,9 +110,10 @@ namespace AccountErp.DataLayer.Repositories
                             on b.VendorId equals v.Id
                             where b.Status != Constants.BillStatus.Deleted
                             && (model.VendorId == null || b.VendorId == model.VendorId.Value)
-                            && (filterKey == null
-                                || EF.Functions.Like(b.Id.ToString(), "%" + model.FilterKey + "%"))
+                            && (model.FilterKey == null
+                                || EF.Functions.Like(b.Id.ToString(), "%" + model.FilterKey + "%")
                                 || EF.Functions.Like(v.Name, "%" + model.FilterKey + "%")
+                                || EF.Functions.Like(b.BillNumber, "%" + model.FilterKey + "%"))
                             select new BillListItemDto
                             {
                                 Id = b.Id,

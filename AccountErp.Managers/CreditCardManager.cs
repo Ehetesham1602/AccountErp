@@ -52,7 +52,7 @@ namespace AccountErp.Managers
             return await _creditCardRepository.GetForEditAsync(id);
         }
 
-        public async Task<JqDataTableResponse<CreditCardListItemDto>> GetPagedResultAsync(JqDataTableRequest model)
+        public async Task<JqDataTableResponse<CreditCardListItemDto>> GetPagedResultAsync(CreditCardJqDataTableRequestModel model)
         {
             return await _creditCardRepository.GetPagedResultAsync(model);
         }

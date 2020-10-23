@@ -5,6 +5,7 @@ using AccountErp.Dtos.Invoice;
 using AccountErp.Dtos.ShippingAddress;
 using AccountErp.Entities;
 using AccountErp.Infrastructure.Repositories;
+using AccountErp.Models.Customer;
 using AccountErp.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -134,7 +135,7 @@ namespace AccountErp.DataLayer.Repositories
             return customer;
         }
 
-        public async Task<JqDataTableResponse<CustomerListItemDto>> GetPagedResultAsync(JqDataTableRequest model)
+        public async Task<JqDataTableResponse<CustomerListItemDto>> GetPagedResultAsync(CustomerJqDataTableRequestModel model)
         {
             if (model.Length == 0)
             {
@@ -143,8 +144,8 @@ namespace AccountErp.DataLayer.Repositories
             var filerKey = model.Search.Value;
 
             var linqstmt = (from c in _dataContext.Customers
-                            where c.Status != Constants.RecordStatus.Deleted && (filerKey == null || EF.Functions.Like(c.FirstName, "%" + filerKey + "%")
-                            || EF.Functions.Like(c.LastName, "%" + filerKey + "%"))
+                            where c.Status != Constants.RecordStatus.Deleted && (model.FilterKey == null || EF.Functions.Like(c.FirstName, "%" + model.FilterKey + "%")
+                            || EF.Functions.Like(c.LastName, "%" + model.FilterKey + "%") || EF.Functions.Like(c.Email, "%" + model.FilterKey + "%"))
                             select new CustomerListItemDto
                             {
                                 Id = c.Id,

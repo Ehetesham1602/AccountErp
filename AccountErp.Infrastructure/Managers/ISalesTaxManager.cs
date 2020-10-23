@@ -21,7 +21,7 @@ namespace AccountErp.Infrastructure.Managers
 
         Task<IEnumerable<SalesTaxDetailDto>> GetSelectListItemsAsync();
 
-        Task<JqDataTableResponse<SalesTaxListItemDto>> GetPagedResultAsync(JqDataTableRequest model);
+        Task<JqDataTableResponse<SalesTaxListItemDto>> GetPagedResultAsync(SalexTaxJqDataTableRequestModel model);
 
         Task ToggleStatusAsync(int id);
 
