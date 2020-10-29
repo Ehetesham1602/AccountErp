@@ -127,7 +127,8 @@ namespace AccountErp.DataLayer.Repositories
         public async Task DeleteAsync(int id)
         {
             var salesTax = await _dataContext.SalesTaxes.FindAsync(id);
-            _dataContext.SalesTaxes.Remove(salesTax);
+            salesTax.Status = Constants.RecordStatus.Deleted;
+            _dataContext.SalesTaxes.Update(salesTax);
         }
 
         public async Task<SalesTax> GetAsync(int id)
