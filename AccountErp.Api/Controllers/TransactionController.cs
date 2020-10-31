@@ -14,32 +14,32 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace AccountErp.Api.Controllers
-{ 
-     [Route("api/[controller]")]
-[Produces("application/json")]
-//[Authorize]
-[ApiController]
-public class TransactionController : ControllerBase
+{
+    [Route("api/[controller]")]
+    [Produces("application/json")]
+    [Authorize]
+    [ApiController]
+    public class TransactionController : ControllerBase
     {
         private readonly ITransactionManager _transactionManager;
-      
+
         public TransactionController(ITransactionManager transactionManager)
         {
             _transactionManager = transactionManager;
-          
+
         }
 
-       
+
         [HttpPost]
         [Route("paged-result")]
         public async Task<IActionResult> GetPagedResult(TransactionJqDataTableRequestModel model)
-       {
-            
+        {
+
             var pagedResult = await _transactionManager.GetPagedResultAsync(model);
 
             return Ok(pagedResult);
         }
 
-      
+
     }
 }

@@ -62,7 +62,8 @@ namespace AccountErp.DataLayer.Repositories
                                   City = c.Address.City,
                                   State = c.Address.State,
                                   CountryName = c.Address.Country.Name,
-                                  Phone = c.Address.Phone
+                                  Phone = c.Address.Phone,
+                                  CountryId = c.Address.Country.Id
                               },
                               ShippingAddress = new ShippingAddressDto
                               {
@@ -109,7 +110,8 @@ namespace AccountErp.DataLayer.Repositories
                                           City = c.Address.City,
                                           State = c.Address.State,
                                           CountryId = c.Address.CountryId,
-                                          Phone = c.Address.Phone
+                                          Phone = c.Address.Phone,
+                                          CountryName = c.Address.Country.Name
                                       },
                                       ShippingAddress = new ShippingAddressDto
                                       {

@@ -17,6 +17,7 @@ namespace AccountErp.Api.Controllers
 {
     [Route("api/[controller]")]
     [Produces("application/json")]
+    [Authorize]
     [ApiController]
     public class RecurringInvoiceController : ControllerBase
     { 

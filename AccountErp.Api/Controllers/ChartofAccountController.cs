@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AccountErp.Api.Helpers;
 using AccountErp.Infrastructure.Managers;
 using AccountErp.Models.ChartOfAccount;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +13,7 @@ namespace AccountErp.Api.Controllers
 {
     [Route("api/[controller]")]
     [Produces("application/json")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class ChartofAccountController : ControllerBase
     {

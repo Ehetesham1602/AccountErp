@@ -17,7 +17,7 @@ namespace AccountErp.Api.Controllers
 {
     [Route("api/[controller]")]
     [Produces("application/json")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class InvoiceController : ControllerBase
     {

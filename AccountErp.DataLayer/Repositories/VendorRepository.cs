@@ -65,7 +65,9 @@ namespace AccountErp.DataLayer.Repositories
                                   PostalCode = v.BillingAddress.PostalCode,
                                   City = v.BillingAddress.City,
                                   State = v.BillingAddress.State,
-                                  CountryName = v.BillingAddress.Country.Name
+                                  CountryName = v.BillingAddress.Country.Name,
+                                  CountryId = v.BillingAddress.Country.Id
+
                               },
                               ShippingAddress = new AddressDto
                               {
@@ -128,7 +130,9 @@ namespace AccountErp.DataLayer.Repositories
                                   PostalCode = v.BillingAddress.PostalCode,
                                   City = v.BillingAddress.City,
                                   State = v.BillingAddress.State,
-                                  CountryId = v.BillingAddress.CountryId
+                                  //CountryId = v.BillingAddress.CountryId,
+                                  CountryId = v.BillingAddress.Country.Id,
+                                  CountryName = v.BillingAddress.Country.Name,
                               },
                               ShippingAddress = new AddressDto
                               {
