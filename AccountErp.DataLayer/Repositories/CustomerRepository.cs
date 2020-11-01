@@ -76,7 +76,8 @@ namespace AccountErp.DataLayer.Repositories
                                   CountryId = c.ShippingAddress.CountryId,
                                   ShipTo = c.ShippingAddress.ShipTo,
                                   DeliveryInstruction = c.ShippingAddress.DeliveryInstruction,
-                                  Phone = c.ShippingAddress.Phone
+                                  Phone = c.ShippingAddress.Phone,
+                                  CountryName = c.ShippingAddress.Country.Name
                               },
                               AccountNumber = c.AccountNumber,
                               BankName = c.BankName,

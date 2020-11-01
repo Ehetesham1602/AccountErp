@@ -76,7 +76,8 @@ namespace AccountErp.DataLayer.Repositories
                                   PostalCode = v.ShippingAddress.PostalCode,
                                   City = v.ShippingAddress.City,
                                   State = v.ShippingAddress.State,
-                                  CountryName = v.ShippingAddress.Country.Name
+                                  CountryName = v.ShippingAddress.Country.Name,
+                                  CountryId = v.ShippingAddress.CountryId
                               },
                               BankBranch = v.BankBranch,
                               AccountNumber = v.AccountNumber,
