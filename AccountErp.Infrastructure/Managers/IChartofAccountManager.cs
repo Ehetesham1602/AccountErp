@@ -20,5 +20,7 @@ namespace AccountErp.Infrastructure.Managers
         Task<List<AccountDeatilDto>> getAccountByTypeId(int id);
         Task<List<AccountTypeDetailDto>> GetDetailByMarterIdAsync(int id);
         Task<List<AccountDetailsWithMasterDto>> GetDetailForAccountAsync();
+        //new
+        Task<List<AccountWithMasterDetailsDto>> GetCOAAccountDetailsaAsync();
     }
 }
