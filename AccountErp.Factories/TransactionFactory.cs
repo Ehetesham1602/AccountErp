@@ -28,6 +28,7 @@ namespace AccountErp.Factories
                 CreationDate = Utility.GetDateTime(),
                 ModifyDate = null,
                 Status = Constants.TransactionStatus.Pending,
+         
                 isForTransEntry = true
             };
 
@@ -120,6 +121,7 @@ namespace AccountErp.Factories
                 CreationDate = model.PaymentDate,
                 ModifyDate = model.PaymentDate,
                 Status = Constants.TransactionStatus.Paid,
+                Description = model.Description,
                 isForTransEntry = isForTransEntry
             };
 
@@ -142,6 +144,7 @@ namespace AccountErp.Factories
                 CreationDate = model.PaymentDate,
                 ModifyDate = model.PaymentDate,
                 Status= Constants.TransactionStatus.Paid,
+                Description = model.Description,
                 isForTransEntry = isForTransEntry
             };
 
@@ -165,6 +168,7 @@ namespace AccountErp.Factories
                 CreationDate = model.PaymentDate,
                 ModifyDate = model.PaymentDate,
                 Status = Constants.TransactionStatus.Paid,
+                Description = model.Description,
                 isForTransEntry = isForTransEntry
             };
 
@@ -187,6 +191,7 @@ namespace AccountErp.Factories
                 CreationDate = model.PaymentDate,
                 ModifyDate = model.PaymentDate,
                 Status = Constants.TransactionStatus.Paid,
+                Description = model.Description,
                 isForTransEntry = isForTransEntry
             };
 
