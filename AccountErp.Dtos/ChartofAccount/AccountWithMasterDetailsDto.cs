@@ -5,10 +5,10 @@ using System.Text;
 
 namespace AccountErp.Dtos.ChartofAccount
 {
-    public class AccountDetailsWithMasterDto
+   public class AccountWithMasterDetailsDto
     {
-        public int Id { get; set; }
+        public String Id { get; set; }
         public String text { get; set; }
-        public List<BankAccountDetailDto> children { get; set; }
+        public List<BankAccountDto> children { get; set; }
     }
 }

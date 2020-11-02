@@ -78,13 +78,37 @@ namespace AccountErp.Managers
             {
                 AccountDetailsWithMasterDto accountMasterDto = new AccountDetailsWithMasterDto();
                 accountMasterDto.Id = item.Id;
-                accountMasterDto.AccountMasterName = item.AccountMasterName;
-                accountMasterDto.BankAccount = new List<BankAccountDetailDto>();
+                accountMasterDto.text = item.AccountMasterName;
+                accountMasterDto.children = new List<BankAccountDetailDto>();
                 foreach (var accType in item.AccountTypes)
                 {
                     foreach (var acc in accType.BankAccount)
                     {
-                        accountMasterDto.BankAccount.Add(acc);
+                        accountMasterDto.children.Add(acc);
+                    }
+                }
+                accountDetailDto.Add(accountMasterDto);
+            }
+            return accountDetailDto;
+        }
+        public async Task<List<AccountWithMasterDetailsDto>> GetCOAAccountDetailsaAsync()
+        {
+            var data = await _repository.GetCOADetailAsync();
+            List<AccountWithMasterDetailsDto> accountDetailDto = new List<AccountWithMasterDetailsDto>();
+            foreach (var item in data)
+            {
+                AccountWithMasterDetailsDto accountMasterDto = new AccountWithMasterDetailsDto();
+                accountMasterDto.Id = item.Id.ToString();
+                accountMasterDto.text = item.AccountMasterName;
+                accountMasterDto.children = new List<BankAccountDto>();
+                foreach (var accType in item.AccountTypes)
+                {
+                    foreach (var acc in accType.BankAccount)
+                    {
+                        BankAccountDto bankAccountDto = new BankAccountDto();
+                        bankAccountDto.Id = acc.Id.ToString();
+                        bankAccountDto.text = acc.AccountName.ToString();
+                        accountMasterDto.children.Add(bankAccountDto);
                     }
                 }
                 accountDetailDto.Add(accountMasterDto);

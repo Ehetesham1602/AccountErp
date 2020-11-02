@@ -128,5 +128,14 @@ namespace AccountErp.Api.Controllers
 
             return Ok(COA_Details);
         }
+        [HttpGet]
+        [Route("getCOAWithAccountDetails")]
+        public async Task<IActionResult> GetCOAAccountDetailsaAsync()
+        {
+
+            var COA_Details = await _manager.GetCOAAccountDetailsaAsync();
+
+            return Ok(COA_Details);
+        }
     }
 }
