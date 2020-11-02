@@ -112,7 +112,7 @@ namespace AccountErp.Factories
                     continue;
                 }
 
-                if (!contactModel.Id.HasValue || contactModel.Id.Value == 0)
+                if (!contactModel.Id.HasValue)
                 {
                     var contact = new Contact
                     {
@@ -139,7 +139,7 @@ namespace AccountErp.Factories
 
                     entity.Contacts.Add(contact);
                 }
-                else
+                else if(contactModel.Id.Value != 0)
                 {
                     var contact = entity.Contacts.Single(x => x.Id == contactModel.Id);
 
@@ -176,3 +176,5 @@ namespace AccountErp.Factories
         }
     }
 }
+
+
