@@ -149,5 +149,12 @@ namespace AccountErp.Api.Controllers
             var pagedResult = await _customerManager.GetCustomerStatementAsync(model);
             return (pagedResult);
         }
+        [HttpGet]
+        [Route("getDetailsCustomerAndVendor")]
+        public async Task<IActionResult> GetDetailsCustomerAndVendorAsync()
+        {
+            var CustomerAndVendor = await _customerManager.GetDetailsCustomerAndVendorAsync();
+            return Ok(CustomerAndVendor);
+        }
     }
 }

@@ -17,6 +17,7 @@ namespace AccountErp.Managers
     public class CustomerManager : ICustomerManager
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly IVendorRepository _vendorRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly string _userId;
@@ -109,10 +110,45 @@ namespace AccountErp.Managers
             }
            
         }
+        public async Task<List<CustomerAndVendorDetailsDto>> GetDetailsCustomerAndVendorAsync()
+        {
+            var customer = await _customerRepository.GetCustomerAsync();
+            List<CustomerAndVendorDetailsDto> customerAndVendorDetailsDtos = new List<CustomerAndVendorDetailsDto>();
+            CustomerAndVendorDetailsDto customerAndVendorDetailsObj = new CustomerAndVendorDetailsDto();
+            customerAndVendorDetailsObj.id = "0";
+            customerAndVendorDetailsObj.text = "Customer";
+            customerAndVendorDetailsObj.children = new List<CustomerAndVendorDto>();
+
+            foreach (var item in customer.CustomerTypes)
+            {
+                CustomerAndVendorDto customerAndVendorDtoObj = new CustomerAndVendorDto();
+                customerAndVendorDtoObj.id = item.Id.ToString() + "/1";
+                customerAndVendorDtoObj.text = item.FirstName;
+                customerAndVendorDetailsObj.children.Add(customerAndVendorDtoObj);
+            }
+
+            customerAndVendorDetailsDtos.Add(customerAndVendorDetailsObj);
+            customerAndVendorDetailsObj = new CustomerAndVendorDetailsDto();
+            customerAndVendorDetailsObj.id = "0";
+            customerAndVendorDetailsObj.text = "Vendor";
+            customerAndVendorDetailsObj.children = new List<CustomerAndVendorDto>();
+
+            foreach (var item in customer.VendorTypes)
+            {
+                CustomerAndVendorDto customerAndVendorDtoObj = new CustomerAndVendorDto();
+                customerAndVendorDtoObj.id = item.Id.ToString() + "/2";
+                customerAndVendorDtoObj.text = item.Name;
+                customerAndVendorDetailsObj.children.Add(customerAndVendorDtoObj);
+            }
+            customerAndVendorDetailsDtos.Add(customerAndVendorDetailsObj);
+            return customerAndVendorDetailsDtos;
+        }
+
         //public async Task SetOverdueStatus()
         //{
         //    await _customerRepository.SetOverdueStatus();
         //    await _unitOfWork.SaveChangesAsync();
         //}
+
     }
 }
