@@ -3,6 +3,7 @@ using AccountErp.Dtos.Address;
 using AccountErp.Dtos.Customer;
 using AccountErp.Dtos.Invoice;
 using AccountErp.Dtos.ShippingAddress;
+using AccountErp.Dtos.Vendor;
 using AccountErp.Entities;
 using AccountErp.Infrastructure.Repositories;
 using AccountErp.Models.Customer;
@@ -316,6 +317,31 @@ namespace AccountErp.DataLayer.Repositories
 
             return await linqstmt.ToListAsync();
         }
+        public async Task<CustomerAndVendorMainDetailsDto> GetCustomerAsync()
+        {
+            CustomerAndVendorMainDetailsDto mainDetailsDto = new CustomerAndVendorMainDetailsDto();
+            List<CustomerDetailDto> customerDetails = await (from i in _dataContext.Customers
+                              select new CustomerDetailDto
+                              {
+                                  Id = i.Id,
+                                  FirstName = i.FirstName + " " + i.MiddleName + " " + i.LastName
+
+                              })
+                           .AsNoTracking().ToListAsync();
+            List<VendorDetailDto> vendorDetails = await (from i in _dataContext.Vendors
+                                                             select new VendorDetailDto
+                                                             {
+                                                                 Id = i.Id,
+                                                                 Name = i.Name
+
+                                                             })
+                          .AsNoTracking().ToListAsync();
+            mainDetailsDto.CustomerTypes = customerDetails;
+            mainDetailsDto.VendorTypes = vendorDetails;
+
+            return mainDetailsDto;
+        }
+        
         //public async Task SetOverdueStatus()
         //{
         //    DateTime startDateTime = DateTime.Today;
