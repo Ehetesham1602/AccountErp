@@ -19,6 +19,6 @@ namespace AccountErp.Models.Bill
         public int VendorId { get; set; }
         public Constants.TransactionType PaymentType { get; set; }
         public decimal Amount { get; set; }
-        public int DebitBankAccountId { get; set; }
+        public int? DebitBankAccountId { get; set; }
     }
 }
