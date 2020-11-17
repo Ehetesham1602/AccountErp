@@ -33,16 +33,16 @@ namespace AccountErp.Api.Controllers
             }
             if (await _manager.IsCodeExistsAsync(model.Code))
             {
-                return BadRequest("Sales tax of this code is already exists");
+                try
+                {
+                    await _manager.AddAsync(model);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
-            try
-            {
-                await _manager.AddAsync(model);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            
             return Ok();
         }
 
