@@ -25,7 +25,7 @@ namespace AccountErp.Api.Controllers
 
         [HttpPost]
         [Route("add")]
-        public async Task<IActionResult> Add([FromBody]SalesTaxAddModel model)
+        public async Task<IActionResult> Add([FromBody] SalesTaxAddModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -33,16 +33,16 @@ namespace AccountErp.Api.Controllers
             }
             if (await _manager.IsCodeExistsAsync(model.Code))
             {
-                try
-                {
-                    await _manager.AddAsync(model);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                return BadRequest("Sales tax of this code is already exists");
             }
-            
+            try
+            {
+                await _manager.AddAsync(model);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return Ok();
         }
 
