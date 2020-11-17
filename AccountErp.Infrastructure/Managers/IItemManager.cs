@@ -26,13 +26,15 @@ namespace AccountErp.Infrastructure.Managers
 
         Task<IEnumerable<ItemDetailDto>> GetAllForExpenseAsync(Constants.RecordStatus? status = null);
 
-        
 
+   
 
         Task<IEnumerable<SelectListItemDto>> GetSelectItemsAsync();
 
         Task ToggleStatusAsync(int id);
 
         Task DeleteAsync(int id);
+
+        bool checkItemAvailable(int id);
     }
 }

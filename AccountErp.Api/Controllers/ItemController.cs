@@ -11,7 +11,7 @@ namespace AccountErp.Api.Controllers
 {
     [Route("api/[controller]")]
     [Produces("application/json")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class ItemController : ControllerBase
     {
@@ -137,9 +137,16 @@ namespace AccountErp.Api.Controllers
         [Route("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _manager.DeleteAsync(id);
+            if (_manager.checkItemAvailable(id))
+            {
+                await _manager.DeleteAsync(id);
 
-            return Ok();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
     }

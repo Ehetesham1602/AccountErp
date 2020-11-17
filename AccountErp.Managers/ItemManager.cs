@@ -74,9 +74,14 @@ namespace AccountErp.Managers
             await _unitOfWork.SaveChangesAsync();
         }
 
+        public bool checkItemAvailable(int id)
+        {
+           return _repository.checkItemAvailable(id);
+        }
+
         public async Task DeleteAsync(int id)
         {
-            await _repository.DeleteAsync(id);
+             _repository.DeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();
         }
 

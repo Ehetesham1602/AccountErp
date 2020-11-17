@@ -25,10 +25,6 @@ namespace AccountErp.Infrastructure.Repositories
         Task<IEnumerable<ItemDetailDto>> GetAllForSalesAsync(Constants.RecordStatus? status = null);
         Task<IEnumerable<ItemDetailDto>> GetAllForExpenseAsync(Constants.RecordStatus? status = null);
 
-
-
-        
-
         Task<ItemDetailForEditDto> GetForEditAsync(int id);
 
         Task<JqDataTableResponse<ItemListItemDto>> GetPagedResultAsync(ItemJqDataTableRequestModel model);
@@ -36,7 +32,8 @@ namespace AccountErp.Infrastructure.Repositories
         Task<IEnumerable<SelectListItemDto>> GetSelectItemsAsync();
 
         Task ToggleStatusAsync(int id);
-
+        
         Task DeleteAsync(int id);
+        bool checkItemAvailable(int id);
     }
 }
