@@ -10,7 +10,7 @@ namespace AccountErp.Models.Bill
         public decimal Rate { get; set; }
         public decimal Price { get; set; }
         public int? TaxId { get; set; }
-        public int? TaxPercentage { get; set; }
+        public decimal? TaxPercentage { get; set; }
         public int Quantity { get; set; }
         public int BankAccountId { get; set; }
         public int TaxBankAccountId { get; set; }

@@ -9,7 +9,7 @@
         public string Description { get; set; }
         public decimal Price { get; set; }
         public int? TaxId { get; set; }
-        public int? TaxPercentage { get; set; }
+        public decimal? TaxPercentage { get; set; }
         public string RefrenceNumber { get; set; }
         public int Quantity { get; set; }
         public decimal TaxPrice { get; set; }
