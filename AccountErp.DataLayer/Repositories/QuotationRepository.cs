@@ -214,7 +214,7 @@ namespace AccountErp.DataLayer.Repositories
 
             var pagedResult = new JqDataTableResponse<QuotationListItemDto>
             {
-                RecordsTotal = await _dataContext.Quotations.CountAsync(x => model.CustomerId == null || x.CustomerId == model.CustomerId.Value),
+                RecordsTotal = await _dataContext.Quotations.CountAsync(x =>  x.Status != Constants.InvoiceStatus.Deleted),
                 RecordsFiltered = await linqstmt.CountAsync(),
                 Data = await linqstmt.OrderBy(sortExpresstion).Skip(model.Start).Take(model.Length).ToListAsync()
             };

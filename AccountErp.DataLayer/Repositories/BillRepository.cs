@@ -86,8 +86,7 @@ namespace AccountErp.DataLayer.Repositories
 
             var pagedResult = new JqDataTableResponse<BillListItemDto>
             {
-                RecordsTotal = await _dataContext.Bills.CountAsync(x => (model.VendorId == null || x.VendorId == model.VendorId.Value)
-                    && x.Status != Constants.BillStatus.Deleted),
+                RecordsTotal = await _dataContext.Bills.CountAsync(x => x.Status != Constants.BillStatus.Deleted),
                 RecordsFiltered = await linqstmt.CountAsync(),
                 Data = await linqstmt.OrderBy(sortExpression).Skip(model.Start).Take(model.Length).ToListAsync()
             };

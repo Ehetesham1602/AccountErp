@@ -11,7 +11,7 @@ namespace AccountErp.Models.Invoice
         public decimal Price { get; set; }
         public int? TaxId { get; set; }
         public decimal? TaxPrice { get; set; }
-        public int? TaxPercentage { get; set; }
+        public decimal? TaxPercentage { get; set; }
         public int Quantity { get; set; }
         public int TaxBankAccountId { get; set; }
         public int BankAccountId { get; set; }

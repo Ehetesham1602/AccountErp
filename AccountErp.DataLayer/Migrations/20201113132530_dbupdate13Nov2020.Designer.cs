@@ -4,14 +4,16 @@ using AccountErp.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201113132530_dbupdate13Nov2020")]
+    partial class dbupdate13Nov2020
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -294,7 +296,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("TaxId");
 
-                    b.Property<decimal?>("TaxPercentage")
+                    b.Property<int?>("TaxPercentage")
                         .IsRequired();
 
                     b.Property<decimal>("TaxPrice");
@@ -729,7 +731,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("TaxId");
 
-                    b.Property<decimal?>("TaxPercentage");
+                    b.Property<int?>("TaxPercentage");
 
                     b.Property<decimal?>("TaxPrice")
                         .IsRequired()
@@ -940,7 +942,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("TaxId");
 
-                    b.Property<decimal?>("TaxPercentage");
+                    b.Property<int?>("TaxPercentage");
 
                     b.Property<decimal>("TaxPrice")
                         .HasColumnType("NUMERIC(12,2)");

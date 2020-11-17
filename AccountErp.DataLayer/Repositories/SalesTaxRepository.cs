@@ -84,7 +84,7 @@ namespace AccountErp.DataLayer.Repositories
 
         public async Task<bool> IsCodeExistsAsync(string code)
         {
-            return await _dataContext.SalesTaxes.AnyAsync(x => x.Code.Equals(code) );
+            return await _dataContext.SalesTaxes.AnyAsync(x => x.Code.Equals(code) && x.Status != Constants.RecordStatus.Deleted );
         }
 
         public async Task<bool> IsCodeExistsAsync(string code, int id)

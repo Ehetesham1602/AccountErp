@@ -25,7 +25,7 @@ namespace AccountErp.Api.Controllers
 
         [HttpPost]
         [Route("add")]
-        public async Task<IActionResult> Add([FromBody]SalesTaxAddModel model)
+        public async Task<IActionResult> Add([FromBody] SalesTaxAddModel model)
         {
             if (!ModelState.IsValid)
             {
