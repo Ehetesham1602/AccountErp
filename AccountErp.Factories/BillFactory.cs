@@ -132,7 +132,8 @@ namespace AccountErp.Factories
                     Price = service.Price,
                     Quantity = service.Quantity,
                     TaxPercentage = service.TaxPercentage,
-                    TaxPrice = service.TaxPrice
+                    TaxPrice = service.TaxPrice,
+                    LineAmount = service.LineAmount
                 });
             }
 
