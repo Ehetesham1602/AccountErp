@@ -130,7 +130,7 @@ namespace AccountErp.DataLayer.Repositories
                                 Id = s.Id,
                                 Name = s.Name,
                                 Rate = s.Rate,
-                                Description = s.Description,
+                                Description = s.Description ?? "",
                                 Status = s.Status,
                                 TaxCode = s.SalesTax.Code,
                                 TaxPercentage = s.SalesTax.TaxPercentage,

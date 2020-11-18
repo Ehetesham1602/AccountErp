@@ -47,7 +47,7 @@ namespace AccountErp.Managers
                 await _invoiceRepository.UpdateStatusAsync(model.InvoiceId, Constants.InvoiceStatus.Paid);
 
                 //For Transaction Update
-                await _transactionRepository.SetTransactionAccountIdForInvoice(model.InvoiceId,model.BankAccountId,model.PaymentDate);
+                await _transactionRepository.SetTransactionAccountIdForInvoice(model.InvoiceId,model.BankAccountId,model.PaymentDate,model.Description);
 
                 await _unitOfWork.SaveChangesAsync();
             }

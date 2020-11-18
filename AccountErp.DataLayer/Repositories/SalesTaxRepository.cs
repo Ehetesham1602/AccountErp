@@ -53,7 +53,7 @@ namespace AccountErp.DataLayer.Repositories
                             {
                                 Id = st.Id,
                                 Code = st.Code,
-                                Description = st.Description,
+                                Description = st.Description ?? "",
                                 TaxPercentage = st.TaxPercentage,
                                 Status = st.Status,
                                 BankAccountId = st.BankAccountId

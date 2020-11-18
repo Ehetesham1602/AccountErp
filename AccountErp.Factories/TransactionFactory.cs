@@ -180,7 +180,7 @@ namespace AccountErp.Factories
             {
                 TransactionId = null,
                 CompanyId = null,
-                TransactionTypeId = Constants.TransactionType.AccountExpence,
+                TransactionTypeId = Constants.TransactionType.AccountIncome,
                 TransactionDate = model.PaymentDate,
                 TransactionNumber = null,
                 ContactType = null,

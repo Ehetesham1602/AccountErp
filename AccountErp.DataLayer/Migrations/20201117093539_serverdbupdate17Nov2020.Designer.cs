@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20201113132530_dbupdate13Nov2020")]
-    partial class dbupdate13Nov2020
+    [Migration("20201117093539_serverdbupdate17Nov2020")]
+    partial class serverdbupdate17Nov2020
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -296,7 +296,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("TaxId");
 
-                    b.Property<int?>("TaxPercentage")
+                    b.Property<decimal?>("TaxPercentage")
                         .IsRequired();
 
                     b.Property<decimal>("TaxPrice");
@@ -731,7 +731,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("TaxId");
 
-                    b.Property<int?>("TaxPercentage");
+                    b.Property<decimal?>("TaxPercentage");
 
                     b.Property<decimal?>("TaxPrice")
                         .IsRequired()
@@ -942,7 +942,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("TaxId");
 
-                    b.Property<int?>("TaxPercentage");
+                    b.Property<decimal?>("TaxPercentage");
 
                     b.Property<decimal>("TaxPrice")
                         .HasColumnType("NUMERIC(12,2)");

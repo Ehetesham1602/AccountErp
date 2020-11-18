@@ -9,6 +9,10 @@
     <Compile Remove="Migrations\20200825064727_TransactionTableChange25082020.Designer.cs" />
     <Compile Remove="Migrations\20200825081813_TransactionTableChange25082020.cs" />
     <Compile Remove="Migrations\20200825081813_TransactionTableChange25082020.Designer.cs" />
+    <Compile Remove="Migrations\20201117092830_serverdbupdate17Nov2020.cs" />
+    <Compile Remove="Migrations\20201117092830_serverdbupdate17Nov2020.Designer.cs" />
+    <Compile Remove="Migrations\20201117093312_serverdbupdate17Nov2020.cs" />
+    <Compile Remove="Migrations\20201117093312_serverdbupdate17Nov2020.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

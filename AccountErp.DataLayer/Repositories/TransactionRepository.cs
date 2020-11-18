@@ -27,7 +27,7 @@ namespace AccountErp.DataLayer.Repositories
             await _dataContext.Transaction.AddAsync(entity);
         }
 
-        public async Task SetTransactionAccountIdForInvoice(int invoiceId, int? AccId, DateTime date)
+        public async Task SetTransactionAccountIdForInvoice(int invoiceId, int? AccId, DateTime date, string desc)
         {
             var linqstmt = await (from t in _dataContext.Transaction
                                   where t.TransactionId == invoiceId
@@ -40,6 +40,7 @@ namespace AccountErp.DataLayer.Repositories
                if(item.BankAccountId == 1)
                 {
                     item.BankAccountId = AccId;
+                    item.Description = desc;
                 }
                 item.ModifyDate = date;
                 item.Status = Utilities.Constants.TransactionStatus.Paid;
@@ -47,7 +48,7 @@ namespace AccountErp.DataLayer.Repositories
             }
            
         }
-        public async Task SetTransactionAccountIdForBill(int billId, int? AccId, DateTime date)
+        public async Task SetTransactionAccountIdForBill(int billId, int? AccId, DateTime date ,string desc)
         {
             var linqstmt = await (from t in _dataContext.Transaction
                                   where t.TransactionId == billId
@@ -60,6 +61,7 @@ namespace AccountErp.DataLayer.Repositories
                 if (item.BankAccountId == 2)
                 {
                     item.BankAccountId = AccId;
+                    item.Description = desc;
                 }
                 item.ModifyDate = date;
                 item.Status = Utilities.Constants.TransactionStatus.Paid;
@@ -126,7 +128,7 @@ namespace AccountErp.DataLayer.Repositories
 
             var pagedResult = new JqDataTableResponse<TransactionListItemDto>
             {
-                //RecordsTotal = await _dataContext.Invoices.CountAsync(x => model.CustomerId == null || x.CustomerId == model.CustomerId.Value),
+                RecordsTotal = await _dataContext.Transaction.CountAsync(),
                 RecordsFiltered = await linqstmt.CountAsync(),
                 Data = await linqstmt.OrderBy(sortExpresstion).Skip(model.Start).Take(model.Length).ToListAsync()
             };

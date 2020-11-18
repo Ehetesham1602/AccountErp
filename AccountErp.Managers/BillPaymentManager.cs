@@ -53,7 +53,7 @@ namespace AccountErp.Managers
                 await _billRepository.UpdateStatusAsync(model.BillId, Constants.BillStatus.Paid);
 
                 //For Transaction Update
-                await _transactionRepository.SetTransactionAccountIdForBill(model.BillId, model.BankAccountId, model.PaymentDate);
+                await _transactionRepository.SetTransactionAccountIdForBill(model.BillId, model.BankAccountId, model.PaymentDate, model.Description);
 
                 await _unitOfWork.SaveChangesAsync();
             }

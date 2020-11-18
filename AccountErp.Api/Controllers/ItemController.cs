@@ -145,7 +145,7 @@ namespace AccountErp.Api.Controllers
             }
             else
             {
-                return BadRequest();
+                return BadRequest("This Item is in Used.");
             }
         }
 
