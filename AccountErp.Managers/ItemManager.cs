@@ -81,7 +81,7 @@ namespace AccountErp.Managers
 
         public async Task DeleteAsync(int id)
         {
-             _repository.DeleteAsync(id);
+            await _repository.DeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();
         }
 

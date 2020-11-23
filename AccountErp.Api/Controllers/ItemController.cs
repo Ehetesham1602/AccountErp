@@ -11,7 +11,7 @@ namespace AccountErp.Api.Controllers
 {
     [Route("api/[controller]")]
     [Produces("application/json")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class ItemController : ControllerBase
     {
@@ -24,7 +24,7 @@ namespace AccountErp.Api.Controllers
 
         [HttpPost]
         [Route("add")]
-        public async Task<IActionResult> Add([FromBody]ItemAddModel model)
+        public async Task<IActionResult> Add([FromBody] ItemAddModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -43,7 +43,7 @@ namespace AccountErp.Api.Controllers
 
         [HttpPost]
         [Route("edit")]
-        public async Task<IActionResult> Edit([FromBody]ItemEditModel model)
+        public async Task<IActionResult> Edit([FromBody] ItemEditModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -129,7 +129,6 @@ namespace AccountErp.Api.Controllers
         public async Task<IActionResult> ToggleStatus(int id)
         {
             await _manager.ToggleStatusAsync(id);
-
             return Ok();
         }
 
@@ -140,12 +139,11 @@ namespace AccountErp.Api.Controllers
             if (_manager.checkItemAvailable(id))
             {
                 await _manager.DeleteAsync(id);
-
                 return Ok();
             }
             else
             {
-                return BadRequest("This Item is in Used.");
+                return BadRequest("This Item & Services Is Already Exist.");
             }
         }
 
