@@ -143,7 +143,7 @@ namespace AccountErp.Api.Controllers
             }
             else
             {
-                return BadRequest("This Item & Services Is Already Exist.");
+                return BadRequest("This Item & Services Is Already Exists.");
             }
         }
 
