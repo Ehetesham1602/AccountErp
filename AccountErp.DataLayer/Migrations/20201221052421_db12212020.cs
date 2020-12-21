@@ -2,22 +2,22 @@
 
 namespace AccountErp.DataLayer.Migrations
 {
-    public partial class BillChange27082020 : Migration
+    public partial class db12212020 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "ReferenceNumber",
-                table: "Bills",
-                newName: "HSTNumber");
+                name: "ReconciliationStatuse",
+                table: "Reconciliations",
+                newName: "ReconciliationStatus");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "HSTNumber",
-                table: "Bills",
-                newName: "ReferenceNumber");
+                name: "ReconciliationStatus",
+                table: "Reconciliations",
+                newName: "ReconciliationStatuse");
         }
     }
 }

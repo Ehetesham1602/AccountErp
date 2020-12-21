@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200828021704_Dbmigration_27_08_20_01")]
-    partial class Dbmigration_27_08_20_01
+    [Migration("20201221052421_db12212020")]
+    partial class db12212020
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -96,6 +96,9 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<int?>("CountryId");
 
                     b.Property<int?>("CountryId1");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(50);
 
                     b.Property<string>("PostalCode")
                         .HasMaxLength(50);
@@ -293,7 +296,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("TaxId");
 
-                    b.Property<int?>("TaxPercentage")
+                    b.Property<decimal?>("TaxPercentage")
                         .IsRequired();
 
                     b.Property<decimal>("TaxPrice");
@@ -728,7 +731,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("TaxId");
 
-                    b.Property<int?>("TaxPercentage");
+                    b.Property<decimal?>("TaxPercentage");
 
                     b.Property<decimal?>("TaxPrice")
                         .IsRequired()
@@ -939,7 +942,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("TaxId");
 
-                    b.Property<int?>("TaxPercentage");
+                    b.Property<decimal?>("TaxPercentage");
 
                     b.Property<decimal>("TaxPrice")
                         .HasColumnType("NUMERIC(12,2)");
@@ -953,6 +956,33 @@ namespace AccountErp.DataLayer.Migrations
                     b.HasIndex("TaxId");
 
                     b.ToTable("QuotationServices");
+                });
+
+            modelBuilder.Entity("AccountErp.Entities.Reconciliation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BankAccountId");
+
+                    b.Property<decimal>("EndingBalance")
+                        .HasColumnType("NUMERIC(12,2)");
+
+                    b.Property<bool>("IsReconciliation");
+
+                    b.Property<DateTime>("ReconciliationDate");
+
+                    b.Property<int>("ReconciliationStatus");
+
+                    b.Property<decimal>("StartingBalance")
+                        .HasColumnType("NUMERIC(12,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BankAccountId");
+
+                    b.ToTable("Reconciliations");
                 });
 
             modelBuilder.Entity("AccountErp.Entities.RecurringInvoice", b =>
@@ -1132,6 +1162,8 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<int?>("CountryId");
 
                     b.Property<string>("DeliveryInstruction");
+
+                    b.Property<string>("Phone");
 
                     b.Property<string>("PostalCode");
 
@@ -1550,6 +1582,14 @@ namespace AccountErp.DataLayer.Migrations
                     b.HasOne("AccountErp.Entities.SalesTax", "Taxes")
                         .WithMany()
                         .HasForeignKey("TaxId");
+                });
+
+            modelBuilder.Entity("AccountErp.Entities.Reconciliation", b =>
+                {
+                    b.HasOne("AccountErp.Entities.BankAccount", "bank")
+                        .WithMany()
+                        .HasForeignKey("BankAccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.RecurringInvoice", b =>

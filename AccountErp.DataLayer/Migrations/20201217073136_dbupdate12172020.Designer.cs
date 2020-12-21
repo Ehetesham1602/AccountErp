@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccountErp.DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200827234828_Dbmigration_27_08_20")]
-    partial class Dbmigration_27_08_20
+    [Migration("20201217073136_dbupdate12172020")]
+    partial class dbupdate12172020
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -96,6 +96,9 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<int?>("CountryId");
 
                     b.Property<int?>("CountryId1");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(50);
 
                     b.Property<string>("PostalCode")
                         .HasMaxLength(50);
@@ -195,9 +198,6 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<DateTime?>("DueDate");
 
-                    b.Property<string>("HSTNumber")
-                        .HasMaxLength(50);
-
                     b.Property<decimal?>("LineAmountSubTotal")
                         .HasColumnType("NUMERIC(12,2)");
 
@@ -205,6 +205,9 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<decimal?>("PoSoNumber")
                         .HasColumnType("NUMERIC(12,2)");
+
+                    b.Property<string>("RefrenceNumber")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Remark")
                         .HasMaxLength(1000);
@@ -293,7 +296,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("TaxId");
 
-                    b.Property<int?>("TaxPercentage")
+                    b.Property<decimal?>("TaxPercentage")
                         .IsRequired();
 
                     b.Property<decimal>("TaxPrice");
@@ -728,7 +731,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("TaxId");
 
-                    b.Property<int?>("TaxPercentage");
+                    b.Property<decimal?>("TaxPercentage");
 
                     b.Property<decimal?>("TaxPrice")
                         .IsRequired()
@@ -939,7 +942,7 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<int?>("TaxId");
 
-                    b.Property<int?>("TaxPercentage");
+                    b.Property<decimal?>("TaxPercentage");
 
                     b.Property<decimal>("TaxPrice")
                         .HasColumnType("NUMERIC(12,2)");
@@ -1133,6 +1136,8 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<string>("DeliveryInstruction");
 
+                    b.Property<string>("Phone");
+
                     b.Property<string>("PostalCode");
 
                     b.Property<string>("ShipTo");
@@ -1226,6 +1231,8 @@ namespace AccountErp.DataLayer.Migrations
                     b.Property<string>("Fax")
                         .HasMaxLength(50);
 
+                    b.Property<string>("HSTNumber");
+
                     b.Property<string>("Ifsc")
                         .HasMaxLength(50);
 
@@ -1235,8 +1242,6 @@ namespace AccountErp.DataLayer.Migrations
 
                     b.Property<string>("Phone")
                         .HasMaxLength(50);
-
-                    b.Property<string>("RegistrationNumber");
 
                     b.Property<int?>("ShippingAddressId");
 

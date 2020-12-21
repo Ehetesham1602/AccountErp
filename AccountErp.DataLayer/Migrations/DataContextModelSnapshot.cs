@@ -956,6 +956,33 @@ namespace AccountErp.DataLayer.Migrations
                     b.ToTable("QuotationServices");
                 });
 
+            modelBuilder.Entity("AccountErp.Entities.Reconciliation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BankAccountId");
+
+                    b.Property<decimal>("EndingBalance")
+                        .HasColumnType("NUMERIC(12,2)");
+
+                    b.Property<bool>("IsReconciliation");
+
+                    b.Property<DateTime>("ReconciliationDate");
+
+                    b.Property<int>("ReconciliationStatus");
+
+                    b.Property<decimal>("StartingBalance")
+                        .HasColumnType("NUMERIC(12,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BankAccountId");
+
+                    b.ToTable("Reconciliations");
+                });
+
             modelBuilder.Entity("AccountErp.Entities.RecurringInvoice", b =>
                 {
                     b.Property<int>("Id")
@@ -1553,6 +1580,14 @@ namespace AccountErp.DataLayer.Migrations
                     b.HasOne("AccountErp.Entities.SalesTax", "Taxes")
                         .WithMany()
                         .HasForeignKey("TaxId");
+                });
+
+            modelBuilder.Entity("AccountErp.Entities.Reconciliation", b =>
+                {
+                    b.HasOne("AccountErp.Entities.BankAccount", "bank")
+                        .WithMany()
+                        .HasForeignKey("BankAccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AccountErp.Entities.RecurringInvoice", b =>
