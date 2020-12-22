@@ -13,9 +13,9 @@ namespace AccountErp.DataLayer.EntityConfigurations
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
-            builder.Property(x => x.ReconciliationDate).IsRequired();
-            builder.Property(x => x.StartingBalance).IsRequired().HasColumnType("NUMERIC(12,2)");
-            builder.Property(x => x.EndingBalance).IsRequired().HasColumnType("NUMERIC(12,2)");
+            builder.Property(x => x.ReconciliationDate).IsRequired(false);
+            builder.Property(x => x.StatementBalance).IsRequired().HasColumnType("NUMERIC(12,2)");
+            builder.Property(x => x.IcloseBalance).IsRequired().HasColumnType("NUMERIC(12,2)");
             builder.Property(x => x.IsReconciliation).IsRequired();
             builder.Property(x => x.ReconciliationStatus).IsRequired();
             builder.HasOne(x => x.bank).WithMany().HasForeignKey(x => x.BankAccountId);

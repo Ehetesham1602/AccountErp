@@ -54,7 +54,7 @@ namespace AccountErp.Managers
 
                 //For Transaction Update
                 await _transactionRepository.SetTransactionAccountIdForBill(model.BillId, model.BankAccountId, model.PaymentDate, model.Description);
-
+               
                 await _unitOfWork.SaveChangesAsync();
             }
             else if(model.PaymentType == Constants.TransactionType.VendorAdvancePayment)

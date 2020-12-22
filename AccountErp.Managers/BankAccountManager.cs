@@ -1,9 +1,12 @@
-﻿using AccountErp.Dtos;
+﻿using AccountErp.DataLayer.Repositories;
+using AccountErp.Dtos;
 using AccountErp.Dtos.BankAccount;
+using AccountErp.Entities;
 using AccountErp.Factories;
 using AccountErp.Infrastructure;
 using AccountErp.Infrastructure.DataLayer;
 using AccountErp.Infrastructure.Managers;
+using AccountErp.Infrastructure.Repositories;
 using AccountErp.Models.BankAccount;
 using AccountErp.Utilities;
 using Microsoft.AspNetCore.Http;
@@ -15,20 +18,30 @@ namespace AccountErp.Managers
     public class BackAccountManager : IBankAccountManager
     {
         private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly IReconciliationRepository _reconciliationRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly string _userId;
 
         public BackAccountManager(IHttpContextAccessor contextAccessor, IBankAccountRepository bankAccountRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, IReconciliationRepository reconciliationRepository)
         {
             _userId = contextAccessor.HttpContext.User.GetUserId();
             _bankAccountRepository = bankAccountRepository;
+            _reconciliationRepository = reconciliationRepository;
             _unitOfWork = unitOfWork;
         }
         public async Task AddAsync(BankAccountAddModel model)
         {
-            await _bankAccountRepository.AddAsync(BankAccountFactory.Create(model,_userId));
+            var result = BankAccountFactory.Create(model, _userId);
+
+            await _bankAccountRepository.AddAsync(result);
+            if (model.COA_AccountTypeId==1||model.COA_AccountTypeId==2||model.COA_AccountTypeId==6||model.COA_AccountTypeId==7)
+            {
+                Reconciliation reconciliation =new Reconciliation();
+                ReconciliationFactory.Create(result.Id,reconciliation);
+                await _reconciliationRepository.AddAsync(reconciliation);
+            }
             await _unitOfWork.SaveChangesAsync();
         }
 

@@ -1,4 +1,5 @@
 ﻿using AccountErp.Entities;
+using AccountErp.Models.BankAccount;
 using AccountErp.Models.Reconciliation;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,8 @@ namespace AccountErp.Factories
 
                 BankAccountId = model.BankAccountId,
                 ReconciliationDate = model.ReconciliationDate,
-                StartingBalance = model.StartingBalance,
-                EndingBalance = model.EndingBalance,
+                StatementBalance = model.StatementBalance,
+                IcloseBalance = model.IcloseBalance,
                 ReconciliationStatus = model.ReconciliationStatus,
                 IsReconciliation = model.IsReconciliation
 
@@ -27,14 +28,25 @@ namespace AccountErp.Factories
         {
             entity.BankAccountId = model.BankAccountId;
             entity.ReconciliationDate = model.ReconciliationDate;
-            entity.StartingBalance = model.StartingBalance;
-            entity.EndingBalance = model.EndingBalance;
+            entity.StatementBalance = model.StatementBalance;
+            entity.IcloseBalance = model.IcloseBalance;
             entity.ReconciliationStatus = model.ReconciliationStatus;
                 entity.IsReconciliation = model.IsReconciliation;
 
 
     }
 
+        public static void Create(int id, Reconciliation entity)
+        {
+            entity.BankAccountId = id;
+            entity.ReconciliationDate = null;
+            entity.StatementBalance = 0;
+            entity.IcloseBalance = 0;
+            entity.ReconciliationStatus =1;
+            entity.IsReconciliation = false;
+
+
+        }
     }
 }
 

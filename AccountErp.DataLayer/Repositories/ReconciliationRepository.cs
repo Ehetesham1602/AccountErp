@@ -43,8 +43,8 @@ namespace AccountErp.DataLayer.Repositories
                               Id = s.Id,
                               BankAccountId = s.BankAccountId,
                               ReconciliationDate = s.ReconciliationDate,
-                              StartingBalance = s.StartingBalance,
-                              EndingBalance = s.EndingBalance,
+                              StatementBalance = s.StatementBalance,
+                              IcloseBalance = s.IcloseBalance,
                               IsReconciliation = s.IsReconciliation,
                               ReconciliationStatus = s.ReconciliationStatus,
                               bankname=s.bank.AccountName
@@ -53,5 +53,12 @@ namespace AccountErp.DataLayer.Repositories
                             .ToListAsync();
         }
 
+       /* public async Task DeleteAsync(int id)
+        {
+            var item = await _dataContext.Reconciliation.FindAsync(id);
+            item.Status = Constants.RecordStatus.Deleted;
+            _dataContext.Items.Update(item);
+
+        }*/
     }
 }
