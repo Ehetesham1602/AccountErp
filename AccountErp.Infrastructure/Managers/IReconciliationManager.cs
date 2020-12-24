@@ -16,7 +16,7 @@ namespace AccountErp.Infrastructure.Managers
 
         Task<Reconciliation> GetDetailAsync(int id);
 
-        Task<IEnumerable<ReconciliationDto>> GetAllAsync();
+        Task<ReconciliationMainDto> GetAllAsync();
 
     }
 }

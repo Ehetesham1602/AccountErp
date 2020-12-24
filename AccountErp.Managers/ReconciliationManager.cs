@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using AccountErp.Models.Reconciliation;
 using AccountErp.Dtos.Reconciliation;
 using AccountErp.Entities;
+using System.Linq;
 
 namespace AccountErp.Managers
 {
@@ -55,9 +56,49 @@ namespace AccountErp.Managers
             return await _repository.GetAsync(id);
         }
 
-        public async Task<IEnumerable<ReconciliationDto>> GetAllAsync()
+        public async Task<ReconciliationMainDto> GetAllAsync()
         {
-            return await _repository.GetAllAsync();
+            ReconciliationMainDto mainDetailDto = new ReconciliationMainDto();
+            mainDetailDto.mainReconciliationDtos = new List<NewReconciliationDto>();
+            var data = await _repository.GetAllAsync();
+            var result = (data.GroupBy(l => l.BankAccountId,  l => new { l.BankAccountId, l.StatementBalance, l.ReconciliationDate, l.IcloseBalance, l.bankname, l.IsReconciliation, l.ReconciliationStatus })
+            .Select(g => new { GroupId = g.Key, Values = g.ToList() })).ToList();
+            foreach(var ban in result)
+            {
+               NewReconciliationDto newReconcilationDto = new NewReconciliationDto();
+                newReconcilationDto.reconciliationDtos = new List<ReconciliationDto>();
+                // var id = ban.GroupId;
+                //var amount = ban.Values.Sum(x => x.BankAccountId);
+                //   amount = ban.Values.Sum(x => x.bankname);
+                newReconcilationDto.bankAccountId = ban.GroupId;
+                newReconcilationDto.ammount = 0;
+
+
+                foreach (var item in ban.Values)
+                {
+                    newReconcilationDto.bankname = item.bankname;
+
+                        ReconciliationDto reconcilationDto = new ReconciliationDto();
+                    reconcilationDto.BankAccountId = ban.GroupId;
+                    reconcilationDto.ReconciliationDate = item.ReconciliationDate;
+                    reconcilationDto.StatementBalance = item.StatementBalance;
+                    reconcilationDto.IcloseBalance = item.IcloseBalance;
+                    reconcilationDto.bankname = item.bankname;
+                    reconcilationDto.IsReconciliation = item.IsReconciliation;
+                    reconcilationDto.ReconciliationStatus = item.ReconciliationStatus;
+                    newReconcilationDto.reconciliationDtos.Add(reconcilationDto);
+                }
+                mainDetailDto.mainReconciliationDtos.Add(newReconcilationDto);
+
+
+
+            }
+
+           // ReconciliationDto reconcilationDtt = new ReconciliationDto();
+            //reconcilationDtt.bankn
+         //   mainDetailDto.AccountEndingBalance = 0;
+            
+            return mainDetailDto;
         }
 
     }
