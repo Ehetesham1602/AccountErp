@@ -17,7 +17,7 @@ namespace AccountErp.Api.Controllers
 {
     [Route("api/[controller]")]
     [Produces("application/json")]
-    [Authorize]
+   // [Authorize]
     [ApiController]
     public class TransactionController : ControllerBase
     {
@@ -40,6 +40,17 @@ namespace AccountErp.Api.Controllers
             return Ok(pagedResult);
         }
 
+        [HttpGet]
+        [Route("get-detail")]
+        public async Task<IActionResult> GetDetail(int BankAccountId)
+        {
+            var item = await _transactionManager.GetDetailAsync(BankAccountId);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            return Ok(item);
+        }
 
     }
 }

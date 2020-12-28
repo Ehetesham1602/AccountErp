@@ -142,8 +142,11 @@ namespace AccountErp.DataLayer.Repositories
 
             return pagedResult;
         }
-
+        public async Task<Transaction> GetAsync(int BankAccountId)
+        {
+            return await _dataContext.Transaction.Where(x=>x.BankAccountId== BankAccountId).FirstOrDefaultAsync();
+        }
     }
-
+   
 
 }

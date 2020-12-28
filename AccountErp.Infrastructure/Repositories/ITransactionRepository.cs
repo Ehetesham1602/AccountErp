@@ -16,6 +16,8 @@ namespace AccountErp.Infrastructure.Repositories
         Task SetTransactionAccountIdForBill(int billId, int? AccId, DateTime date, string desc);
         Task DeleteTransaction(int id);
 
+        Task<Transaction> GetAsync(int BankAccountId);
+
         Task<JqDataTableResponse<TransactionListItemDto>> GetPagedResultAsync(TransactionJqDataTableRequestModel model);
     }
 }

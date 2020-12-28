@@ -1,5 +1,6 @@
 ﻿
 using AccountErp.Dtos.Transaction;
+using AccountErp.Entities;
 using AccountErp.Models.Transaction;
 using AccountErp.Utilities;
 using System.Collections.Generic;
@@ -10,5 +11,7 @@ namespace AccountErp.Infrastructure.Managers
     {
         Task<JqDataTableResponse<TransactionListItemDto>> GetPagedResultAsync(TransactionJqDataTableRequestModel model);
 
+
+        Task<Transaction> GetDetailAsync(int BankAccountId);
     }
 }

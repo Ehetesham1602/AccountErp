@@ -1,4 +1,5 @@
 ﻿using AccountErp.Dtos.Transaction;
+using AccountErp.Entities;
 using AccountErp.Infrastructure.DataLayer;
 using AccountErp.Infrastructure.Managers;
 using AccountErp.Infrastructure.Repositories;
@@ -42,5 +43,11 @@ namespace AccountErp.Managers
         {
            return await _transactionRepository.GetPagedResultAsync(model);
         }
+        public async Task<Transaction> GetDetailAsync(int BankAccountId)
+        {
+            return await _transactionRepository.GetAsync(BankAccountId);
+        }
+
     }
+
 }
