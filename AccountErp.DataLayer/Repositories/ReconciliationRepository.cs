@@ -53,12 +53,19 @@ namespace AccountErp.DataLayer.Repositories
                             .ToListAsync();
         }
 
-       /* public async Task DeleteAsync(int id)
-        {
-            var item = await _dataContext.Reconciliation.FindAsync(id);
-            item.Status = Constants.RecordStatus.Deleted;
-            _dataContext.Items.Update(item);
+        /* public async Task DeleteAsync(int id)
+         {
+             var item = await _dataContext.Reconciliation.FindAsync(id);
+             item.Status = Constants.RecordStatus.Deleted;
+             _dataContext.Items.Update(item);
 
-        }*/
+         }*/
+
+        public async Task<List<Transaction>> GetByBankId(int BankAccountId)
+        {
+            return await _dataContext.Transaction.Where(x => x.BankAccountId == BankAccountId)
+                .AsNoTracking()
+                 .ToListAsync();
+        }
     }
 }

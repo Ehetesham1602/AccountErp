@@ -17,7 +17,12 @@ namespace AccountErp.Infrastructure.Repositories
 
         Task<Reconciliation> GetAsync(int id);
 
+
+        Task<List<Transaction>> GetByBankId(int BankAccountId);
+
         Task<IEnumerable<ReconciliationDto>> GetAllAsync();
+
+
 
     }
 }

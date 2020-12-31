@@ -12,6 +12,6 @@ namespace AccountErp.Infrastructure.Managers
         Task<JqDataTableResponse<TransactionListItemDto>> GetPagedResultAsync(TransactionJqDataTableRequestModel model);
 
 
-        Task<Transaction> GetDetailAsync(int BankAccountId);
+        Task<List<Transaction>> GetDetailAsync(int BankAccountId);
     }
 }

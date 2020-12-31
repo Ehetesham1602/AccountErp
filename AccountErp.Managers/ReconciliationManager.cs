@@ -21,7 +21,7 @@ using System.Linq;
 
 namespace AccountErp.Managers
 {
-  public  class ReconciliationManager : IReconciliationManager
+    public class ReconciliationManager : IReconciliationManager
     {
         private readonly IReconciliationRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
@@ -56,16 +56,49 @@ namespace AccountErp.Managers
             return await _repository.GetAsync(id);
         }
 
+
+        public async Task<List<Transaction>> GetByBankId(int BankAccountId)
+        {
+            var data = await _repository.GetByBankId(BankAccountId);
+            var result = (data.GroupBy(l => l.TransactionDate, l => new { l.BankAccountId, l.TransactionDate, l.CreditAmount, l.DebitAmount, l.Description, l.Id })
+            .Select(g => new { GroupId = g.Key, Values = g.ToList() })).OrderByDescending(x => x.GroupId).Take(2).Select(x => x.Values).ToList();
+            List<Transaction> obj = new List<Transaction>();
+            foreach (var item in result)
+            {
+                foreach (var item2 in item)
+                {
+                    var trsn = new Transaction()
+                    {
+                        TransactionId = item2.Id,
+                        BankAccountId = item2.BankAccountId,
+                        CreditAmount = item2.CreditAmount,
+                        TransactionDate = item2.TransactionDate,
+                        Description = item2.Description,
+                        DebitAmount = item2.DebitAmount,
+                       
+                        
+                    };
+                    obj.Add(trsn);
+                }
+            }
+            /* for(int i=0; i<result.Count-1; i++)
+            {
+
+            }*/
+            return  obj.OrderBy(x=>x.TransactionId).ToList();
+          //  return await _repository.GetByBankId(BankAccountId);
+        }
+
         public async Task<ReconciliationMainDto> GetAllAsync()
         {
             ReconciliationMainDto mainDetailDto = new ReconciliationMainDto();
             mainDetailDto.mainReconciliationDtos = new List<NewReconciliationDto>();
             var data = await _repository.GetAllAsync();
-            var result = (data.GroupBy(l => l.BankAccountId,  l => new { l.BankAccountId, l.StatementBalance, l.ReconciliationDate, l.IcloseBalance, l.bankname, l.IsReconciliation, l.ReconciliationStatus })
+            var result = (data.GroupBy(l => l.BankAccountId, l => new { l.BankAccountId, l.StatementBalance, l.ReconciliationDate, l.IcloseBalance, l.bankname, l.IsReconciliation, l.ReconciliationStatus })
             .Select(g => new { GroupId = g.Key, Values = g.ToList() })).ToList();
-            foreach(var ban in result)
+            foreach (var ban in result)
             {
-               NewReconciliationDto newReconcilationDto = new NewReconciliationDto();
+                NewReconciliationDto newReconcilationDto = new NewReconciliationDto();
                 newReconcilationDto.reconciliationDtos = new List<ReconciliationDto>();
                 // var id = ban.GroupId;
                 //var amount = ban.Values.Sum(x => x.BankAccountId);
@@ -78,7 +111,7 @@ namespace AccountErp.Managers
                 {
                     newReconcilationDto.bankname = item.bankname;
 
-                        ReconciliationDto reconcilationDto = new ReconciliationDto();
+                    ReconciliationDto reconcilationDto = new ReconciliationDto();
                     reconcilationDto.BankAccountId = ban.GroupId;
                     reconcilationDto.ReconciliationDate = item.ReconciliationDate;
                     reconcilationDto.StatementBalance = item.StatementBalance;
@@ -94,10 +127,10 @@ namespace AccountErp.Managers
 
             }
 
-           // ReconciliationDto reconcilationDtt = new ReconciliationDto();
+            // ReconciliationDto reconcilationDtt = new ReconciliationDto();
             //reconcilationDtt.bankn
-         //   mainDetailDto.AccountEndingBalance = 0;
-            
+            //   mainDetailDto.AccountEndingBalance = 0;
+
             return mainDetailDto;
         }
 

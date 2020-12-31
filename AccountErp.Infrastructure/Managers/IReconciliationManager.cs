@@ -15,6 +15,8 @@ namespace AccountErp.Infrastructure.Managers
         Task EditAsync(ReconciliationEditModel model);
 
         Task<Reconciliation> GetDetailAsync(int id);
+        Task <List<Transaction>> GetByBankId(int BankAccountId);
+
 
         Task<ReconciliationMainDto> GetAllAsync();
 

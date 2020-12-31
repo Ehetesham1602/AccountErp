@@ -73,6 +73,19 @@ namespace AccountErp.Api.Controllers
             return Ok(item);
         }
 
+        [HttpGet]
+        [Route("get-detail")]
+        public async Task<IActionResult> GetByBankId(int BankAccountId)
+        {
+            var item = await _manager.GetByBankId(BankAccountId);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            return Ok(item);
+        }
+
+
         /*[HttpPost]
         [Route("paged-result")]
         public async Task<IActionResult> GetPagedResult(ItemJqDataTableRequestModel model)
