@@ -10,8 +10,7 @@ namespace AccountErp.Infrastructure.Managers
     public interface ITransactionManager
     {
         Task<JqDataTableResponse<TransactionListItemDto>> GetPagedResultAsync(TransactionJqDataTableRequestModel model);
-
-
+        Task DeleteAsync(int id);
         Task<List<Transaction>> GetDetailAsync(int BankAccountId);
     }
 }

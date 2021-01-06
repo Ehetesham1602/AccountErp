@@ -43,6 +43,13 @@ namespace AccountErp.Managers
         {
            return await _transactionRepository.GetPagedResultAsync(model);
         }
+
+        public async Task DeleteAsync(int id)
+        {
+            await _transactionRepository.DeleteAsync(id);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
         public async Task<List<Transaction>> GetDetailAsync(int BankAccountId)
         {
             return await _transactionRepository.GetAsync(BankAccountId);

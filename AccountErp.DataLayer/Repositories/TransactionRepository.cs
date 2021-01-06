@@ -142,6 +142,14 @@ namespace AccountErp.DataLayer.Repositories
 
             return pagedResult;
         }
+
+        public async Task DeleteAsync(int id)
+        {
+            var transaction = await _dataContext.Transaction.FindAsync(id);
+            transaction.Status = (Constants.TransactionStatus)Constants.RecordStatus.Deleted;
+            _dataContext.Transaction.Update(transaction);
+        }
+
         public async Task <List<Transaction>> GetAsync(int BankAccountId)
         {
             return await _dataContext.Transaction.Where(x=>x.BankAccountId== BankAccountId)

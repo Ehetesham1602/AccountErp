@@ -40,6 +40,15 @@ namespace AccountErp.Api.Controllers
             return Ok(pagedResult);
         }
 
+        [HttpPost]
+        [Route("delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _transactionManager.DeleteAsync(id);
+
+            return Ok();
+        }
+
         [HttpGet]
         [Route("get-detail")]
         public async Task<IActionResult> GetDetail(int BankAccountId)
