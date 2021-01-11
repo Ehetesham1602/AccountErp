@@ -1,4 +1,5 @@
 ﻿using AccountErp.Api.Helpers;
+using AccountErp.Dtos.Transaction;
 using AccountErp.Infrastructure.Managers;
 using AccountErp.Models.Invoice;
 using AccountErp.Models.Transaction;
@@ -41,10 +42,10 @@ namespace AccountErp.Api.Controllers
         }
 
         [HttpPost]
-        [Route("delete/{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [Route("delete")]
+        public async Task<IActionResult> Delete(TransactionDeleteDto ids)
         {
-            await _transactionManager.DeleteAsync(id);
+            await _transactionManager.DeleteAsync(ids);
 
             return Ok();
         }
