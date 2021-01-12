@@ -50,6 +50,8 @@ namespace AccountErp.Config
             services.AddScoped<ITransactionManager, TransactionManager>();
             services.AddScoped<IDashboardManager, DashboardManager>();
             services.AddScoped<IReconciliationManager, ReconciliationManager>();
+            services.AddScoped<IEndingStatementBalanceManager, EndingStatementBalanceManager>();
+
 
 
         }
@@ -77,6 +79,7 @@ namespace AccountErp.Config
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<IDashboardRepository, DashboardRepository>();
             services.AddScoped<IReconciliationRepository, ReconciliationRepository>();
+            services.AddScoped<IEndingStatementBalanceRepository, EndingStatementBalanceRepository>();
 
 
         }

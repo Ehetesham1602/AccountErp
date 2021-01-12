@@ -40,6 +40,8 @@ namespace AccountErp.DataLayer
         public DbSet<COA_AccountMaster> COA_AccountMaster { get; set; }
         public DbSet<Transaction> Transaction { get; set; }
         public DbSet<Reconciliation> Reconciliation { get; set; }
+        public DbSet<EndingStatementBalance> EndingStatementBalance { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -71,6 +73,8 @@ namespace AccountErp.DataLayer
             modelBuilder.ApplyConfiguration(new RecurringInvoiceServiceConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
             modelBuilder.ApplyConfiguration(new ReconciliationConfigurations());
+            modelBuilder.ApplyConfiguration(new EndingStatementBalanceConfiguration());
+
 
         }
     }

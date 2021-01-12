@@ -152,7 +152,7 @@ namespace AccountErp.DataLayer.Repositories
 
         public async Task <List<Transaction>> GetAsync(int BankAccountId)
         {
-            return await _dataContext.Transaction.Where(x=>x.BankAccountId== BankAccountId)
+            return await _dataContext.Transaction.Where(x=>x.BankAccountId== BankAccountId && x.Status != (Constants.TransactionStatus)Constants.RecordStatus.Deleted)
               .AsNoTracking()
               .ToListAsync();
         }
