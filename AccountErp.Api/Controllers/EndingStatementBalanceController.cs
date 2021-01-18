@@ -57,7 +57,7 @@ namespace AccountErp.Api.Controllers
                 return BadRequest(ex.Message);
             }
             return Ok();
-        }
+        }  
 
         [HttpGet]
         [Route("get-detail/{BankAccountId}")]

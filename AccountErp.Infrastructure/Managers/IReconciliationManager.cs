@@ -1,4 +1,5 @@
 ﻿using AccountErp.Dtos.Reconciliation;
+using AccountErp.Dtos.Transaction;
 using AccountErp.Entities;
 using AccountErp.Models.Reconciliation;
 using System;
@@ -15,7 +16,7 @@ namespace AccountErp.Infrastructure.Managers
         Task EditAsync(ReconciliationEditModel model);
 
         Task<Reconciliation> GetDetailAsync(int id);
-        Task <List<Transaction>> GetByBankId(int BankAccountId);
+        Task<List<TransactionBankDto>> GetByBankId(int BankAccountId);
 
 
         Task<ReconciliationMainDto> GetAllAsync();

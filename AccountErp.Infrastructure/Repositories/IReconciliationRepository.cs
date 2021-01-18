@@ -1,4 +1,5 @@
 ﻿using AccountErp.Dtos.Reconciliation;
+using AccountErp.Dtos.Transaction;
 using AccountErp.Entities;
 using AccountErp.Utilities;
 using System;
@@ -18,7 +19,7 @@ namespace AccountErp.Infrastructure.Repositories
         Task<Reconciliation> GetAsync(int id);
 
 
-        Task<List<Transaction>> GetByBankId(int BankAccountId);
+        Task<List<TransactionBankDto>> GetByBankId(int BankAccountId);
 
         Task<IEnumerable<ReconciliationDto>> GetAllAsync();
 

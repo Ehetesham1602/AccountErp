@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using AccountErp.Dtos.Transaction;
+using AccountErp.Utilities;
 
 namespace AccountErp.DataLayer.Repositories
 {
@@ -22,7 +24,10 @@ namespace AccountErp.DataLayer.Repositories
 
         public async Task AddAsync(Reconciliation entity)
         {
+            if(entity.Id==0)
             await _dataContext.AddAsync(entity);
+            else
+                _dataContext.Update(entity);
         }
 
         public void Edit(Reconciliation entity)
@@ -60,12 +65,31 @@ namespace AccountErp.DataLayer.Repositories
              _dataContext.Items.Update(item);
 
          }*/
+     public async Task<List<TransactionBankDto>> GetByBankId(int BankAccountId)
 
-        public async Task<List<Transaction>> GetByBankId(int BankAccountId)
-        {
-            return await _dataContext.Transaction.Where(x => x.BankAccountId == BankAccountId)
-                .AsNoTracking()
-                 .ToListAsync();
+       {
+            var linqstmt =await (from i in _dataContext.Transaction
+                            join b in _dataContext.BankAccounts
+                            on i.BankAccountId equals b.Id
+                            where i.BankAccountId == BankAccountId
+                                 select new TransactionBankDto
+                            {
+                                BankName = b.AccountName,
+                                TransactionRecords = new TransactionDetailDto
+                                {
+                                    Id = i.Id,
+                                    BankAccountId = i.BankAccountId,
+                                    DebitAmount = i.DebitAmount,
+                                    CreditAmount = i.CreditAmount,
+                                    Description = i.Description
+                                }
+                                }).AsNoTracking().ToListAsync();
+
+            return linqstmt;
+
+           //return await _dataContext.Transaction.Where(x => x.BankAccountId == BankAccountId)
+           //     .AsNoTracking()
+           //      .ToListAsync();
         }
     }
 }

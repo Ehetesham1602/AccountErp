@@ -13,7 +13,7 @@ namespace AccountErp.Factories
         {
             var reconciliation = new Reconciliation
             {
-
+                Id=model.Id,
                 BankAccountId = model.BankAccountId,
                 ReconciliationDate = model.ReconciliationDate,
                 StatementBalance = model.StatementBalance,

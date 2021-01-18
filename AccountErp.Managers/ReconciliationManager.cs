@@ -18,6 +18,7 @@ using AccountErp.Models.Reconciliation;
 using AccountErp.Dtos.Reconciliation;
 using AccountErp.Entities;
 using System.Linq;
+using AccountErp.Dtos.Transaction;
 
 namespace AccountErp.Managers
 {
@@ -57,17 +58,18 @@ namespace AccountErp.Managers
         }
 
 
-        public async Task<List<Transaction>> GetByBankId(int BankAccountId)
+        public async Task<List<TransactionBankDto>> GetByBankId(int BankAccountId)
         {
             var data = await _repository.GetByBankId(BankAccountId);
-            var result = (data.GroupBy(l => l.TransactionDate, l => new { l.BankAccountId, l.TransactionDate, l.CreditAmount, l.DebitAmount, l.Description, l.Id })
+            var result = (data.GroupBy(l => l.TransactionRecords.TransactionDate, l => new { l.BankName,l.TransactionRecords.BankAccountId, l.TransactionRecords.TransactionDate, l.TransactionRecords.CreditAmount, l.TransactionRecords.DebitAmount, l.TransactionRecords.Description, l.TransactionRecords.Id })
             .Select(g => new { GroupId = g.Key, Values = g.ToList() })).OrderByDescending(x => x.GroupId).Take(2).Select(x => x.Values).ToList();
-            List<Transaction> obj = new List<Transaction>();
+            TransactionBankDto obj = new TransactionBankDto();
+            List<TransactionBankDto> bankdto = new List<TransactionBankDto>();
             foreach (var item in result)
             {
                 foreach (var item2 in item)
                 {
-                    var trsn = new Transaction()
+                    var trsn = new TransactionDetailDto()
                     {
                         TransactionId = item2.Id,
                         BankAccountId = item2.BankAccountId,
@@ -75,17 +77,21 @@ namespace AccountErp.Managers
                         TransactionDate = item2.TransactionDate,
                         Description = item2.Description,
                         DebitAmount = item2.DebitAmount,
-                       
-                        
                     };
-                    obj.Add(trsn);
+                    //bankdto.BankName = item2.Id.ToString();
+                    obj.BankName = item2.BankName;
+                    obj.TransactionRecords = trsn;
+                    bankdto.Add(obj);
                 }
+                
             }
             /* for(int i=0; i<result.Count-1; i++)
             {
 
             }*/
-            return  obj.OrderBy(x=>x.TransactionId).ToList();
+           // obj.OrderBy(x => x.TransactionId).ToList();
+            
+            return bankdto;
           //  return await _repository.GetByBankId(BankAccountId);
         }
 
@@ -105,7 +111,7 @@ namespace AccountErp.Managers
                 //   amount = ban.Values.Sum(x => x.bankname);
                 newReconcilationDto.bankAccountId = ban.GroupId;
                 newReconcilationDto.ammount = 0;
-
+              //  newReconcilationDto.bankname=
 
                 foreach (var item in ban.Values)
                 {
