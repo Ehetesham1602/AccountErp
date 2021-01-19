@@ -58,13 +58,13 @@ namespace AccountErp.Managers
         }
 
 
-        public async Task<List<TransactionBankDto>> GetByBankId(int BankAccountId)
+        public async Task<TransactionBankDto> GetByBankId(int BankAccountId)
         {
             var data = await _repository.GetByBankId(BankAccountId);
-            var result = (data.GroupBy(l => l.TransactionRecords.TransactionDate, l => new { l.BankName,l.TransactionRecords.BankAccountId, l.TransactionRecords.TransactionDate, l.TransactionRecords.CreditAmount, l.TransactionRecords.DebitAmount, l.TransactionRecords.Description, l.TransactionRecords.Id })
+            var result = (data.TransactionRecords.GroupBy(l => l.TransactionDate, l => new { l.BankAccountId,l.TransactionDate, l.CreditAmount, l.DebitAmount, l.Description, l.Id })
             .Select(g => new { GroupId = g.Key, Values = g.ToList() })).OrderByDescending(x => x.GroupId).Take(2).Select(x => x.Values).ToList();
             TransactionBankDto obj = new TransactionBankDto();
-            List<TransactionBankDto> bankdto = new List<TransactionBankDto>();
+            List<TransactionDetailDto> bankdto = new List<TransactionDetailDto>();
             foreach (var item in result)
             {
                 foreach (var item2 in item)
@@ -79,9 +79,9 @@ namespace AccountErp.Managers
                         DebitAmount = item2.DebitAmount,
                     };
                     //bankdto.BankName = item2.Id.ToString();
-                    obj.BankName = item2.BankName;
-                    obj.TransactionRecords = trsn;
-                    bankdto.Add(obj);
+                 //   obj.BankName = item2.BankName;
+                //    obj.TransactionRecords = trsn;
+                    bankdto.Add(trsn);
                 }
                 
             }
@@ -89,9 +89,10 @@ namespace AccountErp.Managers
             {
 
             }*/
-           // obj.OrderBy(x => x.TransactionId).ToList();
-            
-            return bankdto;
+            // obj.OrderBy(x => x.TransactionId).ToList();
+            obj.TransactionRecords = bankdto;
+            obj.BankName = data.BankName;
+            return obj;
           //  return await _repository.GetByBankId(BankAccountId);
         }
 

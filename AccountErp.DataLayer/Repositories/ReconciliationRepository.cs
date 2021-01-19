@@ -65,27 +65,29 @@ namespace AccountErp.DataLayer.Repositories
              _dataContext.Items.Update(item);
 
          }*/
-     public async Task<List<TransactionBankDto>> GetByBankId(int BankAccountId)
+     public async Task<TransactionBankDto> GetByBankId(int BankAccountId)
 
        {
             var linqstmt =await (from i in _dataContext.Transaction
-                            join b in _dataContext.BankAccounts
-                            on i.BankAccountId equals b.Id
                             where i.BankAccountId == BankAccountId
-                                 select new TransactionBankDto
-                            {
-                                BankName = b.AccountName,
-                                TransactionRecords = new TransactionDetailDto
-                                {
-                                    Id = i.Id,
-                                    BankAccountId = i.BankAccountId,
-                                    DebitAmount = i.DebitAmount,
-                                    CreditAmount = i.CreditAmount,
-                                    Description = i.Description
-                                }
-                                }).AsNoTracking().ToListAsync();
+                                 select new TransactionDetailDto
+                                 {
+                                Id=i.Id,
+                                CreditAmount=i.CreditAmount,
+                                DebitAmount=i.DebitAmount,
+                                Description=i.Description,
+                                TransactionDate=i.TransactionDate,
+                                TransactionId=i.TransactionId,
+                                Status=i.Status
 
-            return linqstmt;
+                                }).AsNoTracking().ToListAsync();
+            var banks =new TransactionBankDto();
+
+              var obj =  _dataContext.BankAccounts.Where(x => x.Id == BankAccountId).FirstOrDefault();
+            banks.BankName = obj.BankName;
+            banks.TransactionRecords = linqstmt;
+
+            return banks;
 
            //return await _dataContext.Transaction.Where(x => x.BankAccountId == BankAccountId)
            //     .AsNoTracking()
