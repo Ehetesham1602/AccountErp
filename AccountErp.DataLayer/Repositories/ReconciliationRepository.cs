@@ -73,6 +73,7 @@ namespace AccountErp.DataLayer.Repositories
                                  select new TransactionDetailDto
                                  {
                                 Id=i.Id,
+                                BankAccountId=i.BankAccountId,
                                 CreditAmount=i.CreditAmount,
                                 DebitAmount=i.DebitAmount,
                                 Description=i.Description,
