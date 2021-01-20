@@ -101,7 +101,7 @@ namespace AccountErp.Managers
             ReconciliationMainDto mainDetailDto = new ReconciliationMainDto();
             mainDetailDto.mainReconciliationDtos = new List<NewReconciliationDto>();
             var data = await _repository.GetAllAsync();
-            var result = (data.GroupBy(l => l.BankAccountId, l => new { l.BankAccountId, l.StatementBalance, l.ReconciliationDate, l.IcloseBalance, l.bankname, l.IsReconciliation, l.ReconciliationStatus })
+            var result = (data.GroupBy(l => l.BankAccountId, l => new { l.BankAccountId, l.StatementBalance, l.ReconciliationDate, l.IcloseBalance, l.bankname, l.IsReconciliation, l.ReconciliationStatus,l.Id })
             .Select(g => new { GroupId = g.Key, Values = g.ToList() })).ToList();
             foreach (var ban in result)
             {
@@ -126,6 +126,7 @@ namespace AccountErp.Managers
                     reconcilationDto.bankname = item.bankname;
                     reconcilationDto.IsReconciliation = item.IsReconciliation;
                     reconcilationDto.ReconciliationStatus = item.ReconciliationStatus;
+                    reconcilationDto.Id = item.Id;
                     newReconcilationDto.reconciliationDtos.Add(reconcilationDto);
                 }
                 mainDetailDto.mainReconciliationDtos.Add(newReconcilationDto);
